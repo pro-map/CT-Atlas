@@ -12,11 +12,17 @@ function cleanText(value,max=10000){
   return String(value??"").replace(/\s+/g," ").trim().slice(0,max);
 }
 
-function harness(){
+function harness(users=["analyst"]){
   const values=new Map();
+  // The keys of each write, one entry per put call.
+  const puts=[];
   const storage={
     async get(key){return structuredClone(values.get(key));},
-    async put(key,value){values.set(key,structuredClone(value));},
+    async put(key,value){
+      const entries=key&&typeof key==="object"?Object.entries(key):[[key,value]];
+      puts.push(entries.map(([name])=>name));
+      for(const [name,item] of entries)values.set(name,structuredClone(item));
+    },
     async delete(key){return values.delete(key);},
     async list({prefix=""}={}){return new Map([...values].filter(([key])=>key.startsWith(prefix)));},
     async getAlarm(){return null;},
@@ -31,18 +37,20 @@ function harness(){
     usageTemplate:username=>({username})
   });
   vm.runInContext(source,context);
-  const gate=new context.__ReportGate({storage},{users:["analyst"]});
+  const gate=new context.__ReportGate({storage},{users});
   const call=async(path,body)=>{
     const response=await gate.fetch(new Request("https://gate.invalid"+path,{method:"POST",body:JSON.stringify(body)}));
     return {status:response.status,body:await response.json()};
   };
-  return {call,values};
+  return {call,values,puts};
 }
 
 const WATCH={id:"w1",chain:"ethereum",address:"0x"+"1".repeat(40),enabled:true,thresholds:{},last_snapshot:null};
 const empty={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:[],alerts:[]};
 const put=(call,workspace,revision)=>call("/crypto-workspace-put",{username:"analyst",workspace,revision});
 const get=async call=>(await call("/crypto-workspace-get",{username:"analyst"})).body;
+// What the monitor sends for one wallet of analyst's.
+const monitorUpdate=(call,update)=>call("/crypto-monitor-update",{updates:[{username:"analyst",watch_id:"w1",...update}]});
 
 test("a new workspace starts at revision 0 and each save moves it on",async()=>{
   const {call}=harness();
@@ -93,7 +101,7 @@ test("a page save keeps scheduled alerts and the monitor baseline, and takes onl
   const {call}=harness();
   await put(call,{...empty,watchlist:[WATCH]},0);
   const page=await get(call);
-  await call("/crypto-monitor-update",{username:"analyst",watch_id:"w1",
+  await monitorUpdate(call,{
     snapshot:{checked_at:"t",newest_tx_id:"new",newest_tx_time:"2026-11-05T00:00:00Z",tx_count:1,aggregate_value:1,risk_label:"HIGH"},
     alerts:[{type:"SANCTIONS_EXPOSURE",severity:"HIGH",title:"Direct exposure",detail:"d",tx_id:"tx1"}]});
 
@@ -116,7 +124,7 @@ test("a page save keeps scheduled alerts and the monitor baseline, and takes onl
 test("an acknowledgement is the one alert edit a page can make",async()=>{
   const {call}=harness();
   await put(call,{...empty,watchlist:[WATCH]},0);
-  await call("/crypto-monitor-update",{username:"analyst",watch_id:"w1",alerts:[
+  await monitorUpdate(call,{alerts:[
     {id:"a1",type:"VELOCITY_24H",severity:"MEDIUM",title:"First",detail:"original"},
     {id:"a2",type:"NEW_TRANSACTION",severity:"LOW",title:"Second",detail:"original"}
   ]});
@@ -133,7 +141,7 @@ test("a windowed alert fires once per day bucket, and an alert with no bucket st
   const {call}=harness();
   await put(call,{...empty,watchlist:[WATCH]},0);
   const alert={type:"AGGREGATE_24H",severity:"MEDIUM",title:"24h aggregate threshold crossed",detail:"d"};
-  const send=async extra=>(await call("/crypto-monitor-update",{username:"analyst",watch_id:"w1",alerts:[{...alert,...extra}]})).body.alerts_added;
+  const send=async extra=>(await monitorUpdate(call,{alerts:[{...alert,...extra}]})).body.alerts_added;
   assert.equal(await send({day_bucket:"2026-11-01"}),1);
   assert.equal(await send({day_bucket:"2026-11-01"}),0);
   assert.equal(await send({day_bucket:"2026-11-02"}),1);
@@ -176,7 +184,10 @@ test("stored blank thresholds are repaired on read, for the page and for the mon
 
 // ---------------------------------------------------------------- check records and the run record
 
-const check=(call,ok,extra={})=>call("/crypto-monitor-update",{username:"analyst",watch_id:"w1",check:{ok,error:ok?"":"Blockstream transaction history: HTTP 503"},...extra});
+const check=(call,ok,update={},run)=>call("/crypto-monitor-update",{
+  updates:[{username:"analyst",watch_id:"w1",check:{ok,error:ok?"":"Blockstream transaction history: HTTP 503"},...update}],
+  ...(run?{run}:{})
+});
 const watchNow=async call=>(await get(call)).workspace.watchlist[0];
 const failingAlerts=async call=>(await get(call)).workspace.alerts.filter(alert=>alert.type==="CHECK_FAILING");
 
@@ -204,6 +215,16 @@ test("three failed checks in a row raise one alert, not one per check, and a suc
   assert.equal(cleared.last_success_at,cleared.last_attempt_at);
 });
 
+test("a second run of failures raises its own alert, even on the same day",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  for(let run=1;run<=3;run++)await check(call,false);
+  await check(call,true);
+  for(let run=1;run<=2;run++)assert.equal((await check(call,false)).body.alerts_added,0);
+  assert.equal((await check(call,false)).body.alerts_added,1);
+  assert.equal((await failingAlerts(call)).length,2);
+});
+
 test("a watch saved before check records existed keeps working, and its first failure keeps its last real check",async()=>{
   const {call,values}=harness();
   values.set("crypto-workspace:analyst",{...empty,username:"analyst",watchlist:[{...WATCH,last_snapshot:{checked_at:"2026-11-01T06:17:00.000Z",newest_tx_id:"old"}}]});
@@ -220,7 +241,7 @@ test("an update that carries no check leaves the check record alone",async()=>{
   const {call}=harness();
   await put(call,{...empty,watchlist:[WATCH]},0);
   await check(call,false);
-  await call("/crypto-monitor-update",{username:"analyst",watch_id:"w1",alerts:[]});
+  await monitorUpdate(call,{alerts:[]});
   assert.equal((await watchNow(call)).monitor.failures,1);
 });
 
@@ -240,10 +261,49 @@ test("a page save can neither replace nor forge a check record",async()=>{
   assert.equal("monitor" in second,false);
 });
 
-test("the run record holds what the last update carried, read back with a status and a one-line summary, never a wallet",async()=>{
+test("a run's one update saves every wallet of every analyst, writing each workspace once, and a deleted wallet stops nothing",async()=>{
+  const {call,values,puts}=harness(["analyst","other"]);
+  values.set("crypto-workspace:analyst",{...empty,username:"analyst",watchlist:[WATCH,{...WATCH,id:"w2"}]});
+  values.set("crypto-workspace:other",{...empty,username:"other",watchlist:[{...WATCH,id:"o1"}]});
+  puts.length=0;
+  const sanctions={type:"SANCTIONS_EXPOSURE",severity:"HIGH",title:"Direct exposure to a sanctioned address",detail:"d",tx_id:"tx9"};
+  const {status,body}=await call("/crypto-monitor-update",{
+    updates:[
+      {username:"analyst",watch_id:"w1",snapshot:{checked_at:"t",newest_tx_id:"new"},alerts:[],check:{ok:true,error:""}},
+      {username:"analyst",watch_id:"deleted",alerts:[],check:{ok:false,error:"x"}},
+      {username:"analyst",watch_id:"w2",snapshot:null,alerts:[sanctions],check:{ok:false,error:"Partial read: Blockstream older transactions could not be read."}},
+      {username:"other",watch_id:"o1",snapshot:null,alerts:[],check:{ok:false,error:"Blockstream transaction history: HTTP 503"}}
+    ],
+    run:{selected:4,checked:1,partial:1,failed:2}
+  });
+  assert.equal(status,200);
+  assert.deepEqual(body,{ok:true,alerts_added:1,missing:1});
+  assert.deepEqual(puts,[["crypto-monitor-run","crypto-workspace:analyst","crypto-workspace:other"]],"one write for the run, each workspace in it once");
+  const analyst=values.get("crypto-workspace:analyst");
+  assert.equal(analyst.watchlist[0].last_snapshot.newest_tx_id,"new");
+  assert.equal(analyst.watchlist[1].last_snapshot,null);
+  assert.equal(analyst.watchlist[1].monitor.failures,1);
+  assert.deepEqual(analyst.alerts.map(alert=>[alert.watch_id,alert.type]),[["w2","SANCTIONS_EXPOSURE"]]);
+  assert.equal(values.get("crypto-workspace:other").watchlist[0].monitor.last_error,"Blockstream transaction history: HTTP 503");
+  assert.equal(values.get("crypto-monitor-run").partial,1);
+});
+
+test("an update must be a batch no larger than a run, and the run alone is enough when no wallet could be tried",async()=>{
+  const {call,values}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  const one={username:"analyst",watch_id:"w1",alerts:[]};
+  for(const body of [one,{updates:[]},{updates:Array(9).fill(one)}]){
+    assert.equal((await call("/crypto-monitor-update",body)).status,400,JSON.stringify(body).slice(0,40));
+  }
+  assert.equal(values.has("crypto-monitor-run"),false);
+  assert.equal((await call("/crypto-monitor-update",{updates:[],run:{selected:2,checked:0,partial:0,failed:0}})).status,200);
+  assert.match((await call("/crypto-monitor-run-get",{})).body.run.summary,/ UTC · FAILED: 0 of 2 wallets read · 2 not checked$/);
+});
+
+test("the run record holds what the run's update carried, read back with a status and a one-line summary, never a wallet",async()=>{
   const {call}=harness();
   await put(call,{...empty,watchlist:[WATCH]},0);
-  await check(call,false,{run:{selected:8,checked:0,partial:0,failed:8,username:"analyst",address:WATCH.address}});
+  await check(call,false,{},{selected:8,checked:0,partial:0,failed:8,username:"analyst",address:WATCH.address});
   const {run}=(await call("/crypto-monitor-run-get",{})).body;
   assert.equal(run.status,"failed");
   assert.equal(run.stale,false);
@@ -251,12 +311,34 @@ test("the run record holds what the last update carried, read back with a status
   assert.ok(!JSON.stringify(run).includes(WATCH.address)&&!JSON.stringify(run).includes("analyst"));
   assert.deepEqual((await get(call)).monitor_run,run,"the page reads the same summary with its workspace");
 
-  await check(call,true,{run:{selected:8,checked:5,partial:1,failed:1}});
+  await check(call,true,{},{selected:8,checked:5,partial:1,failed:1});
   const degraded=(await call("/crypto-monitor-run-get",{})).body.run;
   assert.equal(degraded.status,"degraded");
   assert.match(degraded.summary,/ · 5 of 8 wallets read · 1 partial · 1 failed · 1 not checked$/);
-  await check(call,true,{run:{selected:8,checked:8,partial:0,failed:0}});
+  await check(call,true,{},{selected:8,checked:7,partial:0,failed:0});
+  assert.equal((await call("/crypto-monitor-run-get",{})).body.run.status,"degraded","a wallet left unchecked is not a clean run");
+  await check(call,true,{},{selected:8,checked:8,partial:0,failed:0});
   assert.equal((await call("/crypto-monitor-run-get",{})).body.run.status,"ok");
+});
+
+test("a run's start replaces the last result, and a run that never reports reads as failed, not as the run before it",async()=>{
+  const {call,values,puts}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  values.set("crypto-monitor-run",{finished_at:new Date(Date.now()-6*3600000).toISOString(),selected:8,checked:8,partial:0,failed:0});
+  puts.length=0;
+  await call("/crypto-monitor-targets",{limit:8});
+  assert.deepEqual(puts,[["crypto-monitor-cursor","crypto-monitor-run"]],"the start costs no write of its own");
+  const running=(await call("/crypto-monitor-run-get",{})).body.run;
+  assert.equal(running.status,"running");
+  assert.match(running.summary,/^\d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC · Running: 1 wallets to read$/);
+
+  values.set("crypto-monitor-run",{started_at:new Date(Date.now()-16*60000).toISOString(),selected:8});
+  const lost=(await call("/crypto-monitor-run-get",{})).body.run;
+  assert.equal(lost.status,"failed");
+  assert.equal(lost.finished_at,"");
+  assert.match(lost.summary,/ UTC · FAILED: the run never reported a result for its 8 wallets$/);
+  values.set("crypto-monitor-run",{started_at:new Date(Date.now()-13*3600000).toISOString(),selected:8});
+  assert.match((await call("/crypto-monitor-run-get",{})).body.run.summary,/its 8 wallets · OVERDUE: no later run has reported$/);
 });
 
 test("no run yet reads as none, and a run older than two missed runs is overdue",async()=>{

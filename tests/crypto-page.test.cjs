@@ -1011,8 +1011,20 @@ test("with revisions, CHECK NOW runs in the Worker, because the gate only takes 
   assert.deepEqual(h.api.workspace().alerts.map(item=>item.id),["srv"],"the server's alerts are read back");
   assert.equal(h.api.workspace().labels[0].id,"unsaved","an edit not saved yet survives the refresh");
   assert.equal(h.api.state().revision,2);
-  assert.equal(h.el("monitorStatus").textContent,"Monitoring check complete · 1 wallet(s) checked · 1 new alert(s) · 1 could not be checked.");
+  assert.equal(h.el("monitorStatus").textContent,"Monitoring check complete · 1 wallet(s) checked · 1 new alert(s) · 1 could not be read in full (last reason: provider down).");
   assert.equal(h.el("monitorCheckButton").disabled,false);
+});
+
+test("CHECK NOW counts the alerts a partial read stored, a sanctions hit among them, and says why the read was incomplete",async()=>{
+  const h=harness({respond:call=>{
+    if(call.url.endsWith("/crypto-monitor-check"))return {status:503,json:{error:"Partial read: Blockstream older transactions could not be read.",alerts_added:1}};
+    if(call.method==="GET")return {json:{ok:true,revision:1,workspace:emptyWorkspace({watchlist:[watchItem("w1")]})}};
+    return {json:{}};
+  }});
+  await h.api.loadCryptoWorkspace();
+  await h.api.checkMonitored();
+  assert.equal(h.el("monitorStatus").textContent,
+    "Monitoring check complete · 0 wallet(s) checked · 1 new alert(s) · 1 could not be read in full (last reason: Partial read: Blockstream older transactions could not be read).");
 });
 
 test("without revisions, an older Worker keeps the page's own check",async()=>{

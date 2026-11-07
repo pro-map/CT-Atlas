@@ -49,7 +49,13 @@ class Storage{
   async setAlarm(){}
 }
 
-async function rig(extra={}){
+// Cloudflare refuses a run's subrequests past its allowance, provider and gate calls alike.
+function allowance(limit){
+  let spent=0;
+  return ()=>{if(++spent>limit)throw new Error("Too many subrequests.");};
+}
+
+async function rig(extra={},spend=()=>{}){
   const {ReportGate}=await entry;
   const storage=new Storage();
   const gate=new ReportGate({storage},{AUTH_USERS_JSON:USERS});
@@ -57,11 +63,12 @@ async function rig(extra={}){
   const env={
     AUTH_USERS_JSON:USERS,SANCTIONS_URL,...extra,
     REPORT_GATE:{idFromName:name=>name,get:()=>({fetch:async(url,init)=>{
+      spend();
       gateCalls.push({path:new URL(url).pathname,body:JSON.parse(init.body)});
       return gate.fetch(new Request(url,init));
     }})}
   };
-  return {env,storage,gateCalls};
+  return {env,storage,gateCalls,gate};
 }
 
 const json=(value,status=200)=>Response.json(value,{status});
@@ -79,21 +86,27 @@ function payment(wallet,index,hoursAgo,from=SENDER){
 const history=(wallet,count,newestHoursAgo=48)=>Array.from({length:count},(_,index)=>payment(wallet,index,newestHoursAgo+index));
 const info=count=>({chain_stats:{tx_count:count,funded_txo_sum:count*100000000,spent_txo_sum:0},mempool_stats:{tx_count:0,funded_txo_sum:0,spent_txo_sum:0}});
 
-// Blockstream as `answer(wallet,page)` describes it, page being "info", "txs" or "older"; null is an outage.
-async function withBlockstream(answer,run){
-  const calls=[],saved=globalThis.fetch,log=console.log,warn=console.warn,error=console.error;
+// Blockstream as `answer(wallet,page,attempt)` describes it: page is "info", "txs" or "older", attempt
+// counts the asks for that same URL from 1, null is an outage and a number is that HTTP status.
+// The Worker's pause before a rate-limit retry is cut to nothing: it changes no call.
+async function withBlockstream(answer,run,spend=()=>{}){
+  const calls=[],attempts=new Map(),saved=globalThis.fetch,wait=globalThis.setTimeout,log=console.log,warn=console.warn,error=console.error;
   globalThis.fetch=async url=>{
+    spend();
     const parsed=new URL(String(url));
     calls.push(parsed.hostname+parsed.pathname);
     if(parsed.hostname==="sanctions.test")return json(LIST);
     const parts=parsed.pathname.split("/");
     if(parsed.hostname!=="blockstream.info"||parts[2]!=="address")return json({error:"not stubbed"},503);
-    const body=answer(parts[3],parts[4]?parts[5]?"older":"txs":"info");
-    return body===null?json({error:"unavailable"},503):json(body);
+    const attempt=(attempts.get(String(url))||0)+1;
+    attempts.set(String(url),attempt);
+    const body=answer(parts[3],parts[4]?parts[5]?"older":"txs":"info",attempt);
+    return body===null?json({error:"unavailable"},503):typeof body==="number"?json({error:"rate limited"},body):json(body);
   };
+  globalThis.setTimeout=(callback,_ms,...args)=>wait(callback,0,...args);
   console.log=console.warn=console.error=()=>{};
   try{return {result:await run(),calls};}
-  finally{globalThis.fetch=saved;console.log=log;console.warn=warn;console.error=error;}
+  finally{globalThis.fetch=saved;globalThis.setTimeout=wait;console.log=log;console.warn=warn;console.error=error;}
 }
 
 function watch(id,address,lastSnapshot,thresholds={}){
@@ -114,37 +127,71 @@ const saved=async setup=>setup.storage.get(KEY);
 // ---------------------------------------------------------------- the subrequest budget
 
 // A full batch of Bitcoin wallets, the dearest chain: an address read and two pages of 25 each.
-async function budgetRun(page){
+async function budgetSetup(spend){
   (await sanctions).resetSanctionsCache();
-  const setup=await rig();
+  const setup=await rig({},spend);
   const wallets=Array.from({length:8},(_,index)=>p2pkh("budget"+index));
   const rows=new Map(wallets.map(wallet=>[wallet,history(wallet,60)]));
   await seed(setup,wallets.map((wallet,index)=>watch("w"+index,wallet,baselineOf(rows.get(wallet)))));
+  return {setup,wallets,rows};
+}
+async function budgetRun(page,spend){
+  const {setup,wallets,rows}=await budgetSetup(spend);
   const {runCryptoMonitor}=await monitor;
-  const {result,calls}=await withBlockstream((wallet,kind)=>page(kind,rows.get(wallet)),()=>runCryptoMonitor(setup.env));
+  const {result,calls}=await withBlockstream((wallet,kind,attempt)=>page(kind,rows.get(wallet),attempt,wallets.indexOf(wallet)),()=>runCryptoMonitor(setup.env),spend);
   return {result,calls,setup};
 }
 
 const FULL=(kind,rows)=>kind==="info"?info(rows.length):kind==="txs"?rows.slice(0,25):rows.slice(25,50);
 const PARTIAL=(kind,rows)=>kind==="older"?null:FULL(kind,rows);
+// Every ask for an older page is rate-limited: the Worker retries once, then keeps what it has.
+const LIMITED=(kind,rows)=>kind==="older"?429:FULL(kind,rows);
+// Every first ask is rate-limited and the retry is served.
+const RETRIED=(kind,rows,attempt)=>attempt===1?429:FULL(kind,rows);
 const DOWN=()=>null;
+const MIXED=(kind,rows,attempt,index)=>(index<4?FULL:LIMITED)(kind,rows,attempt);
 
-test("a run spends the same 42 subrequests as before at most, whatever the providers answer, and recording costs no call",async()=>{
-  // Where each call goes: 1 target read, 1 sanctions list, and per wallet 3 Blockstream reads, 1 label
-  // lookup and 1 update. With Blockstream down a wallet stops after 2 reads and still sends its update.
-  for(const [name,page,expected,status] of [["full",FULL,42,"ok"],["partial",PARTIAL,42,"failed"],["down",DOWN,25,"failed"]]){
+test("a run spends fewer subrequests than before, and one more only to record a run in which no wallet could be read",async()=>{
+  // Each wallet costs 3 Blockstream reads and a label lookup, or 2 reads when Blockstream is down; a
+  // run adds the target read and the sanctions list. Before, every wallet read in full sent an update
+  // of its own: the "before" column is what the monitor spent at c23dc9d, measured with these same
+  // answers. In production a fresh isolate adds one gate call (/migration-status) to both.
+  for(const [name,page,spent,before,status] of [
+    ["full",FULL,35,42,"ok"],
+    ["partial",PARTIAL,35,34,"failed"],
+    ["rate-limited older pages",LIMITED,43,42,"failed"],
+    ["every first ask rate-limited",RETRIED,59,66,"ok"],
+    ["Blockstream down",DOWN,18,17,"failed"],
+    ["mixed",MIXED,39,42,"degraded"]
+  ]){
     const {result,calls,setup}=await budgetRun(page);
     const updates=setup.gateCalls.filter(call=>call.path==="/crypto-monitor-update");
-    assert.equal(updates.length,8,name+": every wallet reports, whatever its read");
-    assert.equal(updates.filter(call=>call.body.run).length,1,name+": the run's outcome rides on an update already made");
-    assert.ok(updates.at(-1).body.run,name);
-    assert.deepEqual([...new Set(setup.gateCalls.map(call=>call.path))].sort(),
-      (name==="down"?["/crypto-monitor-targets","/crypto-monitor-update"]:["/crypto-exchange-labels-lookup","/crypto-monitor-targets","/crypto-monitor-update"]),name);
+    assert.equal(updates.length,1,name+": one update saves the whole run");
+    assert.equal(updates[0].body.updates.length,8,name+": every wallet reports, whatever its read");
+    assert.deepEqual(updates[0].body.run,{selected:8,checked:result.checked,partial:result.partial,failed:result.failed},name);
     const total=calls.length+setup.gateCalls.length;
-    assert.equal(total,expected,name+" spent "+total);
-    assert.ok(total<=42,name);
+    assert.equal(total,spent,name+" spent "+total);
+    // What it used to cost, less the updates of the wallets read in full, plus the one update.
+    assert.equal(total,before-result.checked+1,name);
     assert.equal(result.status,status,name);
   }
+});
+
+test("a run that runs out of subrequests leaves a record that says so, not the clean run before it",async()=>{
+  const spend=allowance(50);
+  const {setup,wallets,rows}=await budgetSetup(spend);
+  await setup.storage.put("crypto-monitor-run",{finished_at:new Date(NOW-6*HOUR).toISOString(),selected:8,checked:8,partial:0,failed:0});
+  const {runCryptoMonitor}=await monitor;
+  await assert.rejects(
+    ()=>withBlockstream((wallet,kind,attempt)=>RETRIED(kind,rows.get(wallet),attempt),()=>runCryptoMonitor(setup.env),spend),
+    /Too many subrequests/
+  );
+  // The start the gate recorded with the targets: 15 minutes on, it reads as a failed run (crypto-gate.test.cjs).
+  const {run}=await (await setup.gate.fetch(new Request("https://gate.internal/crypto-monitor-run-get",{method:"POST",body:"{}"}))).json();
+  assert.equal(run.status,"running");
+  assert.match(run.summary,/ UTC · Running: 8 wallets to read$/,"the earlier 8 of 8 wallets read is gone");
+  const workspace=await saved(setup);
+  assert.deepEqual(workspace.watchlist.map(item=>item.last_snapshot),wallets.map(wallet=>baselineOf(rows.get(wallet))),"a run that was not saved moved no baseline");
 });
 
 // ---------------------------------------------------------------- what a bad read may change
@@ -192,6 +239,34 @@ test("an empty answer keeps a baseline with activity, and the next good read rai
   assert.deepEqual(workspace.alerts,[],"the six old payments are not new activity");
   assert.equal(workspace.watchlist[0].last_snapshot.newest_tx_id,rows[0].txid);
   assert.equal(workspace.watchlist[0].monitor.failures,0);
+});
+
+test("a new watch is not given an empty baseline its provider contradicts, nor one that turns its history into alerts later",async()=>{
+  (await sanctions).resetSanctionsCache();
+  const {runCryptoMonitor}=await monitor;
+  // The page cannot set a baseline, so every new watch reaches the monitor without one.
+  for(const [name,firstInfo,expectedFirst] of [
+    ["the address read counts 60 transactions",()=>info(60),"failed"],
+    ["the address read is down, so nothing contradicts the empty list",()=>null,"checked"]
+  ]){
+    const setup=await rig();
+    const wallet=p2pkh("new-"+name);
+    const rows=history(wallet,60);
+    await seed(setup,[watch("w1",wallet,null,{min_amount:0.5})]);
+    const first=await withBlockstream((_,kind)=>kind==="info"?firstInfo():[],()=>runCryptoMonitor(setup.env));
+    assert.equal(first.result[expectedFirst],1,name);
+    let workspace=await saved(setup);
+    if(expectedFirst==="failed"){
+      assert.equal(workspace.watchlist[0].last_snapshot,null,name+": no baseline from a read its provider contradicts");
+      assert.equal(workspace.watchlist[0].monitor.last_error,"The provider returned no history although it counts 60 transactions for this wallet.");
+    }else{
+      assert.equal(workspace.watchlist[0].last_snapshot.newest_tx_id,"",name+": an empty wallet, as far as anything shows");
+    }
+    await withBlockstream((_,kind)=>FULL(kind,rows),()=>runCryptoMonitor(setup.env));
+    workspace=await saved(setup);
+    assert.deepEqual(workspace.alerts,[],name+": payments 48 to 107 hours old are not new activity");
+    assert.equal(workspace.watchlist[0].last_snapshot.newest_tx_id,rows[0].txid,name);
+  }
 });
 
 test("a run with every provider down is not ok, changes no baseline, and three failed runs raise one alert",async()=>{

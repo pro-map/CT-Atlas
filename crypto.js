@@ -2069,7 +2069,7 @@ function monitorSeed(){
 // A Worker with revisions takes alerts and baselines only from its own monitor, so a save from this
 // page could not add them: the check has to run there. An older Worker has no revisions or route.
 async function checkMonitoredOnServer(watches,status,skipped){
-  let created=0,checked=0,failed=0;
+  let created=0,checked=0,failed=0,reason="";
   for(const watch of watches){
     status.textContent="Checking "+(checked+failed+1)+"/"+watches.length+" · "+short(watch.address,8);
     try{
@@ -2080,11 +2080,13 @@ async function checkMonitoredOnServer(watches,status,skipped){
       });
       const payload=await response.json().catch(()=>({}));
       if(response.status===401){redirectToLogin();return;}
-      if(!response.ok)throw new Error(payload.error||"Monitor check failed.");
+      // A partial read still stores the alerts it found, a sanctions match among them.
       created+=Number(payload.alerts_added)||0;
+      if(!response.ok)throw new Error(payload.error||"Monitor check failed.");
       checked++;
     }catch(error){
       failed++;
+      reason=String(error?.message||"").replace(/\.$/,"");
       console.warn("Monitor check failed",watch.address,error);
     }
     await sleep(250);
@@ -2098,7 +2100,7 @@ async function checkMonitoredOnServer(watches,status,skipped){
     console.warn("Crypto workspace refresh failed",error);
   }
   status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s)"+
-    (failed?" · "+failed+" could not be checked":"")+skipped+(refreshed?".":". Reload the page to see them.");
+    (failed?" · "+failed+" could not be read in full (last reason: "+reason+")":"")+skipped+(refreshed?".":". Reload the page to see them.");
 }
 
 async function checkMonitored(){
