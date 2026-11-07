@@ -264,7 +264,9 @@ test("every dispatched workflow titles a slot run the way the dispatcher looks f
 test("update-map treats a dispatched slot like the schedule and keeps the schedule path for a rollback",()=>{
   const yaml=read(".github/workflows/update-map.yml");
   assert.ok(yaml.includes("CT_ATLAS_SCHEDULE: ${{ github.event.schedule || inputs.slot || '' }}"));
-  assert.ok(yaml.includes("(github.event.schedule == '17 10 * * *' || inputs.slot == '17 10 * * *' || (github.event_name == 'workflow_dispatch' && inputs.slot == ''))"));
+  // The OFAC step that keyed on the 10:17 slot moved to refresh-sanctions.yml;
+  // the recovery run is now what a dispatched slot must start like a scheduled one.
+  assert.ok(yaml.includes("(github.event_name == 'schedule' || (inputs.mode == 'daily' && inputs.slot != ''))"));
 });
 
 test("update-map's slots are the ones the daily ledger accepts",()=>{

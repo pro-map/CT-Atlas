@@ -13,6 +13,10 @@ Standard library only. Usage:
     python tools/update_sanctions.py                 # download + write
     python tools/update_sanctions.py --input sdn.xml # parse a local file
 
+A list whose Last-Modified has not moved since the last write is not
+downloaded again (.github/workflows/refresh-sanctions.yml runs this several
+times a day).
+
 Safety rails: the existing file is never replaced by a suspiciously smaller
 one (a truncated/garbled download must not silently erase the list).
 """
@@ -20,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import io
 import json
 import re
@@ -29,7 +34,9 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-OFAC_SDN_URL = "https://www.treasury.gov/ofac/downloads/sdn.xml"
+# OFAC's Sanctions List Service; the treasury.gov download URL only redirects here.
+OFAC_SDN_URL = "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML"
+USER_AGENT = "CT-Atlas-sanctions-updater/1"
 OUTPUT = Path(__file__).resolve().parent.parent / "sanctions-crypto.json"
 FORMAT_VERSION = "sanctions-crypto-v1"
 
@@ -45,10 +52,10 @@ BITCOIN_RE = re.compile(r"^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9
 MIN_RETAINED_RATIO = 0.6
 
 # OFAC changes crypto entries only occasionally. An unchanged list is left
-# untouched (no daily no-op commit) but is re-stamped after this long so the
-# Worker's "stale after 7 days" check keeps meaning "we have not verified
-# recently", not "OFAC has not changed anything".
-REFRESH_AFTER = timedelta(days=3)
+# untouched (no no-op commit) but is re-stamped after this long, so the Crypto
+# page's "stale after 3 days" and the Worker's "after 7 days" keep meaning "we
+# have not verified recently", not "OFAC has not changed anything".
+REFRESH_AFTER = timedelta(days=1)
 
 
 def classify(address: str) -> str:
@@ -150,7 +157,7 @@ def publish_date_iso(value: str) -> str:
         return ""
 
 
-def build_document(raw: bytes, source_url: str, now: datetime | None = None) -> dict:
+def build_document(raw: bytes, source_url: str, now: datetime | None = None, last_modified: str = "") -> dict:
     now = now or datetime.now(timezone.utc)
     entities, addresses, published = parse_sdn(raw)
 
@@ -172,6 +179,7 @@ def build_document(raw: bytes, source_url: str, now: datetime | None = None) -> 
             "name": "OFAC Specially Designated Nationals (SDN) List",
             "url": source_url,
             "published": publish_date_iso(published),
+            "last_modified": last_modified,
             "sha256": hashlib.sha256(raw).hexdigest(),
             "entities": len(entities),
             "addresses": len(merged_list),
@@ -188,15 +196,18 @@ def read_existing(path: Path) -> dict | None:
         return None
 
 
-def is_unchanged(existing: dict | None, document: dict, now: datetime) -> bool:
-    """True when rewriting would only bump the timestamp/hash of an identical list."""
-    if not existing:
-        return False
+def refresh_due(existing: dict | None, now: datetime) -> bool:
+    """True when the file must be rewritten even if OFAC has not changed the list."""
     try:
         retrieved = datetime.strptime(existing["retrieved_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
     except (KeyError, ValueError, TypeError):
-        return False
-    if now - retrieved >= REFRESH_AFTER:
+        return True
+    return now - retrieved >= REFRESH_AFTER
+
+
+def is_unchanged(existing: dict | None, document: dict, now: datetime) -> bool:
+    """True when rewriting would only bump the timestamp/hash of an identical list."""
+    if not existing or refresh_due(existing, now):
         return False
     old_source = (existing.get("sources") or [{}])[0]
     new_source = document["sources"][0]
@@ -207,8 +218,32 @@ def is_unchanged(existing: dict | None, document: dict, now: datetime) -> bool:
     )
 
 
+def already_current(existing: dict | None, url: str, modified: str, now: datetime) -> bool:
+    """True when OFAC still reports the Last-Modified stored with the list we
+    hold, so a download would only find the same list again."""
+    if not modified or not existing or refresh_due(existing, now):
+        return False
+    source = (existing.get("sources") or [{}])[0]
+    return source.get("url") == url and source.get("last_modified") == modified
+
+
+def last_modified(url: str) -> str:
+    """OFAC's Last-Modified for the list, or "" when it cannot be had.
+
+    Asked with HEAD: OFAC answers every GET, If-Modified-Since included, with a
+    redirect to a freshly signed download. This is only a shortcut: without it
+    the list is downloaded in full.
+    """
+    request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": USER_AGENT})
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return (response.headers.get("Last-Modified") or "").strip()
+    except (OSError, http.client.HTTPException):
+        return ""
+
+
 def download(url: str) -> bytes:
-    request = urllib.request.Request(url, headers={"User-Agent": "CT-Atlas-sanctions-updater/1"})
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=120) as response:
         return response.read()
 
@@ -221,16 +256,30 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     output = Path(args.output)
-    raw = Path(args.input).read_bytes() if args.input else download(args.url)
+    existing = read_existing(output)
     now = datetime.now(timezone.utc)
-    document = build_document(raw, args.url, now)
+    modified = ""
+    try:
+        if args.input:
+            raw = Path(args.input).read_bytes()
+        else:
+            # Asked before the download: a list published in between is stored
+            # with the older date, which costs one more download, never a skip.
+            modified = last_modified(args.url)
+            if already_current(existing, args.url, modified, now):
+                print(f"Unchanged: OFAC's list is still the one of {modified}; not downloaded.")
+                return 0
+            raw = download(args.url)
+        document = build_document(raw, args.url, now, modified)
+    except (OSError, http.client.HTTPException, ET.ParseError) as error:
+        print(f"Refusing to write: the OFAC list could not be read ({type(error).__name__}: {error}).", file=sys.stderr)
+        return 1
 
     count = len(document["addresses"])
     if count == 0:
         print("Refusing to write: no digital-currency addresses parsed (format change or bad download).", file=sys.stderr)
         return 1
 
-    existing = read_existing(output)
     if existing and isinstance(existing.get("addresses"), list):
         previous = len(existing["addresses"])
         if previous and count < previous * MIN_RETAINED_RATIO:

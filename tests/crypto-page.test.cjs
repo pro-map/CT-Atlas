@@ -41,7 +41,7 @@ function harness({respond}={}){
       inReportMode(fn){return withoutTransactionFilters(fn);},
       reportModel:()=>collectReportModel(),
       setPayloadOnly(payload){lastPayload=payload;},
-      detectPatterns,renderPatterns,riskView,renderRisk,combineRisk,checkOneHop,oneHopCandidates,peelChainFinding,oneHopFinding,
+      detectPatterns,renderPatterns,riskView,renderRisk,combineRisk,checkOneHop,oneHopCandidates,peelChainFinding,oneHopFinding,sanctionsView,
       riskOverlays,snapshotFromPayload,paintGraphFrame,render,exportCasePdf,
       renderWatchlist,toggleWatch,deleteWatch,acknowledgeAlert,renderAlerts,monitorSeed,checkMonitored,
       selectCase(id){activeCaseId=id;},
@@ -816,7 +816,28 @@ test("a browser rule leaves the list once it has run, whatever the Worker says",
 test("a service-like wallet and a stale list each show a chip",()=>{
   const h=harness();
   h.api.seed(wallet(addr(1),[],{risk_assessment:assessment({service_discount:true}),sanctions_screening:{status:"stale"}}));
-  assert.deepEqual(plain(h.api.riskView().chips.map(chip=>chip.text)),["SERVICE-LIKE WALLET","LIST OLDER THAN 7 DAYS"]);
+  assert.deepEqual(plain(h.api.riskView().chips.map(chip=>chip.text)),["SERVICE-LIKE WALLET","LIST OLDER THAN 3 DAYS"]);
+});
+
+test("a list last refreshed over 3 days ago reads as stale, with its dates, while the Worker still says ok",()=>{
+  const day=24*60*60*1000;
+  const seeded=retrievedAt=>{
+    const h=harness();
+    h.api.seed(wallet(addr(1),[],{risk_assessment:assessment(),sanctions_screening:{status:"ok",hit:false,counterparties_checked:0,
+      list:{retrieved_at:retrievedAt,address_count:1058,sources:[{id:"OFAC_SDN",name:"OFAC SDN",published:"2026-11-05"}]}}}));
+    return h;
+  };
+  const retrievedAt=new Date(Date.now()-3*day-60*60*1000).toISOString();
+  const old=seeded(retrievedAt);
+  assert.deepEqual(plain(old.api.riskView().chips.map(chip=>chip.text)),["LIST OLDER THAN 3 DAYS"]);
+  const view=plain(old.api.sanctionsView());
+  assert.match(view.note,/published 2026-11-05/);
+  assert.equal(view.badge.text,"NO MATCH");
+  assert.deepEqual(view.warnings,["The sanctions list is older than 3 days or could not be refreshed (last refreshed "+
+    retrievedAt.slice(0,10)+"); recent designations may be missing."]);
+  const fresh=seeded(new Date(Date.now()-2*day).toISOString());
+  assert.deepEqual(plain(fresh.api.riskView().chips),[]);
+  assert.deepEqual(plain(fresh.api.sanctionsView().warnings),[]);
 });
 
 test("the overlays feed the card: a labelled mixer, a one-hop link and a peel chain all count",()=>{
