@@ -28,6 +28,8 @@ function safeCategory(value) {
   return allowed.has(category) ? category : "OTHER";
 }
 
+// Keeps bsc and base although they can no longer be analysed: a blank chain drops the label, watch
+// or cross-chain link at sanitizeWorkspace's filters, and a save would then delete it for good.
 function safeChain(value) {
   const chain = cleanText(value, 24).toLowerCase();
   return ["bitcoin","ethereum","bsc","polygon","arbitrum","base","tron"].includes(chain) ? chain : "";

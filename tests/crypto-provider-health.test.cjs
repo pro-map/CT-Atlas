@@ -18,9 +18,9 @@ const KEYS={ETHERSCAN_API_KEY:"ETHERSCANKEYETHERSCANKEY1234567890",TRONGRID_API_
 const TRONSCAN={TRONSCAN_TAG_LOOKUP_ENABLED:"true",TRONSCAN_API_KEY:"TRONSCANKEY-7f3e9a1c5b2d"};
 const SECRETS=[...Object.values(KEYS),TRONSCAN.TRONSCAN_API_KEY];
 const FAST={etherscanSpacingMs:0};
-const CHAINS=["ethereum","bsc","polygon","arbitrum","base"];
-const CHAIN_IDS={1:"ethereum",56:"bsc",137:"polygon",42161:"arbitrum",8453:"base"};
-const SEVEN=["blockstream",...CHAINS.map(chain=>"etherscan_"+chain),"trongrid"];
+const CHAINS=["ethereum","polygon","arbitrum"];
+const CHAIN_IDS={1:"ethereum",137:"polygon",42161:"arbitrum"};
+const FIVE=["blockstream",...CHAINS.map(chain=>"etherscan_"+chain),"trongrid"];
 const HOUR=3600000;
 const at=iso=>Date.parse(iso);
 
@@ -44,7 +44,7 @@ function providerOf(url){
   return parsed.hostname;
 }
 
-// `answers` maps a provider id, or "etherscan" for all five chains, to a function giving a Response.
+// `answers` maps a provider id, or "etherscan" for every chain, to a function giving a Response.
 function providers(answers={}){
   const calls=[];
   const fetcher=async(url,init={})=>{
@@ -161,8 +161,8 @@ const ETHERSCAN_ANSWERS=[
 
 for(const [name,expected,answer] of ETHERSCAN_ANSWERS){
   test(`Etherscan, ${name}: ${expected}`,async()=>{
-    const {record}=await probeOnce({etherscan_bsc:answer});
-    assert.equal(record.providers.etherscan_bsc.status,expected);
+    const {record}=await probeOnce({etherscan_polygon:answer});
+    assert.equal(record.providers.etherscan_polygon.status,expected);
     assert.equal(record.providers.etherscan_ethereum.status,"ok","one chain's answer stays that chain's");
   });
 }
@@ -196,7 +196,7 @@ test("every provider that fails to answer is unavailable, with fixed words and n
   const fetcher=async url=>{throw new Error("network down at "+url);};
   assert.equal(await runCryptoProviderProbe(setup.env,at("2026-11-06T22:27:00Z"),{fetcher,...FAST}),true);
   const {providers:result}=await stored(setup);
-  for(const id of SEVEN){
+  for(const id of FIVE){
     assert.equal(result[id].status,"unavailable",id);
     assert.equal(result[id].message,"The provider could not be reached.",id);
   }
@@ -219,8 +219,8 @@ test("Tronscan needs both its flag and its key",async()=>{
 
 // The published text.
 test("a provider's message keeps its meaning and loses its URL",async()=>{
-  const {record}=await probeOnce({etherscan_bsc:notok("Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage. https://etherscan.io/apis")});
-  assert.equal(record.providers.etherscan_bsc.message,"Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage.");
+  const {record}=await probeOnce({etherscan_polygon:notok("Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage. https://etherscan.io/apis")});
+  assert.equal(record.providers.etherscan_polygon.message,"Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage.");
 });
 
 test("an ok provider publishes no message, and a silent failure publishes the plain reason",async()=>{
@@ -333,7 +333,7 @@ test("no key reaches the record, /health or the logs, even when every provider e
       published=await (await getHealth(setup.env)).text();
     });
     const saved=JSON.stringify(await stored(setup));
-    assert.equal(Object.keys(JSON.parse(published).crypto_provider_status.providers).length,8);
+    assert.equal(Object.keys(JSON.parse(published).crypto_provider_status.providers).length,6);
     for(const text of [saved,published,logs]){
       for(const secret of SECRETS)assert.equal(text.includes(secret),false);
       assert.doesNotMatch(text,/apikey=|TRON-PRO-API-KEY|api\.etherscan\.io|api\.trongrid\.io/);
@@ -356,7 +356,7 @@ test("each probe is the very request a real analysis makes, with the key handled
   await withGlobalFetch(realFetch,async()=>{
     await analyzeCryptoAddress(PROBE_BITCOIN_ADDRESS,"bitcoin",10,env).catch(()=>{});
     await analyzeCryptoAddress(PROBE_EVM_ADDRESS,"ethereum",10,env).catch(()=>{});
-    await analyzeCryptoAddress(PROBE_EVM_ADDRESS,"bsc",10,env).catch(()=>{});
+    await analyzeCryptoAddress(PROBE_EVM_ADDRESS,"polygon",10,env).catch(()=>{});
     await analyzeCryptoAddress(PROBE_TRON_ADDRESS,"tron",10,env).catch(()=>{});
   });
   const {calls:first}=await probeOnce({},{...KEYS,...TRONSCAN});
@@ -374,10 +374,10 @@ test("each probe is the very request a real analysis makes, with the key handled
   };
   sameRequest("blockstream");
   sameRequest("etherscan_ethereum");
-  sameRequest("etherscan_bsc");
+  sameRequest("etherscan_polygon");
   sameRequest("trongrid",url=>url.replace(/limit=\d+/,"limit=N"));
   sameRequest("tronscan");
-  assert.match(both.find(call=>call.id==="etherscan_bsc").url,new RegExp("apikey="+KEYS.ETHERSCAN_API_KEY));
+  assert.match(both.find(call=>call.id==="etherscan_polygon").url,new RegExp("apikey="+KEYS.ETHERSCAN_API_KEY));
   assert.equal(both.find(call=>call.id==="trongrid").init.headers["TRON-PRO-API-KEY"],KEYS.TRONGRID_API_KEY);
   assert.equal(both.find(call=>call.id==="tronscan").init.headers["TRON-PRO-API-KEY"],TRONSCAN.TRONSCAN_API_KEY);
 });
@@ -395,28 +395,28 @@ test("the probe's Etherscan call is cheap on every chain: one balance, nothing p
 });
 
 // Quota.
-test("a run makes exactly one call per provider, seven in all, none of them Gemini",async()=>{
+test("a run makes exactly one call per provider, five in all, none of them Gemini",async()=>{
   const {calls}=await probeOnce({});
-  assert.deepEqual(calls.map(call=>call.id).sort(),[...SEVEN].sort());
+  assert.deepEqual(calls.map(call=>call.id).sort(),[...FIVE].sort());
   assert.ok(calls.every(call=>!/google|gemini/i.test(call.url)));
 });
 
-test("rate limits and failures are never retried: seven stays seven",async()=>{
+test("rate limits and failures are never retried: five stays five",async()=>{
   const limited=await probeOnce({blockstream:html(429),etherscan:notok("Max calls per sec rate limit reached (5/sec)"),trongrid:json({error:"The key exceeds the frequency limit"},429)});
-  assert.equal(limited.calls.length,7);
-  assert.equal(limited.record.providers.etherscan_base.status,"rate_limited");
+  assert.equal(limited.calls.length,5);
+  assert.equal(limited.record.providers.etherscan_arbitrum.status,"rate_limited");
   const down=await probeOnce({blockstream:html(503),etherscan:html(503),trongrid:html(503)});
-  assert.equal(down.calls.length,7);
+  assert.equal(down.calls.length,5);
 });
 
-test("with Tronscan on, a run still makes seven calls: it takes turns with Blockstream",async()=>{
+test("with Tronscan on, a run still makes five calls: it takes turns with Blockstream",async()=>{
   const {runCryptoProviderProbe}=await health;
   const setup=await rig({...KEYS,...TRONSCAN});
   const seen=[];
   for(let hour=0;hour<4;hour++){
     const {fetcher,calls}=providers();
     await runCryptoProviderProbe(setup.env,at("2026-11-06T01:27:00Z")+hour*HOUR,{fetcher,...FAST});
-    assert.equal(calls.length,7,"hour "+hour);
+    assert.equal(calls.length,5,"hour "+hour);
     seen.push(calls.find(call=>["blockstream","tronscan"].includes(call.id)).id);
   }
   assert.deepEqual(seen,["blockstream","tronscan","blockstream","tronscan"]);
@@ -440,7 +440,7 @@ test("a Tronscan turned on later goes first, and turned off it costs nothing",as
   assert.equal((await stored(setup)).providers.tronscan.status,"not_configured");
 });
 
-test("Etherscan's five calls run one at a time, spaced, so the run cannot trip the limit it measures",async()=>{
+test("Etherscan's three calls run one at a time, spaced, so the run cannot trip the limit it measures",async()=>{
   const {runCryptoProviderProbe}=await health;
   const setup=await rig();
   let inFlight=0,most=0;
@@ -455,7 +455,7 @@ test("Etherscan's five calls run one at a time, spaced, so the run cannot trip t
   };
   await runCryptoProviderProbe(setup.env,at("2026-11-06T22:27:00Z"),{fetcher,etherscanSpacingMs:30});
   assert.equal(most,1);
-  assert.equal(starts.length,5);
+  assert.equal(starts.length,3);
   for(let i=1;i<starts.length;i++)assert.ok(starts[i]-starts[i-1]>=30,"gap "+i);
 });
 
@@ -463,7 +463,7 @@ test("the default spacing keeps under Etherscan's Free tier of 3 calls a second,
   const source=fs.readFileSync("cloudflare-worker/crypto-provider-health.js","utf8");
   assert.ok(Number(source.match(/etherscanSpacingMs: (\d+)/)[1])>=334);
   assert.equal(source.match(/^\/\/ Quota: .*$/gm).length,1);
-  assert.match(source,/^\/\/ Quota: at most 7 upstream calls an hour .*none of them Gemini\.$/m);
+  assert.match(source,/^\/\/ Quota: at most 5 upstream calls an hour .*none of them Gemini\.$/m);
 });
 
 // The schedule.
@@ -474,7 +474,7 @@ test("the first tick after a deploy fills the record in, even the monitor's",asy
     const setup=await rig();
     const {fetcher,calls}=providers();
     assert.equal(await runCryptoProviderProbe(setup.env,at(iso),{fetcher,...FAST}),true,iso);
-    assert.equal(calls.length,7);
+    assert.equal(calls.length,5);
     assert.ok((await stored(setup)).checked_at);
   }
 });
@@ -542,7 +542,7 @@ test("two ticks racing for the same hour make one run",async()=>{
   const time=at("2026-11-06T22:27:00Z");
   const results=await Promise.all([runCryptoProviderProbe(setup.env,time,{fetcher,...FAST}),runCryptoProviderProbe(setup.env,time,{fetcher,...FAST})]);
   assert.deepEqual(results.sort(),[false,true]);
-  assert.equal(calls.length,7);
+  assert.equal(calls.length,5);
 });
 
 test("a run that died after its claim still counts: the next tick stays quiet",async()=>{
@@ -550,7 +550,7 @@ test("a run that died after its claim still counts: the next tick stays quiet",a
   const setup=await rig(KEYS,{intercept:path=>path==="/crypto-provider-status-put"?new Response("{}",{status:500}):null});
   const first=providers();
   await captured(()=>runCryptoProviderProbe(setup.env,at("2026-11-06T22:27:00Z"),{fetcher:first.fetcher,...FAST}));
-  assert.equal(first.calls.length,7);
+  assert.equal(first.calls.length,5);
   const second=providers();
   assert.equal(await runCryptoProviderProbe(setup.env,at("2026-11-06T22:37:00Z"),{fetcher:second.fetcher,...FAST}),false);
   assert.equal(second.calls.length,0);
@@ -595,9 +595,9 @@ test("the whole run has a total time bound, even when calls ignore their abort s
   assert.ok(Date.now()-started<1500);
   assert.equal(finished,true,"what is known is still written");
   const {providers:result}=await stored(setup);
-  for(const id of SEVEN)assert.equal(result[id].status,"unavailable",id);
+  for(const id of FIVE)assert.equal(result[id].status,"unavailable",id);
   assert.equal(result.etherscan_ethereum.message,"The provider did not answer in time.");
-  assert.equal(result.etherscan_base.message,"Not checked: the run ran out of time.");
+  assert.equal(result.etherscan_arbitrum.message,"Not checked: the run ran out of time.");
 });
 
 test("a body that never finishes is bounded like a call that never answers",async()=>{
@@ -659,12 +659,12 @@ test("the gate stores only what it recognises, whatever it is handed",async()=>{
   assert.equal(Object.keys((await stored(setup)).providers).length,12);
   await put({
     checked_at:"z".repeat(500),
-    providers:{etherscan_base:{status:"ok",checked_at:"t".repeat(500),message:"m".repeat(5000),extra:"x"},"Bad Id":{status:"ok"},trongrid:{status:"fine"},blockstream:"ok"}
+    providers:{etherscan_arbitrum:{status:"ok",checked_at:"t".repeat(500),message:"m".repeat(5000),extra:"x"},"Bad Id":{status:"ok"},trongrid:{status:"fine"},blockstream:"ok"}
   });
   const record=await stored(setup);
-  assert.deepEqual(Object.keys(record.providers),["etherscan_base"]);
-  assert.deepEqual(Object.keys(record.providers.etherscan_base).sort(),["checked_at","message","status"]);
-  assert.equal(record.providers.etherscan_base.message.length,120);
+  assert.deepEqual(Object.keys(record.providers),["etherscan_arbitrum"]);
+  assert.deepEqual(Object.keys(record.providers.etherscan_arbitrum).sort(),["checked_at","message","status"]);
+  assert.equal(record.providers.etherscan_arbitrum.message.length,120);
   assert.equal(record.checked_at.length,40);
   assert.equal(record.extra,undefined);
 });
@@ -673,7 +673,7 @@ test("the gate stores only what it recognises, whatever it is handed",async()=>{
 test("/health publishes each provider's status, checked_at and message, and never the claim",async()=>{
   const {resetCryptoProviderStatusCache}=await health;
   resetCryptoProviderStatusCache();
-  const {env}=await probeOnce({etherscan_bsc:notok("Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage. https://etherscan.io/apis")});
+  const {env}=await probeOnce({etherscan_polygon:notok("Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage. https://etherscan.io/apis")});
   const response=await getHealth(env);
   assert.equal(response.status,200);
   assert.equal(response.headers.get("Access-Control-Allow-Origin"),"https://ct-atlas.com");
@@ -681,11 +681,11 @@ test("/health publishes each provider's status, checked_at and message, and neve
   assert.equal(body.ok,true);
   assert.equal(body.crypto_providers.bitcoin,true,"the rest of /health is as it was");
   const status=body.crypto_provider_status;
-  assert.deepEqual(Object.keys(status.providers).sort(),[...SEVEN,"tronscan"].sort());
+  assert.deepEqual(Object.keys(status.providers).sort(),[...FIVE,"tronscan"].sort());
   assert.equal(status.stale,false);
   assert.match(status.checked_at,/^\d{4}-\d{2}-\d{2}T/);
-  assert.deepEqual(Object.keys(status.providers.etherscan_bsc).sort(),["checked_at","message","status"]);
-  assert.equal(status.providers.etherscan_bsc.status,"plan_restricted");
+  assert.deepEqual(Object.keys(status.providers.etherscan_polygon).sort(),["checked_at","message","status"]);
+  assert.equal(status.providers.etherscan_polygon.status,"plan_restricted");
   assert.equal(status.providers.etherscan_ethereum.status,"ok");
   assert.equal(status.providers.tronscan.status,"not_configured");
   assert.equal(JSON.stringify(status).includes("claimed_at"),false);
@@ -816,15 +816,15 @@ test("end to end: the real scheduled() fills the record that /health then publis
   const {resetCryptoProviderStatusCache}=await health;
   resetCryptoProviderStatusCache();
   const setup=await rig();
-  const {fetcher,calls}=providers({etherscan_base:notok("Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage. https://etherscan.io/apis")});
+  const {fetcher,calls}=providers({etherscan_arbitrum:notok("Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage. https://etherscan.io/apis")});
   const waits=[];
   await withGlobalFetch(fetcher,async()=>{
     await app.scheduled({cron:"7,17,27,37,47,57 * * * *",scheduledTime:at("2026-11-06T22:27:00Z")},setup.env,{waitUntil:promise=>waits.push(promise)});
     await Promise.all(waits);
   });
-  assert.equal(calls.length,7);
+  assert.equal(calls.length,5);
   const {crypto_provider_status:status}=await (await getHealth(setup.env)).json();
-  assert.equal(status.providers.etherscan_base.status,"plan_restricted");
+  assert.equal(status.providers.etherscan_arbitrum.status,"plan_restricted");
   assert.equal(status.providers.etherscan_ethereum.status,"ok");
   assert.equal(status.providers.blockstream.status,"ok");
   assert.equal(status.providers.trongrid.status,"ok");

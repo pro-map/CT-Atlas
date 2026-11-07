@@ -15,10 +15,15 @@ const CRYPTO_VERSION = "crypto-intel-v6-risk-assessment";
 
 const EVM_CHAINS = {
   ethereum: { chainid: "1", name: "Ethereum", symbol: "ETH", explorer: "https://etherscan.io" },
-  bsc: { chainid: "56", name: "BNB Smart Chain", symbol: "BNB", explorer: "https://bscscan.com" },
   polygon: { chainid: "137", name: "Polygon", symbol: "POL", explorer: "https://polygonscan.com" },
-  arbitrum: { chainid: "42161", name: "Arbitrum One", symbol: "ETH", explorer: "https://arbiscan.io" },
-  base: { chainid: "8453", name: "Base", symbol: "ETH", explorer: "https://basescan.org" }
+  arbitrum: { chainid: "42161", name: "Arbitrum One", symbol: "ETH", explorer: "https://arbiscan.io" }
+};
+
+// Etherscan's free plan refuses these chains. Saved cases, labels and watches still name them, so
+// they stay valid data, but a request naming one is refused: it is never read on another chain.
+const RETIRED_CHAINS = {
+  bsc: { name: "BNB Smart Chain", explorer: "https://bscscan.com" },
+  base: { name: "Base", explorer: "https://basescan.org" }
 };
 
 const EVM_CHAIN_KEYS = new Set(Object.keys(EVM_CHAINS));
@@ -58,6 +63,12 @@ function normalizeChainHint(value) {
   return hint || "auto";
 }
 
+function retiredChainError(chain) {
+  if (!Object.hasOwn(RETIRED_CHAINS, chain)) return "";
+  const { name, explorer } = RETIRED_CHAINS[chain];
+  return name + " is no longer supported by CT Atlas, so nothing was analysed. Saved work on this chain is kept, and " + explorer + " still shows it.";
+}
+
 function looksLikeBitcoinAddress(value) {
   return BTC_BASE58_RE.test(value) || BTC_BECH32_RE.test(value);
 }
@@ -74,6 +85,8 @@ function addressTarget(chain, value) {
 function detectCryptoInput(query, chainHint = "auto") {
   const value = cleanText(query, 180);
   const hint = normalizeChainHint(chainHint);
+  const retired = retiredChainError(hint);
+  if (retired) return { error: retired };
   if (!value) return { error: "Enter a wallet address or transaction hash." };
 
   if (hint === "bitcoin") {
@@ -94,12 +107,15 @@ function detectCryptoInput(query, chainHint = "auto") {
     return { error: "This does not look like an EVM address or transaction hash." };
   }
 
+  // Past this line a 0x address reads as Ethereum, which is right only when no chain was named.
+  if (hint !== "auto") return { error: "This blockchain is not supported by CT Atlas, so nothing was analysed." };
+
   if (TRON_ADDRESS_RE.test(value)) return addressTarget("tron", value);
   if (EVM_ADDRESS_RE.test(value)) return { chain: "ethereum", kind: "address", value: value.toLowerCase() };
   if (looksLikeBitcoinAddress(value)) return addressTarget("bitcoin", value);
   if (EVM_TX_RE.test(value)) {
     return {
-      error: "A 0x transaction hash can exist on several EVM chains. Select Ethereum, BNB Chain, Polygon, Arbitrum or Base."
+      error: "A 0x transaction hash can exist on several EVM chains. Select Ethereum, Polygon or Arbitrum."
     };
   }
   if (HEX64_RE.test(value)) {
@@ -977,6 +993,8 @@ async function handleCrypto(request, env) {
 export {
   CRYPTO_VERSION,
   EVM_CHAINS,
+  RETIRED_CHAINS,
+  retiredChainError,
   BLOCKSTREAM_API,
   TRONGRID_API,
   etherscanUrl,

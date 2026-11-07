@@ -121,7 +121,8 @@ this environment; do not present these seed records as complete current PoR list
   source information.
 - CSV columns: `chain,address,name,wallet_role,confidence,source_type,source_title,source_url,notes`.
   Accepted chain names: `bitcoin`, `ethereum`, `bsc`, `polygon`, `arbitrum`, `base`,
-  and `tron`. The admin panel can download an empty CSV template.
+  and `tron`. `bsc` and `base` are labels only: those chains can no longer be analysed
+  (see Retired chains). The admin panel can download an empty CSV template.
 - The graph and transaction table identify approved exchange addresses by name.
   A transaction relationship alone is never treated as proof that an address
   belongs to an exchange.
@@ -149,9 +150,9 @@ only, and a plan can allow one chain and refuse another.
 `crypto-provider-health.js` runs on the ten-minute cron, at most once an hour, and within ten
 minutes of the first deploy. No route can start it. It makes one small call to Blockstream, to
 Etherscan V2 for each chain in `EVM_CHAINS`, and to TronGrid, through the same request code as a
-real analysis: at most 7 upstream calls an hour, none of them Gemini, and no retry. When
+real analysis: at most 5 upstream calls an hour, none of them Gemini, and no retry. When
 `TRONSCAN_TAG_LOOKUP_ENABLED` and its key are set, Tronscan takes turns with Blockstream, so the
-two are each up to two hours old and the budget stays 7. A run skips the six-hour monitor's tick,
+two are each up to two hours old and the budget stays 5. A run skips the six-hour monitor's tick,
 which spends the same keys.
 
 Each entry of `providers` has a `status`, its own `checked_at` and a `message` stripped of any
@@ -171,6 +172,29 @@ last run is over 130 minutes old, so the result no longer describes the present.
 means the Durable Object did not answer within 800 ms; `/health` still answers. It reads the object
 directly, so it never waits for the EU migration or starts it. An ok on Etherscan
 proves the `balance` call for that chain; the status is read through a 60-second cache.
+
+## Retired chains
+
+BNB Smart Chain (`bsc`, chain 56) and Base (`base`, chain 8453) left the tool on 2026-11-07: the
+probe, with the real key, found Etherscan answering "Free API access is not supported for this
+chain". The analysable chains are now Bitcoin, Ethereum, Polygon, Arbitrum One and TRON.
+
+- A request naming a retired chain gets a 400 that says so, from `/crypto-analyze`,
+  `/crypto-monitor-check` and `/crypto-exchange-attribution`. It is never read on another chain.
+  Any other chain name the Worker does not know is refused too: only `auto`, or no chain at all,
+  reads a 0x address as Ethereum.
+- Saved data stays valid. `safeChain` in `crypto-workspace.js` keeps both names on purpose: a blank
+  chain would drop a label, watch or cross-chain link at the next save. The page shows them with
+  the chain's name and a link to bscscan.com or basescan.org, from its display-only
+  `RETIRED_CHAINS`.
+- The monitor does not check these watches. The gate keeps them out of the rotation, so they cost
+  no batch slot, and reports them as `retired`; the run counts them under `skipped`. Baselines and
+  alerts stay as they are. The page marks them NOT CHECKED and leaves them out of CHECK MONITORED
+  NOW.
+- `/health` no longer lists `etherscan_bsc` or `etherscan_base`. The gate drops both from a record
+  stored before the change.
+- Sanctions matching, exchange labels and the risk tables still name both chains. They are
+  reference data, not chain APIs.
 
 Deploy `index.js`, `crypto.js`, `crypto-risk.mjs`, `crypto-monitor.js`, `crypto-provider-health.js`, `crypto-workspace.js`,
 `exchange-addresses.js`, `exchange-behavior.mjs`, `report-gate.js`, and their existing shared dependencies together to the existing

@@ -168,11 +168,15 @@ const CRYPTO_PROVIDER_STATUS_KEY = "crypto-provider-status";
 const CRYPTO_PROVIDER_PROBE_INTERVAL_MS = 60 * 60 * 1000;
 const CRYPTO_PROVIDER_MAX_ENTRIES = 12;
 const CRYPTO_PROVIDER_STATUSES = new Set(["ok", "rate_limited", "plan_restricted", "auth_failed", "unavailable", "not_configured"]);
+// RETIRED_CHAINS in crypto.js. This file only imports shared.js, and a test keeps the two equal.
+const RETIRED_CRYPTO_CHAINS = new Set(["bsc", "base"]);
 
 function cryptoProviderStatusView(record) {
   const providers = {};
   for (const [id, entry] of Object.entries(record?.providers || {}).slice(0, CRYPTO_PROVIDER_MAX_ENTRIES)) {
     if (!/^[a-z_]{1,32}$/.test(id) || !CRYPTO_PROVIDER_STATUSES.has(entry?.status)) continue;
+    // A record stored before a chain was retired must not bring it back on /health.
+    if (RETIRED_CRYPTO_CHAINS.has(id.replace(/^etherscan_/, ""))) continue;
     providers[id] = { status: entry.status, checked_at: cleanText(entry.checked_at, 40), message: cleanText(entry.message, 120) };
   }
   return { checked_at: cleanText(record?.checked_at, 40), providers };
@@ -930,16 +934,19 @@ export class ReportGate {
         const watchId = cleanText(body.watch_id, 80);
         return Response.json({ ok: true, targets: targets.filter(item => item.username === username && item.watch.id === watchId) });
       }
-      if (!targets.length) return Response.json({ ok: true, targets: [], total: 0 });
+      // A batch is 8 wallets: a watch nobody can read would take a live wallet's turn on every run.
+      const rotation = targets.filter(item => !RETIRED_CRYPTO_CHAINS.has(item.watch.chain));
+      const retired = targets.length - rotation.length;
+      if (!rotation.length) return Response.json({ ok: true, targets: [], total: 0, retired });
 
       const cursorRaw = Number((await this.state.storage.get("crypto-monitor-cursor")) || 0);
-      const cursor = ((cursorRaw % targets.length) + targets.length) % targets.length;
+      const cursor = ((cursorRaw % rotation.length) + rotation.length) % rotation.length;
       const selected = [];
-      for (let i = 0; i < Math.min(limit, targets.length); i++) {
-        selected.push(targets[(cursor + i) % targets.length]);
+      for (let i = 0; i < Math.min(limit, rotation.length); i++) {
+        selected.push(rotation[(cursor + i) % rotation.length]);
       }
-      await this.state.storage.put("crypto-monitor-cursor", (cursor + selected.length) % targets.length);
-      return Response.json({ ok: true, targets: selected, total: targets.length, cursor });
+      await this.state.storage.put("crypto-monitor-cursor", (cursor + selected.length) % rotation.length);
+      return Response.json({ ok: true, targets: selected, total: rotation.length, retired, cursor });
     }
 
     if (url.pathname === "/crypto-monitor-update") {

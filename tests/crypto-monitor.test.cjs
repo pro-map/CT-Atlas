@@ -15,7 +15,7 @@ async function analyzeCryptoAddress(){throw new Error("network not used");}
 
 function harness(overrides={}){
   const context=vm.createContext({
-    cleanText,gateCall,analyzeCryptoAddress,
+    cleanText,gateCall,analyzeCryptoAddress,retiredChainError:()=>"",
     crypto:{randomUUID:()=> "uuid-monitor"},
     Date,Number,String,Array,Object,Set,Map,console,
     ...overrides

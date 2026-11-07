@@ -17,13 +17,14 @@ import {
   waitBeforeGeminiRetry,
   GEMINI_SECOND_FALLBACK_MODEL
 } from "./shared.js";
+import { retiredChainError } from "./crypto.js";
 
 const EXCHANGE_ATTRIBUTION_VERSION = "exchange-attribution-v2";
 const ATTRIBUTION_MODEL = "gemini-3.5-flash-lite";
 const MAX_WALLETS = 8;
 const MAX_NEIGHBOURS = 12;
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-const CHAINS = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
+const CHAINS = new Set(["bitcoin", "ethereum", "polygon", "arbitrum", "tron"]);
 const CONFIDENCE = new Set(["low", "moderate", "high"]);
 
 const INSTRUCTION = `
@@ -192,7 +193,7 @@ async function handleExchangeAttribution(request, env) {
   if (!session.ok || session.p?.username !== username) return jsonResponse({ error: "Unauthorized session." }, 401, env);
 
   const chain = cleanText(body?.chain, 20).toLowerCase();
-  if (!CHAINS.has(chain)) return jsonResponse({ error: "Unsupported chain." }, 400, env);
+  if (!CHAINS.has(chain)) return jsonResponse({ error: retiredChainError(chain) || "Unsupported chain." }, 400, env);
   const wallets = parseWallets(body?.wallets, chain);
   if (!wallets.length) return jsonResponse({ version: EXCHANGE_ATTRIBUTION_VERSION, attributions: [] }, 200, env);
   if (!env.GEMINI_API_KEY) return jsonResponse({ error: "AI attribution is not configured." }, 503, env);

@@ -77,6 +77,13 @@ const SERVICE_REGISTRY={
   }
 };
 
+// Display only, for saved work that names them: these chains are neither offered nor analysed. The
+// explorers are separate from the API that refused them, and share one URL scheme.
+const RETIRED_CHAINS={
+  bsc:{name:"BNB Smart Chain",explorer:"https://bscscan.com"},
+  base:{name:"Base",explorer:"https://basescan.org"}
+};
+
 function token(){return String(sessionStorage.getItem(TOKEN_KEY)||"");}
 function user(){return String(sessionStorage.getItem(USER_KEY)||"").trim().toLowerCase();}
 function esc(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
@@ -115,7 +122,28 @@ function redirectToLogin(){
 function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 function traceKey(address,chain){
   const value=String(address||"");
-  return ["ethereum","bsc","polygon","arbitrum","base"].includes(chain)?value.toLowerCase():value;
+  return ["ethereum","polygon","arbitrum"].includes(chain)?value.toLowerCase():value;
+}
+
+function retiredChain(chain){
+  const key=String(chain||"").toLowerCase();
+  return Object.hasOwn(RETIRED_CHAINS,key)?RETIRED_CHAINS[key]:null;
+}
+function chainName(chain){return retiredChain(chain)?.name||String(chain||"");}
+function retiredChainNotice(chain){return chainName(chain)+" is no longer supported by CT Atlas, so nothing was analysed.";}
+function retiredExplorerUrl(chain,value){
+  const retired=retiredChain(chain),text=String(value||"");
+  const kind=/^0x[a-f0-9]{40}$/i.test(text)?"address":/^0x[a-f0-9]{64}$/i.test(text)?"tx":"";
+  return retired&&kind?retired.explorer+"/"+kind+"/"+text:"";
+}
+function retiredExplorerLink(chain,value){
+  const url=retiredExplorerUrl(chain,value);
+  return url?'<a class="tx-link" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(url.split("/")[2])+"</a>":"";
+}
+// One saved wallet as a PDF line: the chain's name, plus the explorer once the tool cannot read it.
+function chainEntry(chain,address){
+  const url=retiredExplorerUrl(chain,address);
+  return chainName(chain)+": "+address+(url?" · "+url:"");
 }
 
 async function verifySession(){
@@ -319,6 +347,7 @@ function scheduleWorkspaceSave(){
   workspaceSaveTimer=setTimeout(()=>saveCryptoWorkspace(),250);
 }
 
+// Saved labels and watches on a retired chain are still compared by this key.
 function normalizeAddressForChain(address,chain){
   const value=String(address||"");
   return ["ethereum","bsc","polygon","arbitrum","base"].includes(chain)?value.toLowerCase():value;
@@ -413,8 +442,7 @@ function kpi(label,value){
 function nativeAssetFor(payload){
   if(payload?.chain==="bitcoin")return "BTC";
   if(payload?.chain==="tron")return "TRX";
-  if(["ethereum","arbitrum","base"].includes(payload?.chain))return "ETH";
-  if(payload?.chain==="bsc")return "BNB";
+  if(["ethereum","arbitrum"].includes(payload?.chain))return "ETH";
   if(payload?.chain==="polygon")return "POL";
   return "";
 }
@@ -585,13 +613,19 @@ function renderFilterSummary(rows){
 
 function isSearchableAddress(address,chain){
   const value=String(address||"");
-  if(["ethereum","bsc","polygon","arbitrum","base"].includes(chain))return /^0x[a-fA-F0-9]{40}$/.test(value);
+  if(["ethereum","polygon","arbitrum"].includes(chain))return /^0x[a-fA-F0-9]{40}$/.test(value);
   if(chain==="tron")return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(value);
   if(chain==="bitcoin")return /^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9]{24,33})$/i.test(value);
   return false;
 }
 
 function openCryptoSearch(address,chain){
+  if(retiredChain(chain)){
+    const url=retiredExplorerUrl(chain,address);
+    setStatus(retiredChainNotice(chain)+(url?" Its explorer: "+url:""),"warning");
+    if(url)window.open(url,"_blank","noopener");
+    return;
+  }
   if(!isSearchableAddress(address,chain)){
     setStatus("This provider returned an encoded/non-searchable counterparty address for the current chain. You can still inspect linked transactions.","warning");
     return;
@@ -1346,8 +1380,9 @@ function renderLabelList(){
     const role=label.category==="EXCHANGE"&&label.wallet_role?" · "+label.wallet_role.replaceAll("_"," "):"";
     const state=label.shared?'<span class="intel-badge clear exchange-source-badge">SHARED · APPROVED</span>':label.builtin?'<span class="intel-badge pattern exchange-source-badge">BUILT-IN</span>':"";
     const remove=label.shared||label.builtin?"":'<div class="intel-actions"><button type="button" class="crypto-small-button label-delete" data-id="'+esc(label.id)+'">DELETE</button></div>';
+    const retired=retiredChain(label.chain)?esc(chainName(label.chain))+' · ':"";
     return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(label.name||label.category)+'</div>'+
-      '<div class="intel-meta">'+esc(label.category+role)+' · '+esc(short(label.address,9))+'</div></div>'+
+      '<div class="intel-meta">'+retired+esc(label.category+role)+' · '+esc(short(label.address,9))+' '+retiredExplorerLink(label.chain,label.address)+'</div></div>'+
       '<div>'+state+'<span class="intel-badge '+String(label.confidence||"low").toLowerCase()+'">'+esc(label.confidence||"LOW")+'</span></div></div>'+
       '<div class="label-source">SOURCE: '+source+'</div>'+
       (label.notes?'<div class="intel-detail">'+esc(label.notes)+'</div>':"")+
@@ -1402,7 +1437,7 @@ async function refreshExchangeProposals(){
     const source=item.source_url
       ?'<a href="'+esc(item.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.source_title||item.source_url)+'</a>'
       :esc(item.source_title||item.source_type||"No source title");
-    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.name)+'</div><div class="intel-meta">'+esc(item.chain)+' · '+esc(item.wallet_role||"UNKNOWN")+' · '+esc(short(item.address,10))+'</div></div><span class="intel-badge '+String(item.confidence||"medium").toLowerCase()+'">'+esc(item.confidence||"MEDIUM")+'</span></div><div class="label-source">SOURCE: '+source+'</div>'+(item.notes?'<div class="intel-detail">'+esc(item.notes)+'</div>':"")+'<div class="intel-meta">Submitted by '+esc(item.created_by||"unknown")+' · '+esc(fmtTime(item.created_at))+'</div><div class="exchange-proposal-actions"><button class="crypto-small-button trace-button" data-exchange-review="approve" data-proposal-id="'+esc(item.id)+'" type="button">APPROVE</button><button class="crypto-small-button" data-exchange-review="reject" data-proposal-id="'+esc(item.id)+'" type="button">REJECT</button></div></div>';
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.name)+'</div><div class="intel-meta">'+esc(chainName(item.chain))+' · '+esc(item.wallet_role||"UNKNOWN")+' · '+esc(short(item.address,10))+'</div></div><span class="intel-badge '+String(item.confidence||"medium").toLowerCase()+'">'+esc(item.confidence||"MEDIUM")+'</span></div><div class="label-source">SOURCE: '+source+'</div>'+(item.notes?'<div class="intel-detail">'+esc(item.notes)+'</div>':"")+'<div class="intel-meta">Submitted by '+esc(item.created_by||"unknown")+' · '+esc(fmtTime(item.created_at))+'</div><div class="exchange-proposal-actions"><button class="crypto-small-button trace-button" data-exchange-review="approve" data-proposal-id="'+esc(item.id)+'" type="button">APPROVE</button><button class="crypto-small-button" data-exchange-review="reject" data-proposal-id="'+esc(item.id)+'" type="button">REJECT</button></div></div>';
   }).join("");
 }
 
@@ -1558,11 +1593,16 @@ function renderCaseUi(){
 
   const active=cases.find(item=>item.id===activeCaseId);
   if(!active){detail.textContent="Select or create a case to persist seeds, paths and analyst notes.";return;}
+  // A link from a retired chain can no longer appear on a graph, so it is listed here.
+  const retiredLinks=(active.crosschain_links||[]).filter(link=>retiredChain(link.from_chain)||retiredChain(link.to_chain));
+  const linkSide=(chain,address)=>esc(chainName(chain))+' '+esc(short(address,8))+' '+retiredExplorerLink(chain,address);
   detail.innerHTML='<div class="intel-title">'+esc(active.name)+'</div>'+
     '<div class="intel-detail">'+esc(active.description||"No description")+'</div>'+
-    '<div class="intel-meta">SEEDS</div><div>'+((active.seed_addresses||[]).map(address=>'<span class="case-pill">'+esc(short(address,8))+'</span>').join("")||"—")+'</div>'+
+    (retiredChain(active.chain)?'<div class="intel-meta">CHAIN · '+esc(chainName(active.chain))+' · NO LONGER ANALYSED</div>':"")+
+    '<div class="intel-meta">SEEDS</div><div>'+((active.seed_addresses||[]).map(address=>'<span class="case-pill">'+esc(short(address,8))+' '+retiredExplorerLink(active.chain,address)+'</span>').join("")||"—")+'</div>'+
     '<div class="intel-meta" style="margin-top:7px">SAVED PATHS · '+(active.saved_paths||[]).length+'</div>'+
     '<div class="intel-meta" style="margin-top:7px">OFF-CHAIN NODES · '+(active.offchain_nodes||[]).length+' · CROSS-CHAIN LINKS · '+(active.crosschain_links||[]).length+'</div>'+
+    retiredLinks.map(link=>'<div class="intel-detail">'+linkSide(link.from_chain,link.from_address)+' → '+linkSide(link.to_chain,link.to_address)+'</div>').join("")+
     '<div class="intel-meta" style="margin-top:7px">NOTES · '+(active.notes||[]).length+'</div>';
 }
 
@@ -1689,9 +1729,9 @@ async function exportCasePdf(){
   const blocks=[
     {text:"CASE SUMMARY",type:"heading"},
     {text:item.description||"No description provided.",type:"body"},
-    {text:"STATUS: "+(item.status||"OPEN")+" · CHAIN: "+(item.chain||lastPayload?.chain||"—"),type:"meta"},
+    {text:"STATUS: "+(item.status||"OPEN")+" · CHAIN: "+(chainName(item.chain)||lastPayload?.chain||"—")+(retiredChain(item.chain)?" (no longer analysed)":""),type:"meta"},
     {text:"SEED ADDRESSES",type:"heading"},
-    {text:(item.seed_addresses||[]).join("\n")||"No seeds saved.",type:"body"},
+    {text:(item.seed_addresses||[]).map(address=>retiredExplorerUrl(item.chain,address)?chainEntry(item.chain,address):address).join("\n")||"No seeds saved.",type:"body"},
     ...(risk?window.CTAtlasCryptoReport?.riskSection?.({risk})||[]:[]),
     {text:"BEHAVIORAL PATTERNS",type:"heading"},
     ...((patterns.length?patterns:[{name:"No configured pattern threshold crossed",metric:"",detail:""}]).map(p=>({
@@ -1717,7 +1757,7 @@ async function exportCasePdf(){
     {text:"OFF-CHAIN ENTITIES",type:"heading"},
     ...((item.offchain_nodes||[]).map(node=>({text:(node.type||"OTHER")+" · "+node.label+"\nLinked wallet: "+(node.linked_address||"—")+(node.notes?"\n"+node.notes:""),type:"body"}))),
     {text:"CROSS-CHAIN LINKS",type:"heading"},
-    ...((item.crosschain_links||[]).map(link=>({text:(link.service||"Cross-chain")+" · "+link.confidence+"\n"+link.from_chain+": "+link.from_address+"\n→ "+link.to_chain+": "+link.to_address+(link.notes?"\n"+link.notes:""),type:"body"}))),
+    ...((item.crosschain_links||[]).map(link=>({text:(link.service||"Cross-chain")+" · "+link.confidence+"\n"+chainEntry(link.from_chain,link.from_address)+"\n→ "+chainEntry(link.to_chain,link.to_address)+(link.notes?"\n"+link.notes:""),type:"body"}))),
     {text:"DETECTED SERVICE / BRIDGE / DEX TOUCHPOINTS",type:"heading"},
     ...((cross.length?cross:[{service:{category:"None observed",name:""},source_wallet:"",tx_id:""}]).map(entry=>({
       text:(entry.service?.category||"")+" · "+(entry.service?.name||"")+(entry.source_wallet?"\nSource wallet: "+entry.source_wallet:"")+(entry.tx_id?"\nTX: "+entry.tx_id:""),type:"body"
@@ -1776,11 +1816,11 @@ function caseContextForReport(){
   const item=activeCase();
   if(!item)return null;
   return {
-    name:item.name,status:item.status,chain:item.chain,description:item.description,
+    name:item.name,status:item.status,chain:chainName(item.chain),description:item.description,
     notes:(item.notes||[]).map(note=>note.text),
     savedPaths:(item.saved_paths||[]).map(path=>({name:path.name,nodes:path.nodes||[]})),
     offchain:(item.offchain_nodes||[]).map(node=>({type:node.type,label:node.label,linked:node.linked_address,notes:node.notes})),
-    crosschain:(item.crosschain_links||[]).map(link=>({service:link.service,confidence:link.confidence,from:link.from_chain+": "+link.from_address,to:link.to_chain+": "+link.to_address,notes:link.notes}))
+    crosschain:(item.crosschain_links||[]).map(link=>({service:link.service,confidence:link.confidence,from:chainEntry(link.from_chain,link.from_address),to:chainEntry(link.to_chain,link.to_address),notes:link.notes}))
   };
 }
 
@@ -2008,7 +2048,7 @@ function monitorSeed(){
 
 // A Worker with revisions takes alerts and baselines only from its own monitor, so a save from this
 // page could not add them: the check has to run there. An older Worker has no revisions or route.
-async function checkMonitoredOnServer(watches,status){
+async function checkMonitoredOnServer(watches,status,skipped){
   let created=0,checked=0,failed=0;
   for(const watch of watches){
     status.textContent="Checking "+(checked+failed+1)+"/"+watches.length+" · "+short(watch.address,8);
@@ -2038,21 +2078,28 @@ async function checkMonitoredOnServer(watches,status){
     console.warn("Crypto workspace refresh failed",error);
   }
   status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s)"+
-    (failed?" · "+failed+" could not be checked":"")+(refreshed?".":". Reload the page to see them.");
+    (failed?" · "+failed+" could not be checked":"")+skipped+(refreshed?".":". Reload the page to see them.");
 }
 
 async function checkMonitored(){
   const button=document.getElementById("monitorCheckButton");
   const status=document.getElementById("monitorStatus");
-  const watches=(cryptoWorkspace.watchlist||[]).filter(item=>item.enabled!==false);
-  if(!watches.length){status.textContent="No monitored wallets.";return;}
+  const enabled=(cryptoWorkspace.watchlist||[]).filter(item=>item.enabled!==false);
+  // Kept out before the 50-wallet cap, so they cannot take a live wallet's place in it.
+  const watches=enabled.filter(item=>!retiredChain(item.chain));
+  const retired=enabled.length-watches.length;
+  const skipped=retired?" · "+retired+" on a chain no longer supported, not checked":"";
+  if(!watches.length){
+    status.textContent=retired?"Nothing to check: "+retired+" monitored wallet(s) on a chain no longer supported.":"No monitored wallets.";
+    return;
+  }
   if(button){button.disabled=true;button.textContent="CHECKING…";}
   let created=0,checked=0;
   try{
     if(workspaceRevision!==null){
       clearTimeout(workspaceSaveTimer);
       await saveCryptoWorkspace();
-      await checkMonitoredOnServer(watches.slice(0,50),status);
+      await checkMonitoredOnServer(watches.slice(0,50),status,skipped);
       return;
     }
     for(const watch of watches.slice(0,50)){
@@ -2141,7 +2188,7 @@ async function checkMonitored(){
       await sleep(250);
     }
     scheduleWorkspaceSave();renderAlerts();renderWatchlist();
-    status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s).";
+    status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s)"+skipped+".";
   }finally{
     if(button){button.disabled=false;button.textContent="CHECK MONITORED NOW";}
   }
@@ -2156,7 +2203,7 @@ function renderAlerts(){
     const severity=esc(String(item.severity||"low").toLowerCase());
     const acknowledged=item.acknowledged===true;
     return '<div class="intel-item alert-item '+severity+(acknowledged?" acknowledged":"")+'"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.title)+'</div>'+
-      '<div class="intel-meta">'+esc(item.type)+' · '+esc(short(item.address,8))+' · '+esc(fmtTime(item.created_at))+'</div></div>'+
+      '<div class="intel-meta">'+(retiredChain(item.chain)?esc(chainName(item.chain))+' · ':"")+esc(item.type)+' · '+esc(short(item.address,8))+' · '+esc(fmtTime(item.created_at))+' '+retiredExplorerLink(item.chain,item.tx_id||item.address)+'</div></div>'+
       '<span class="intel-badge '+severity+'">'+esc(item.severity||"LOW")+'</span></div>'+
       '<div class="intel-detail">'+esc(item.detail||"")+'</div>'+
       (acknowledged
@@ -2186,12 +2233,14 @@ function renderWatchlist(){
   if(!watches.length){box.innerHTML='<div class="intel-result">No monitored wallets. Analyse a wallet, then select MONITOR SEED.</div>';return;}
   box.innerHTML=watches.map(item=>{
     const paused=item.enabled===false;
+    const retired=retiredChain(item.chain);
     const limits=thresholdsText(item);
     const checked=item.last_snapshot?.checked_at?fmtTime(item.last_snapshot.checked_at):"never";
     return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.label||short(item.address,9))+'</div>'+
-      '<div class="intel-meta">'+esc(item.chain)+' · '+esc(short(item.address,9))+' · last checked '+esc(checked)+'</div></div>'+
-      '<span class="intel-badge '+(paused?"unscreened":"clear")+'">'+(paused?"PAUSED":"ACTIVE")+'</span></div>'+
+      '<div class="intel-meta">'+esc(chainName(item.chain))+' · '+esc(short(item.address,9))+' · last checked '+esc(checked)+' '+retiredExplorerLink(item.chain,item.address)+'</div></div>'+
+      '<span class="intel-badge '+(paused||retired?"unscreened":"clear")+'">'+(retired?"NOT CHECKED":paused?"PAUSED":"ACTIVE")+'</span></div>'+
       (limits?'<div class="intel-detail">'+esc(limits)+'</div>':"")+
+      (retired?'<div class="intel-detail">'+esc(chainName(item.chain))+' is no longer supported by CT Atlas: this wallet is skipped, and its saved baseline and alerts are kept.</div>':"")+
       '<div class="intel-actions"><button type="button" class="crypto-small-button" data-watch-toggle="'+esc(item.id)+'">'+(paused?"RESUME":"PAUSE")+'</button>'+
       '<button type="button" class="crypto-small-button" data-watch-delete="'+esc(item.id)+'">DELETE</button></div></div>';
   }).join("");
@@ -2256,7 +2305,7 @@ function crossChainFindings(){
     findings.push({
       service:{name:link.service||"Analyst cross-chain link",category:"BRIDGE",source:"CASE LINK · "+(link.confidence||"LOW")},
       address:link.to_address,tx_id:"",time:link.created_at,source_wallet:link.from_address,asset:"",amount:null,
-      destination_chain:link.to_chain
+      destination_chain:chainName(link.to_chain)
     });
   }
   return findings.slice(0,50);
@@ -3337,9 +3386,9 @@ function paintGraphFrame(payload,model){
     const p=graphPositions.get(key);
     html+='<g class="graph-edge-group graph-aux-edge" data-from="'+esc(fromKey)+'" data-to="'+esc(key)+'"><line class="graph-edge crosschain-link" x1="'+base.x+'" y1="'+base.y+'" x2="'+p.x+'" y2="'+p.y+'"></line></g>';
     html+='<g class="graph-aux-node crosschain-node" data-aux-key="'+esc(key)+'" data-to-chain="'+esc(link.to_chain)+'" data-to-address="'+esc(link.to_address)+'" transform="translate('+p.x+" "+p.y+')" tabindex="0" role="button">'+
-      '<title>'+esc((link.service||"Cross-chain link")+" · "+link.confidence+" · "+link.to_chain+" · "+link.to_address)+'</title>'+
+      '<title>'+esc((link.service||"Cross-chain link")+" · "+link.confidence+" · "+chainName(link.to_chain)+" · "+link.to_address)+'</title>'+
       '<polygon points="0,-29 38,0 0,29 -38,0"></polygon>'+
-      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(short(link.service||link.to_chain,10))+'</text>'+
+      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(short(link.service||chainName(link.to_chain),10))+'</text>'+
       '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(link.to_chain.toUpperCase()+" · "+short(link.to_address,5))+'</text></g>';
   });
 
@@ -3672,14 +3721,18 @@ function applyUrlQuery(){
   const params=new URLSearchParams(window.location.search);
   const q=String(params.get("q")||"").trim();
   const chain=String(params.get("chain")||"").trim();
+  const select=document.getElementById("cryptoChain");
+  // Left on Auto detect, a 0x address from a link to a chain this page lacks would read as Ethereum.
+  if(chain&&select&&![...select.options].some(option=>option.value===chain)){
+    const url=retiredExplorerUrl(chain,q);
+    setStatus((retiredChain(chain)?retiredChainNotice(chain):"This link names a blockchain CT Atlas does not support, so nothing was analysed.")+(url?" Its explorer: "+url:""),"error");
+    return false;
+  }
   if(q){
     const input=document.getElementById("cryptoQuery");
     if(input)input.value=q;
   }
-  if(chain){
-    const select=document.getElementById("cryptoChain");
-    if(select&&[...select.options].some(option=>option.value===chain))select.value=chain;
-  }
+  if(chain&&select)select.value=chain;
   return Boolean(q&&params.get("autorun")==="1");
 }
 

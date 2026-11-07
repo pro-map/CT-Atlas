@@ -51,7 +51,7 @@ database_id = "7c00bac7-05b6-443c-a305-c2bd9352c857"
 
 
 # Crypto Intelligence provider secrets (configure in Cloudflare, never commit values):
-#   ETHERSCAN_API_KEY  -> Etherscan API V2 for Ethereum and supported EVM chains.
+#   ETHERSCAN_API_KEY  -> Etherscan API V2 for Ethereum, Polygon and Arbitrum One.
 #   TRONGRID_API_KEY   -> TronGrid Mainnet API key sent as TRON-PRO-API-KEY.
 # Bitcoin uses Blockstream Esplora's public read-only API and needs no secret.
 

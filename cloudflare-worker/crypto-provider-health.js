@@ -5,7 +5,7 @@ import { tronscanTagEnabled, tronscanTagRequest } from "./exchange-addresses.js"
 // Answers from outside "which Crypto provider works right now, with the real keys?". Only the
 // Worker holds the keys, so the cron asks each provider once and /health publishes the outcome.
 // No route can start a run: a visitor reads the last result and causes no upstream call.
-// Quota: at most 7 upstream calls an hour (Blockstream or Tronscan, 5 Etherscan chains, TronGrid), none of them Gemini.
+// Quota: at most 5 upstream calls an hour (Blockstream or Tronscan, 3 Etherscan chains, TronGrid), none of them Gemini.
 
 // Public addresses, fixed so that a run says nothing about what anyone is investigating.
 const PROBE_BITCOIN_ADDRESS = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
@@ -166,7 +166,7 @@ function tronscanCheck(env) {
   };
 }
 
-// In sequence: five at once would trip the rate limit they are there to measure.
+// In sequence: all at once could trip the rate limit they are there to measure.
 async function probeEtherscan(env, run) {
   const chains = Object.keys(EVM_CHAINS);
   if (!env.ETHERSCAN_API_KEY) return chains.map(chain => ["etherscan_" + chain, outcome("not_configured")]);
@@ -193,7 +193,7 @@ async function probeProviders(env, previous, fetcher, limits) {
   const ask = async check => [[check.id, await probeProvider(check, run)]];
   const known = previous?.providers || {};
   const tronscanOn = tronscanTagEnabled(env);
-  // An eighth call would break the quota, so Tronscan takes turns with Blockstream, which needs
+  // A sixth call would break the quota, so Tronscan takes turns with Blockstream, which needs
   // no key and is the one /health/status also reaches. The other keeps its last result.
   const tronscanTurn = tronscanOn && lastChecked(known.blockstream) > lastChecked(known.tronscan);
   const lists = await Promise.all([

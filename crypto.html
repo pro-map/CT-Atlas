@@ -41,16 +41,14 @@
           <option value="auto">Auto detect</option>
           <option value="bitcoin">Bitcoin</option>
           <option value="ethereum">Ethereum</option>
-          <option value="bsc">BNB Smart Chain</option>
           <option value="polygon">Polygon</option>
           <option value="arbitrum">Arbitrum One</option>
-          <option value="base">Base</option>
           <option value="tron">TRON</option>
         </select>
       </label>
       <button id="cryptoRun" type="button">ANALYSE</button>
       <div class="crypto-hint">
-        Current scope: deterministic on-chain address/transaction analysis, recent flow graph and counterparties. Auto-detection is safe for addresses; ambiguous transaction hashes require an explicit blockchain selection.
+        Current scope: deterministic on-chain address/transaction analysis, recent flow graph and counterparties, on Bitcoin, Ethereum, Polygon, Arbitrum One and TRON. Auto detect reads a 0x address on Ethereum; ambiguous transaction hashes require an explicit blockchain selection. BNB Smart Chain and Base are no longer supported: saved work on them stays readable, with explorer links.
         <span class="crypto-example">Test example: <button id="cryptoTestExample" class="crypto-example-button" type="button">OFAC-listed Bitcoin address with listed counterparties (demo)</button></span>
       </div>
     </section>
@@ -92,9 +90,9 @@
             <button id="offchainSaveButton" class="crypto-small-button trace-button" type="button">SAVE OFF-CHAIN NODE</button>
           </div>
           <div id="crosschainForm" class="intel-form" hidden>
-            <label class="crypto-field compact"><span>From chain</span><select id="crosschainFromChain"><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option><option value="bsc">BNB Smart Chain</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum One</option><option value="base">Base</option><option value="tron">TRON</option></select></label>
+            <label class="crypto-field compact"><span>From chain</span><select id="crosschainFromChain"><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum One</option><option value="tron">TRON</option></select></label>
             <label class="crypto-field compact"><span>From wallet</span><input id="crosschainFromAddress" maxlength="180" placeholder="Any wallet — defaults to the current seed if one is analysed"></label>
-            <label class="crypto-field compact"><span>Destination chain</span><select id="crosschainToChain"><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option><option value="bsc">BNB Smart Chain</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum One</option><option value="base">Base</option><option value="tron">TRON</option></select></label>
+            <label class="crypto-field compact"><span>Destination chain</span><select id="crosschainToChain"><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum One</option><option value="tron">TRON</option></select></label>
             <label class="crypto-field compact"><span>Destination wallet</span><input id="crosschainToAddress" maxlength="180" placeholder="Destination address"></label>
             <label class="crypto-field compact"><span>Bridge / service</span><input id="crosschainService" maxlength="120" placeholder="Across / Stargate / other"></label>
             <label class="crypto-field compact"><span>Confidence</span><select id="crosschainConfidence"><option>HIGH</option><option selected>MEDIUM</option><option>LOW</option></select></label>
@@ -118,7 +116,7 @@
         </div>
         <div class="crypto-card-body">
           <div id="labelForm" class="intel-form" hidden>
-            <label class="crypto-field compact"><span>Chain</span><select id="labelChain"><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option><option value="bsc">BNB Smart Chain</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum One</option><option value="base">Base</option><option value="tron">TRON</option></select></label>
+            <label class="crypto-field compact"><span>Chain</span><select id="labelChain"><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum One</option><option value="tron">TRON</option></select></label>
             <label class="crypto-field compact"><span>Address</span><input id="labelAddress" autocomplete="off" spellcheck="false"></label>
             <label class="crypto-field compact"><span>Label / entity</span><input id="labelName" maxlength="120" placeholder="Exchange / alias / service"></label>
             <label class="crypto-field compact"><span>Category</span><select id="labelCategory"><option>CT WATCHLIST</option><option>SANCTIONS</option><option>DARKNET</option><option>MIXER</option><option>EXCHANGE</option><option>BRIDGE</option><option>DEX</option><option>GAMBLING</option><option>SCAM/FRAUD</option><option>SERVICE</option><option>PERSON/ALIAS</option><option>ORGANIZATION</option><option>DONATION CAMPAIGN</option><option>UNKNOWN SERVICE</option><option>OTHER</option></select></label>
@@ -401,7 +399,7 @@
 </div>
 <script src="pdf-export.js?v=20261106"></script>
 <script src="crypto-report.js?v=8"></script>
-<script src="crypto.js?v=2026110501"></script>
+<script src="crypto.js?v=2026110701"></script>
 <script src="tab-health.js?v=2" data-health-scope="crypto"></script>
 </body>
 </html>

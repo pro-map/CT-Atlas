@@ -1,5 +1,5 @@
 import { cleanText, normalizeUsername, isAllowedUser, jsonResponse, gateCall } from "./shared.js";
-import { analyzeCryptoAddress, authenticate } from "./crypto.js";
+import { analyzeCryptoAddress, authenticate, retiredChainError } from "./crypto.js";
 
 const CRYPTO_MONITOR_VERSION = "crypto-monitor-v2-scheduled-6h";
 const MONITOR_BATCH_LIMIT = 8;
@@ -11,7 +11,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 function normalizeAddress(address, chain) {
   const value = String(address || "");
-  return ["ethereum","bsc","polygon","arbitrum","base"].includes(chain)
+  return ["ethereum","polygon","arbitrum"].includes(chain)
     ? value.toLowerCase()
     : value;
 }
@@ -275,7 +275,7 @@ function buildSanctionsAlerts(watch, screening) {
 function providerAvailable(chain, env) {
   if (chain === "bitcoin") return true;
   if (chain === "tron") return Boolean(env.TRONGRID_API_KEY);
-  if (["ethereum","bsc","polygon","arbitrum","base"].includes(chain)) {
+  if (["ethereum","polygon","arbitrum"].includes(chain)) {
     return Boolean(env.ETHERSCAN_API_KEY);
   }
   return false;
@@ -310,7 +310,8 @@ async function runCryptoMonitor(env) {
 
   const targets = Array.isArray(targetPayload.targets) ? targetPayload.targets : [];
   let checked = 0;
-  let skipped = 0;
+  // Retired-chain watches stay out of the rotation, so the gate only counts them.
+  let skipped = Number(targetPayload.retired) || 0;
   let alertsAdded = 0;
   let failed = 0;
 
@@ -364,6 +365,8 @@ async function handleCryptoMonitorCheck(request, env) {
   const targetPayload = await targetResponse.json().catch(() => ({}));
   const target = Array.isArray(targetPayload.targets) ? targetPayload.targets[0] : null;
   if (!targetResponse.ok || !target) return jsonResponse({ error: "Monitored wallet not found." }, 404, env);
+  const retired = retiredChainError(target.watch.chain);
+  if (retired) return jsonResponse({ error: retired }, 400, env);
   if (!providerAvailable(target.watch.chain, env)) {
     return jsonResponse({ error: "This chain's provider is not configured." }, 503, env);
   }

@@ -82,9 +82,7 @@ test("crypto backend exposes a non-empty version and expected EVM chains",()=>{
   const h=harness();
   assert.equal(typeof h.CRYPTO_VERSION,"string");
   assert.ok(h.CRYPTO_VERSION.length>0);
-  for(const chain of ["ethereum","bsc","polygon","arbitrum","base"]){
-    assert.ok(h.EVM_CHAINS[chain]);
-  }
+  assert.deepEqual(Object.keys(h.EVM_CHAINS),["ethereum","polygon","arbitrum"]);
 });
 
 

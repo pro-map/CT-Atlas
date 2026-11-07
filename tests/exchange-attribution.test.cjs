@@ -16,6 +16,7 @@ function load(){
     gateCall:async(env,path,body)=>{gate.push(path);return new Response(JSON.stringify(path==="/session-get"?{username:"analyst"}:{hit:false}),{status:200});},
     normalizeUsername:v=>String(v||"").trim().toLowerCase(),
     isAllowedUser:name=>name==="analyst",
+    retiredChainError:()=>"",
     GEMINI_URL:"https://gemini.test",GEMINI_SECOND_FALLBACK_MODEL:"m2",
     geminiModelRotation:models=>({next:()=>models[0],spent(){}}),
     waitBeforeGeminiRetry:async()=>{},
