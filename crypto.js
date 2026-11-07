@@ -931,7 +931,7 @@ function riskView(){
     :findings.filter(item=>Number(item.points)>0).map(item=>item.title);
   const chips=[];
   if(base?.service_discount)chips.push({cls:"low",text:"SERVICE-LIKE WALLET"});
-  if(lastPayload.sanctions_screening?.status==="stale")chips.push({cls:"unscreened",text:"LIST OLDER THAN 7 DAYS"});
+  if(sanctionsListStale(lastPayload.sanctions_screening))chips.push({cls:"unscreened",text:"LIST OLDER THAN 3 DAYS"});
   return {
     available:Boolean(base),label,labelText:label.replace("_"," "),badgeClass:RISK_BADGE_CLASS[label],
     summary:(base?wording[label]:wording.missing)||"",
@@ -1928,7 +1928,7 @@ function collectReportModel(){
       const screening=entry.payload?.sanctions_screening;
       return {
         address:entry.address,depth:entry.depth,records:(entry.payload?.transactions||[]).length,
-        screening:!screening||screening.status==="unavailable"?"not screened":screening.hit?"MATCH (see the sanctions section)":screening.status==="stale"?"no match (list older than 7 days)":"no match"
+        screening:!screening||screening.status==="unavailable"?"not screened":screening.hit?"MATCH (see the sanctions section)":sanctionsListStale(screening)?"no match (list older than 3 days)":"no match"
       };
     }),
     transactions:derived.rows.map(row=>({
@@ -2382,6 +2382,14 @@ function sanctionsHits(){
   );
 }
 
+// The refresh re-stamps the list at least daily (tools/update_sanctions.py), so a list
+// older than 3 days means it has stopped, even while the Worker, which waits 7, says "ok".
+function sanctionsListStale(screening){
+  if(screening?.status==="stale")return true;
+  const retrieved=Date.parse(screening?.list?.retrieved_at||"");
+  return Number.isFinite(retrieved)&&Date.now()-retrieved>3*24*60*60*1000;
+}
+
 // Everything the sanctions card shows, as data: the card renders it, and the full report reuses it word for word.
 function sanctionsView(){
   const entries=sanctionsEntries();
@@ -2405,8 +2413,9 @@ function sanctionsView(){
   }else if(entries.length>usable.length){
     warnings.push((entries.length-usable.length)+" of "+entries.length+" analysed wallet(s) could not be screened; results below are partial.");
   }
-  if(usable.some(item=>item.status==="stale")){
-    warnings.push("The sanctions list is older than 7 days or could not be refreshed; recent designations may be missing.");
+  if(usable.some(sanctionsListStale)){
+    warnings.push("The sanctions list is older than 3 days or could not be refreshed"+
+      (list?.retrieved_at?" (last refreshed "+String(list.retrieved_at).slice(0,10)+")":"")+"; recent designations may be missing.");
   }
 
   let badge;

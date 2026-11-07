@@ -312,11 +312,15 @@ test("Crypto UI never presents an unscreened result as a clean pass",()=>{
   assert.ok(unscreened>0&&noMatch>unscreened,"NOT SCREENED must be decided before NO MATCH");
 });
 
-test("CI refreshes the sanctions list daily, publishes it, and smoke-tests the Worker's view of it",()=>{
-  const updateMap=fs.readFileSync(".github/workflows/update-map.yml","utf8");
-  assert.ok(updateMap.includes("python -u tools/update_sanctions.py"));
-  assert.match(updateMap,/Refresh OFAC sanctioned crypto addresses[\s\S]{0,400}continue-on-error: true/);
-  assert.ok(updateMap.includes('"sanctions-crypto.json"'),"the refreshed file must be committed");
+test("CI refreshes the sanctions list several times a day, publishes it, and smoke-tests the Worker's view of it",()=>{
+  // Its own workflow since 2026-11-07: the map update refreshed it once a day,
+  // before OFAC's afternoon publications, and a failure there stayed green.
+  const refresh=fs.readFileSync(".github/workflows/refresh-sanctions.yml","utf8");
+  assert.ok(refresh.includes("python -u tools/update_sanctions.py"));
+  assert.ok(refresh.includes("git add -- sanctions-crypto.json"),"the refreshed file must be committed");
+  assert.ok(refresh.includes("uses: actions/deploy-pages@"),"and published where the Worker reads it");
+  assert.ok(!refresh.includes("continue-on-error"),"a failed refresh must turn the run red");
+  assert.ok(!fs.readFileSync(".github/workflows/update-map.yml","utf8").includes("update_sanctions"),"one writer");
   const smoke=fs.readFileSync(".github/workflows/live-smoke.yml","utf8");
   assert.ok(smoke.includes("health.sanctions.status"));
   const deploy=fs.readFileSync(".github/workflows/deploy-report-worker.yml","utf8");

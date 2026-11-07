@@ -1,9 +1,13 @@
+import contextlib
 import importlib.util
+import io
 import json
 import tempfile
 import unittest
+import urllib.error
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest import mock
 
 # No network is needed: the updater is exercised against a small synthetic sdn.xml
 # that mirrors the real file's structure (default XML namespace, idList records).
@@ -143,9 +147,12 @@ class UnchangedTests(unittest.TestCase):
         self.assertTrue(u.is_unchanged(existing, self.doc(), now))
 
     def test_old_timestamp_forces_a_refresh_so_staleness_stays_meaningful(self):
+        # The Crypto page calls a list stale after 3 days: a healthy refresh
+        # must re-stamp it well before that.
         now = datetime(2026, 9, 24, tzinfo=timezone.utc)
-        existing = {**self.doc(), 'retrieved_at': (now - timedelta(days=4)).strftime('%Y-%m-%dT%H:%M:%SZ')}
+        existing = {**self.doc(), 'retrieved_at': (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')}
         self.assertFalse(u.is_unchanged(existing, self.doc(), now))
+        self.assertLessEqual(u.REFRESH_AFTER, timedelta(days=1))
 
     def test_new_publish_date_or_content_is_a_change(self):
         now = datetime(2026, 9, 24, tzinfo=timezone.utc)
@@ -159,6 +166,121 @@ class UnchangedTests(unittest.TestCase):
         now = datetime(2026, 9, 24, tzinfo=timezone.utc)
         self.assertFalse(u.is_unchanged(None, self.doc(), now))
         self.assertFalse(u.is_unchanged({**self.doc(), 'retrieved_at': 'garbage'}, self.doc(), now))
+
+
+class FakeResponse(io.BytesIO):
+    def __init__(self, body=b'', headers=None):
+        super().__init__(body)
+        self.headers = headers or {}
+
+
+class ConditionalRequestTests(unittest.TestCase):
+    """OFAC's HEAD Last-Modified decides whether the list is downloaded at all."""
+    MODIFIED = 'Fri, 06 Nov 2026 19:33:11 GMT'
+    ONE = sdn_xml([entry('1', 'A', ['SDGT'], [('XBT', BTC)])])
+    TWO = sdn_xml([entry('1', 'A', ['SDGT'], [('XBT', BTC), ('USDT', TRON)])], published='11/06/2026')
+
+    def setUp(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.out = Path(folder.name) / 'sanctions.json'
+
+    def run_main(self, served, modified=MODIFIED, head=None, get=None):
+        """main() against a scripted OFAC; returns (exit code, requests, stderr)."""
+        requests = []
+
+        def urlopen(request, timeout=None):
+            requests.append((request.get_method(), request.full_url))
+            if request.get_method() == 'HEAD':
+                if head:
+                    raise head
+                return FakeResponse(headers={'Last-Modified': modified} if modified else {})
+            if get:
+                raise get
+            return FakeResponse(served)
+
+        stderr = io.StringIO()
+        with mock.patch.object(u.urllib.request, 'urlopen', urlopen), \
+                contextlib.redirect_stderr(stderr), contextlib.redirect_stdout(io.StringIO()):
+            code = u.main(['--output', str(self.out)])
+        return code, requests, stderr.getvalue()
+
+    def stored(self):
+        return json.loads(self.out.read_text(encoding='utf-8'))
+
+    def test_the_canonical_ofac_url_is_asked_and_its_last_modified_stored(self):
+        code, requests, _ = self.run_main(self.ONE)
+        self.assertEqual(code, 0)
+        url = 'https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML'
+        self.assertEqual(requests, [('HEAD', url), ('GET', url)])
+        self.assertEqual(self.stored()['sources'][0]['url'], url)
+        self.assertEqual(self.stored()['sources'][0]['last_modified'], self.MODIFIED)
+
+    def test_an_unchanged_last_modified_skips_the_download(self):
+        self.run_main(self.ONE)
+        before = self.out.read_bytes()
+        code, requests, stderr = self.run_main(self.TWO)
+        self.assertEqual(code, 0)
+        self.assertEqual([method for method, _ in requests], ['HEAD'], 'nothing downloaded')
+        self.assertEqual(self.out.read_bytes(), before)
+        self.assertEqual(stderr, '')
+
+    def test_a_new_last_modified_downloads_and_writes_the_new_list(self):
+        self.run_main(self.ONE)
+        code, requests, _ = self.run_main(self.TWO, modified='Sat, 07 Nov 2026 19:40:02 GMT')
+        self.assertEqual(code, 0)
+        self.assertEqual([method for method, _ in requests], ['HEAD', 'GET'])
+        self.assertEqual(len(self.stored()['addresses']), 2)
+        self.assertEqual(self.stored()['sources'][0]['last_modified'], 'Sat, 07 Nov 2026 19:40:02 GMT')
+
+    def test_a_list_due_for_its_restamp_is_downloaded_and_restamped(self):
+        self.run_main(self.ONE)
+        document = self.stored()
+        document['retrieved_at'] = (datetime.now(timezone.utc) - u.REFRESH_AFTER - timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        self.out.write_text(json.dumps(document), encoding='utf-8')
+        code, requests, _ = self.run_main(self.ONE)
+        self.assertEqual(code, 0)
+        self.assertEqual([method for method, _ in requests], ['HEAD', 'GET'])
+        self.assertGreater(self.stored()['retrieved_at'], document['retrieved_at'])
+
+    def test_another_url_or_no_last_modified_never_skips(self):
+        self.run_main(self.ONE)
+        document = self.stored()
+        document['sources'][0]['url'] = 'https://www.treasury.gov/ofac/downloads/sdn.xml'
+        self.out.write_text(json.dumps(document), encoding='utf-8')
+        self.assertEqual([m for m, _ in self.run_main(self.ONE)[1]], ['HEAD', 'GET'])
+        self.assertEqual([m for m, _ in self.run_main(self.ONE, modified='')[1]], ['HEAD', 'GET'])
+
+    def test_a_failed_head_falls_back_to_the_full_download(self):
+        code, requests, _ = self.run_main(self.ONE, head=urllib.error.URLError('timed out'))
+        self.assertEqual(code, 0)
+        self.assertEqual([method for method, _ in requests], ['HEAD', 'GET'])
+        self.assertEqual(self.stored()['sources'][0]['last_modified'], '', 'no date to skip on next time')
+
+    def test_a_failed_or_truncated_download_refuses_and_keeps_the_list(self):
+        self.run_main(self.ONE)
+        before = self.out.read_bytes()
+        failures = {
+            'HTTP error': {'get': urllib.error.HTTPError(u.OFAC_SDN_URL, 503, 'Service Unavailable', {}, None)},
+            'truncated XML': {'served': self.TWO[:len(self.TWO) // 2]},
+        }
+        for name, failure in failures.items():
+            with self.subTest(failure=name):
+                code, _, stderr = self.run_main(failure.get('served', self.TWO), modified='Sat, 07 Nov 2026 19:40:02 GMT',
+                                                get=failure.get('get'))
+                self.assertEqual(code, 1)
+                self.assertEqual(self.out.read_bytes(), before)
+                self.assertTrue(stderr.startswith('Refusing to write: the OFAC list could not be read'), stderr)
+                self.assertEqual(len(stderr.strip().splitlines()), 1, 'one line: the workflow quotes it in its error')
+
+    def test_the_shrink_refusal_still_guards_a_downloaded_list(self):
+        many = [entry(str(i), f'E{i}', ['SDGT'], [('ETH', '0x' + f'{i:040x}')]) for i in range(1, 11)]
+        self.run_main(sdn_xml(many))
+        before = self.out.read_bytes()
+        code, _, stderr = self.run_main(sdn_xml(many[:3]), modified='Sat, 07 Nov 2026 19:40:02 GMT')
+        self.assertEqual(code, 1)
+        self.assertEqual(self.out.read_bytes(), before)
+        self.assertIn('Refusing to overwrite', stderr)
 
 
 if __name__ == '__main__':

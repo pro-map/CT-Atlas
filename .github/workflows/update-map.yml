@@ -255,13 +255,7 @@ jobs:
         run: python -u tools/daily_publication_audit.py receipt --output "$RUNNER_TEMP/daily-publication-audit.json"
 
       # Quiz generation is retired; it consumes no model or deployment resources.
-      # Independent of collection: the sanctioned-address list is refreshed once a
-      # day (and on manual runs). A failed download keeps the previous file.
-      - name: Refresh OFAC sanctioned crypto addresses
-        if: ${{ always() && steps.checkout.outcome == 'success' && (github.event.schedule == '17 10 * * *' || inputs.slot == '17 10 * * *' || (github.event_name == 'workflow_dispatch' && inputs.slot == '')) }}
-        continue-on-error: true
-        run: python -u tools/update_sanctions.py
-
+      # The OFAC list has its own workflow, refresh-sanctions.yml.
       - name: Preserve recovery files even if a previous step failed
         if: ${{ always() && steps.checkout.outcome == 'success' }}
         uses: actions/upload-artifact@v6
@@ -338,14 +332,11 @@ jobs:
               # archive (read by the nightly sync-background-corpus run).
               for aged_out in sorted(Path("archive").glob("removed-events-aged-out-*.json")):
                   subprocess.run(["git", "add", "--", str(aged_out)], check=True)
-          # A quiz is independent of collection and can be published when collection
-          # or geolocation fails, provided the quiz step produced valid files.
-          # background-articles.json is likewise independent of whether collection's
+          # background-articles.json is independent of whether collection's
           # events.json write succeeded -- it is written incrementally inside
           # ai_select_events() itself, not part of the final database swap above.
-          for generated in ("sanctions-crypto.json", "background-articles.json"):
-              if Path(generated).exists():
-                  subprocess.run(["git", "add", "--", generated], check=True)
+          if Path("background-articles.json").exists():
+              subprocess.run(["git", "add", "--", "background-articles.json"], check=True)
           PY
           finish() {
             echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"

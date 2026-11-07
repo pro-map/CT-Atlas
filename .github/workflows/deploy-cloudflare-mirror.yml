@@ -35,6 +35,7 @@ on:
       - "Retire Judicial collection"
       - "Clean up existing events database"
       - "Actualiser le logo uniquement"
+      - "Refresh OFAC sanctions list"
     types: [completed]
     branches: [main]
 

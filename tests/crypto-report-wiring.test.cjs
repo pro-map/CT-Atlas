@@ -79,7 +79,7 @@ test("the sanctions card and the report share one source of truth (sanctionsView
   assert.match(view,/NOT performed for this analysis/);
   assert.match(view,/must not be read as a clean result/);
   assert.match(view,/No match does not mean an address is safe/);
-  assert.match(view,/older than 7 days/);
+  assert.match(view,/older than 3 days/);
   assert.match(view,/could not be screened; results below are partial/);
   assert.match(js,/sanctions:sanctionsView\(\)/,"the report gets the same text");
 });
