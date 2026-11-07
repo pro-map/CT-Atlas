@@ -10,6 +10,12 @@ if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != "--prepare-only" ]; }; then
   echo "Usage: tools/deploy_mirror.sh [--prepare-only]" >&2
   exit 2
 fi
+# A lower asset cap (tools/compact_mirror_json.py) is for rehearsing the chunked path
+# with small files, never for files that will be uploaded.
+if [ -n "${CT_ATLAS_MIRROR_REHEARSAL_CAP+set}" ] && [ "${1:-}" != "--prepare-only" ]; then
+  echo "CT_ATLAS_MIRROR_REHEARSAL_CAP is only for --prepare-only rehearsals" >&2
+  exit 2
+fi
 cd "$(dirname "$0")/.."
 
 STAGING=_pages_mirror
