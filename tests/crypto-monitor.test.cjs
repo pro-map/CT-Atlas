@@ -20,6 +20,8 @@ function harness(overrides={}){
     sanitizeProviderMessage:text=>cleanText(text,120),
     crypto:{randomUUID:()=> "uuid-monitor"},
     Date,Number,String,Array,Object,Set,Map,console,
+    // The pause before a save is sent again changes no call, so it is cut to nothing.
+    setTimeout:callback=>setTimeout(callback,0),
     ...overrides
   });
   vm.runInContext(source,context);
@@ -459,14 +461,68 @@ test("a run with wallets to check but no provider to read them is not ok, and st
   assert.deepEqual({...update.payload.run},{selected:1,checked:0,partial:0,failed:0});
 });
 
-test("a run whose results the gate refuses fails, instead of reading as a quiet run",async()=>{
+const quiet={log(){},error(){}};
+
+test("a run whose results the gate refuses twice fails, instead of reading as a quiet run",async()=>{
+  const saves=[];
   const h=harness({
-    gateCall:async path=>path==="/crypto-monitor-targets"
-      ?{ok:true,json:async()=>({ok:true,targets:[TARGET],total:1})}
-      :{ok:false,json:async()=>({error:"Gate unavailable."})},
+    console:quiet,
+    gateCall:async(_env,path,payload)=>{
+      if(path==="/crypto-monitor-targets")return {ok:true,json:async()=>({ok:true,targets:[TARGET],total:1,run_id:"run-7"})};
+      saves.push(payload);
+      return {ok:false,json:async()=>({error:"Gate unavailable."})};
+    },
     analyzeCryptoAddress:async()=>({transactions:[eth({id:"new",amount:1})],coverage:{partial:false}})
   });
   await assert.rejects(()=>h.runCryptoMonitor({}),/^Error: Gate unavailable\.$/);
+  assert.equal(saves.length,2,"the refused save is sent once more");
+  assert.deepEqual(saves.map(payload=>payload.update_id),["run-7","run-7"],"under the run's id, so the gate saves nothing twice");
+});
+
+test("a save lost on the way is sent once more, and a run saved by the retry is ok",async()=>{
+  const saves=[];
+  const h=harness({
+    console:quiet,
+    gateCall:async(_env,path,payload)=>{
+      if(path==="/crypto-monitor-targets")return {ok:true,json:async()=>({ok:true,targets:[TARGET],total:1,run_id:"run-8"})};
+      saves.push(payload);
+      if(saves.length===1)throw new Error("Network connection lost.");
+      return {ok:true,json:async()=>({ok:true,alerts_added:1,missing:0})};
+    },
+    analyzeCryptoAddress:async()=>({transactions:[eth({id:"new",amount:1})],coverage:{partial:false}})
+  });
+  const result=await h.runCryptoMonitor({});
+  assert.equal(result.status,"ok");
+  assert.equal(result.alerts_added,1);
+  assert.equal(saves.length,2);
+  assert.equal(JSON.stringify(saves[1]),JSON.stringify(saves[0]),"the same results under the same id");
+});
+
+test("a run tells the gate which chains it can read and saves under the run's id; a CHECK NOW saves under its own",async()=>{
+  const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[TARGET],total:1,run_id:"run-9"}});
+  await h.runCryptoMonitor({ETHERSCAN_API_KEY:"k"});
+  assert.deepEqual(Array.from(calls[0].payload.readable_chains),["bitcoin","ethereum","polygon","arbitrum"],"no TronGrid key, so no TRON wallet is owed a result");
+  assert.equal(updates(calls)[0].payload.update_id,"run-9");
+  const single=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[TARGET]}});
+  await single.h.handleCryptoMonitorCheck(checkRequest({user_id:"analyst",watch_id:"w1"}),{});
+  assert.equal(updates(single.calls)[0].payload.update_id,"uuid-monitor");
+});
+
+test("a wallet that reads empty again keeps the time it was first found empty, so a payment the second read missed still alerts",()=>{
+  const h=harness();
+  const first=h.buildMonitorAlerts(watchWith({min_amount:10},null),{transactions:[]},Date.parse("2026-09-20T06:00:00Z")).snapshot;
+  assert.equal(first.empty_since,"2026-09-20T06:00:00.000Z");
+  // A 50 ETH payment on the 21st, which the empty read of the 22nd missed.
+  const again=h.buildMonitorAlerts(watchWith({min_amount:10},first),{transactions:[]},Date.parse("2026-09-22T06:00:00Z")).snapshot;
+  assert.equal(again.checked_at,"2026-09-22T06:00:00.000Z");
+  assert.equal(again.empty_since,"2026-09-20T06:00:00.000Z");
+  const missed=eth({id:"missed",amount:50,time:"2026-09-21T10:00:00Z"});
+  const full=h.buildMonitorAlerts(watchWith({min_amount:10},again),{transactions:[missed]},NOW);
+  assert.deepEqual(types(full),["NEW_TRANSACTION","LARGE_TRANSFER"]);
+  assert.equal("empty_since" in full.snapshot,false,"a baseline with activity has a time of its own");
+  // A snapshot saved before the field existed was first found empty at its own check.
+  const legacy={newest_tx_id:"",newest_tx_time:"",checked_at:"2026-09-20T06:00:00Z"};
+  assert.equal(h.buildMonitorAlerts(watchWith({},legacy),{transactions:[]},NOW).snapshot.empty_since,"2026-09-20T06:00:00.000Z");
 });
 
 test("CHECK NOW records a failed read and answers with its reason",async()=>{

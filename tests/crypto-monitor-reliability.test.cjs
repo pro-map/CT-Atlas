@@ -55,7 +55,8 @@ function allowance(limit){
   return ()=>{if(++spent>limit)throw new Error("Too many subrequests.");};
 }
 
-async function rig(extra={},spend=()=>{}){
+// intercept(path,forward) may answer a gate call itself, after or instead of forward() to the gate.
+async function rig(extra={},spend=()=>{},intercept=null){
   const {ReportGate}=await entry;
   const storage=new Storage();
   const gate=new ReportGate({storage},{AUTH_USERS_JSON:USERS});
@@ -64,8 +65,10 @@ async function rig(extra={},spend=()=>{}){
     AUTH_USERS_JSON:USERS,SANCTIONS_URL,...extra,
     REPORT_GATE:{idFromName:name=>name,get:()=>({fetch:async(url,init)=>{
       spend();
-      gateCalls.push({path:new URL(url).pathname,body:JSON.parse(init.body)});
-      return gate.fetch(new Request(url,init));
+      const path=new URL(url).pathname;
+      gateCalls.push({path,body:JSON.parse(init.body)});
+      const forward=()=>gate.fetch(new Request(url,init));
+      return (intercept&&await intercept(path,forward))||forward();
     }})}
   };
   return {env,storage,gateCalls,gate};
@@ -308,6 +311,106 @@ test("a run with every provider down is not ok, changes no baseline, and three f
   assert.equal(health.monitor_run.status,"failed");
   assert.equal(health.monitor_run.summary,page.monitor_run.summary);
   assert.ok(!JSON.stringify(health).includes(address),"the public summary names no wallet");
+});
+
+// ---------------------------------------------------------------- over time, and when the save fails
+
+// A run as if the clock read `offset` ms after now.
+async function runAt(setup,answer,offset){
+  const {runCryptoMonitor}=await monitor;
+  (await sanctions).resetSanctionsCache();
+  const real=Date.now;
+  Date.now=()=>real()+offset;
+  try{return await withBlockstream(answer,()=>runCryptoMonitor(setup.env));}
+  finally{Date.now=real;}
+}
+const runRecord=async setup=>(await (await setup.gate.fetch(new Request("https://gate.internal/crypto-monitor-run-get",{method:"POST",body:"{}"}))).json()).run;
+
+test("a new wallet that reads empty twice still alerts on the payment the second empty read missed",async()=>{
+  const setup=await rig();
+  const wallet=p2pkh("donation");
+  // A newly advertised donation wallet, empty when added. Blockstream's address read is down, so
+  // nothing contradicts an empty list.
+  await seed(setup,[watch("w1",wallet,null,{min_amount:0.5})]);
+  const emptyRead=(_,kind)=>kind==="info"?null:[];
+  const paid=payment(wallet,0,-24);
+  await runAt(setup,emptyRead,0);
+  const firstCheck=(await saved(setup)).watchlist[0].last_snapshot.checked_at;
+  // The payment arrives a day later; two days after that the provider answers empty again.
+  await runAt(setup,emptyRead,72*HOUR);
+  let workspace=await saved(setup);
+  assert.equal(workspace.watchlist[0].last_snapshot.empty_since,firstCheck,"the second empty read keeps the first one's time");
+  await runAt(setup,(_,kind)=>kind==="info"?info(1):kind==="txs"?[paid]:[],78*HOUR);
+  workspace=await saved(setup);
+  assert.deepEqual(workspace.alerts.map(alert=>alert.type+" "+alert.tx_id).sort(),["LARGE_TRANSFER "+paid.txid,"NEW_TRANSACTION "+paid.txid]);
+  assert.equal(workspace.watchlist[0].last_snapshot.newest_tx_id,paid.txid);
+});
+
+// Three wallets read in full, the second with a payment from a listed address in its history.
+async function threeWallets(intercept){
+  (await sanctions).resetSanctionsCache();
+  const setup=await rig({},()=>{},intercept);
+  const wallets=["save0","save1","save2"].map(p2pkh);
+  const rows=new Map(wallets.map(wallet=>[wallet,history(wallet,30)]));
+  rows.get(wallets[1])[2]=payment(wallets[1],2,50,LISTED);
+  await seed(setup,wallets.map((wallet,index)=>watch("w"+index,wallet,baselineOf(rows.get(wallet)))));
+  return {setup,wallets,rows};
+}
+const saves=setup=>setup.gateCalls.filter(call=>call.path==="/crypto-monitor-update");
+
+test("a run whose save the gate refuses once is saved by the retry, its sanctions alert included",async()=>{
+  let refused=0;
+  const {setup,wallets,rows}=await threeWallets(path=>path==="/crypto-monitor-update"&&!refused++?json({error:"Durable Object is overloaded."},500):null);
+  const {result}=await runAt(setup,(wallet,kind)=>FULL(kind,rows.get(wallet)),0);
+  assert.equal(result.status,"ok");
+  assert.equal(saves(setup).length,2);
+  assert.equal(saves(setup)[1].body.update_id,saves(setup)[0].body.update_id);
+  const workspace=await saved(setup);
+  assert.deepEqual(workspace.watchlist.map(item=>item.monitor.failures),[0,0,0]);
+  assert.deepEqual(workspace.watchlist.map(item=>item.last_snapshot.newest_tx_id),wallets.map(wallet=>rows.get(wallet)[0].txid));
+  assert.deepEqual(workspace.alerts.filter(alert=>alert.type==="SANCTIONS_EXPOSURE").map(alert=>alert.watch_id),["w1"]);
+  assert.equal(result.alerts_added,workspace.alerts.length);
+  assert.match((await runRecord(setup)).summary,/ UTC · 3 of 3 wallets read$/);
+});
+
+test("a save whose answer is lost is sent once more, and the gate counts no failure or alert twice",async()=>{
+  let lost=0;
+  const {setup,wallets,rows}=await threeWallets(async(path,forward)=>{
+    if(path!=="/crypto-monitor-update"||lost++)return null;
+    await forward();
+    return json({error:"Network connection lost."},500);
+  });
+  // The first wallet's provider is down: a failed check, counted once.
+  const {result}=await runAt(setup,(wallet,kind)=>wallet===wallets[0]?null:FULL(kind,rows.get(wallet)),0);
+  assert.equal(saves(setup).length,2);
+  assert.equal(result.status,"degraded");
+  const workspace=await saved(setup);
+  assert.deepEqual(workspace.watchlist.map(item=>item.monitor.failures),[1,0,0]);
+  assert.equal(workspace.alerts.filter(alert=>alert.type==="SANCTIONS_EXPOSURE").length,1);
+  assert.equal(result.alerts_added,workspace.alerts.length,"the retry reports the alerts the first attempt saved");
+  assert.match((await runRecord(setup)).summary,/ UTC · 2 of 3 wallets read · 1 failed$/);
+});
+
+test("the wallets of a run that never reported read CHECK FAILING once the next run starts, instead of as checked",async()=>{
+  (await sanctions).resetSanctionsCache();
+  let down=true;
+  const setup=await rig({},()=>{},path=>down&&path==="/crypto-monitor-update"?json({error:"Durable Object is overloaded."},500):null);
+  // Two batches of 8.
+  const wallets=Array.from({length:16},(_,index)=>p2pkh("lost"+index));
+  const rows=new Map(wallets.map(wallet=>[wallet,history(wallet,30)]));
+  await seed(setup,wallets.map((wallet,index)=>watch("w"+String(index).padStart(2,"0"),wallet,baselineOf(rows.get(wallet)))));
+  const answer=(wallet,kind)=>FULL(kind,rows.get(wallet));
+  await assert.rejects(()=>runAt(setup,answer,0),/Durable Object is overloaded/);
+  assert.equal(saves(setup).length,2,"the save was sent once more before the run gave up");
+  down=false;
+  const {result}=await runAt(setup,answer,6*HOUR);
+  assert.equal(result.status,"ok");
+  const workspace=await saved(setup);
+  for(const item of workspace.watchlist.slice(0,8)){
+    assert.equal(item.monitor.failures,1,item.id);
+    assert.match(item.monitor.last_error,/^The automatic run that selected this wallet at \d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC never reported a result\.$/,item.id);
+  }
+  assert.deepEqual(workspace.watchlist.slice(8).map(item=>item.monitor.failures),[0,0,0,0,0,0,0,0]);
 });
 
 // The workspace route checks the session with the gate first.

@@ -7,13 +7,19 @@ const MONITOR_BATCH_LIMIT = 8;
 // Each wallet costs 3 provider calls (Bitcoin: address read plus 2 pages of 25) and a
 // label lookup, and one update saves the whole run. With the target read and the
 // sanctions list, a full batch spends 35 of the 50 subrequests a run may use, and the
-// rest covers rate-limit retries. A wallet that cannot be read costs no call of its own.
+// rest covers rate-limit retries. A wallet that cannot be read costs no call of its own;
+// an update the gate did not confirm costs one more.
 const MONITOR_SAMPLE_ROWS = 50;
 const DAY_MS = 24 * 60 * 60 * 1000;
 // Bitcoin accepts a block time up to about an hour behind the clock, and a provider lists
 // a block a little after it is mined: a first payment can carry a time just before the
 // check that found the wallet empty.
 const EMPTY_BASELINE_MARGIN_MS = 2 * 60 * 60 * 1000;
+// The chains a run can be owed a result for, when their provider is configured.
+const MONITOR_CHAINS = ["bitcoin", "ethereum", "polygon", "arbitrum", "tron"];
+// A save the gate did not confirm is sent once more, after this pause.
+const SAVE_RETRY_MS = 1000;
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function normalizeAddress(address, chain) {
   const value = String(address || "");
@@ -93,6 +99,13 @@ function alertBase(watch, type, severity, title, detail, txId = "", dayBucket = 
   };
 }
 
+// When an empty baseline was first found empty. A snapshot saved before empty_since existed
+// only has the time of its own check.
+function emptySince(previous) {
+  const since = Date.parse(previous?.empty_since || "");
+  return Number.isFinite(since) ? since : Date.parse(previous?.checked_at || "");
+}
+
 function buildMonitorAlerts(target, analysis, now = Date.now()) {
   const watch = target.watch || {};
   const previous = watch.last_snapshot || null;
@@ -107,7 +120,13 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
   // missed from before it is not, or one bad read would turn a whole history into alerts.
   const previousTime = Date.parse(previous?.newest_tx_time || "");
   const hasBaselineTime = Number.isFinite(previousTime);
-  const since = hasBaselineTime ? previousTime : Date.parse(previous?.checked_at || "") - EMPTY_BASELINE_MARGIN_MS;
+  const since = hasBaselineTime ? previousTime : emptySince(previous) - EMPTY_BASELINE_MARGIN_MS;
+  // A wallet that reads empty again keeps the time it was first found empty. Moved to this check,
+  // it would put activity that this read missed before the baseline, and that activity would never alert.
+  if (!snapshot.newest_tx_id) {
+    const first = previous && !previous.newest_tx_id ? emptySince(previous) : NaN;
+    snapshot.empty_since = Number.isFinite(first) ? new Date(first).toISOString() : snapshot.checked_at;
+  }
   const notNew = time => Number.isFinite(since) && time <= since;
   const newRows = previous
     ? rows.filter(row => {
@@ -339,9 +358,12 @@ async function readMonitorTarget(target, env) {
   }
 }
 
-// One gate call saves every wallet's result, and the outcome of a scheduled run with them.
-async function saveMonitorResults(env, reads, run = null) {
-  const updateResponse = await gateCall(env, "/crypto-monitor-update", {
+// One gate call saves every wallet's result, and the outcome of a scheduled run with them. A save
+// the gate did not confirm is sent once more with the same id: the gate skips each wallet the first
+// attempt already saved, so an answer lost on the way back costs no failure or alert twice.
+async function saveMonitorResults(env, reads, run = null, updateId = "") {
+  const body = {
+    update_id: updateId || crypto.randomUUID(),
     updates: reads.map(({ target, read }) => ({
       username: target.username,
       watch_id: target.watch?.id,
@@ -350,15 +372,33 @@ async function saveMonitorResults(env, reads, run = null) {
       check: { ok: read.state === "checked", error: read.problem }
     })),
     ...(run ? { run } : {})
-  });
-  const updatePayload = await updateResponse.json().catch(() => ({}));
-  if (!updateResponse.ok) throw new Error(updatePayload?.error || "Unable to save monitoring results.");
-  return { alertsAdded: Number(updatePayload.alerts_added || 0), missing: Number(updatePayload.missing || 0) };
+  };
+  let failure = null;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    if (attempt > 1) {
+      console.error("Crypto monitor results not saved, trying once more", cleanText(failure?.message, 200));
+      await pause(SAVE_RETRY_MS);
+    }
+    try {
+      const updateResponse = await gateCall(env, "/crypto-monitor-update", body);
+      const updatePayload = await updateResponse.json().catch(() => ({}));
+      if (updateResponse.ok) {
+        return { alertsAdded: Number(updatePayload.alerts_added || 0), missing: Number(updatePayload.missing || 0) };
+      }
+      failure = new Error(updatePayload?.error || "Unable to save monitoring results.");
+    } catch (error) {
+      failure = error;
+    }
+  }
+  throw failure;
 }
 
 async function runCryptoMonitor(env) {
   const targetResponse = await gateCall(env, "/crypto-monitor-targets", {
-    limit: MONITOR_BATCH_LIMIT
+    limit: MONITOR_BATCH_LIMIT,
+    // The gate keeps the run's wallets until it reports, and a run that never does leaves each a failed
+    // check. A wallet on a chain with no provider key is never read, so no result is owed for it.
+    readable_chains: MONITOR_CHAINS.filter(chain => providerAvailable(chain, env))
   });
   const targetPayload = await targetResponse.json().catch(() => ({}));
   if (!targetResponse.ok) {
@@ -382,9 +422,10 @@ async function runCryptoMonitor(env) {
   }
 
   // A live wallet left unread for want of a provider key counts against the run. If this call
-  // fails, the run start the gate recorded with the targets reads as a run that never reported.
+  // fails twice, the run start the gate recorded with the targets reads as a run that never
+  // reported, and the next run's start gives each of its wallets a failed check.
   const { alertsAdded } = live.length
-    ? await saveMonitorResults(env, reads, { selected: live.length, ...counts })
+    ? await saveMonitorResults(env, reads, { selected: live.length, ...counts }, cleanText(targetPayload.run_id, 80))
     : { alertsAdded: 0 };
 
   const status = counts.checked === live.length ? "ok" : counts.checked ? "degraded" : "failed";

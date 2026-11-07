@@ -187,6 +187,10 @@ function cryptoProviderStatusView(record) {
 // publishes it, so it holds counts and times, never a wallet.
 const CRYPTO_MONITOR_RUN_KEY = "crypto-monitor-run";
 const CRYPTO_MONITOR_RUN_COUNTS = ["selected", "checked", "partial", "failed"];
+// The wallets a scheduled run selected, kept here (never published) until its results are saved. A run
+// that never saves them leaves each a failed check when the next run starts, so they read CHECK FAILING
+// and count toward CHECK_FAILING instead of looking checked. The key matches no prefix purgeExpired walks.
+const CRYPTO_MONITOR_PENDING_KEY = "crypto-monitor-pending";
 // Past two missed 6-hour runs the last result no longer describes the monitor.
 const CRYPTO_MONITOR_STALE_MS = 12.5 * 60 * 60 * 1000;
 // Even with every provider call running to its 12-second timeout, 8 Bitcoin wallets are read in
@@ -206,15 +210,19 @@ function cryptoMonitorRunView(record, now) {
   const started = Date.parse(record?.started_at || "");
   if (!Number.isFinite(finished) && !Number.isFinite(started)) return null;
   const [selected, checked, partial, failed] = CRYPTO_MONITOR_RUN_COUNTS.map(key => monitorCount(record[key]));
+  // Results the gate could not write: a wallet read in full but not saved is not a wallet checked.
+  const unsaved = monitorCount(record.unsaved);
+  const savedReads = checked - Math.min(checked, monitorCount(record.unsaved_read));
   let status;
   let parts;
   if (Number.isFinite(finished)) {
-    status = checked === selected ? "ok" : checked ? "degraded" : "failed";
+    status = savedReads === selected && !unsaved ? "ok" : savedReads ? "degraded" : "failed";
     const unchecked = Math.max(0, selected - checked - partial - failed);
     parts = [utcMinute(finished), (status === "failed" ? "FAILED: " : "") + checked + " of " + selected + " wallets read"];
     if (partial) parts.push(partial + " partial");
     if (failed) parts.push(failed + " failed");
     if (unchecked) parts.push(unchecked + " not checked");
+    if (unsaved) parts.push(unsaved + " not saved");
   } else {
     status = now - started <= CRYPTO_MONITOR_REPORT_MS ? "running" : "failed";
     parts = [utcMinute(started), status === "running"
@@ -264,13 +272,17 @@ function applyCryptoMonitorUpdate(workspace, watch, update, now) {
   const at = new Date(now).toISOString();
   const snapshot = update.snapshot && typeof update.snapshot === "object" ? update.snapshot : null;
   if (snapshot) {
+    const newest = cleanText(snapshot.newest_tx_id, 180);
     watch.last_snapshot = {
       checked_at: cleanText(snapshot.checked_at, 64),
-      newest_tx_id: cleanText(snapshot.newest_tx_id, 180),
+      newest_tx_id: newest,
       newest_tx_time: cleanText(snapshot.newest_tx_time, 64),
       tx_count: Number(snapshot.tx_count || 0),
       aggregate_value: Number(snapshot.aggregate_value || 0),
-      risk_label: cleanText(snapshot.risk_label, 24)
+      risk_label: cleanText(snapshot.risk_label, 24),
+      // An empty baseline keeps the time the wallet was first found empty (crypto-monitor.js): activity
+      // from after that time is new, however many empty reads came since.
+      ...(newest ? {} : { empty_since: cleanText(snapshot.empty_since, 64) || cleanText(snapshot.checked_at, 64) })
     };
     watch.updated_at = at;
   }
@@ -347,6 +359,45 @@ function mergeCryptoWorkspace(stored, incoming) {
       acknowledged.has(alert?.id) ? { ...alert, acknowledged: acknowledged.get(alert.id) } : alert
     )
   };
+}
+
+// The wallets of a run that never saved its results each get a failed check, unless something has
+// checked them since that run started: its own save, a CHECK NOW, or an earlier pass of this. Strictly
+// since: this pass stamps its checks with the same time as the start of the run it precedes, and a
+// wallet that run loses too must be marked again. Each analyst's workspace is written on its own, so one
+// that cannot be written holds up no other, nor the next run. A run younger than its report window may
+// still be running, so it is left alone.
+async function recordUnreportedRun(storage, env, pending, now) {
+  const started = Date.parse(pending?.started_at || "");
+  const owed = Array.isArray(pending?.watches) ? pending.watches.slice(0, 8) : [];
+  if (!Number.isFinite(started) || !owed.length || now - started <= CRYPTO_MONITOR_REPORT_MS) return 0;
+  const error = "The automatic run that selected this wallet at " + utcMinute(started) + " never reported a result.";
+  const byUser = new Map();
+  for (const item of owed) {
+    const username = normalizeUsername(item?.username);
+    const watchId = cleanText(item?.watch_id, 80);
+    if (!username || !watchId || !isAllowedUser(username, env)) continue;
+    byUser.set(username, [...(byUser.get(username) || []), watchId]);
+  }
+  let recorded = 0;
+  for (const [username, ids] of byUser) {
+    const key = `crypto-workspace:${username}`;
+    try {
+      const workspace = await storage.get(key);
+      let changed = 0;
+      for (const watch of Array.isArray(workspace?.watchlist) ? workspace.watchlist : []) {
+        if (!ids.includes(watch?.id) || Date.parse(watch.monitor?.last_attempt_at || "") > started) continue;
+        applyCryptoMonitorUpdate(workspace, watch, { snapshot: null, alerts: [], check: { ok: false, error } }, now);
+        changed++;
+      }
+      if (!changed) continue;
+      await storage.put(key, workspace);
+      recorded += changed;
+    } catch (failure) {
+      console.error("Crypto monitor: the wallets of a run that never reported could not be marked", username, cleanText(failure?.message, 200));
+    }
+  }
+  return recorded;
 }
 
 export class ReportGate {
@@ -1077,13 +1128,27 @@ export class ReportGate {
       for (let i = 0; i < Math.min(limit, rotation.length); i++) {
         selected.push(rotation[(cursor + i) % rotation.length]);
       }
+      // The last run's wallets, if it never saved them, are marked before this run replaces its record.
+      await recordUnreportedRun(this.state.storage, this.env, await this.state.storage.get(CRYPTO_MONITOR_PENDING_KEY), now);
       // The run's start goes with the cursor, so a run that never reports reads as failed instead of
-      // leaving the previous result on screen.
+      // leaving the previous result on screen, and with the wallets it owes a result for.
+      const runId = crypto.randomUUID();
+      const startedAt = new Date(now).toISOString();
+      const readable = Array.isArray(body.readable_chains)
+        ? new Set(body.readable_chains.map(chain => cleanText(chain, 24).toLowerCase()))
+        : null;
       await this.state.storage.put({
         "crypto-monitor-cursor": (cursor + selected.length) % rotation.length,
-        [CRYPTO_MONITOR_RUN_KEY]: { started_at: new Date(now).toISOString(), selected: selected.length }
+        [CRYPTO_MONITOR_RUN_KEY]: { started_at: startedAt, selected: selected.length, run_id: runId },
+        [CRYPTO_MONITOR_PENDING_KEY]: {
+          run_id: runId,
+          started_at: startedAt,
+          watches: selected
+            .filter(item => !readable || readable.has(item.watch.chain))
+            .map(item => ({ username: item.username, watch_id: item.watch.id }))
+        }
       });
-      return Response.json({ ok: true, targets: selected, total: rotation.length, retired, cursor });
+      return Response.json({ ok: true, targets: selected, total: rotation.length, retired, cursor, run_id: runId });
     }
 
     if (url.pathname === "/crypto-monitor-update") {
@@ -1093,31 +1158,78 @@ export class ReportGate {
       if (!updates || updates.length > 8 || (!updates.length && !run)) {
         return Response.json({ error: "Invalid monitoring update." }, { status: 400 });
       }
-      const writes = {};
-      if (run) {
-        writes[CRYPTO_MONITOR_RUN_KEY] = {
-          finished_at: new Date(now).toISOString(),
-          ...Object.fromEntries(CRYPTO_MONITOR_RUN_COUNTS.map(name => [name, monitorCount(run[name])]))
-        };
-      }
+      // A retry carries the id of the attempt it repeats. A wallet that attempt saved keeps the id in its
+      // check record and is not saved again, so its failures and alerts count once.
+      const updateId = cleanText(body.update_id, 80);
+      const byAnalyst = new Map();
       let added = 0;
       let missing = 0;
       for (const update of updates) {
         const username = normalizeUsername(update?.username);
         const watchId = cleanText(update?.watch_id, 80);
-        const key = `crypto-workspace:${username}`;
-        const workspace = isAllowedUser(username, this.env) && watchId ? (writes[key] || await this.state.storage.get(key)) : null;
-        const watch = Array.isArray(workspace?.watchlist) ? workspace.watchlist.find(item => item?.id === watchId) : null;
-        // A wallet deleted during the run is left out; the rest of the run is still saved.
-        if (!watch) {
+        if (!isAllowedUser(username, this.env) || !watchId) {
           missing++;
           continue;
         }
-        added += applyCryptoMonitorUpdate(workspace, watch, update, now);
-        writes[key] = workspace;
+        if (!byAnalyst.has(username)) byAnalyst.set(username, []);
+        byAnalyst.get(username).push({ watchId, update });
       }
-      // Each analyst's workspace is written once per run, however many of their wallets it read.
-      if (Object.keys(writes).length) await this.state.storage.put(writes);
+      // Each analyst's workspace is written once per run, however many of their wallets it read, and on
+      // its own: one that cannot be written loses that analyst's results alone, and the answer says so.
+      const unsaved = [];
+      for (const [username, items] of byAnalyst) {
+        const key = `crypto-workspace:${username}`;
+        const workspace = await this.state.storage.get(key);
+        const applied = [];
+        let analystAdded = 0;
+        for (const { watchId, update } of items) {
+          const watch = Array.isArray(workspace?.watchlist) ? workspace.watchlist.find(item => item?.id === watchId) : null;
+          // A wallet deleted during the run is left out; the rest of the run is still saved.
+          if (!watch) {
+            missing++;
+            continue;
+          }
+          if (updateId && watch.monitor?.update_id === updateId) {
+            added += monitorCount(watch.monitor.update_alerts);
+            continue;
+          }
+          const count = applyCryptoMonitorUpdate(workspace, watch, update, now);
+          if (updateId) watch.monitor = { ...(watch.monitor || {}), update_id: updateId, update_alerts: count };
+          analystAdded += count;
+          applied.push({ username, watch_id: watchId, read: update?.check?.ok === true });
+        }
+        if (!applied.length) continue;
+        try {
+          await this.state.storage.put(key, workspace);
+          added += analystAdded;
+        } catch (error) {
+          console.error("Crypto monitor results could not be saved", username, cleanText(error?.message, 200));
+          unsaved.push(...applied);
+        }
+      }
+      if (run) {
+        const writes = {};
+        const stored = await this.state.storage.get(CRYPTO_MONITOR_RUN_KEY);
+        // A run that a later one has replaced reports into nothing: the record belongs to the later run.
+        if (!updateId || !stored?.run_id || stored.run_id === updateId) {
+          writes[CRYPTO_MONITOR_RUN_KEY] = {
+            finished_at: new Date(now).toISOString(),
+            ...(updateId ? { run_id: updateId } : {}),
+            ...Object.fromEntries(CRYPTO_MONITOR_RUN_COUNTS.map(name => [name, monitorCount(run[name])])),
+            unsaved: unsaved.length,
+            unsaved_read: unsaved.filter(item => item.read).length
+          };
+        }
+        // The run has reported: it owes a result only for the wallets it could not save.
+        const pending = await this.state.storage.get(CRYPTO_MONITOR_PENDING_KEY);
+        if (updateId && pending?.run_id === updateId) {
+          writes[CRYPTO_MONITOR_PENDING_KEY] = { ...pending, watches: unsaved.map(({ username, watch_id }) => ({ username, watch_id })) };
+        }
+        if (Object.keys(writes).length) await this.state.storage.put(writes);
+      }
+      if (unsaved.length) {
+        return Response.json({ error: unsaved.length + " monitoring result(s) could not be saved.", alerts_added: added, missing, unsaved: unsaved.length }, { status: 503 });
+      }
       return Response.json({ ok: true, alerts_added: added, missing });
     }
 

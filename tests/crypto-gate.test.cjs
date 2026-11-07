@@ -12,7 +12,9 @@ function cleanText(value,max=10000){
   return String(value??"").replace(/\s+/g," ").trim().slice(0,max);
 }
 
-function harness(users=["analyst"]){
+// failPut(keys) returns the error a write of those keys throws, as an over-size value would, or null.
+// clock() is the gate's Date.now, when a test moves time on.
+function harness(users=["analyst"],{failPut=null,clock=null}={}){
   const values=new Map();
   // The keys of each write, one entry per put call.
   const puts=[];
@@ -20,6 +22,8 @@ function harness(users=["analyst"]){
     async get(key){return structuredClone(values.get(key));},
     async put(key,value){
       const entries=key&&typeof key==="object"?Object.entries(key):[[key,value]];
+      const refused=failPut&&failPut(entries.map(([name])=>name));
+      if(refused)throw refused;
       puts.push(entries.map(([name])=>name));
       for(const [name,item] of entries)values.set(name,structuredClone(item));
     },
@@ -36,6 +40,7 @@ function harness(users=["analyst"]){
     parisDayKey:value=>new Date(value).toISOString().slice(0,10),
     usageTemplate:username=>({username})
   });
+  if(clock){context.__clock=clock;vm.runInContext("Date.now=()=>__clock();",context);}
   vm.runInContext(source,context);
   const gate=new context.__ReportGate({storage},{users});
   const call=async(path,body)=>{
@@ -278,7 +283,7 @@ test("a run's one update saves every wallet of every analyst, writing each works
   });
   assert.equal(status,200);
   assert.deepEqual(body,{ok:true,alerts_added:1,missing:1});
-  assert.deepEqual(puts,[["crypto-monitor-run","crypto-workspace:analyst","crypto-workspace:other"]],"one write for the run, each workspace in it once");
+  assert.deepEqual(puts,[["crypto-workspace:analyst"],["crypto-workspace:other"],["crypto-monitor-run"]],"each workspace written once and on its own, then the run");
   const analyst=values.get("crypto-workspace:analyst");
   assert.equal(analyst.watchlist[0].last_snapshot.newest_tx_id,"new");
   assert.equal(analyst.watchlist[1].last_snapshot,null);
@@ -327,7 +332,7 @@ test("a run's start replaces the last result, and a run that never reports reads
   values.set("crypto-monitor-run",{finished_at:new Date(Date.now()-6*3600000).toISOString(),selected:8,checked:8,partial:0,failed:0});
   puts.length=0;
   await call("/crypto-monitor-targets",{limit:8});
-  assert.deepEqual(puts,[["crypto-monitor-cursor","crypto-monitor-run"]],"the start costs no write of its own");
+  assert.deepEqual(puts,[["crypto-monitor-cursor","crypto-monitor-run","crypto-monitor-pending"]],"the start, and the wallets it owes a result for, cost no write of their own");
   const running=(await call("/crypto-monitor-run-get",{})).body.run;
   assert.equal(running.status,"running");
   assert.match(running.summary,/^\d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC · Running: 1 wallets to read$/);
@@ -349,4 +354,146 @@ test("no run yet reads as none, and a run older than two missed runs is overdue"
   const {run}=(await call("/crypto-monitor-run-get",{})).body;
   assert.equal(run.stale,true);
   assert.match(run.summary,/8 of 8 wallets read · OVERDUE: no later run has reported$/);
+});
+
+test("an empty baseline keeps the time the wallet was first found empty, and a baseline with activity has none",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  const save=snapshot=>monitorUpdate(call,{snapshot,alerts:[],check:{ok:true,error:""}});
+  await save({checked_at:"2026-11-03T00:00:00.000Z",newest_tx_id:"",newest_tx_time:"",empty_since:"2026-11-01T00:00:00.000Z"});
+  assert.equal((await watchNow(call)).last_snapshot.empty_since,"2026-11-01T00:00:00.000Z");
+  const page=await get(call);
+  assert.equal((await put(call,page.workspace,page.revision)).status,200);
+  assert.equal((await watchNow(call)).last_snapshot.empty_since,"2026-11-01T00:00:00.000Z","a page save keeps it");
+  await save({checked_at:"2026-11-04T00:00:00.000Z",newest_tx_id:"",newest_tx_time:""});
+  assert.equal((await watchNow(call)).last_snapshot.empty_since,"2026-11-04T00:00:00.000Z","with no time of its own, an empty read was first found empty when it was taken");
+  await save({checked_at:"2026-11-05T00:00:00.000Z",newest_tx_id:"tx1",newest_tx_time:"2026-11-04T12:00:00.000Z",empty_since:"2026-11-01T00:00:00.000Z"});
+  assert.equal("empty_since" in (await watchNow(call)).last_snapshot,false);
+});
+
+// ---------------------------------------------------------------- saves that fail, and runs that never report
+
+const SANCTIONS_ALERT={type:"SANCTIONS_EXPOSURE",severity:"HIGH",title:"Direct exposure to a sanctioned address",detail:"d",tx_id:"tx9"};
+
+test("an update sent again under the same id saves nothing twice: failures, alerts and the check-failing alert count once",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  const send=(id,alerts=[])=>call("/crypto-monitor-update",{update_id:id,updates:[
+    {username:"analyst",watch_id:"w1",snapshot:null,alerts,check:{ok:false,error:"Blockstream transaction history: HTTP 503"}}
+  ]});
+  assert.deepEqual((await send("run-1",[SANCTIONS_ALERT])).body,{ok:true,alerts_added:1,missing:0});
+  // The retry of an attempt whose answer was lost gets the same answer.
+  assert.deepEqual((await send("run-1",[SANCTIONS_ALERT])).body,{ok:true,alerts_added:1,missing:0});
+  assert.equal((await watchNow(call)).monitor.failures,1);
+  await send("run-2");
+  assert.equal((await send("run-3")).body.alerts_added,1,"the third failure in a row raises CHECK_FAILING");
+  assert.equal((await send("run-3")).body.alerts_added,1);
+  const {workspace}=await get(call);
+  assert.equal(workspace.watchlist[0].monitor.failures,3);
+  assert.deepEqual(workspace.alerts.map(alert=>alert.type),["CHECK_FAILING","SANCTIONS_EXPOSURE"]);
+});
+
+test("a run that never reports leaves each wallet it owed a result a failed check when the next run starts",async()=>{
+  let offset=0;
+  const {call,values}=harness(["analyst"],{clock:()=>Date.now()+offset});
+  const tron={...WATCH,id:"t1",chain:"tron",address:"T"+"1".repeat(33)};
+  // Three wallets, so every run selects all of them, as it does for any rotation of 8 or fewer.
+  await put(call,{...empty,watchlist:[WATCH,{...WATCH,id:"w2"},tron]},0);
+  const start=async()=>(await call("/crypto-monitor-targets",{limit:8,readable_chains:["bitcoin","ethereum"]})).body;
+  const byId=async()=>new Map((await get(call)).workspace.watchlist.map(item=>[item.id,item]));
+  const first=await start();
+  assert.match(first.run_id,/^[0-9a-f-]{36}$/);
+  assert.equal(values.get("crypto-monitor-run").run_id,first.run_id);
+  const lost=values.get("crypto-monitor-pending");
+  assert.deepEqual(lost.watches.map(item=>item.watch_id),["w1","w2"],"nothing is owed for a wallet on a chain the run cannot read");
+  // The run never reports, and a CHECK NOW reads w2 while it is out.
+  offset=60000;
+  await call("/crypto-monitor-update",{update_id:"check-now",updates:[{username:"analyst",watch_id:"w2",snapshot:null,alerts:[],check:{ok:true,error:""}}]});
+  // Ten minutes in, the run may still be running: a start then (a schedule firing twice) marks nothing.
+  offset=10*60000;
+  await start();
+  assert.equal((await byId()).get("w1").monitor,undefined);
+  values.set("crypto-monitor-pending",lost);
+
+  offset=6*3600000;
+  const second=await start();
+  let watches=await byId();
+  assert.equal(watches.get("w1").monitor.failures,1);
+  assert.match(watches.get("w1").monitor.last_error,/^The automatic run that selected this wallet at \d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC never reported a result\.$/);
+  assert.equal(watches.get("w2").monitor.failures,0,"checked since the run started");
+  assert.equal(watches.get("t1").monitor,undefined);
+  assert.equal(values.get("crypto-monitor-pending").run_id,second.run_id);
+  // The same lost run seen again marks nothing twice.
+  const current=values.get("crypto-monitor-pending");
+  values.set("crypto-monitor-pending",lost);
+  offset+=60000;
+  await start();
+  assert.equal((await byId()).get("w1").monitor.failures,1);
+  values.set("crypto-monitor-pending",current);
+  // The next two runs lose the same wallets: the third failure in a row raises the one CHECK_FAILING alert.
+  for(let run=0;run<2;run++){offset+=6*3600000;await start();}
+  watches=await byId();
+  assert.equal(watches.get("w1").monitor.failures,3);
+  assert.equal(watches.get("w2").monitor.failures,2,"w2 was lost by the two runs after its CHECK NOW");
+  const failing=(await get(call)).workspace.alerts.filter(alert=>alert.type==="CHECK_FAILING");
+  assert.deepEqual(failing.map(alert=>alert.watch_id),["w1"]);
+  assert.match(failing[0].detail,/never reported a result\.$/);
+});
+
+test("a run's report clears what it owed, and a run a later one replaced can overwrite neither record",async()=>{
+  const {call,values}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  const report=runId=>call("/crypto-monitor-update",{update_id:runId,updates:[
+    {username:"analyst",watch_id:"w1",snapshot:null,alerts:[],check:{ok:true,error:""}}
+  ],run:{selected:1,checked:1,partial:0,failed:0}});
+  const older=(await call("/crypto-monitor-targets",{limit:8})).body.run_id;
+  const newer=(await call("/crypto-monitor-targets",{limit:8})).body.run_id;
+  await report(older);
+  assert.equal((await call("/crypto-monitor-run-get",{})).body.run.status,"running");
+  assert.equal(values.get("crypto-monitor-pending").run_id,newer);
+  assert.equal(values.get("crypto-monitor-pending").watches.length,1);
+  await report(newer);
+  assert.equal((await call("/crypto-monitor-run-get",{})).body.run.status,"ok");
+  assert.deepEqual(values.get("crypto-monitor-pending").watches,[]);
+});
+
+test("a workspace that cannot be written loses only its analyst's results, and the answer and the run record say so",async()=>{
+  let refuse=true;
+  const {call,values}=harness(["analyst","other"],{
+    failPut:keys=>refuse&&keys.includes("crypto-workspace:other")?new RangeError("string or blob too big: SQLITE_TOOBIG"):null
+  });
+  values.set("crypto-workspace:analyst",{...empty,username:"analyst",watchlist:[WATCH]});
+  values.set("crypto-workspace:other",{...empty,username:"other",watchlist:[{...WATCH,id:"o1"}]});
+  const {run_id}=(await call("/crypto-monitor-targets",{limit:8})).body;
+  const snapshot={checked_at:"t",newest_tx_id:"new",newest_tx_time:"2026-11-05T00:00:00Z"};
+  const body={update_id:run_id,updates:[
+    {username:"analyst",watch_id:"w1",snapshot,alerts:[SANCTIONS_ALERT],check:{ok:true,error:""}},
+    {username:"other",watch_id:"o1",snapshot,alerts:[],check:{ok:true,error:""}}
+  ],run:{selected:2,checked:2,partial:0,failed:0}};
+  const error=console.error;
+  console.error=()=>{};
+  let first;
+  try{first=await call("/crypto-monitor-update",body);}
+  finally{console.error=error;}
+  assert.equal(first.status,503);
+  assert.deepEqual(first.body,{error:"1 monitoring result(s) could not be saved.",alerts_added:1,missing:0,unsaved:1});
+  const analyst=values.get("crypto-workspace:analyst");
+  assert.equal(analyst.watchlist[0].last_snapshot.newest_tx_id,"new");
+  assert.deepEqual(analyst.alerts.map(alert=>alert.type),["SANCTIONS_EXPOSURE"],"the other analyst's workspace does not hold up this one");
+  assert.equal(values.get("crypto-workspace:other").watchlist[0].last_snapshot,null);
+  let run=(await call("/crypto-monitor-run-get",{})).body.run;
+  assert.equal(run.status,"degraded");
+  assert.match(run.summary,/ UTC · 2 of 2 wallets read · 1 not saved$/);
+  assert.deepEqual(values.get("crypto-monitor-pending").watches,[{username:"other",watch_id:"o1"}]);
+
+  // The Worker's retry, once the workspace can be written: the rest is saved, and nothing twice.
+  refuse=false;
+  const retry=await call("/crypto-monitor-update",body);
+  assert.deepEqual(retry.body,{ok:true,alerts_added:1,missing:0});
+  assert.equal(values.get("crypto-workspace:analyst").alerts.length,1);
+  assert.equal(values.get("crypto-workspace:other").watchlist[0].last_snapshot.newest_tx_id,"new");
+  run=(await call("/crypto-monitor-run-get",{})).body.run;
+  assert.equal(run.status,"ok");
+  assert.match(run.summary,/ UTC · 2 of 2 wallets read$/);
+  assert.deepEqual(values.get("crypto-monitor-pending").watches,[]);
 });
