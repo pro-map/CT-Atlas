@@ -60,13 +60,13 @@ function durableObject(ReportGate,name,entries,calls,before){
   const stub={fetch:async(url,init)=>{
     const gatePath=new URL(url).pathname;
     calls.push(name+" "+gatePath);
-    await before?.(gatePath);
-    return inTurn(()=>gate.fetch(new Request(url,init)));
+    const answer=await before?.(gatePath);
+    return answer||inTurn(()=>gate.fetch(new Request(url,init)));
   }};
   return {storage,stub};
 }
 
-// `before` runs ahead of each gate call, and can hold it, drop it or fail it.
+// `before` runs ahead of each gate call, and can hold it, drop it, fail it or answer it.
 function gates(ReportGate,{migrated=true,legacy={},eu={},before}={}){
   const calls=[];
   const euObject=durableObject(ReportGate,"eu",migrated?{[COMPLETE]:{completed_at:"2026-09-25T00:00:00.000Z"},...eu}:eu,calls,before);
@@ -182,6 +182,21 @@ test("a check that fails is not remembered as a success",async()=>{
   assert.equal((await gateCall(setup.env,READ,{})).status,200);
   assert.equal(setup.count("eu /migration-status"),2);
 });
+
+// A status nobody can read says nothing, so it must not count as migrated: that would strand
+// every session in the legacy object.
+for(const [failure,answer] of [["a 500",()=>new Response("gate error",{status:500})],
+  ["a 200 that is not JSON",()=>new Response("<html>proxy</html>")]]){
+  test("a status check answering "+failure+" still moves an unmigrated gate",async()=>{
+    const {gateCall,ReportGate}=await isolate();
+    const setup=gates(ReportGate,{migrated:false,legacy:legacySessions(3),
+      before:gatePath=>gatePath==="/migration-status"?answer():undefined});
+    await within(gateCall(setup.env,READ,{}));
+    assert.equal(setup.eu.values.size,4);
+    assert.deepEqual(await setup.eu.get("session:0002"),{from:"legacy",i:2});
+    assert.equal(setup.legacy.values.size,0);
+  });
+}
 
 // Concurrent first requests.
 test("concurrent first requests on a migrated gate all answer, then the checks stop",async()=>{
