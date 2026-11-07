@@ -355,23 +355,14 @@ jobs:
           if [ -s "$REFUSAL_FILE" ]; then
             git commit -m "Keep the AI checkpoint of a run that could not publish"
             # Only that checkpoint leaves this runner: the refused files are in the
-            # recovery artifact, and the rebase below needs a clean worktree.
+            # recovery artifact, and the push script's rebase needs a clean worktree.
             git checkout -- .
           else
             git commit -m "Update CT database and resumable AI checkpoints"
           fi
-          for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              echo "Concurrent modification conflict; recovery artifact retained."
-              exit 1
-            fi
-            if git push origin HEAD:main; then
-              finish
-            fi
-            sleep $((attempt * 4))
-          done
+          if bash tools/push_data_commit.sh; then
+            finish
+          fi
           echo "Push failed; recovery artifact retained."
           exit 1
 

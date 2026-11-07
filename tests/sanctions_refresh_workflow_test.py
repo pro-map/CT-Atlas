@@ -7,6 +7,7 @@ day. The shell steps run here against stubs; nothing reaches the network.
 """
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import textwrap
@@ -48,6 +49,17 @@ def bash(text, cwd, env=None, stubs=""):
     """Runs a step's script after shell functions that stand in for its commands."""
     return subprocess.run(["bash", "-c", stubs + "\n" + text], cwd=cwd, capture_output=True, text=True,
                           env={**os.environ, **(env or {})}, check=False)
+
+
+def add_tools(repo):
+    """The step runs in a checkout of this repository: the scripts it calls are there."""
+    (repo / "tools").mkdir()
+    for name in ("check_committed_sizes.py", "push_data_commit.sh"):
+        shutil.copyfile(ROOT / "tools" / name, repo / "tools" / name)
+
+
+# Exported, so that the push script's own bash does not wait either.
+NO_SLEEP = "sleep() { :; }; export -f sleep"
 
 
 def cron_hours(field):
@@ -177,12 +189,13 @@ class LoudFailureTests(unittest.TestCase):
         for key, value in (("user.email", "test@example.test"), ("user.name", "Test")):
             subprocess.run(["git", "config", key, value], cwd=repo, check=True)
         (repo / "sanctions-crypto.json").write_text("{}\n", encoding="utf-8")
+        add_tools(repo)
         subprocess.run(["git", "add", "."], cwd=repo, check=True)
         subprocess.run(["git", "commit", "--quiet", "-m", "list"], cwd=repo, check=True)
         subprocess.run(["git", "remote", "add", "origin", str(Path(self.temp) / "missing.git")], cwd=repo, check=True)
         (repo / "sanctions-crypto.json").write_text('{"new":1}\n', encoding="utf-8")
         output = Path(self.temp) / "output.txt"
-        result = bash(script("Commit the new list"), repo, {"GITHUB_OUTPUT": output.as_posix()}, stubs="sleep() { :; }")
+        result = bash(script("Commit the new list"), repo, {"GITHUB_OUTPUT": output.as_posix()}, stubs=NO_SLEEP)
         self.assertEqual(result.returncode, 1)
         self.assertIn("::error title=OFAC list not published::", result.stdout)
         self.assertNotIn("changed=true", output.read_text(encoding="utf-8") if output.exists() else "")
@@ -207,6 +220,7 @@ class QuietUnchangedTests(unittest.TestCase):
         self.git("config", "user.email", "test@example.test")
         self.git("config", "user.name", "Test")
         (self.repo / "sanctions-crypto.json").write_text('{"addresses":[]}\n', encoding="utf-8")
+        add_tools(self.repo)
         self.git("add", ".")
         self.git("commit", "--quiet", "-m", "Published list")
         self.git("push", "--quiet", "origin", "main")

@@ -72,18 +72,10 @@ jobs:
             echo "Nothing reviewed; no commit."
             exit 0
           fi
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
           git commit -m "Review archive backlog with Gemini"
-          for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              echo "Concurrent modification conflict; the next run will review again."
-              exit 1
-            fi
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-            sleep $((attempt * 4))
-          done
-          echo "Push failed; the next run will review again."
-          exit 1
+          if ! bash tools/push_data_commit.sh; then
+            echo "Push failed; the next run will review again."
+            exit 1
+          fi

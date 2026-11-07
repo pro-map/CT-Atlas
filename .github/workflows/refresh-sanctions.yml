@@ -81,24 +81,15 @@ jobs:
           fi
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
           git commit -m "Refresh OFAC sanctioned crypto addresses"
-          for attempt in 1 2 3 4 5; do
-            if git fetch origin main; then
-              if ! git rebase origin/main; then
-                git rebase --abort || true
-                echo "::error title=OFAC list not published::The new list does not rebase onto main; the next run downloads it again."
-                exit 1
-              fi
-              if git push origin HEAD:main; then
-                echo "changed=true" >> "$GITHUB_OUTPUT"
-                echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-                exit 0
-              fi
-            fi
-            sleep $((attempt * 4))
-          done
-          echo "::error title=OFAC list not published::Pushing the new list to main failed five times; the next run downloads it again."
-          exit 1
+          if ! bash tools/push_data_commit.sh; then
+            echo "::error title=OFAC list not published::The new list could not be pushed to main; the next run downloads it again."
+            exit 1
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: Decide whether GitHub Pages needs the list
         id: publish
         env:

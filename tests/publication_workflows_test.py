@@ -145,9 +145,9 @@ class StatusRefreshPublicationTests(unittest.TestCase):
     def test_commit_reports_a_change_only_after_its_push_succeeds(self):
         commit = step(read(REFRESH), "Commit verified progress")
         self.assertIn("id: commit", commit)
-        self.assertIn("for attempt in 1 2 3 4 5; do", commit)
         self.assertEqual(commit.count('echo "changed=true" >> "$GITHUB_OUTPUT"'), 1)
-        push = commit.index("if git push origin HEAD:main; then")
+        push = commit.index("if ! bash tools/push_data_commit.sh; then")
+        self.assertIn("exit 1", commit[push:commit.index("          fi\n", push)], "a failed push stops here")
         self.assertLess(push, commit.index('echo "changed=true"'))
         self.assertLess(commit.index("if git diff --cached --quiet; then"), push)
 

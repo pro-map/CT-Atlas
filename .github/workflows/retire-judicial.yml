@@ -74,20 +74,13 @@ jobs:
           fi
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
           git commit -m "Retire Judicial records from active CT collection; preserve evidence"
-          for attempt in 1 2 3; do
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              echo "Concurrent database change; preserved recovery artifact instead of overwriting." >&2
-              exit 1
-            fi
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-          done
-          echo "Migration could not be committed; recovery artifact preserved." >&2
-          exit 1
+          if ! bash tools/push_data_commit.sh; then
+            echo "Migration could not be committed; recovery artifact preserved." >&2
+            exit 1
+          fi
 
   deploy:
     needs: retire

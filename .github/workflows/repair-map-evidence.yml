@@ -98,12 +98,7 @@ jobs:
           # GitHub refuses files over 100 MiB: say so before the push fails.
           python3 tools/check_committed_sizes.py
           git commit -m 'Apply source-reviewed map corrections and preserve quarantined evidence (zero AI)'
-          git fetch origin main
-          if ! git rebase origin/main; then
-            git rebase --abort
-            exit 1
-          fi
-          git push origin HEAD:main
+          bash tools/push_data_commit.sh
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   deploy:
