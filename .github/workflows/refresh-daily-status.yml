@@ -62,21 +62,11 @@ jobs:
           # GitHub refuses files over 100 MiB: say so before the push fails.
           python3 tools/check_committed_sizes.py
           git commit -m "Refresh visible daily and RadNuc processing status"
-          for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              echo "Concurrent status conflict; the next refresh rebuilds it."
-              exit 1
-            fi
-            if git push origin HEAD:main; then
-              echo "changed=true" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            sleep $((attempt * 4))
-          done
-          echo "Status push failed; the next refresh rebuilds it."
-          exit 1
+          if ! bash tools/push_data_commit.sh; then
+            echo "Status push failed; the next refresh rebuilds it."
+            exit 1
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
       - name: Decide whether GitHub Pages needs this refresh
         id: publish
         env:

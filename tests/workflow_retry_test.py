@@ -95,7 +95,7 @@ class MapPublicationRetryTests(unittest.TestCase):
                 self.assertNotIn("changed=true", no_op)
                 self.assertNotIn("git commit", no_op)
                 self.assertLess(check, commit.index('git add -- "archive/'))
-                self.assertLess(commit.index("git push origin HEAD:main"), commit.index('echo "changed=true"'))
+                self.assertLess(commit.index("bash tools/push_data_commit.sh"), commit.index('echo "changed=true"'))
                 self.assertIn("changed: ${{ steps.commit.outputs.changed }}", source)
                 deploy = source.split("\n  deploy:", 1)[1]
                 self.assertIn("if: ${{ needs.repair.outputs.changed == 'true' || "

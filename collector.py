@@ -2362,8 +2362,9 @@ def atomic_json_write(path, data, compact=False):
 
 
 def load_database_strict():
+    # A missing database is not an empty one: the run would publish only its own events.
     if not os.path.exists(OUTPUT_FILE):
-        return {"events": []}
+        raise RuntimeError(f"{OUTPUT_FILE} is missing; refusing to start from an empty database.")
     try:
         with open(OUTPUT_FILE, encoding="utf-8") as handle:
             data = json.load(handle)

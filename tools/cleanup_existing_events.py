@@ -18,7 +18,9 @@ result matches exactly what the live collector would now accept or reject:
 
 Removed events are archived (never silently discarded) to a JSON file before
 being dropped from events.json, and every other top-level key in events.json
-is preserved exactly as found.
+is preserved exactly as found, except number_of_events, which follows the
+remaining events. Both files are written like every other events.json writer
+(collector.atomic_json_write): whole or not at all, in the same bytes.
 
 Usage:
     python3 tools/cleanup_existing_events.py --dry-run
@@ -225,18 +227,12 @@ def main(argv=None):
 
     archive_path = Path(args.archive) if args.archive else ROOT / "archive" / f"removed-events-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}.json"
     archive_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(archive_path, "w", encoding="utf-8") as handle:
-        json.dump(
-            {"removed_at": datetime.now(timezone.utc).isoformat(), "events": removed},
-            handle,
-            ensure_ascii=False,
-            indent=2,
-        )
+    collector.atomic_json_write(archive_path, {"removed_at": datetime.now(timezone.utc).isoformat(), "events": removed})
     print(f"\nArchived {len(removed)} removed events to {archive_path}")
 
     database["events"] = kept
-    with open(args.input, "w", encoding="utf-8") as handle:
-        json.dump(database, handle, ensure_ascii=False, indent=2)
+    database["number_of_events"] = len(kept)
+    collector.atomic_json_write(args.input, database)
     print(f"Wrote {len(kept)} remaining events to {args.input}")
 
     return 0

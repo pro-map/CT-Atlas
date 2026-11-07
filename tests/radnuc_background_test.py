@@ -46,6 +46,15 @@ class Gate:
     def __exit__(self,*_):return False
 
 
+@contextlib.contextmanager
+def checkout():
+    """A temporary repository root with an empty map: the run and the sync read
+    the map's stories, and a missing events.json stops them."""
+    with tempfile.TemporaryDirectory() as tmp:
+        Path(tmp,'events.json').write_text('{"events":[]}',encoding='utf-8')
+        yield tmp
+
+
 class BackgroundTests(unittest.TestCase):
     def setUp(self):
         sleeper = patch.object(daily.time, 'sleep')
@@ -79,7 +88,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(post.call_count,1)
 
     def test_one_unanswerable_candidate_does_not_block_a_valid_sibling(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             class Searcher:
                 def search(self,task):return [candidate(1),candidate(2)],False
             def review(payload):
@@ -96,7 +105,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual([row['url'] for row in pending],[candidate(1)['url']])
 
     def test_model_output_cutoff_splits_the_batch_instead_of_stopping_the_whole_update(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             class Searcher:
                 def search(self,task):return [candidate(1),candidate(2)],False
             calls=[]
@@ -114,7 +123,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(report['review_validation_errors']['interaction_incomplete'],1)
 
     def test_partial_response_shrinks_the_next_batch_without_discarding_unresolved_inputs(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             class Searcher:
                 def search(self,task):return [candidate(i) for i in range(8)],False
             calls=[]
@@ -131,7 +140,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertFalse(report['complete'])
 
     def test_twenty_request_envelope_counts_http_retries_and_preserves_the_remaining_queue(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,
                 'pending':[candidate(i) for i in range(200)]})
@@ -159,7 +168,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(report['batch_status'],'partial')
 
     def test_full_queue_is_reviewed_before_discovery_and_recent_new_input_precedes_old_queue(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             old=candidate(0,published=(NOW-timedelta(days=4)).isoformat())
             carried=[candidate(i,published=(NOW-timedelta(days=1)).isoformat()) for i in range(1,500)]
@@ -191,7 +200,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(report['source_discovery']['pending_queries'],49)
 
     def test_existing_backlog_is_reviewed_only_after_recent_without_historical_searches(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,
                 'pending':[candidate(0,published=(NOW-timedelta(days=5)).isoformat()),candidate(1),
@@ -211,7 +220,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertFalse(report['complete'])
 
     def test_empty_review_queue_does_not_claim_unsearched_sources_are_complete(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             class Searcher:
                 def search(self,task):return [],False
             report=daily.run(tmp,max_fetches=1,collector=collector,searcher=Searcher(),
@@ -225,7 +234,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(report['source_discovery']['stop_code'],'fetch_limit_reached')
 
     def test_unchanged_shared_daily_ledger_limits_the_larger_run_envelope(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,
                 'pending':[candidate(i) for i in range(40)]})
@@ -301,7 +310,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(original,{p:p.read_bytes() for p in map_files.values()})
 
     def test_failed_ai_review_preserves_candidates_without_adding_articles(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             class Searcher:
                 def search(self,task):return [candidate(1),candidate(2)],False
@@ -315,7 +324,7 @@ class BackgroundTests(unittest.TestCase):
         # Runs 40723425571 (10-28) and 41511857381 (11-02): 486 rows left from
         # the first runs kept the queue full, so the first action was a review,
         # a 503 ended the run before any search, and the run exited 1.
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             stale=[candidate(i,published=(NOW-timedelta(days=20)).isoformat()) for i in range(487)]
             recent=[candidate(1000+i,published=(NOW-timedelta(hours=i+1)).isoformat()) for i in range(10)]
@@ -339,7 +348,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(saved['consecutive_transient_failures'],1)
 
     def test_pending_rows_older_than_fourteen_days_are_dropped_at_load_and_counted(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             rows=[candidate(0,published=(NOW-timedelta(days=15)).isoformat()),
                   candidate(1,published=(NOW-timedelta(days=13)).isoformat()),candidate(2,published=''),candidate(3)]
@@ -354,7 +363,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertFalse(report['failed'])
 
     def test_three_transient_failures_in_a_row_fail_the_run_and_a_review_resets_the_count(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp)
             archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,'pending':[candidate(1)]})
             outcomes=[]
@@ -376,7 +385,7 @@ class BackgroundTests(unittest.TestCase):
     def test_invalid_responses_and_non_transient_http_errors_still_fail_at_once(self):
         def forbidden(payload):raise daily.BackgroundHTTPError(403)
         for review in (lambda _:[],forbidden):
-            with self.subTest(review=review), tempfile.TemporaryDirectory() as tmp:
+            with self.subTest(review=review), checkout() as tmp:
                 root=Path(tmp)
                 # An earlier deferral neither softens nor delays a real failure.
                 archive_review.write_json(root/bg.STATUS_FILE,{'consecutive_transient_failures':1})
@@ -408,7 +417,7 @@ class BackgroundTests(unittest.TestCase):
                     self.assertNotIn('::',out.getvalue())
 
     def test_partial_siblings_are_matched_by_id_and_unresolved_rows_stay_pending(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             class Searcher:
                 def search(self,task):return [candidate(1),candidate(2)],False
             calls=[]
@@ -432,7 +441,7 @@ class BackgroundTests(unittest.TestCase):
         self.assertEqual(issues['Invalid background review identifier'],2)
 
     def test_three_day_window_excludes_old_undated_and_future_candidates(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             class Searcher:
                 def search(self,task):return [candidate(1,published=(NOW-timedelta(days=180)).isoformat()),
                     candidate(2,published=''),candidate(3,published=(NOW+timedelta(days=1)).isoformat())],False
@@ -442,7 +451,7 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(report['counts']['reviewed'],0)
 
     def test_archive_sync_retains_purpose_and_files_only_under_rn(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with checkout() as tmp:
             root=Path(tmp);row=bg.article(candidate(),decision(),NOW)
             archive_review.write_json(root/bg.ARTICLES_FILE,{'articles':[row,{**row,'ai_selected':True}]})
             articles,_=sync.collect_articles(root)
