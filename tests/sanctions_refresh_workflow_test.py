@@ -101,15 +101,19 @@ class LockTests(unittest.TestCase):
         self.assertEqual(lines, ["group: ct-map-update-main", "cancel-in-progress: false", "queue: max"])
         self.assertEqual(SOURCE.count("concurrency:"), 1, "no job may leave the workflow's lock")
 
-    def test_the_deploy_publishes_the_pushed_commit_and_the_mirror_follows(self):
+    def test_the_deploy_publishes_the_pushed_commit_and_the_mirror_does_not_redeploy_for_it(self):
         deploy = job("deploy")
         self.assertIn("needs: refresh", deploy)
         self.assertIn("if: ${{ needs.refresh.outputs.pages == 'true' }}", deploy)
         self.assertIn("ref: ${{ needs.refresh.outputs.data_sha }}", deploy)
         self.assertIn("uses: ./.github/actions/build-events-lite", deploy)
         self.assertIn("uses: actions/deploy-pages@", deploy)
+        # The mirror does not stage the list, and the Worker reads it from ct-atlas.com.
         mirror = (WORKFLOWS / "deploy-cloudflare-mirror.yml").read_text(encoding="utf-8")
-        self.assertIn('      - "Refresh OFAC sanctions list"\n', mirror)
+        self.assertNotIn('      - "Refresh OFAC sanctions list"\n', mirror)
+        self.assertNotIn("sanctions-crypto.json", (ROOT / "tools/deploy_mirror.sh").read_text(encoding="utf-8"))
+        self.assertIn('SANCTIONS_URL = "https://ct-atlas.com/sanctions-crypto.json"',
+                      (ROOT / "cloudflare-worker/wrangler.toml").read_text(encoding="utf-8"))
         self.assertIn("name: Refresh OFAC sanctions list\n", SOURCE)
 
     def test_the_deploy_checks_that_pages_serves_the_committed_list(self):

@@ -15,6 +15,10 @@ REFRESH = "refresh-daily-status.yml"
 # A finished one-shot patch whose Pages steps are being retired: the UI deploy
 # already publishes the same files, with verification. It must not be listed.
 NOT_MIRRORED = {"apply-usage-upgrade.yml"}
+# Pages publishers whose commits change no file the mirror serves: following them
+# only redeployed identical files. They must not be listed either, and
+# test_a_publisher_the_mirror_skips_commits_nothing_it_serves holds them to that.
+MIRROR_UNCHANGED = {"refresh-sanctions.yml"}
 UI_GLOBS = {"*.html", "*.js", "*.css", "*.svg", "*.png"}
 
 
@@ -75,9 +79,23 @@ class MirrorTriggerTests(unittest.TestCase):
                          "These names match no workflow's name: and never trigger the mirror")
         files = {names[name] for name in listed}
         self.assertEqual(sorted(files - deployers), [], "Listed workflows that do not deploy Pages")
-        self.assertEqual(sorted(deployers - NOT_MIRRORED - files), [],
+        self.assertEqual(sorted(deployers - NOT_MIRRORED - MIRROR_UNCHANGED - files), [],
                          "These workflows deploy Pages but the mirror does not follow them")
         self.assertEqual(files & NOT_MIRRORED, set())
+        self.assertEqual(files & MIRROR_UNCHANGED, set(), "The mirror would redeploy identical files after these")
+        self.assertLessEqual(MIRROR_UNCHANGED, deployers)
+
+    def test_a_publisher_the_mirror_skips_commits_nothing_it_serves(self):
+        script = (ROOT / "tools/deploy_mirror.sh").read_text(encoding="utf-8")
+        for name in sorted(MIRROR_UNCHANGED):
+            with self.subTest(workflow=name):
+                adds = re.findall(r"git add[^\n]*", read(name))
+                self.assertTrue(adds, "No commit found")
+                for add in adds:
+                    # A wider add could stage a file the mirror serves.
+                    staged = re.fullmatch(r"git add -- ([\w.-]+)", add)
+                    self.assertIsNotNone(staged, add)
+                    self.assertNotIn(staged[1], script, f"The mirror serves {staged[1]}, so it must follow {name}")
 
     def test_mirror_runs_only_after_a_successful_trusted_trigger(self):
         source = read(MIRROR)

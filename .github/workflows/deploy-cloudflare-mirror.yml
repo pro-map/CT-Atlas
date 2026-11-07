@@ -24,8 +24,11 @@ on:
   workflow_dispatch:
   workflow_run:
     # Data commits use GITHUB_TOKEN; publish only after a successful trusted run.
-    # Exactly the name: of every workflow that deploys GitHub Pages
-    # (tests/publication_workflows_test.py keeps this list complete and current).
+    # Exactly the name: of every workflow that deploys GitHub Pages, but "Refresh
+    # OFAC sanctions list": it commits only sanctions-crypto.json, which the mirror
+    # does not stage (the Worker reads it from ct-atlas.com), so following it only
+    # redeployed identical files (tests/publication_workflows_test.py keeps this
+    # list complete and current).
     workflows:
       - "Daily CT Intelligence Map Update"
       - "Refresh daily collection status"
@@ -35,7 +38,6 @@ on:
       - "Retire Judicial collection"
       - "Clean up existing events database"
       - "Actualiser le logo uniquement"
-      - "Refresh OFAC sanctions list"
     types: [completed]
     branches: [main]
 
