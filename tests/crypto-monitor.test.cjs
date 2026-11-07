@@ -16,6 +16,8 @@ async function analyzeCryptoAddress(){throw new Error("network not used");}
 function harness(overrides={}){
   const context=vm.createContext({
     cleanText,gateCall,analyzeCryptoAddress,retiredChainError:()=>"",
+    // The real one is exercised end to end in crypto-monitor-reliability.test.cjs.
+    sanitizeProviderMessage:text=>cleanText(text,120),
     crypto:{randomUUID:()=> "uuid-monitor"},
     Date,Number,String,Array,Object,Set,Map,console,
     ...overrides
@@ -207,7 +209,7 @@ test("real dormancy alerts on the row that ended the gap",()=>{
   assert.equal(alert.tx_id,"first");
 });
 
-test("an empty baseline treats every row as new, and no baseline at all treats none as new",()=>{
+test("an empty baseline with no check time treats every row as new, and no baseline at all treats none as new",()=>{
   const h=harness();
   const rows=[eth({id:"a",amount:50})];
   const empty=h.buildMonitorAlerts(watchWith({min_amount:10},{newest_tx_id:"",newest_tx_time:""}),{transactions:rows},NOW);
@@ -302,14 +304,18 @@ function monitorRoute(answers={}){
 const checkRequest=body=>({json:async()=>body});
 const TARGET={username:"analyst",watch:{id:"w1",chain:"bitcoin",address:"bc1qseed",thresholds:{},last_snapshot:{newest_tx_id:"old",newest_tx_time:"2026-09-22T10:00:00Z"}},sensitive_labels:[]};
 
+const updates=calls=>calls.filter(call=>call.path==="/crypto-monitor-update");
+// Each wallet result sent to the gate, in order, whichever call carried it.
+const records=calls=>updates(calls).flatMap(call=>Array.from(call.payload.updates));
+
 test("CHECK NOW runs one wallet through the shared alert builder and saves through the gate",async()=>{
-  const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[TARGET]},"/crypto-monitor-update":{ok:true,alerts_added:1}});
+  const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[TARGET]},"/crypto-monitor-update":{ok:true,alerts_added:1,missing:0}});
   const response=await h.handleCryptoMonitorCheck(checkRequest({user_id:"analyst",watch_id:"w1"}),{});
   assert.equal(response.status,200);
   assert.equal(response.value.alerts_added,1);
-  const update=calls.find(call=>call.path==="/crypto-monitor-update");
-  assert.equal(update.payload.username,"analyst");
-  assert.equal(update.payload.alerts[0].type,"NEW_TRANSACTION");
+  const [record]=records(calls);
+  assert.equal(record.username,"analyst");
+  assert.equal(record.alerts[0].type,"NEW_TRANSACTION");
   assert.equal(calls.find(call=>call.path==="/usage-increment").payload.log.details.origin,"monitor");
 });
 
@@ -325,13 +331,153 @@ test("CHECK NOW answers 404 for a wallet the gate does not return for this user"
   assert.equal((await h.handleCryptoMonitorCheck(checkRequest({user_id:"analyst",watch_id:"other"}),{})).status,404);
 });
 
-test("a partial provider read leaves the baseline alone and counts as a failed check",async()=>{
+test("CHECK NOW on a wallet deleted while it was read says so instead of reporting a check",async()=>{
+  const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[TARGET]},"/crypto-monitor-update":{ok:true,alerts_added:0,missing:1}});
+  const response=await h.handleCryptoMonitorCheck(checkRequest({user_id:"analyst",watch_id:"w1"}),{});
+  assert.equal(response.status,503);
+  assert.equal(response.value.error,"Monitored wallet not found.");
+  assert.equal(calls.some(call=>call.path==="/usage-increment"),false);
+});
+
+const PARTIAL={coverage:{partial:true,failed_sources:["Blockstream older transactions"]}};
+
+test("a partial read with a sanctions hit still alerts, says the read was partial, and leaves the baseline alone",async()=>{
   const {h,calls}=monitorRoute({
     "/crypto-monitor-targets":{ok:true,targets:[TARGET],total:1},
-    analysis:async()=>({transactions:[],coverage:{partial:true}})
+    analysis:async()=>({transactions:[eth({id:"new",amount:1})],sanctions_screening:HIT,...PARTIAL})
   });
   const result=await h.runCryptoMonitor({});
-  assert.equal(result.failed,1);
+  assert.equal(result.partial,1);
   assert.equal(result.checked,0);
-  assert.equal(calls.some(call=>call.path==="/crypto-monitor-update"),false);
+  const [record]=records(calls);
+  assert.equal(record.snapshot,null,"a partial read never becomes the baseline");
+  assert.deepEqual(Array.from(record.alerts,alert=>alert.type),["SANCTIONS_EXPOSURE","SANCTIONS_EXPOSURE"],"no new-activity alert from it");
+  for(const alert of record.alerts){
+    assert.match(alert.detail,/EXAMPLE FINANCIER \[SDGT\]/);
+    assert.match(alert.detail,/Partial read: Blockstream older transactions could not be read\. Other records may be missing from this check\.$/);
+  }
+  assert.deepEqual({...record.check},{ok:false,error:"Partial read: Blockstream older transactions could not be read."});
+});
+
+test("an empty answer, or one older than the baseline, is a failed check that changes no baseline and raises no alert",async()=>{
+  const answers=[
+    [{transactions:[],coverage:{partial:false}},/no history for a wallet with saved activity/],
+    [{transactions:[eth({id:"stale",amount:9,time:"2026-09-21T10:00:00Z"})],coverage:{partial:false}},/only history older than the saved baseline/]
+  ];
+  for(const [analysis,reason] of answers){
+    const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[TARGET],total:1},analysis:async()=>analysis});
+    const result=await h.runCryptoMonitor({});
+    assert.equal(result.failed,1);
+    const [record]=records(calls);
+    assert.equal(record.snapshot,null);
+    assert.deepEqual(Array.from(record.alerts),[]);
+    assert.equal(record.check.ok,false);
+    assert.match(record.check.error,reason);
+  }
+});
+
+test("an empty answer for a wallet with no saved activity is a real empty wallet, and becomes its baseline",async()=>{
+  const fresh={...TARGET,watch:{...TARGET.watch,last_snapshot:{newest_tx_id:"",newest_tx_time:""}}};
+  for(const coverage of [{partial:false},{partial:false,lifetime_tx_count:0}]){
+    const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[fresh],total:1},analysis:async()=>({transactions:[],coverage})});
+    assert.equal((await h.runCryptoMonitor({})).checked,1);
+    const [record]=records(calls);
+    assert.equal(record.snapshot.newest_tx_id,"");
+    assert.equal(record.check.ok,true);
+  }
+});
+
+test("an empty answer the provider's own count contradicts is a failed check, even before the wallet has a baseline",async()=>{
+  for(const last_snapshot of [null,{newest_tx_id:"",newest_tx_time:""}]){
+    const fresh={...TARGET,watch:{...TARGET.watch,last_snapshot}};
+    const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[fresh],total:1},analysis:async()=>({transactions:[],coverage:{partial:false,lifetime_tx_count:60}})});
+    assert.equal((await h.runCryptoMonitor({})).failed,1);
+    const [record]=records(calls);
+    assert.equal(record.snapshot,null,"an empty baseline here would turn the whole history into alerts at the next full read");
+    assert.deepEqual({...record.check},{ok:false,error:"The provider returned no history although it counts 60 transactions for this wallet."});
+  }
+});
+
+test("after an empty baseline, history from before its check is not new, and a first payment after it is",()=>{
+  const h=harness();
+  const emptyAt={newest_tx_id:"",newest_tx_time:"",checked_at:"2026-09-23T06:00:00Z"};
+  const old=[eth({id:"old1",amount:50,time:"2026-09-22T10:00:00Z"}),eth({id:"old2",amount:50,time:"2026-09-21T10:00:00Z"})];
+  assert.deepEqual(types(h.buildMonitorAlerts(watchWith({min_amount:10},emptyAt),{transactions:old},NOW)),[],
+    "an empty read that missed the history must not turn it into alerts");
+  const first=h.buildMonitorAlerts(watchWith({min_amount:10},emptyAt),{transactions:[eth({id:"first",amount:50}),...old]},NOW);
+  assert.deepEqual(types(first),["NEW_TRANSACTION","LARGE_TRANSFER"]);
+  assert.deepEqual(Array.from(first.alerts,alert=>alert.tx_id),["first","first"]);
+  // A block time can trail the clock, so a payment stamped an hour before the empty check is still new.
+  const early=h.buildMonitorAlerts(watchWith({min_amount:10},emptyAt),{transactions:[eth({id:"early",amount:50,time:"2026-09-23T05:00:00Z"})]},NOW);
+  assert.deepEqual(types(early),["NEW_TRANSACTION","LARGE_TRANSFER"]);
+  const unconfirmed=h.buildMonitorAlerts(watchWith({},emptyAt),{transactions:[eth({id:"mempool",amount:50,time:""})]},NOW);
+  assert.deepEqual(types(unconfirmed),["NEW_TRANSACTION"],"a payment not yet in a block is recent by definition");
+});
+
+test("a run saves every wallet, whatever its read, and its outcome, in one call",async()=>{
+  const targets=["ok","down","partial"].map(id=>({...TARGET,watch:{...TARGET.watch,id,address:"bc1q"+id}}));
+  const {h,calls}=monitorRoute({
+    "/crypto-monitor-targets":{ok:true,targets,total:3},
+    analysis:async address=>{
+      if(address==="bc1qdown")throw new Error("Blockstream transaction history: HTTP 503");
+      return address==="bc1qpartial"?{transactions:[eth({id:"new",amount:1})],...PARTIAL}:{transactions:[eth({id:"new",amount:1})],coverage:{partial:false}};
+    }
+  });
+  const result=await h.runCryptoMonitor({});
+  assert.deepEqual(Array.from(calls,call=>call.path),["/crypto-monitor-targets","/crypto-monitor-update"],"one update for the whole run and no other call");
+  assert.deepEqual(Array.from(records(calls),record=>record.watch_id),["ok","down","partial"]);
+  assert.deepEqual(Array.from(records(calls),record=>record.check.ok),[true,false,false]);
+  assert.equal(records(calls)[1].check.error,"Blockstream transaction history: HTTP 503");
+  assert.deepEqual({...updates(calls)[0].payload.run},{selected:3,checked:1,partial:1,failed:1});
+  assert.equal(result.status,"degraded");
+  assert.equal(result.ok,true);
+});
+
+test("a run in which every wallet failed is not ok",async()=>{
+  const targets=["a","b"].map(id=>({...TARGET,watch:{...TARGET.watch,id}}));
+  const {h,calls}=monitorRoute({
+    "/crypto-monitor-targets":{ok:true,targets,total:2},
+    analysis:async()=>{throw new Error("Blockstream transaction history: the provider did not answer in time.");}
+  });
+  const result=await h.runCryptoMonitor({});
+  assert.equal(result.ok,false);
+  assert.equal(result.status,"failed");
+  assert.equal(result.failed,2);
+  assert.deepEqual({...updates(calls)[0].payload.run},{selected:2,checked:0,partial:0,failed:2});
+});
+
+test("a run with wallets to check but no provider to read them is not ok, and still reports",async()=>{
+  const tron={...TARGET,watch:{...TARGET.watch,chain:"tron",address:"T"+"1".repeat(33)}};
+  const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[tron],total:1}});
+  const result=await h.runCryptoMonitor({});
+  assert.equal(result.ok,false);
+  assert.equal(result.status,"failed");
+  assert.equal(result.checked,0);
+  assert.equal(result.skipped,1);
+  const [update]=updates(calls);
+  assert.deepEqual(Array.from(update.payload.updates),[]);
+  assert.deepEqual({...update.payload.run},{selected:1,checked:0,partial:0,failed:0});
+});
+
+test("a run whose results the gate refuses fails, instead of reading as a quiet run",async()=>{
+  const h=harness({
+    gateCall:async path=>path==="/crypto-monitor-targets"
+      ?{ok:true,json:async()=>({ok:true,targets:[TARGET],total:1})}
+      :{ok:false,json:async()=>({error:"Gate unavailable."})},
+    analyzeCryptoAddress:async()=>({transactions:[eth({id:"new",amount:1})],coverage:{partial:false}})
+  });
+  await assert.rejects(()=>h.runCryptoMonitor({}),/^Error: Gate unavailable\.$/);
+});
+
+test("CHECK NOW records a failed read and answers with its reason",async()=>{
+  const {h,calls}=monitorRoute({
+    "/crypto-monitor-targets":{ok:true,targets:[TARGET]},
+    analysis:async()=>({transactions:[],coverage:{partial:false}})
+  });
+  const response=await h.handleCryptoMonitorCheck(checkRequest({user_id:"analyst",watch_id:"w1"}),{});
+  assert.equal(response.status,503);
+  assert.match(response.value.error,/no history for a wallet with saved activity/);
+  assert.equal(records(calls)[0].check.ok,false);
+  assert.equal(updates(calls)[0].payload.run,undefined,"a single check is not a run");
+  assert.equal(calls.some(call=>call.path==="/usage-increment"),false);
 });

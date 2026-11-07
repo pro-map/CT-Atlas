@@ -1,13 +1,19 @@
 import { cleanText, normalizeUsername, isAllowedUser, jsonResponse, gateCall } from "./shared.js";
 import { analyzeCryptoAddress, authenticate, retiredChainError } from "./crypto.js";
+import { sanitizeProviderMessage } from "./crypto-provider-health.js";
 
 const CRYPTO_MONITOR_VERSION = "crypto-monitor-v2-scheduled-6h";
 const MONITOR_BATCH_LIMIT = 8;
-// Each wallet costs 3 provider calls (Bitcoin: address read plus 2 pages of 25), a
-// label lookup and an update. A full batch then spends 42 of the 50 subrequests a
-// run may use, and the rest covers rate-limit retries.
+// Each wallet costs 3 provider calls (Bitcoin: address read plus 2 pages of 25) and a
+// label lookup, and one update saves the whole run. With the target read and the
+// sanctions list, a full batch spends 35 of the 50 subrequests a run may use, and the
+// rest covers rate-limit retries. A wallet that cannot be read costs no call of its own.
 const MONITOR_SAMPLE_ROWS = 50;
 const DAY_MS = 24 * 60 * 60 * 1000;
+// Bitcoin accepts a block time up to about an hour behind the clock, and a provider lists
+// a block a little after it is mined: a first payment can carry a time just before the
+// check that found the wallet empty.
+const EMPTY_BASELINE_MARGIN_MS = 2 * 60 * 60 * 1000;
 
 function normalizeAddress(address, chain) {
   const value = String(address || "");
@@ -97,20 +103,24 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
   const alerts = [];
 
   // No snapshot means no baseline yet. A snapshot with no time means the wallet was
-  // empty when it was taken, so everything seen since is new.
+  // empty when it was taken: what came after that check is new, but what an empty read
+  // missed from before it is not, or one bad read would turn a whole history into alerts.
   const previousTime = Date.parse(previous?.newest_tx_time || "");
   const hasBaselineTime = Number.isFinite(previousTime);
+  const since = hasBaselineTime ? previousTime : Date.parse(previous?.checked_at || "") - EMPTY_BASELINE_MARGIN_MS;
+  const notNew = time => Number.isFinite(since) && time <= since;
   const newRows = previous
     ? rows.filter(row => {
         const time = Date.parse(row.time || "");
-        return movedValue(row) && Number.isFinite(time) && (!hasBaselineTime || time > previousTime);
+        return movedValue(row) && Number.isFinite(time) && !notNew(time);
       })
     : [];
 
   if (
     previous &&
     snapshot.newest_tx_id &&
-    snapshot.newest_tx_id !== previous.newest_tx_id
+    snapshot.newest_tx_id !== previous.newest_tx_id &&
+    (hasBaselineTime || !notNew(Date.parse(snapshot.newest_tx_time)))
   ) {
     alerts.push(alertBase(
       watch,
@@ -281,22 +291,69 @@ function providerAvailable(chain, env) {
   return false;
 }
 
-async function checkMonitorTarget(target, env) {
+// What the analysts read when a check fails: an error can quote a provider URL, and Etherscan's carries the key.
+function failureReason(error, env) {
+  return sanitizeProviderMessage(error?.message, [env.ETHERSCAN_API_KEY, env.TRONGRID_API_KEY]) || "The provider could not be read.";
+}
+
+// Why a read cannot replace the baseline, or "" when it can. A baseline taken from a partial
+// read would make the next full read look like new activity. A chain only grows, so a wallet
+// with saved activity cannot come back empty, or with nothing as recent as its baseline, and
+// neither can one whose provider counts transactions for it, baseline or not.
+function unusableRead(watch, analysis) {
+  const coverage = analysis?.coverage;
+  if (coverage?.partial) {
+    const sources = (Array.isArray(coverage.failed_sources) ? coverage.failed_sources : []).map(source => cleanText(source, 60)).filter(Boolean);
+    return "Partial read: " + (sources.join(", ") || "part of the history") + " could not be read.";
+  }
+  const rows = Array.isArray(analysis?.transactions) ? analysis.transactions : [];
+  const previous = watch.last_snapshot;
+  if (!rows.length) {
+    if (previous?.newest_tx_id) return "The provider returned no history for a wallet with saved activity.";
+    const lifetime = Number(coverage?.lifetime_tx_count) || 0;
+    return lifetime > 0 ? "The provider returned no history although it counts " + lifetime + " transactions for this wallet." : "";
+  }
+  if (!previous?.newest_tx_id) return "";
+  const baseline = Date.parse(previous.newest_tx_time || "");
+  const newest = Math.max(-Infinity, ...rows.map(row => Date.parse(row?.time || "")).filter(Number.isFinite));
+  if (Number.isFinite(baseline) && newest < baseline) return "The provider returned only history older than the saved baseline.";
+  return "";
+}
+
+// Never throws: a wallet that cannot be read still reports, so its failure is recorded.
+async function readMonitorTarget(target, env) {
   const watch = target.watch || {};
-  const analysis = await analyzeCryptoAddress(watch.address, watch.chain, MONITOR_SAMPLE_ROWS, env, { skipBalance: true });
-  // A baseline taken from a partial read would make the next full read look like
-  // new activity, so the wallet waits for its next turn.
-  if (analysis?.coverage?.partial) throw new Error("Partial provider history; baseline left unchanged.");
-  const { snapshot, alerts } = buildMonitorAlerts(target, analysis);
+  try {
+    const analysis = await analyzeCryptoAddress(watch.address, watch.chain, MONITOR_SAMPLE_ROWS, env, { skipBalance: true });
+    const problem = unusableRead(watch, analysis);
+    if (!problem) return { state: "checked", problem, ...buildMonitorAlerts(target, analysis) };
+    // Nothing in this read may move the baseline or count as new activity. A sanctions match among
+    // the rows it did return is still a match, so it alerts and says the read was incomplete.
+    const alerts = buildSanctionsAlerts(watch, analysis?.sanctions_screening).map(alert => ({
+      ...alert,
+      detail: alert.detail + " " + problem + " Other records may be missing from this check."
+    }));
+    return { state: analysis?.coverage?.partial ? "partial" : "failed", problem, snapshot: null, alerts };
+  } catch (error) {
+    return { state: "failed", problem: failureReason(error, env), snapshot: null, alerts: [] };
+  }
+}
+
+// One gate call saves every wallet's result, and the outcome of a scheduled run with them.
+async function saveMonitorResults(env, reads, run = null) {
   const updateResponse = await gateCall(env, "/crypto-monitor-update", {
-    username: target.username,
-    watch_id: watch.id,
-    snapshot,
-    alerts
+    updates: reads.map(({ target, read }) => ({
+      username: target.username,
+      watch_id: target.watch?.id,
+      snapshot: read.snapshot,
+      alerts: read.alerts,
+      check: { ok: read.state === "checked", error: read.problem }
+    })),
+    ...(run ? { run } : {})
   });
   const updatePayload = await updateResponse.json().catch(() => ({}));
-  if (!updateResponse.ok) throw new Error(updatePayload?.error || "Unable to save monitoring result.");
-  return Number(updatePayload.alerts_added || 0);
+  if (!updateResponse.ok) throw new Error(updatePayload?.error || "Unable to save monitoring results.");
+  return { alertsAdded: Number(updatePayload.alerts_added || 0), missing: Number(updatePayload.missing || 0) };
 }
 
 async function runCryptoMonitor(env) {
@@ -309,40 +366,44 @@ async function runCryptoMonitor(env) {
   }
 
   const targets = Array.isArray(targetPayload.targets) ? targetPayload.targets : [];
-  let checked = 0;
-  // Retired-chain watches stay out of the rotation, so the gate only counts them.
-  let skipped = Number(targetPayload.retired) || 0;
-  let alertsAdded = 0;
-  let failed = 0;
+  // Retired-chain watches stay out of the rotation, so the gate only counts them. One that
+  // still reaches here is skipped the same way: never read, and never a failure.
+  const live = targets.filter(target => !retiredChainError(target.watch?.chain));
+  const checkable = live.filter(target => providerAvailable(target.watch?.chain, env));
+  const skipped = (Number(targetPayload.retired) || 0) + targets.length - checkable.length;
+  const counts = { checked: 0, partial: 0, failed: 0 };
+  const reads = [];
 
-  for (const target of targets) {
-    const watch = target.watch || {};
-    if (!providerAvailable(watch.chain, env)) {
-      skipped++;
-      continue;
-    }
-
-    try {
-      alertsAdded += await checkMonitorTarget(target, env);
-      checked++;
-    } catch (error) {
-      failed++;
-      console.error("Crypto automatic monitor failed", target.username, watch.address, error);
-    }
+  for (const target of checkable) {
+    const read = await readMonitorTarget(target, env);
+    counts[read.state]++;
+    reads.push({ target, read });
+    if (read.problem) console.error("Crypto automatic monitor check failed", target.username, target.watch?.address, read.problem);
   }
 
+  // A live wallet left unread for want of a provider key counts against the run. If this call
+  // fails, the run start the gate recorded with the targets reads as a run that never reported.
+  const { alertsAdded } = live.length
+    ? await saveMonitorResults(env, reads, { selected: live.length, ...counts })
+    : { alertsAdded: 0 };
+
+  const status = counts.checked === live.length ? "ok" : counts.checked ? "degraded" : "failed";
   const result = {
-    ok: true,
+    // Every wallet failing is an outage, not a quiet run.
+    ok: status !== "failed",
+    status,
     version: CRYPTO_MONITOR_VERSION,
     generated_at: new Date().toISOString(),
     total_watchlist: Number(targetPayload.total || targets.length),
     selected: targets.length,
-    checked,
+    checked: counts.checked,
+    partial: counts.partial,
     skipped,
-    failed,
+    failed: counts.failed,
     alerts_added: alertsAdded
   };
-  console.log("Crypto automatic monitor", JSON.stringify(result));
+  if (result.ok) console.log("Crypto automatic monitor", JSON.stringify(result));
+  else console.error("Crypto automatic monitor", JSON.stringify(result));
   return result;
 }
 
@@ -372,7 +433,10 @@ async function handleCryptoMonitorCheck(request, env) {
   }
 
   try {
-    const alertsAdded = await checkMonitorTarget(target, env);
+    const read = await readMonitorTarget(target, env);
+    const { alertsAdded, missing } = await saveMonitorResults(env, [{ target, read }]);
+    if (missing) throw new Error("Monitored wallet not found.");
+    if (read.problem) return jsonResponse({ error: read.problem, alerts_added: alertsAdded }, 503, env);
     await gateCall(env, "/usage-increment", {
       username,
       metrics: { blockchain_searches: 1 },

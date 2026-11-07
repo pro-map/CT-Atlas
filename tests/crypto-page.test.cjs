@@ -948,6 +948,29 @@ test("the watchlist lists each wallet with its state, and works before any analy
   assert.equal(h.el("cryptoWatchCount").textContent,"2 of 300 wallets monitored · 1 unacknowledged alert(s)");
 });
 
+test("a watch whose checks fail says so, since when and why, and the panel shows the last automatic run",async()=>{
+  const failing={failures:2,failing_since:iso(0),last_error:"Blockstream <transaction> history: HTTP 503",last_attempt_at:iso(0),last_success_at:""};
+  const h=harness({respond:()=>({json:{ok:true,workspace:emptyWorkspace({watchlist:[
+    watchItem("w1",{monitor:failing}),
+    watchItem("w2",{monitor:{failures:0,last_error:"",failing_since:""}}),
+    watchItem("w3",{enabled:false,monitor:failing}),
+    watchItem("w4",{chain:"bsc",monitor:failing})
+  ]}),monitor_run:{status:"degraded",summary:"2026-11-07 06:17 UTC · 7 of 8 wallets read · 1 failed"}}})});
+  await h.api.loadCryptoWorkspace();
+  const html=h.el("cryptoWatchlist").innerHTML;
+  assert.ok(html.startsWith('<div class="intel-result">Last automatic run (all analysts\' wallets): 2026-11-07 06:17 UTC · 7 of 8 wallets read · 1 failed</div>'));
+  const items=html.split('<div class="intel-item">').slice(1);
+  assert.match(items[0],/intel-badge high">CHECK FAILING</);
+  assert.match(items[0],/intel-detail">Check failing since \d{2} [A-Z][a-z]{2} \d{4}, \d{2}:\d{2}, 2 check\(s\) in a row: new activity on this wallet may be missed\. Last error: Blockstream &lt;transaction&gt; history: HTTP 503<\/div>/);
+  assert.match(items[1],/intel-badge clear">ACTIVE</);
+  assert.doesNotMatch(items[1],/Check failing/);
+  assert.match(items[2],/intel-badge unscreened">PAUSED</);
+  assert.doesNotMatch(items[2],/Check failing/,"a paused wallet is not being checked");
+  assert.match(items[3],/intel-badge unscreened">NOT CHECKED</);
+  assert.doesNotMatch(items[3],/Check failing|CHECK FAILING/,"a retired chain is never counted as failing");
+  assert.equal(h.el("cryptoWatchCount").textContent,"4 of 300 wallets monitored · 0 unacknowledged alert(s)");
+});
+
 test("pause, resume and delete change the workspace and are saved",async()=>{
   const h=harness({respond:call=>({json:{ok:true,workspace:call.method==="GET"?emptyWorkspace({watchlist:[watchItem("w1"),watchItem("w2")]}):call.body.workspace}})});
   await h.api.loadCryptoWorkspace();
@@ -1009,8 +1032,20 @@ test("with revisions, CHECK NOW runs in the Worker, because the gate only takes 
   assert.deepEqual(h.api.workspace().alerts.map(item=>item.id),["srv"],"the server's alerts are read back");
   assert.equal(h.api.workspace().labels[0].id,"unsaved","an edit not saved yet survives the refresh");
   assert.equal(h.api.state().revision,2);
-  assert.equal(h.el("monitorStatus").textContent,"Monitoring check complete · 1 wallet(s) checked · 1 new alert(s) · 1 could not be checked.");
+  assert.equal(h.el("monitorStatus").textContent,"Monitoring check complete · 1 wallet(s) checked · 1 new alert(s) · 1 could not be read in full (last reason: provider down).");
   assert.equal(h.el("monitorCheckButton").disabled,false);
+});
+
+test("CHECK NOW counts the alerts a partial read stored, a sanctions hit among them, and says why the read was incomplete",async()=>{
+  const h=harness({respond:call=>{
+    if(call.url.endsWith("/crypto-monitor-check"))return {status:503,json:{error:"Partial read: Blockstream older transactions could not be read.",alerts_added:1}};
+    if(call.method==="GET")return {json:{ok:true,revision:1,workspace:emptyWorkspace({watchlist:[watchItem("w1")]})}};
+    return {json:{}};
+  }});
+  await h.api.loadCryptoWorkspace();
+  await h.api.checkMonitored();
+  assert.equal(h.el("monitorStatus").textContent,
+    "Monitoring check complete · 0 wallet(s) checked · 1 new alert(s) · 1 could not be read in full (last reason: Partial read: Blockstream older transactions could not be read).");
 });
 
 test("without revisions, an older Worker keeps the page's own check",async()=>{

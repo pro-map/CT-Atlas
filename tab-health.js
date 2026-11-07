@@ -35,10 +35,11 @@ const SCOPES={
       ]},
       {title:"SCREENING",rows:[{key:"sanctions",label:"Sanctions list · OFAC SDN"}]}
     ],
-    facts:versions=>[
+    facts:(versions,data)=>[
       ["Analysis backend",versions.crypto],
       ["Sanctions screening",versions.sanctions],
-      ["Automatic monitoring","Every 6 hours"+(versions.crypto_monitor?" · "+versions.crypto_monitor:"")]
+      ["Automatic monitoring","Every 6 hours"+(versions.crypto_monitor?" · "+versions.crypto_monitor:"")],
+      ["Last monitor run",data.monitor_run&&data.monitor_run.summary]
     ]
   }
 };
@@ -114,7 +115,7 @@ function renderPanel(){
       html+='<div class="th-section"><div class="th-section-title">'+esc(section.title)+'</div>'+
         section.rows.map(row=>rowHtml(row.label,componentOf(row,components),row.key)).join("")+'</div>';
     }
-    const facts=(config.facts?config.facts(versions):[]).filter(([,value])=>value);
+    const facts=(config.facts?config.facts(versions,state.data):[]).filter(([,value])=>value);
     if(facts.length){
       html+='<div class="th-section"><div class="th-section-title">DETAILS</div>'+
         facts.map(([name,value])=>'<div class="th-row"><div class="th-row-main"><span>'+esc(name)+'</span><strong>'+esc(value)+'</strong></div></div>').join("")+'</div>';

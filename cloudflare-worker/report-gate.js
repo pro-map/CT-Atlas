@@ -182,6 +182,137 @@ function cryptoProviderStatusView(record) {
   return { checked_at: cleanText(record?.checked_at, 40), providers };
 }
 
+// The 6-hour monitor's last run: its start, written with the rotation's cursor, then its outcome,
+// written with the run's results. The key matches no prefix purgeExpired walks. /health/status
+// publishes it, so it holds counts and times, never a wallet.
+const CRYPTO_MONITOR_RUN_KEY = "crypto-monitor-run";
+const CRYPTO_MONITOR_RUN_COUNTS = ["selected", "checked", "partial", "failed"];
+// Past two missed 6-hour runs the last result no longer describes the monitor.
+const CRYPTO_MONITOR_STALE_MS = 12.5 * 60 * 60 * 1000;
+// Even with every provider call running to its 12-second timeout, 8 Bitcoin wallets are read in
+// about 6 minutes: a run that has not reported after 15 never will.
+const CRYPTO_MONITOR_REPORT_MS = 15 * 60 * 1000;
+// A run of failed checks on one wallet raises one alert, when it reaches this length.
+const CHECK_FAILING_ALERT_AFTER = 3;
+
+function monitorCount(value) {
+  return Math.max(0, Math.min(1000, Math.trunc(Number(value) || 0)));
+}
+
+const utcMinute = time => new Date(time).toISOString().slice(0, 16).replace("T", " ") + " UTC";
+
+function cryptoMonitorRunView(record, now) {
+  const finished = Date.parse(record?.finished_at || "");
+  const started = Date.parse(record?.started_at || "");
+  if (!Number.isFinite(finished) && !Number.isFinite(started)) return null;
+  const [selected, checked, partial, failed] = CRYPTO_MONITOR_RUN_COUNTS.map(key => monitorCount(record[key]));
+  let status;
+  let parts;
+  if (Number.isFinite(finished)) {
+    status = checked === selected ? "ok" : checked ? "degraded" : "failed";
+    const unchecked = Math.max(0, selected - checked - partial - failed);
+    parts = [utcMinute(finished), (status === "failed" ? "FAILED: " : "") + checked + " of " + selected + " wallets read"];
+    if (partial) parts.push(partial + " partial");
+    if (failed) parts.push(failed + " failed");
+    if (unchecked) parts.push(unchecked + " not checked");
+  } else {
+    status = now - started <= CRYPTO_MONITOR_REPORT_MS ? "running" : "failed";
+    parts = [utcMinute(started), status === "running"
+      ? "Running: " + selected + " wallets to read"
+      : "FAILED: the run never reported a result for its " + selected + " wallets"];
+  }
+  const stale = now - (Number.isFinite(finished) ? finished : started) > CRYPTO_MONITOR_STALE_MS;
+  if (stale) parts.push("OVERDUE: no later run has reported");
+  return {
+    finished_at: Number.isFinite(finished) ? new Date(finished).toISOString() : "",
+    status, stale, selected, checked, partial, failed, summary: parts.join(" · ")
+  };
+}
+
+// What each check did to the watch: last tried, last read in full, why it last failed and how many
+// checks in a row failed. A watch saved before these fields existed reads as never failed.
+function recordMonitorCheck(watch, check, at) {
+  const before = watch.monitor || {};
+  if (check.ok === true) {
+    watch.monitor = { last_attempt_at: at, last_success_at: at, last_error: "", failures: 0, failing_since: "" };
+    return null;
+  }
+  const failures = monitorCount(before.failures) + 1;
+  const reason = cleanText(check.error, 200) || "The check failed.";
+  const since = cleanText(before.failing_since, 64) || at;
+  watch.monitor = {
+    last_attempt_at: at,
+    last_success_at: cleanText(before.last_success_at || watch.last_snapshot?.checked_at, 64),
+    last_error: reason,
+    failures,
+    failing_since: since
+  };
+  if (failures !== CHECK_FAILING_ALERT_AFTER) return null;
+  return {
+    type: "CHECK_FAILING",
+    severity: "MEDIUM",
+    title: "Automatic check failing",
+    detail: "The last " + failures + " checks of this wallet failed (since " + since.slice(0, 16).replace("T", " ") +
+      " UTC), so new activity on it may be missed. Latest reason: " + reason,
+    tx_id: "",
+    day_bucket: at.slice(0, 10)
+  };
+}
+
+// One wallet's result from a run or a CHECK NOW: its baseline, its check record and its alerts.
+function applyCryptoMonitorUpdate(workspace, watch, update, now) {
+  const at = new Date(now).toISOString();
+  const snapshot = update.snapshot && typeof update.snapshot === "object" ? update.snapshot : null;
+  if (snapshot) {
+    watch.last_snapshot = {
+      checked_at: cleanText(snapshot.checked_at, 64),
+      newest_tx_id: cleanText(snapshot.newest_tx_id, 180),
+      newest_tx_time: cleanText(snapshot.newest_tx_time, 64),
+      tx_count: Number(snapshot.tx_count || 0),
+      aggregate_value: Number(snapshot.aggregate_value || 0),
+      risk_label: cleanText(snapshot.risk_label, 24)
+    };
+    watch.updated_at = at;
+  }
+  const failing = update.check && typeof update.check === "object" ? recordMonitorCheck(watch, update.check, at) : null;
+
+  workspace.alerts = Array.isArray(workspace.alerts) ? workspace.alerts : [];
+  // day_bucket lets a windowed alert fire again on a later day: without it the
+  // first crossing of a 24h threshold silenced that alert for good.
+  const signatures = new Set(workspace.alerts.map(item =>
+    [item?.watch_id, item?.type, item?.tx_id || "", item?.title, item?.day_bucket || ""].join("|")
+  ));
+  let added = 0;
+  for (const raw of [...(Array.isArray(update.alerts) ? update.alerts.slice(0, 40) : []), ...(failing ? [failing] : [])]) {
+    const alert = {
+      id: cleanText(raw?.id || crypto.randomUUID(), 80),
+      watch_id: watch.id,
+      chain: cleanText(raw?.chain || watch.chain, 24).toLowerCase(),
+      address: cleanText(raw?.address || watch.address, 180),
+      type: cleanText(raw?.type, 64).toUpperCase(),
+      severity: ["HIGH","MEDIUM","LOW"].includes(cleanText(raw?.severity, 16).toUpperCase())
+        ? cleanText(raw.severity, 16).toUpperCase()
+        : "LOW",
+      title: cleanText(raw?.title, 180),
+      detail: cleanText(raw?.detail, 1200),
+      tx_id: cleanText(raw?.tx_id, 180),
+      day_bucket: cleanText(raw?.day_bucket, 10),
+      created_at: cleanText(raw?.created_at, 64) || at,
+      acknowledged: false
+    };
+    const signature = [alert.watch_id, alert.type, alert.tx_id || "", alert.title, alert.day_bucket].join("|");
+    // The check-failing alert comes once per run of failures, when it reaches the threshold, so a
+    // second run of failures alerts again, even on the same day.
+    if (!alert.type || !alert.title || (raw !== failing && signatures.has(signature))) continue;
+    signatures.add(signature);
+    workspace.alerts.unshift(alert);
+    added++;
+  }
+  workspace.alerts = workspace.alerts.slice(0, 1000);
+  workspace.updated_at = at;
+  return added;
+}
+
 function cryptoWorkspaceView(stored, username, now) {
   const workspace = stored || {
     version: "crypto-workspace-v1",
@@ -201,16 +332,17 @@ function cryptoWorkspaceView(stored, username, now) {
 
 // The gate owns monitor output. A page holds a copy that can predate the last
 // scheduled run, so it may edit a watch or acknowledge an alert, but it never
-// replaces a baseline or the alert list.
+// replaces a baseline, a check record or the alert list.
 function mergeCryptoWorkspace(stored, incoming) {
-  const baselines = new Map((Array.isArray(stored?.watchlist) ? stored.watchlist : []).map(watch => [watch?.id, watch?.last_snapshot]));
+  const saved = new Map((Array.isArray(stored?.watchlist) ? stored.watchlist : []).map(watch => [watch?.id, watch]));
   const acknowledged = new Map((Array.isArray(incoming.alerts) ? incoming.alerts : []).map(alert => [alert?.id, alert?.acknowledged === true]));
   return {
     ...incoming,
-    watchlist: (Array.isArray(incoming.watchlist) ? incoming.watchlist : []).map(watch => ({
-      ...watch,
-      last_snapshot: baselines.get(watch?.id) || null
-    })),
+    watchlist: (Array.isArray(incoming.watchlist) ? incoming.watchlist : []).map(watch => {
+      const { monitor: _page, ...edited } = watch || {};
+      const monitor = saved.get(edited.id)?.monitor;
+      return { ...edited, last_snapshot: saved.get(edited.id)?.last_snapshot || null, ...(monitor ? { monitor } : {}) };
+    }),
     alerts: (Array.isArray(stored?.alerts) ? stored.alerts : []).map(alert =>
       acknowledged.has(alert?.id) ? { ...alert, acknowledged: acknowledged.get(alert.id) } : alert
     )
@@ -945,71 +1077,48 @@ export class ReportGate {
       for (let i = 0; i < Math.min(limit, rotation.length); i++) {
         selected.push(rotation[(cursor + i) % rotation.length]);
       }
-      await this.state.storage.put("crypto-monitor-cursor", (cursor + selected.length) % rotation.length);
+      // The run's start goes with the cursor, so a run that never reports reads as failed instead of
+      // leaving the previous result on screen.
+      await this.state.storage.put({
+        "crypto-monitor-cursor": (cursor + selected.length) % rotation.length,
+        [CRYPTO_MONITOR_RUN_KEY]: { started_at: new Date(now).toISOString(), selected: selected.length }
+      });
       return Response.json({ ok: true, targets: selected, total: rotation.length, retired, cursor });
     }
 
     if (url.pathname === "/crypto-monitor-update") {
-      const username = normalizeUsername(body.username);
-      const watchId = cleanText(body.watch_id, 80);
-      if (!isAllowedUser(username, this.env) || !watchId) {
+      // A run sends its batch of at most 8 wallets in one update, with its outcome; a CHECK NOW sends one wallet.
+      const updates = Array.isArray(body.updates) ? body.updates : null;
+      const run = body.run && typeof body.run === "object" ? body.run : null;
+      if (!updates || updates.length > 8 || (!updates.length && !run)) {
         return Response.json({ error: "Invalid monitoring update." }, { status: 400 });
       }
-      const key = `crypto-workspace:${username}`;
-      const workspace = await this.state.storage.get(key);
-      if (!workspace || !Array.isArray(workspace.watchlist)) {
-        return Response.json({ error: "Crypto workspace not found." }, { status: 404 });
-      }
-      const watch = workspace.watchlist.find(item => item?.id === watchId);
-      if (!watch) return Response.json({ error: "Monitored wallet not found." }, { status: 404 });
-
-      const snapshot = body.snapshot && typeof body.snapshot === "object" ? body.snapshot : null;
-      if (snapshot) {
-        watch.last_snapshot = {
-          checked_at: cleanText(snapshot.checked_at, 64),
-          newest_tx_id: cleanText(snapshot.newest_tx_id, 180),
-          newest_tx_time: cleanText(snapshot.newest_tx_time, 64),
-          tx_count: Number(snapshot.tx_count || 0),
-          aggregate_value: Number(snapshot.aggregate_value || 0),
-          risk_label: cleanText(snapshot.risk_label, 24)
+      const writes = {};
+      if (run) {
+        writes[CRYPTO_MONITOR_RUN_KEY] = {
+          finished_at: new Date(now).toISOString(),
+          ...Object.fromEntries(CRYPTO_MONITOR_RUN_COUNTS.map(name => [name, monitorCount(run[name])]))
         };
-        watch.updated_at = new Date(now).toISOString();
       }
-
-      workspace.alerts = Array.isArray(workspace.alerts) ? workspace.alerts : [];
-      // day_bucket lets a windowed alert fire again on a later day: without it the
-      // first crossing of a 24h threshold silenced that alert for good.
-      const signatures = new Set(workspace.alerts.map(item =>
-        [item?.watch_id, item?.type, item?.tx_id || "", item?.title, item?.day_bucket || ""].join("|")
-      ));
       let added = 0;
-      for (const raw of Array.isArray(body.alerts) ? body.alerts.slice(0, 40) : []) {
-        const alert = {
-          id: cleanText(raw?.id || crypto.randomUUID(), 80),
-          watch_id: watchId,
-          chain: cleanText(raw?.chain || watch.chain, 24).toLowerCase(),
-          address: cleanText(raw?.address || watch.address, 180),
-          type: cleanText(raw?.type, 64).toUpperCase(),
-          severity: ["HIGH","MEDIUM","LOW"].includes(cleanText(raw?.severity, 16).toUpperCase())
-            ? cleanText(raw.severity, 16).toUpperCase()
-            : "LOW",
-          title: cleanText(raw?.title, 180),
-          detail: cleanText(raw?.detail, 1200),
-          tx_id: cleanText(raw?.tx_id, 180),
-          day_bucket: cleanText(raw?.day_bucket, 10),
-          created_at: cleanText(raw?.created_at, 64) || new Date(now).toISOString(),
-          acknowledged: false
-        };
-        const signature = [alert.watch_id, alert.type, alert.tx_id || "", alert.title, alert.day_bucket].join("|");
-        if (!alert.type || !alert.title || signatures.has(signature)) continue;
-        signatures.add(signature);
-        workspace.alerts.unshift(alert);
-        added++;
+      let missing = 0;
+      for (const update of updates) {
+        const username = normalizeUsername(update?.username);
+        const watchId = cleanText(update?.watch_id, 80);
+        const key = `crypto-workspace:${username}`;
+        const workspace = isAllowedUser(username, this.env) && watchId ? (writes[key] || await this.state.storage.get(key)) : null;
+        const watch = Array.isArray(workspace?.watchlist) ? workspace.watchlist.find(item => item?.id === watchId) : null;
+        // A wallet deleted during the run is left out; the rest of the run is still saved.
+        if (!watch) {
+          missing++;
+          continue;
+        }
+        added += applyCryptoMonitorUpdate(workspace, watch, update, now);
+        writes[key] = workspace;
       }
-      workspace.alerts = workspace.alerts.slice(0, 1000);
-      workspace.updated_at = new Date(now).toISOString();
-      await this.state.storage.put(key, workspace);
-      return Response.json({ ok: true, alerts_added: added });
+      // Each analyst's workspace is written once per run, however many of their wallets it read.
+      if (Object.keys(writes).length) await this.state.storage.put(writes);
+      return Response.json({ ok: true, alerts_added: added, missing });
     }
 
     if (url.pathname === "/crypto-exchange-labels-lookup") {
@@ -1233,7 +1342,12 @@ export class ReportGate {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
       const workspace = cryptoWorkspaceView(await this.state.storage.get(`crypto-workspace:${username}`), username, now);
-      return Response.json({ ok: true, workspace, revision: workspace.revision });
+      const monitorRun = cryptoMonitorRunView(await this.state.storage.get(CRYPTO_MONITOR_RUN_KEY), now);
+      return Response.json({ ok: true, workspace, revision: workspace.revision, monitor_run: monitorRun });
+    }
+
+    if (url.pathname === "/crypto-monitor-run-get") {
+      return Response.json({ ok: true, run: cryptoMonitorRunView(await this.state.storage.get(CRYPTO_MONITOR_RUN_KEY), now) });
     }
 
     if (url.pathname === "/crypto-workspace-put") {

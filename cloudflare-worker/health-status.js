@@ -1,4 +1,4 @@
-import { jsonResponse, cleanText } from "./shared.js";
+import { jsonResponse, cleanText, gateRead } from "./shared.js";
 import { sanctionsHealth } from "./sanctions.js";
 
 // Live status behind the "Health status" button of the Crypto tab. /health only
@@ -13,6 +13,7 @@ const CACHE_OK_MS = 60 * 1000;
 // A failure is cached only briefly so a transient one does not stay on screen for a minute.
 const CACHE_DOWN_MS = 10 * 1000;
 const FORCE_REFRESH_MIN_AGE_MS = 5 * 1000;
+const GATE_READ_TIMEOUT_MS = 1000;
 
 let statusCache = { at: 0, body: null };
 
@@ -118,18 +119,45 @@ function credentialOnly(value) {
   return { status: String(value || "").trim() ? "configured" : "not_configured" };
 }
 
+// The 6-hour monitor's last run, as the gate recorded it: counts and a time, never a wallet.
+// gateRead, not gateCall: a public route must not start the EU migration.
+async function readMonitorRun(env) {
+  try {
+    // A gate stub takes no abort signal, so the deadline races the read.
+    const signal = AbortSignal.timeout(GATE_READ_TIMEOUT_MS);
+    const timeout = new Promise((_, reject) => signal.addEventListener("abort", () => reject(signal.reason)));
+    const read = (async () => {
+      const response = await gateRead(env, "/crypto-monitor-run-get", {});
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      return (await response.json())?.run;
+    })();
+    const run = await Promise.race([read, timeout]);
+    if (!run) return { status: "none", summary: "None recorded yet" };
+    return {
+      status: cleanText(run.status, 16),
+      stale: run.stale === true,
+      finished_at: cleanText(run.finished_at, 40),
+      summary: cleanText(run.summary, 200)
+    };
+  } catch {
+    return { status: "unavailable", summary: "Status unavailable" };
+  }
+}
+
 async function buildHealthStatus(env, versions = {}) {
-  const [bitcoin, evm, tron, sanctions] = await Promise.all([
+  const [bitcoin, evm, tron, sanctions, monitorRun] = await Promise.all([
     probeBitcoin(),
     probeEvm(env),
     probeTron(env),
-    probeSanctions(env)
+    probeSanctions(env),
+    readMonitorRun(env)
   ]);
   return {
     ok: true,
     version: HEALTH_STATUS_VERSION,
     generated_at: new Date().toISOString(),
     versions: Object.fromEntries(Object.entries(versions).map(([key, value]) => [cleanText(key, 40), cleanText(value, 80)])),
+    monitor_run: monitorRun,
     components: {
       worker: { status: "operational" },
       bitcoin, evm, tron, sanctions,

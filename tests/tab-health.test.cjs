@@ -27,6 +27,13 @@ test("the health component reads the live status endpoint and covers the Crypto 
   assert.ok(js.includes('setAttribute("aria-expanded"'));
 });
 
+test("the panel's details show the monitor's last run as /health/status summarises it",()=>{
+  const js=read("tab-health.js");
+  assert.ok(js.includes('["Last monitor run",data.monitor_run&&data.monitor_run.summary]'));
+  assert.ok(js.includes("config.facts(versions,state.data)"));
+  assert.match(read("crypto.html"),/<script src="tab-health\.js\?v=3" /,"a cached copy without the line is replaced");
+});
+
 test("the health component escapes everything it renders and never uses eval-like APIs",()=>{
   const js=read("tab-health.js");
   assert.ok(js.includes("const esc="));
