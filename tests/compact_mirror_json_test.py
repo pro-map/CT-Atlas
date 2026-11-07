@@ -1,5 +1,7 @@
 """Offline mirror size regression tests; no provider calls or data changes."""
+import contextlib
 import hashlib
+import io
 import json
 import os
 import sys
@@ -254,6 +256,33 @@ class CompactMirrorJsonTests(unittest.TestCase):
         self.assertEqual(report["format"], "single-json")
         self.assertTrue(self.target.exists())
         self.assertFalse((self.target.parent / mirror.SHARD_MANIFEST).exists())
+
+    def test_a_rehearsal_may_lower_the_chunking_cap_but_never_raise_it(self):
+        # tests/mirror-stage-e2e.test.cjs takes the chunked path with small files this way.
+        with patch.dict(os.environ):
+            os.environ.pop(mirror.REHEARSAL_CAP_VARIABLE, None)
+            self.assertEqual(mirror.chunking_limit(), mirror.MAX_ASSET_BYTES)
+        for value, limit in (("1", 1), (str(mirror.MAX_ASSET_BYTES), mirror.MAX_ASSET_BYTES)):
+            with self.subTest(value=value), patch.dict(os.environ, {mirror.REHEARSAL_CAP_VARIABLE: value}):
+                self.assertEqual(mirror.chunking_limit(), limit)
+        for value in ("", "0", "-1", "1e6", str(mirror.MAX_ASSET_BYTES + 1)):
+            with self.subTest(value=value), patch.dict(os.environ, {mirror.REHEARSAL_CAP_VARIABLE: value}):
+                with self.assertRaises(ValueError):
+                    mirror.chunking_limit()
+
+    def test_the_command_chunks_at_the_rehearsal_cap_and_refuses_a_higher_one(self):
+        self.source.write_bytes(b'{"events":[{"id":"a","summary":"a long string"}]}')
+        argv = ["compact_mirror_json.py", "--input", str(self.source), "--output", str(self.target), "--allow-chunks"]
+        with patch.object(sys, "argv", argv), patch.dict(os.environ, {mirror.REHEARSAL_CAP_VARIABLE: "16"}), \
+                contextlib.redirect_stdout(io.StringIO()):
+            mirror.main()
+        self.assertFalse(self.target.exists())
+        self.assertEqual(json.loads(mirror.read_mirror_bytes(self.target.parent))["events"][0]["id"], "a")
+        too_high = str(mirror.MAX_ASSET_BYTES + 1)
+        with patch.object(sys, "argv", argv), patch.dict(os.environ, {mirror.REHEARSAL_CAP_VARIABLE: too_high}), \
+                contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as refused:
+            mirror.main()
+        self.assertEqual(refused.exception.code, 1)
 
     def test_chunk_failure_keeps_preexisting_full_asset(self):
         self.source.write_bytes(b'{"events":[{"id":"a","summary":"a long string"}]}')

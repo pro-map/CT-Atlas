@@ -23,6 +23,9 @@ SHARD_FORMAT = "ct-atlas-byte-shards-v1"
 # The routes tools/mirror-worker.mjs can stream from chunks (its DATASETS).
 CHUNKED_FILES = ("events.json", "events-lite.json", "events-map.json")
 JSON_WHITESPACE = frozenset(b" \t\r\n")
+# Lets a rehearsal (tests/mirror-stage-e2e.test.cjs) take the chunked path with small
+# files; tools/deploy_mirror.sh accepts it only with --prepare-only, never for an upload.
+REHEARSAL_CAP_VARIABLE = "CT_ATLAS_MIRROR_REHEARSAL_CAP"
 
 
 def shard_manifest_name(name: str) -> str:
@@ -180,6 +183,16 @@ def read_mirror_bytes(directory: Path, name: str = "events.json") -> bytes:
     return content
 
 
+def chunking_limit() -> int:
+    """The asset cap, or the lower one a rehearsal sets: never a higher one."""
+    value = os.environ.get(REHEARSAL_CAP_VARIABLE)
+    if value is None:
+        return MAX_ASSET_BYTES
+    if not value.isdecimal() or not 0 < int(value) <= MAX_ASSET_BYTES:
+        raise ValueError(f"{REHEARSAL_CAP_VARIABLE} must be a byte count from 1 to {MAX_ASSET_BYTES}")
+    return int(value)
+
+
 def check_asset_sizes(directory: Path, *, limit: int = MAX_ASSET_BYTES) -> int:
     directory = Path(directory)
     if not directory.is_dir():
@@ -213,8 +226,10 @@ def main() -> None:
         else:
             if args.input is None or args.output is None:
                 parser.error("Both --input and --output are required")
-            writer = write_mirror_copy if args.allow_chunks else write_compact_copy
-            writer(args.input, args.output)
+            if args.allow_chunks:
+                write_mirror_copy(args.input, args.output, limit=chunking_limit())
+            else:
+                write_compact_copy(args.input, args.output)
     except (OSError, ValueError) as exc:
         parser.exit(1, f"Mirror asset preparation failed: {exc}\n")
 
