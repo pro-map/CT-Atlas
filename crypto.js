@@ -40,6 +40,9 @@ let workspaceLoaded=false;
 // The last copy the server acknowledged, and its revision: what a stale save merges against.
 let workspaceBase=null;
 let workspaceRevision=null;
+// The last 6-hour monitor run across every analyst's wallets, as the server summarised it. Kept out
+// of the workspace: it is not the analyst's data and never goes back on a save.
+let monitorRun=null;
 let workspaceSaveRunning=false;
 let workspaceSaveQueued=false;
 let sharedExchangeLabels=new Map();
@@ -224,6 +227,7 @@ async function fetchCryptoWorkspace(){
   const payload=await response.json().catch(()=>({}));
   if(!response.ok)throw new Error(payload.error||"Unable to load Crypto workspace.");
   if(!payload.workspace||typeof payload.workspace!=="object")throw new Error("The Crypto workspace response was empty.");
+  monitorRun=payload.monitor_run||null;
   return payload;
 }
 
@@ -283,8 +287,9 @@ function mergeWorkspace(base,local,server){
   return {
     ...server,
     labels:mergeById(base?.labels,local.labels,server.labels),
+    // The server owns a watch's check record, so an edit here never brings back an older one.
     watchlist:mergeById(base?.watchlist,local.watchlist,server.watchlist,(mine,theirs)=>({
-      ...mine,last_snapshot:newerSnapshot(mine.last_snapshot,theirs.last_snapshot)
+      ...mine,last_snapshot:newerSnapshot(mine.last_snapshot,theirs.last_snapshot),monitor:theirs.monitor
     })),
     cases:mergeById(base?.cases,local.cases,server.cases,mergeCase),
     // The monitor owns an alert's content; the page only ever adds alerts or acknowledges them.
@@ -2248,14 +2253,18 @@ function renderWatchlist(){
   }
   if(!box)return;
   if(!watches.length){box.innerHTML='<div class="intel-result">No monitored wallets. Analyse a wallet, then select MONITOR SEED.</div>';return;}
-  box.innerHTML=watches.map(item=>{
+  box.innerHTML=(monitorRun?.summary?'<div class="intel-result">Last automatic run (all analysts\' wallets): '+esc(monitorRun.summary)+'</div>':"")+watches.map(item=>{
     const paused=item.enabled===false;
     const retired=retiredChain(item.chain);
+    const failures=Number(item.monitor?.failures)||0;
+    const failing=!paused&&!retired&&failures>0;
     const limits=thresholdsText(item);
     const checked=item.last_snapshot?.checked_at?fmtTime(item.last_snapshot.checked_at):"never";
     return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.label||short(item.address,9))+'</div>'+
       '<div class="intel-meta">'+esc(chainName(item.chain))+' · '+esc(short(item.address,9))+' · last checked '+esc(checked)+' '+retiredExplorerLink(item.chain,item.address)+'</div></div>'+
-      '<span class="intel-badge '+(paused||retired?"unscreened":"clear")+'">'+(retired?"NOT CHECKED":paused?"PAUSED":"ACTIVE")+'</span></div>'+
+      '<span class="intel-badge '+(paused||retired?"unscreened":failing?"high":"clear")+'">'+(retired?"NOT CHECKED":paused?"PAUSED":failing?"CHECK FAILING":"ACTIVE")+'</span></div>'+
+      (failing?'<div class="intel-detail">Check failing since '+esc(fmtTime(item.monitor.failing_since))+', '+failures+' check(s) in a row: new activity on this wallet may be missed. Last error: '+
+        esc(item.monitor.last_error||"none recorded")+'</div>':"")+
       (limits?'<div class="intel-detail">'+esc(limits)+'</div>':"")+
       (retired?'<div class="intel-detail">'+esc(chainName(item.chain))+' is no longer supported by CT Atlas: this wallet is skipped, and its saved baseline and alerts are kept.</div>':"")+
       '<div class="intel-actions"><button type="button" class="crypto-small-button" data-watch-toggle="'+esc(item.id)+'">'+(paused?"RESUME":"PAUSE")+'</button>'+

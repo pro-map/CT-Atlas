@@ -173,3 +173,98 @@ test("stored blank thresholds are repaired on read, for the page and for the mon
   const {targets}=(await call("/crypto-monitor-targets",{limit:8})).body;
   assert.equal(targets.find(target=>target.watch.id==="w1").watch.thresholds.velocity_24h,null);
 });
+
+// ---------------------------------------------------------------- check records and the run record
+
+const check=(call,ok,extra={})=>call("/crypto-monitor-update",{username:"analyst",watch_id:"w1",check:{ok,error:ok?"":"Blockstream transaction history: HTTP 503"},...extra});
+const watchNow=async call=>(await get(call)).workspace.watchlist[0];
+const failingAlerts=async call=>(await get(call)).workspace.alerts.filter(alert=>alert.type==="CHECK_FAILING");
+
+test("three failed checks in a row raise one alert, not one per check, and a success clears the record",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  for(let run=1;run<=2;run++)await check(call,false);
+  assert.equal((await failingAlerts(call)).length,0,"two failures are not yet an alert");
+  assert.equal((await check(call,false)).body.alerts_added,1);
+  for(let run=4;run<=6;run++)assert.equal((await check(call,false)).body.alerts_added,0);
+  const alerts=await failingAlerts(call);
+  assert.equal(alerts.length,1);
+  assert.equal(alerts[0].severity,"MEDIUM");
+  assert.match(alerts[0].detail,/^The last 3 checks of this wallet failed \(since \d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC\), so new activity on it may be missed\. Latest reason: Blockstream transaction history: HTTP 503$/);
+  const failing=(await watchNow(call)).monitor;
+  assert.equal(failing.failures,6);
+  assert.equal(failing.last_error,"Blockstream transaction history: HTTP 503");
+  assert.match(failing.failing_since,/^\d{4}-\d{2}-\d{2}T/);
+  assert.equal(failing.last_success_at,"","never read in full");
+  assert.equal((await watchNow(call)).last_snapshot,null,"a failed check never touches the baseline");
+
+  await check(call,true,{snapshot:{checked_at:"t",newest_tx_id:"new",newest_tx_time:"2026-11-05T00:00:00Z"}});
+  const cleared=(await watchNow(call)).monitor;
+  assert.deepEqual({...cleared,last_attempt_at:"",last_success_at:""},{last_attempt_at:"",last_success_at:"",last_error:"",failures:0,failing_since:""});
+  assert.equal(cleared.last_success_at,cleared.last_attempt_at);
+});
+
+test("a watch saved before check records existed keeps working, and its first failure keeps its last real check",async()=>{
+  const {call,values}=harness();
+  values.set("crypto-workspace:analyst",{...empty,username:"analyst",watchlist:[{...WATCH,last_snapshot:{checked_at:"2026-11-01T06:17:00.000Z",newest_tx_id:"old"}}]});
+  assert.equal((await call("/crypto-monitor-targets",{limit:8})).body.targets.length,1);
+  assert.equal((await watchNow(call)).monitor,undefined);
+  await check(call,false);
+  const record=(await watchNow(call)).monitor;
+  assert.equal(record.failures,1);
+  assert.equal(record.last_success_at,"2026-11-01T06:17:00.000Z");
+  assert.equal((await watchNow(call)).last_snapshot.newest_tx_id,"old");
+});
+
+test("an update that carries no check leaves the check record alone",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  await check(call,false);
+  await call("/crypto-monitor-update",{username:"analyst",watch_id:"w1",alerts:[]});
+  assert.equal((await watchNow(call)).monitor.failures,1);
+});
+
+test("a page save can neither replace nor forge a check record",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH,{...WATCH,id:"w2"}]},0);
+  await check(call,false);
+  const page=await get(call);
+  const edited=structuredClone(page.workspace);
+  edited.watchlist[0].monitor={failures:0,last_error:""};
+  edited.watchlist[1].monitor={failures:9,last_error:"forged"};
+  edited.watchlist[0].label="Renamed";
+  assert.equal((await put(call,edited,page.revision)).status,200);
+  const [first,second]=(await get(call)).workspace.watchlist;
+  assert.equal(first.label,"Renamed");
+  assert.equal(first.monitor.failures,1);
+  assert.equal("monitor" in second,false);
+});
+
+test("the run record holds what the last update carried, read back with a status and a one-line summary, never a wallet",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  await check(call,false,{run:{selected:8,checked:0,partial:0,failed:8,username:"analyst",address:WATCH.address}});
+  const {run}=(await call("/crypto-monitor-run-get",{})).body;
+  assert.equal(run.status,"failed");
+  assert.equal(run.stale,false);
+  assert.match(run.summary,/^\d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC · FAILED: 0 of 8 wallets read · 8 failed$/);
+  assert.ok(!JSON.stringify(run).includes(WATCH.address)&&!JSON.stringify(run).includes("analyst"));
+  assert.deepEqual((await get(call)).monitor_run,run,"the page reads the same summary with its workspace");
+
+  await check(call,true,{run:{selected:8,checked:5,partial:1,failed:1}});
+  const degraded=(await call("/crypto-monitor-run-get",{})).body.run;
+  assert.equal(degraded.status,"degraded");
+  assert.match(degraded.summary,/ · 5 of 8 wallets read · 1 partial · 1 failed · 1 not checked$/);
+  await check(call,true,{run:{selected:8,checked:8,partial:0,failed:0}});
+  assert.equal((await call("/crypto-monitor-run-get",{})).body.run.status,"ok");
+});
+
+test("no run yet reads as none, and a run older than two missed runs is overdue",async()=>{
+  const {call,values}=harness();
+  assert.equal((await call("/crypto-monitor-run-get",{})).body.run,null);
+  assert.equal((await get(call)).monitor_run,null);
+  values.set("crypto-monitor-run",{finished_at:new Date(Date.now()-13*3600000).toISOString(),selected:8,checked:8,partial:0,failed:0});
+  const {run}=(await call("/crypto-monitor-run-get",{})).body;
+  assert.equal(run.stale,true);
+  assert.match(run.summary,/8 of 8 wallets read · OVERDUE: no later run has reported$/);
+});

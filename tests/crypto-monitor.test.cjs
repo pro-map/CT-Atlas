@@ -16,6 +16,8 @@ async function analyzeCryptoAddress(){throw new Error("network not used");}
 function harness(overrides={}){
   const context=vm.createContext({
     cleanText,gateCall,analyzeCryptoAddress,retiredChainError:()=>"",
+    // The real one is exercised end to end in crypto-monitor-reliability.test.cjs.
+    sanitizeProviderMessage:text=>cleanText(text,120),
     crypto:{randomUUID:()=> "uuid-monitor"},
     Date,Number,String,Array,Object,Set,Map,console,
     ...overrides
@@ -325,13 +327,110 @@ test("CHECK NOW answers 404 for a wallet the gate does not return for this user"
   assert.equal((await h.handleCryptoMonitorCheck(checkRequest({user_id:"analyst",watch_id:"other"}),{})).status,404);
 });
 
-test("a partial provider read leaves the baseline alone and counts as a failed check",async()=>{
+const updates=calls=>calls.filter(call=>call.path==="/crypto-monitor-update");
+const PARTIAL={coverage:{partial:true,failed_sources:["Blockstream older transactions"]}};
+
+test("a partial read with a sanctions hit still alerts, says the read was partial, and leaves the baseline alone",async()=>{
   const {h,calls}=monitorRoute({
     "/crypto-monitor-targets":{ok:true,targets:[TARGET],total:1},
-    analysis:async()=>({transactions:[],coverage:{partial:true}})
+    analysis:async()=>({transactions:[eth({id:"new",amount:1})],sanctions_screening:HIT,...PARTIAL})
   });
   const result=await h.runCryptoMonitor({});
-  assert.equal(result.failed,1);
+  assert.equal(result.partial,1);
   assert.equal(result.checked,0);
-  assert.equal(calls.some(call=>call.path==="/crypto-monitor-update"),false);
+  const [update]=updates(calls);
+  assert.equal(update.payload.snapshot,null,"a partial read never becomes the baseline");
+  assert.deepEqual(Array.from(update.payload.alerts,alert=>alert.type),["SANCTIONS_EXPOSURE","SANCTIONS_EXPOSURE"],"no new-activity alert from it");
+  for(const alert of update.payload.alerts){
+    assert.match(alert.detail,/EXAMPLE FINANCIER \[SDGT\]/);
+    assert.match(alert.detail,/Partial read: Blockstream older transactions could not be read\. Other records may be missing from this check\.$/);
+  }
+  assert.deepEqual({...update.payload.check},{ok:false,error:"Partial read: Blockstream older transactions could not be read."});
+});
+
+test("an empty answer, or one older than the baseline, is a failed check that changes no baseline and raises no alert",async()=>{
+  const answers=[
+    [{transactions:[],coverage:{partial:false}},/no history for a wallet with saved activity/],
+    [{transactions:[eth({id:"stale",amount:9,time:"2026-09-21T10:00:00Z"})],coverage:{partial:false}},/only history older than the saved baseline/]
+  ];
+  for(const [analysis,reason] of answers){
+    const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[TARGET],total:1},analysis:async()=>analysis});
+    const result=await h.runCryptoMonitor({});
+    assert.equal(result.failed,1);
+    const [update]=updates(calls);
+    assert.equal(update.payload.snapshot,null);
+    assert.deepEqual(Array.from(update.payload.alerts),[]);
+    assert.equal(update.payload.check.ok,false);
+    assert.match(update.payload.check.error,reason);
+  }
+});
+
+test("an empty answer for a wallet with no saved activity is a real empty wallet, and becomes its baseline",async()=>{
+  const fresh={...TARGET,watch:{...TARGET.watch,last_snapshot:{newest_tx_id:"",newest_tx_time:""}}};
+  const {h,calls}=monitorRoute({"/crypto-monitor-targets":{ok:true,targets:[fresh],total:1},analysis:async()=>({transactions:[],coverage:{partial:false}})});
+  assert.equal((await h.runCryptoMonitor({})).checked,1);
+  const [update]=updates(calls);
+  assert.equal(update.payload.snapshot.newest_tx_id,"");
+  assert.equal(update.payload.check.ok,true);
+});
+
+test("every wallet reports whatever its read, and the run's outcome rides on the last update",async()=>{
+  const targets=["ok","down","partial"].map(id=>({...TARGET,watch:{...TARGET.watch,id,address:"bc1q"+id}}));
+  const {h,calls}=monitorRoute({
+    "/crypto-monitor-targets":{ok:true,targets,total:3},
+    analysis:async address=>{
+      if(address==="bc1qdown")throw new Error("Blockstream transaction history: HTTP 503");
+      return address==="bc1qpartial"?{transactions:[eth({id:"new",amount:1})],...PARTIAL}:{transactions:[eth({id:"new",amount:1})],coverage:{partial:false}};
+    }
+  });
+  const result=await h.runCryptoMonitor({});
+  assert.deepEqual(Array.from(calls,call=>call.path),["/crypto-monitor-targets",...Array(3).fill("/crypto-monitor-update")],"one update per wallet and no other call");
+  assert.deepEqual(Array.from(updates(calls),call=>call.payload.check.ok),[true,false,false]);
+  assert.equal(updates(calls)[1].payload.check.error,"Blockstream transaction history: HTTP 503");
+  assert.deepEqual(Array.from(updates(calls),call=>call.payload.run&&{...call.payload.run}),[undefined,undefined,{selected:3,checked:1,partial:1,failed:1}]);
+  assert.equal(result.status,"degraded");
+  assert.equal(result.ok,true);
+});
+
+test("a run in which every wallet failed is not ok",async()=>{
+  const targets=["a","b"].map(id=>({...TARGET,watch:{...TARGET.watch,id}}));
+  const {h,calls}=monitorRoute({
+    "/crypto-monitor-targets":{ok:true,targets,total:2},
+    analysis:async()=>{throw new Error("Blockstream transaction history: the provider did not answer in time.");}
+  });
+  const result=await h.runCryptoMonitor({});
+  assert.equal(result.ok,false);
+  assert.equal(result.status,"failed");
+  assert.equal(result.failed,2);
+  assert.deepEqual({...updates(calls)[1].payload.run},{selected:2,checked:0,partial:0,failed:2});
+});
+
+test("a wallet whose result cannot be saved counts as failed, and the run goes on",async()=>{
+  const targets=["a","b"].map(id=>({...TARGET,watch:{...TARGET.watch,id}}));
+  const calls=[];
+  const h=harness({
+    gateCall:async(_env,path,payload)=>{
+      calls.push({path,payload});
+      if(path==="/crypto-monitor-targets")return {ok:true,json:async()=>({ok:true,targets,total:2})};
+      return payload.watch_id==="a"?{ok:false,json:async()=>({error:"Monitored wallet not found."})}:{ok:true,json:async()=>({ok:true,alerts_added:0})};
+    },
+    analyzeCryptoAddress:async()=>({transactions:[eth({id:"new",amount:1})],coverage:{partial:false}})
+  });
+  const result=await h.runCryptoMonitor({});
+  assert.equal(result.checked,1);
+  assert.equal(result.failed,1);
+  assert.equal(updates(calls).length,2);
+});
+
+test("CHECK NOW records a failed read and answers with its reason",async()=>{
+  const {h,calls}=monitorRoute({
+    "/crypto-monitor-targets":{ok:true,targets:[TARGET]},
+    analysis:async()=>({transactions:[],coverage:{partial:false}})
+  });
+  const response=await h.handleCryptoMonitorCheck(checkRequest({user_id:"analyst",watch_id:"w1"}),{});
+  assert.equal(response.status,503);
+  assert.match(response.value.error,/no history for a wallet with saved activity/);
+  assert.equal(updates(calls)[0].payload.check.ok,false);
+  assert.equal(updates(calls)[0].payload.run,undefined,"a single check is not a run");
+  assert.equal(calls.some(call=>call.path==="/usage-increment"),false);
 });

@@ -202,7 +202,8 @@ test("the 6-hour monitor checks the live wallet behind nine retired watches, and
   const {runCryptoMonitor}=await monitor;
   const setup=await rig();
   const retired=Array.from({length:9},(_,index)=>watch("a-retired-"+index,index%2?"bsc":"base"));
-  const saved=savedWorkspace({watchlist:[...retired,watch("z-live","ethereum",LIVE_WALLET)]});
+  // No saved activity: the stub answers with an empty wallet, which a wallet with history cannot be.
+  const saved=savedWorkspace({watchlist:[...retired,{...watch("z-live","ethereum",LIVE_WALLET),last_snapshot:null}]});
   await setup.storage.put(KEY,saved);
   let result;
   const calls=await providerCalls(async()=>{result=await runCryptoMonitor(setup.env);});

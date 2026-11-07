@@ -193,6 +193,35 @@ test("a forced refresh bypasses the cache, but not more than once every 5s",asyn
   assert.equal(bitcoin(),2);
 });
 
+test("the monitor's last run comes from the gate as its summary alone, and is not a component",async()=>{
+  const {fetchImpl}=router();
+  const reads=[];
+  const run={status:"failed",stale:false,finished_at:"2026-11-07T06:17:40.000Z",summary:"2026-11-07 06:17 UTC · FAILED: 0 of 8 wallets read · 8 failed"};
+  const gateRead=async(_env,path)=>{reads.push(path);return Response.json({ok:true,run:{...run,selected:8,address:"bc1qwatchedwallet"}});};
+  const h=harness(fetchImpl,{gateRead});
+  const {body}=await h.handleHealthStatus(FULL_ENV);
+  assert.deepEqual(reads,["/crypto-monitor-run-get"]);
+  assert.deepEqual({...body.monitor_run},run);
+  assert.deepEqual(Object.keys(body.components).sort(),["bitcoin","evm","gemini","sanctions","tron","worker"]);
+});
+
+test("with no run recorded, or a gate that fails or hangs, the status still answers and says which",async()=>{
+  const cases=[
+    [async()=>Response.json({ok:true,run:null}),"none","None recorded yet"],
+    [async()=>new Response("{}",{status:500}),"unavailable","Status unavailable"],
+    [async()=>{throw new Error("gate down");},"unavailable","Status unavailable"],
+    [()=>new Promise(()=>{}),"unavailable","Status unavailable"]
+  ];
+  for(const [gateRead,status,summary] of cases){
+    const {fetchImpl}=router();
+    const h=harness(fetchImpl,{gateRead});
+    const response=await h.handleHealthStatus(FULL_ENV);
+    assert.equal(response.status,200);
+    assert.deepEqual({...response.body.monitor_run},{status,summary});
+    assert.equal(response.body.components.bitcoin.status,"operational");
+  }
+});
+
 test("the panel's REFRESH asks for a fresh run",()=>{
   const js=fs.readFileSync("tab-health.js","utf8");
   assert.ok(js.includes('"?refresh=1"'));
