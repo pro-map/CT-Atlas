@@ -196,8 +196,11 @@ def candidate_key(item):
 def save_articles(root, articles, now):
     kept = [row for row in articles if background.valid_article(row)
             and (not archive_dedup.row_time(row) or archive_dedup.row_time(row)>=now-timedelta(days=RETENTION_DAYS))]
-    events = (archive_review.read_json(Path(root)/'events.json') or {}).get('events') or []
-    kept, _ = archive_dedup.plan_archive([],kept,map_stories=events)
+    # Read as "no events", a missing database would keep copies of map stories.
+    database = archive_review.read_json(Path(root)/'events.json')
+    if not isinstance(database,dict) or not isinstance(database.get('events'),list):
+        raise RuntimeError('events.json is missing or unreadable; the archive is not saved without it')
+    kept, _ = archive_dedup.plan_archive([],kept,map_stories=database['events'])
     archive_review.write_json(Path(root)/background.ARTICLES_FILE,{
         'version':1,'kind':background.KIND,'archive_only':True,'retention_days':RETENTION_DAYS,
         'updated_at':now.isoformat(),'articles':kept})

@@ -109,7 +109,10 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
           path = Path("events.json")
-          data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"events": []}
+          # A missing database is not an empty one: no location would be protected.
+          if not path.exists():
+              raise RuntimeError("events.json is missing; refusing to continue")
+          data = json.loads(path.read_text(encoding="utf-8"))
           if not isinstance(data, dict) or not isinstance(data.get("events"), list):
               raise RuntimeError("Invalid existing database; refusing to continue")
           def located(event):

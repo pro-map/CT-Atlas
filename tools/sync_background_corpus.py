@@ -464,8 +464,13 @@ def delete_statements(urls, max_bytes=collector.CLOUDFLARE_D1_MAX_STATEMENT_BYTE
 
 
 def map_events(root=ROOT):
-    """The map's events: the stories the archive does not repeat."""
-    return (_load_json(root / "events.json") or {}).get("events") or []
+    """The map's events: the stories the archive does not repeat. Read as "no
+    events", a missing or unreadable events.json would file every map story in
+    the archive a second time, so it stops the run instead."""
+    database = _load_json(root / "events.json")
+    if not isinstance(database, dict) or not isinstance(database.get("events"), list):
+        raise RuntimeError(f"{root / 'events.json'} is missing or unreadable; the archive is not planned without it.")
+    return database["events"]
 
 
 def plan(stored, articles, events):
@@ -475,8 +480,7 @@ def plan(stored, articles, events):
 
 def collect_articles(root=ROOT):
     now = datetime.now(timezone.utc).isoformat()
-    database = _load_json(root / "events.json") or {}
-    events = database.get("events") or []
+    events = map_events(root)
     threshold = map_threshold(root)
     incidents = live_incidents(events)
     aliases = collector.load_incident_state(str(root / collector.INCIDENT_STATE_FILE)).get("aliases") or {}
