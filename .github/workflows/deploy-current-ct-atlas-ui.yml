@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - ".github/workflows/deploy-current-ct-atlas-ui.yml"
-      # The Node suite gates this deploy: a test-only fix must release what it blocked.
       - "tests/**"
       - "pdf-export.js"
       - "deep-search.js"
