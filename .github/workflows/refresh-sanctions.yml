@@ -6,7 +6,8 @@ run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow 
 # serves it. OFAC usually publishes in the US afternoon (19:33 UTC on 2026-11-06),
 # after the map update's morning slot, which was the only refresh until then.
 # This is the only writer of that file. An unchanged list is not downloaded
-# (tools/update_sanctions.py compares OFAC's Last-Modified) and not committed.
+# (tools/update_sanctions.py compares OFAC's Last-Modified) and not committed;
+# the same list under a new Last-Modified commits that date alone.
 #
 # The slots are Paris times, the same as the dispatcher's: 20:47 and 22:47 follow
 # OFAC's afternoon (14:47 and 16:47 in Washington), and 22:47 is still after

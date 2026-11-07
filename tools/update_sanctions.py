@@ -15,7 +15,7 @@ Standard library only. Usage:
 
 A list whose Last-Modified has not moved since the last write is not
 downloaded again (.github/workflows/refresh-sanctions.yml runs this several
-times a day).
+times a day). A new Last-Modified on the same list is stored on its own.
 
 Safety rails: the existing file is never replaced by a suspiciously smaller
 one (a truncated/garbled download must not silently erase the list).
@@ -248,6 +248,10 @@ def download(url: str) -> bytes:
         return response.read()
 
 
+def write_document(path: Path, document: dict) -> None:
+    path.write_text(json.dumps(document, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--input", help="parse a local sdn.xml instead of downloading")
@@ -291,10 +295,19 @@ def main(argv: list[str] | None = None) -> int:
             return 1
 
     if is_unchanged(existing, document, now):
+        # OFAC can serve the same crypto list under a new Last-Modified. Unless it is stored, every later
+        # run downloads the whole list again, so the validator already_current() reads is updated and
+        # nothing else: the list, its timestamp and its hash stay byte for byte as they were.
+        source = existing["sources"][0]
+        if modified and (source.get("url"), source.get("last_modified")) != (args.url, modified):
+            source.update(url=args.url, last_modified=modified)
+            write_document(output, existing)
+            print(f"Unchanged: {output.name} already matches OFAC ({count} addresses); stored its new Last-Modified, {modified}.")
+            return 0
         print(f"Unchanged: {output.name} already matches OFAC ({count} addresses); not rewriting.")
         return 0
 
-    output.write_text(json.dumps(document, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+    write_document(output, document)
     by_family: dict[str, int] = {}
     for item in document["addresses"]:
         by_family[item["f"]] = by_family.get(item["f"], 0) + 1

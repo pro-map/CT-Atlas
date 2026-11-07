@@ -233,6 +233,31 @@ class ConditionalRequestTests(unittest.TestCase):
         self.assertEqual(len(self.stored()['addresses']), 2)
         self.assertEqual(self.stored()['sources'][0]['last_modified'], 'Sat, 07 Nov 2026 19:40:02 GMT')
 
+    def test_a_new_last_modified_on_the_same_list_is_stored_and_nothing_else_changes(self):
+        # OFAC re-exported the same crypto list: same addresses, same Publish_Date, another Last-Modified.
+        self.run_main(self.ONE)
+        before = self.stored()
+        no_crypto = ('<sdnEntry><uid>9</uid><lastName>NO CRYPTO</lastName><sdnType>Individual</sdnType>'
+                     '<programList><program>SDGT</program></programList><idList></idList></sdnEntry>')
+        same = sdn_xml([entry('1', 'A', ['SDGT'], [('XBT', BTC)]), no_crypto])
+        later = 'Sat, 07 Nov 2026 19:40:02 GMT'
+        code, requests, _ = self.run_main(same, modified=later)
+        self.assertEqual(code, 0)
+        self.assertEqual([method for method, _ in requests], ['HEAD', 'GET'])
+        before['sources'][0]['last_modified'] = later
+        self.assertEqual(self.out.read_text(encoding='utf-8'),
+                         json.dumps(before, ensure_ascii=False, separators=(',', ':')) + '\n',
+                         'only the validator changes: the list, its timestamp and its hash stay')
+        # So the next run asks OFAC only, and finds nothing to write.
+        stored = self.out.read_bytes()
+        code, requests, _ = self.run_main(same, modified=later)
+        self.assertEqual((code, [method for method, _ in requests]), (0, ['HEAD']))
+        self.assertEqual(self.out.read_bytes(), stored)
+        # With no Last-Modified to go on, the same list is read again and the file left byte for byte.
+        code, requests, _ = self.run_main(same, head=urllib.error.URLError('timed out'))
+        self.assertEqual((code, [method for method, _ in requests]), (0, ['HEAD', 'GET']))
+        self.assertEqual(self.out.read_bytes(), stored)
+
     def test_a_list_due_for_its_restamp_is_downloaded_and_restamped(self):
         self.run_main(self.ONE)
         document = self.stored()
