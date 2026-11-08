@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-07T16:42:46.588883+00:00",
+  "removed_at": "2026-11-08T17:03:13.833827+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -856,6 +856,114 @@
       "region": "Adamawa State",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Reports a concrete, dated counter-terrorism combat operation.",
+      "related_articles": []
+    },
+    {
+      "id": "36f753917825d13c",
+      "incident_id": "inc-527764b7884d30da",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOYnRHN2hwbkFsbUZuRXFaUmNmSHRpdGZuRnAwaG1YQlM1VXFLMXhCSzNUTlNtdUlmVlpxaUtscUoyM2RibU5ZVzlDZll6cVNmUzBoaE1KZDZwSHUzcy1RQzN0U3NEdkVVQUxKU084RW1LNVRaWkVaX19pVW1GU084VXF1N1NZU2ZNcHZudVlsbXdwSDZlb3lyUkREQmtCbUY2bFUxX2FrMEtoVVo1amY2YWFpeDgxNTFPR2RUZVJvUHRoUQ?oc=5",
+      "title": "Hezbollah launches largest drone swarm attack on Israel's northern border",
+      "summary": "Hezbollah carried out a major drone swarm attack targeting Israel's northern border.",
+      "original_title": "Hezbollah Launches Largest Drone Swarm Attack On Israel's Northern Border",
+      "original_language": "en",
+      "source": "i24NEWS",
+      "published": "2026-05-12T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Weapons"
+      ],
+      "actor_group": "Hezbollah",
+      "primary_event_type": "ATTACK",
+      "country": "Israel",
+      "region": "Northern District",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete major drone attack by a militant group.",
+      "related_articles": []
+    },
+    {
+      "id": "ae8cd9730306af2f",
+      "incident_id": "inc-2dfa017a956c5263",
+      "url": "https://news.google.com/rss/articles/CBMizgRBVV95cUxPNWFUeG5mUnR1R1BKendzSm5wb0MxT3RFMEdMODBSTk14dUlpeUhwQXJBZXZ2OE5EMUpFSVgtX0xCb2tKeHVyb3dhRlkzUkZQX2d5SHNNMDV1Y0M1c285Um42QVB4eUpxTlJmNm0xdlExbHFEME5rU1o1a0pvNkF6M3ppajdMS2VhdHBfTnRVLWowcXd5cFFvOElYaC1zLUxVemhQczZLcWhtbHVSOGJKVGtQN3B1WkZDRGF4NGVkOVgxWWwyV2RFc1hkeWRVd1hhb0U3dFFIRGl6OG1JNUc5cE1aYlFGNWFkeTVDRmZ1dlZ0OHF3NklSa3RrRWpaU2FLTXZMbnZadG56ajB0RzhBU3JUdXVXMFNVSldfNlVuVktsTE5FVFc3MkQ3MXNCVUp0azF6UW9DUm95cENrcGlBZXdLcEYzdTFVTjducVZOMnNFclJQeE5ZeHRPbXR5WmtQODJHeWtWSlRXOFltWVRhQjdXZDFpTlVYdU5YX0IxcmRhenVtdFNmck1wWXl1WHdxOEFTS05RVzVNZklBaWE2bjE0X3ROekdfVVVVOGVCZmVPUzhlS1JROS1QWnFNVW9TWjhWc0Y1Y3paeVowWl9LMUxPdGM1b1k5QzFra3ZxUlZqYzBoSWY1bXpVdVhNTlpzY0RsOVV6NVBwcXBxOGw2QVQ2NFBtZ3pHNDAyQl9VczZlQU9hTUxsTzNTR1hPRTVGRG5TSm9tRWdTY05wbXBMSDhwdDdjejdIeFVicnNEZm5SSTloZHVkdVBwT3BjZw?oc=5",
+      "title": "UAE adds 21 individuals and entities to national terror list over Hezbollah links",
+      "summary": "The United Arab Emirates has added 21 individuals and entities linked to Hezbollah to its national terrorism sanctions list.",
+      "original_title": "حزب الله «كلمة السر».. الإمارات تدرج 21 فردا وكيانًا على قائمة الإرهاب",
+      "original_language": "ar",
+      "source": "alghad.tv",
+      "published": "2026-05-12T07:00:00+00:00",
+      "category": "Terrorist Financing",
+      "categories": [
+        "Terrorist Financing"
+      ],
+      "actor_group": "Hezbollah",
+      "primary_event_type": "FINANCING",
+      "country": "United Arab Emirates",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Concrete counter-terrorism financing / asset-freezing measure targeting individuals and entities.",
+      "related_articles": [
+        {
+          "title": "UAE updates local terrorism list",
+          "original_title": "الإمارات تدرج أفرادا وكيانات جديدة على قائمة الإرهاب المحلية",
+          "original_language": "ar",
+          "summary": "The UAE has updated its national terrorism list by including new individuals and entities.",
+          "published": "2026-05-12T07:00:00+00:00",
+          "source": "سكاي نيوز عربية",
+          "url": "https://news.google.com/rss/articles/CBMi8ANBVV95cUxQSVRDTUVsYU1ON2JBUFFQMlVmOVN3WFFjMXc1WlpaTUhhdkRiR1lOcUVIWGRuSWxJMXZHWjhzNU80QnFFa2pweGYtVGFPeGFhcjNPUW9YMVRQY3hHalhCczgzZWc5QkVpUjNiVWxSalN3MDFMMjA0VlU2bWhJWVJjaUJJZVdHeklrUGNzeWJjckxYYmU2ejQ3R19wQ1hoTFp4SXlYbVhucVdwRnBNX1ZOWURaX2k0YkRVSm54SnFaUGdIRjZwQV9CTzg1dHZLUEFVSFlDSnF0U25ueVBYUE1FaXRsek02Sk5uWTdCUERmMEdwSDlocFk5c2NUNld1aHNsMThYNGZNTVU3QkxZYzFCTEU2a1JGVGM3eEw3WF9ZUnJmYm43bGlqMTdoc19HamVHdUJVUzRnWWlkVkxOdWVxV0lITFQzYzNGQV8tdzVRM05mbER2cVZTVnJwX3RCbHNRdUloZjNNZVAzdF9JckFyTUtxR2pDcDZWS2lFM21DLXpObmhGSWphU2N6SlVFcmt4MXFhWmFteElUREhBems1WXBnZmw5RkxuNFFvSm1YM0V0N2hTc2NSMHNaYkhBY2NvVjJyTzhkVjlscVMycmdmTktOYkhsV3k0YmRvSHRVOTNETFpsbGFDWjJrbTY4M2lP0gH2A0FVX3lxTE9SWEdndEJCbkdkX29ROXdXOUNQbWc1Rm4zTUM5M2huSVJMMzh2cWF5OWF0VXdNcHJaaGFtRE5Ia0xQWkRyaklKWHQ3aHI2bk01TUlYNnk1U3J0cGNaOGF4UlkxdkFNTnVrQVA5VHBQR0Z3UlRBVnU3SzM1V3VkTmdsVGZLSmhibUhrNWZob3ZsVXpvSzR2OUNRMVRGd1BHUkJqalFDZk4zVjNyRkpMbmpiQ2JnUXlsN0VIR2U1TzZvV0hoVVp4cGN6bU1GbENCdkdCZkhzajNKSkFEbUJsTkQyQk1Ra1JYVi1ldXM1Q29MTUZXdVF1RDJQV2MtQmlzcFNkd0hhOUdncTZtTXhSSEs0QUFLYS0weEFibXFicFQ1ZERWQ3BlMVFTZXpaV0h3dEpwNkVtMXVrc29iQTVfVDdJTDN6ZGlkbXVKUEhpeEI3UGkydTdUZXAzTXdFMmd1UjVQakwxcEZyNXpfeDh4WXZyWkVMZUZCbnRTaU9KR2pRejBjclowLWVlNE5jZTdPY2JRSy1jR0JhaWc2cVlsM2gxYlg3ZGZxT2NDanBzaWhwaC05bVpLckVRbmEtVGV3Z2FUbU85UkZGVkoySlFwQ1doQ3R5WGJmbG85NWE1Z1k1cEpYX1BWRUNSWmZMbUhNbm1KT2tIRGc?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "99983cb592706012",
+      "incident_id": "inc-7f6d2648866b18b3",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOWVl2di02SjFfSVM3aHo2eEJxUGFtRTJCako5dHBIRk5ucEUweEpkZUFIYzI1OWc3ZjZzUFJ3bEZKci15bEFjNUdDT2pzV2dzVDRqbjFsN2YydGRldDNpdldJRFYxejQ3bXlxLVU2MzFXT0Uya3hEX0FYNk5Jd2x1VWNsLXktYk9objhLbkZ3Ujh3SFlPMnfSAZsBQVVfeXFMUGtabWFTWldodUlvc19EYXpFZGZVZFBWY3VKMHF6MGl0TlhSdTJaZWtTY2ZXb21LMUk4cmU4UnZpRnVsaHNBS3dyTXBjYmVsWGVZeTJtMjdCZktKbWhmSkl5VGdhNG54WURVSDNYeWl3dGcyUWlhQVc1WjFra1hoeFlaMFRPelkzT1NFX0VYZXpQdHpkbzZMZVFnSnc?oc=5",
+      "title": "FETÖ operations across 33 provinces: 43 arrests",
+      "summary": "Turkish authorities arrested 43 suspects in coordinated nationwide operations across 33 provinces targeting the FETÖ network.",
+      "original_title": "33 ilde FETÖ operasyonları: 43 tutuklama",
+      "original_language": "tr",
+      "source": "DHA | Demirören Haber Ajansı",
+      "published": "2026-05-12T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "FETÖ",
+      "primary_event_type": "ARREST",
+      "country": "Turkey",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Coordinated counter-terrorism operations and arrests targeting the FETÖ network.",
+      "related_articles": [
+        {
+          "title": "Gendarmerie FETÖ operation in 33 provinces: 69 suspects captured",
+          "original_title": "Jandarmadan 33 ilde FETÖ operasyonu: 69 şüpheli yakalandı - Son Dakika Flaş Haberler",
+          "original_language": "tr",
+          "summary": "The gendarmerie apprehended 69 suspects across 33 provinces in operations targeting the FETÖ network.",
+          "published": "2026-05-12T07:00:00+00:00",
+          "source": "Hürriyet",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQenRMTTZPLVFuMzVkd2QzSjdzZndseE1uYS0xcDhBT00wS1F4NHliYnZoV0pLbXkyQVZ4TVN1TXd5TS1QUkxpSVFOS0RORldmOGg4UnVSRkt5QlN5N2pwLTViTXJINkZSZktPOVVkZFphLUI1WTl1RXh2ZFdZVVktdGhvUXVaRnd0bEh0Rnd5TVBfSEtiRnNiMFZWTjU3TlkwUWc?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "e1f82f2da149f3c4",
+      "incident_id": "inc-09d450ab7e58bd93",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNU25qandsaUNSaGxhdzh0eDZhWUhsTXcxcFNnQWpFellUZTVhdGRTa1lGNWxLYm55bnhlR1NsTjJPb0JIb2F1Vk1UOGpBZDQ1NE5EMzZvajY4azJMZ205b05NdE5DUV9fNVJ6QktlMV9Ca0dlQnh3WC05SkRvVUtSQjZUNENZaVBaU09ZTjhMNDdHeTE4QVFzQjJlRnBGUDY5ZG11S1BONkMzeV9FaVhaNi1VNElpMW5wUTB4MWxn?oc=5",
+      "title": "Troops arrest suspected terrorist collaborators in Taraba State",
+      "summary": "Nigerian military troops arrested three individuals suspected of collaborating with terrorists during a raid in Taraba State.",
+      "original_title": "Troops Arrest Three Suspected Terrorist Collaborators in Taraba State Raid",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-12T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Nigeria",
+      "region": "Taraba State",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Reports a concrete arrest during a military operation.",
       "related_articles": []
     }
   ]
