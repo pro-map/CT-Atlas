@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-08T17:03:13.833827+00:00",
+  "removed_at": "2026-11-09T20:45:25.158782+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -964,6 +964,94 @@
       "region": "Taraba State",
       "ai_relevance_score": 65,
       "ai_relevance_reason": "Reports a concrete arrest during a military operation.",
+      "related_articles": []
+    },
+    {
+      "id": "8095b9bc8e6e8e3d",
+      "incident_id": "inc-653f012858509371",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPdDI0Q0VUQkd0bnNtYWM2d05BMnlicWF4Mi1NaWZXb2FJUUZlZGtfZHptZ3dIQklOTlVlcWpJc1R3VGV0bkp1ZUNtbjVTQ0pZcmhyTEtJMnhPczNTTnprR2JyZWwwdFlURTNFY0VCYXFoZU84dXg1WEM0VkZHVFROaGNWekxVc1g1RUdxM2p5dm1VT3BQX0o0cWJnd0NYODltQTJWS21mS1MwVFV0SzY5UGY0Q2JLYkczSEhVZ3lHdUhkQlA1Y0MyYjNmaDJBc1U?oc=5",
+      "title": "Families Demand Rescue Of 10 Pakistani Crew Aboard Oil Tanker Seized By Somali Pirates",
+      "summary": "Families of 10 Pakistani crew members are urging authorities to rescue sailors held hostage aboard an oil tanker seized by Somali pirates.",
+      "original_title": "Families Demand Rescue Of 10 Pakistani Crew Aboard Oil Tanker Seized By Somali Pirates For Over 23 Days",
+      "original_language": "en",
+      "source": "Marine Insight",
+      "published": "2026-05-13T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete ongoing maritime piracy hostage crisis involving Somali pirates.",
+      "related_articles": [
+        {
+          "title": "Hostage crew’s video surfaces after 26 days in Somali pirate captivity",
+          "original_title": "Hostage crew’s video surfaces after 26 days in Somali pirate captivity",
+          "original_language": "en",
+          "summary": "A video featuring the hostage crew has emerged 26 days after their oil tanker was seized by Somali pirates.",
+          "published": "2026-05-15T07:00:00+00:00",
+          "source": "The Express Tribune",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQOWVJN1BxTHoyN2ozOVI1eWxhZkhBVDVxZEtsa3BjamZUenkzeTl5NlQtUDhseFFyaE1sTTU1VTlEWHYxcWgyWHZ4c1dYWEZZUkZTM3Fldk1ZNDJpUkxoS2FBT01nU1dzLWlNVnZDMGoxZS1IdlB4UnN0d2gzdHJtdUkyZng1aFVsazRETUVsNFFDdHdlc1pEaE1GdGpFQ05mWl9XbXA1dWJBZ9IBsgFBVV95cUxOSnpXVXR6aUpzMS1PTWpza1U2TFVMTWVDS21idVlKRXUwTHpLWC1IcklmZWp2cXVrSk1MODRQRE1MU1lWTUNzZUFzSVhSWllOWlJaYko2aVBTNm5PMzdsZjhjQkNfQW9ORmVFV0hrckxMYWlXalBmV25EcjhVSkxMMEZVSDROMHM5TXdLNHFVMGdYTjBNQkQ4V0hIRk4tS1NiU19hQ1RIcHhqY05NN29CWGhn?oc=5"
+        },
+        {
+          "title": "Video of hijacked crew emerges 26 days after Somali pirate seizure",
+          "original_title": "Video of hijacked crew emerges 26 days after Somali pirate seizure",
+          "original_language": "en",
+          "summary": "Video of hijacked crew emerges 26 days after Somali pirate seizure Pakistan Today",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "Pakistan Today",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPaXlqcVBibUhMRWg4bF9tWVp4RElrZFBBcFBMLTRhZHpQWUNDb203YXI5WXBvMEUyeDY0bV9RY3NkN09nZVlqUndldGdCWEpVamw1Vm9sUlhIS1N6QUtKWnFtX1pTbzBYZFd6WkVPSzUwY2prUmxDdC1MNUlINXR0MzZkS2NCV3k3bTdFY0Y1OTdRVk9fRUhkQVhHTnI0MHBoSlNISU5ONUJXaTVncWxn?oc=5"
+        },
+        {
+          "title": "Families of hostages call for rescue from Somali pirates",
+          "original_title": "Families of Pakistani Hostages Call for Rescue from Somali Pirates",
+          "original_language": "en",
+          "summary": "Families of Pakistani crew members being held by Somali pirates have issued a public appeal for rescue efforts.",
+          "published": "2026-05-13T07:00:00+00:00",
+          "source": "Marine Link",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQNjc5NlFvOE5SSEx6Nnh2OVhZYS1VX29KUUt6UjhqTmJ3R19MaEtnUnk4cWZyU0dhNTdHTThvX1c0NFltdmZyVjFDeTFoR1FFZUZ6M2t3WGo1R2J5WElUVGJ2d3JsR20yUENNZ0x3S3VZZEJzY1VQZ3NvbmFGb1V2bkpuS3k?oc=5"
+        },
+        {
+          "title": "Somali pirates hike ransom demand for hijacked tanker to $10m",
+          "original_title": "Somali pirates hike ransom demand for hijacked tanker to $10m",
+          "original_language": "en",
+          "summary": "Somali pirates have increased their ransom demand to $10 million for a previously hijacked chemical tanker.",
+          "published": "2026-05-14T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNZUdNT0hHbTRoSklqM0pPTlJJMmg0TWREdnVrb1FuV1lkekJmbUdNd2UwVlpiQXZtdTNhdi13d2ppdXBMSWtvaXdvMWkzakp3cVJXZ21mMUlMYVJIMkpEcFN4WFllR1Q5OHZUVEJiUXBLeGx0VE9JRWZRYmpwLTAtTEx6U1BJR1pUVVl0S2pjcjZfT25jN1VXZW5wb3JZN1RTMDNQX2dnbGxINlB2aHlaSg?oc=5"
+        },
+        {
+          "title": "Somali pirates demand ransom for tanker",
+          "original_title": "Somali pirates reportedly demand $10M to release small product tanker",
+          "original_language": "en",
+          "summary": "Somali pirates are reported to be demanding $10 million for the release of a captured product tanker.",
+          "published": "2026-05-14T07:00:00+00:00",
+          "source": "Hiiraan Online",
+          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQeFNXWmtYTlVERGE4azMyZ1dyc1JPOFMtdmNQUVU2OUt2S09ya1JzZ0Q0NlVsbEVKMWg3Q0xIWHdIVlFMY0dKaE5DYnVNZ0EzUk81dkFvT0xXRXVVQVV6SF93V2I4TjBIdnNGWXlTSUNSamxLeUVTY05BZ3haaFJSQmlkQ2h6Y2JxSEVNNmdxekltdUJIMVA4MElNNDBJLS1VZlJPUHZaZ1BQVzA2T2VEbjlOaThBNE9Hd2pz?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "d1906a54b7f6acac",
+      "incident_id": "inc-70084772fe57b6b4",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOdFRrZ1ppV3pDYlRIWUR1NElUUmk4cHM0SUpfbzJmZjVxQW5kR0p1MC1CTENMREw1Y3ZzMlc3Nk5tdzgwMXZYVnN2Vlg4b3RwZmZramNjX2EwTlVkd1MzVDVUSlo0VE84a0RZUXFmT0toRmVvUmRtVzk2cWVUMWtVaUlITEpPdkZnVUhXVWU3OURSZw?oc=5",
+      "title": "UKMTO: Vessel Hijacked at Anchorage off Fujairah",
+      "summary": "The United Kingdom Maritime Trade Operations reported that a vessel has been hijacked at an anchorage off Fujairah.",
+      "original_title": "UKMTO: Vessel Hijacked at Anchorage off Fujairah",
+      "original_language": "en",
+      "source": "The Maritime Executive",
+      "published": "2026-05-13T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "United Arab Emirates",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Concrete, dated operational maritime piracy/hijacking incident.",
       "related_articles": []
     }
   ]
