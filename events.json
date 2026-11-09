@@ -727,7 +727,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-11-08T21:46:16.758653+00:00",
-  "number_of_events": 6961,
+  "number_of_events": 6958,
   "events": [
     {
       "id": "20e8cbeccd0298be",
@@ -10062,468 +10062,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Mosul airport contracts canceled in Mosul, Iraq.",
       "ai_geo_fingerprint": "c4e5e95cd4fef6dc547442484203144e743df442172987ffd9744986f13940d4",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "47cba42ff86fda47",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Chemicals and Explosives",
-        "Online / Cyber / AI"
-      ],
-      "title": "Terror probe into deadly Krakow shooting",
-      "summary": "Authorities are conducting a terrorism investigation into a deadly shooting rampage in Krakow.",
-      "original_title": "Six O'Clock News | Terror probe into deadly Krakow shooting",
-      "original_summary": "Six O'Clock News | Terror probe into deadly Krakow shooting BBC",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-11-07T17:37:00+00:00",
-      "source": "BBC",
-      "source_count": 31,
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE81ekhKQm5wUFphVFRSUU0wYmFGRnFodTJ1LU82YlRSbmZFM25aYlh1R1N1eFJnZnRXYTVFZHhUeXNfTzRFc3lvUEg1MFNLM1Q1?oc=5",
-      "collector": "Google News RSS",
-      "country": "Poland",
-      "country_code": "PL",
-      "city": "Kraków",
-      "region": null,
-      "latitude": 50.06143,
-      "longitude": 19.93658,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "046bed4f40f38eb6349394220b36c37e0a1766ee2750b8fdff12a6a78516e3a3",
-        "12dfcef7430e70ee88778406f2f96a87d510a0f82b0921830708fe0537301a50",
-        "14f58f753a8a2e16cd146a26ef4d4fd0b1fcef4f06d78b65b9bd454051ad9b54",
-        "2a247e8c4d70e396e1a3139e19469247b9ca8aa77ca00134cb3bfdca74ddb393",
-        "436915f8d2c2d552bf12f03b3e5893f5325a2d3854e0a795577d0088df73cde8",
-        "4a4e907384f757066321aaa95c6b9fd6dea3a38fca2439a36a8aad900eb23ff3",
-        "59462beb05e49f4c61b145de14bc86e64ab3557896458123b2e258421ebb78b0",
-        "601c209947c235a98abcf395d7a3236b861a1ef02540948e6055882747f142e9",
-        "8845f5a2de71860f866bafa70bb3a3df12c11d81c75ece3b1e3dcc5f215417f4",
-        "a60637c6dbcdbaa57fb29be96f31630a4872003cee95401ae888b555d1fe8d04",
-        "aa5ede3aa87c14b8261ab8c4c6430d61192fa89ad325de843997e27c2406e7d5",
-        "b0289d1e7e75535aee2434040ddd28997c37c0a902298c716cc5e06ddc5b03f8",
-        "b3c8af962f4e71d40bf9d5f4ed5aca926e700aadc2937c6dd047e76f4d9c9819",
-        "b66cf4b5798291508af8535755a203ebb1bd4258450e4b52af9ca46dae05a2b5",
-        "b68603743a71cc1a4f1450cc28d6238584a53d08036bba6e052f885f2d850c05",
-        "b6fb887bb5dd4ad1ba0fa3ab14cd03a501023549942a85886ba3a25b0754ada4",
-        "b7cd5b2877d04346e22e345fb08865c74472bd78571dde6d6de2f7422d1a0b40",
-        "b9592164d2b34faa350494b9733db306f9417bbca7607d5053132bb8be939d63",
-        "bd7cc458daca83dcc2ecf0bbd627560396942a44a40cbb896036db3c3157bcc5",
-        "bef39426a2ab2aff790241714b43f13384d43efa08c91aeb5c4bcece67d6b56a",
-        "bf6237af0df51df1b5757803a23514d57ee033c19b02b809b77c9378875967ab",
-        "c146a61fa005c414bf61110c7c3bdefdc185ddd20116ded56e17a4ec831fd02c",
-        "c5dc65a6307614efaeccb5fc2df451bbd395e6864abb3ff04f99a7719eeae316",
-        "c9d23b1b8a3ab7f0bfdd70445ea13c0c1f869902643bb2c83cfc6a0466e46c3e",
-        "ca1c942d11bf924530b491e2de415e4f26a85a25b0bb9f60db82670602c43660",
-        "d1a55ea4a63d05d4a857b0729e50588d84e7ee4f605ae01bf829052c3a65fe36",
-        "d6f7eddfae67b639a118dd373cefd8354fc2e9a10fc6f705e621f11228545cd2",
-        "d99de4fcb7d3f3cdaed98b40ee79878182515863a32a90a0359b8b8dfa14dc2a",
-        "de7b01d6ce98b947205111f00b001294f75cec7f5e2e63e4614d390820fe4d57",
-        "e2f1d05677d7484561320443b0dc5615ba15528e3943da8a289c607d30a47046",
-        "eaf2737c79204ece12ea5d019d4164835d651af3addbb78e18a9b9343d071fff",
-        "f3367117dda37224fc00fef705a34a4a88385e157993e779a718ee680aec303c",
-        "f87c154a4ef904e25573ce050b5d0dad04c453200377daf5cac3bf1d122e3a2c",
-        "fa2e66b44aa77844fe9ed8f4426f305b727bd08d63ad045cfc9226f511d0c2b4",
-        "fe249ce0366a9e5b53885a8dabc715854c3bb66650551351e223311851853b96"
-      ],
-      "sources": [
-        "Zamin.uz",
-        "প্রথম আলো",
-        "2M",
-        "The Hindu",
-        "Jornal de Brasília",
-        "EL PAÍS",
-        "Euronews.com",
-        "ORF",
-        "مونت كارلو الدولية",
-        "France 24",
-        "صحيفة الخليج",
-        "DW.com",
-        "Ouest-France",
-        "lanouvellerepublique.fr",
-        "Le Dauphiné Libéré",
-        "CNews",
-        "la Repubblica",
-        "Der Standard",
-        "Epoch Times",
-        "Boursorama",
-        "Charente Libre",
-        "Le Nouvel Obs",
-        "L'Humanité",
-        "CNN Portugal",
-        "Le Figaro",
-        "taz.de",
-        "BBC",
-        "Heute",
-        "Blog do Dina",
-        "Blizko.by",
-        "ZDFheute"
-      ],
-      "related_articles": [
-        {
-          "title": "Six killed in public shooting attack in Krakow by right-wing extremist",
-          "original_title": "পোল্যান্ডের ক্রাকো শহরে প্রকাশ্যে গুলিতে নিহত ৬, হামলাকারী ‘কট্টর ডানপন্থী’ মতাদর্শের",
-          "original_language": "bn",
-          "summary": "Six people were killed in a public shooting in Krakow, Poland, carried out by an attacker with far-right extremist ideology.",
-          "published": "2026-11-07T21:00:19+00:00",
-          "source": "প্রথম আলো",
-          "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9QMmJ1dEgwZGFqanNIM1Y4NnQ1MnFSMzN6OVRiXzNnakV2RTZaREh6VmJPc2hXRUJXYU5CeXp5T0pIQi04dkNwd0JCMDV3SE1CQmNwdzJCQmhqM1o0bjYw0gFsQVVfeXFMTk0xREZXd1FIaHBXdEVBUzNJYU9nc1BNV0VPZG9nNFlHNTZhRGl4SU1sRTlJckQyaGdUck1SZXBzLWpXeHVVVlFPMHJabi1qdDNIUy1PaGlsc05Ed2hGRlUtbmUwYWNiSnBNUmFi?oc=5"
-        },
-        {
-          "title": "Poland opens terrorism investigation after shooting attack in Krakow",
-          "original_title": "بولندا.. القضاء يفتح تحقيقاً في عمل إرهابي بعد مقتل تسعة أشخاص في هجوم مسلح بكراكوف",
-          "original_language": "ar",
-          "summary": "Polish judicial authorities opened a terrorism investigation following the armed attack in Krakow.",
-          "published": "2026-11-08T13:03:00+00:00",
-          "source": "2M",
-          "url": "https://news.google.com/rss/articles/CBMi_gNBVV95cUxPLTRwa3lQdldZSWdlQ2VjSUloN0NEejhocElsTWxUWGVrXzB0bktESkdlX29GWWtVUzZUY2NJWFJyM1hlVWIwU1hpUzk3NldtUFhxVjRRdFRGRDV6TVctQVA5ak00NFdRSXV6Z1l0eUhweHNhR0lqVHNXd2U3WVZMWVNhZzlSRlRMZG1oeGtmNVVZOHRxTjV2YUNxT084WDQ5VS00TDA5U1c5d0tvOHVmZFRBVkcxLTNDR1F4NTBpclRwQ29HUy13V3VLcjlkQjRSSjNNNWlWSFRzSjFUTlhNQjRDZmlRNGhYcEdCTm1FaVN3UzNONktQQjlyb3NQdlZRQmVoQVlaOG9XVDlkaEtseVJ0dHVpZThRcGU3MWw4SkVWOXVhMVd4aTA4YnNmMWIwUWNNUXNveWMxWExFU3FNXzliWlVyMHRuaUd0eVptbGVtb0FCZ0RvZGNuaW5saC0xQmIxVkYwS2ZQejNJTV9tTjRJalF5NE9xOVNVWTd0Yi1Ca2U5ZmxrTF8wUUdKaC15MXNkTnhBYjI5ZVY3R2NaZzFNNVlWWjVvMzdpdFFzVUxpaEpwX3NjRTlITTNGVFZqdmpnbTNvVnA3VDZndEdsYlNMb2FEYjg0cWtTd1l4TklGdHpXdkRaZ0FBRkdiYnpxVFIzTFRTR19FU2pDd1E?oc=5"
-        },
-        {
-          "title": "Poland calls Krakow shooting rampage 'terrorist' attack",
-          "original_title": "Poland calls Krakow shooting rampage 'terrorist' attack",
-          "original_language": "en",
-          "summary": "Polish authorities officially designated the shooting rampage in Krakow as a terrorist attack.",
-          "published": "2026-11-08T13:55:06+00:00",
-          "source": "The Hindu",
-          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQTWR5ellicFhFVUdadmhTQ1poR2pDVThITmVaYXpDLVBMRGNYTHYxMUhjNnpnOGdmbTVnZk5SNXVMZEh6V205bzlfalRNZ29SdWt2bFIwazdvNHQ1YmN1cDd6NnRUZnBFUGg1VFhJT21uaEJzcmpNWWZsVnV0bDlDdEdlRGNDb2ZqRHE0ZjhuWndHRV96Q1RUeXdCZS1ROElHU0JTNXRXSFRFTE1kYXhyY1E0a2JMdE500gG_AUFVX3lxTFBlUHlYMDRZUXBXTTRIQXpTNEsxLXg5OW9TdjFycWNDV01abW42YWZlZjBCSjJsdEk1aWh0cWhTVy1YLWNoWFRTeEJucGhlV2JNMXJsV25lVl9xREdZZXdsLWdhZng5Z05GRE1LaHF6aVh0QWxfWjB6dXItSjBSVXpnaFFaWW82dUp6MnAwWmV3UTlyekMwWkVfUVR5TXJ6SkpYbzlvc1pvS25kSmI0U1VVd0xHOUxsSlNXQXNab040?oc=5"
-        },
-        {
-          "title": "Poland opens terrorism investigation following Krakow shooting",
-          "original_title": "Polônia abre investigação de terrorismo após ataque em Cracóvia e mortes em Ostrowiec",
-          "original_language": "pt",
-          "summary": "Polish authorities have formally opened a terrorism investigation following the deadly shooting attack in Krakow.",
-          "published": "2026-11-08T14:53:30+00:00",
-          "source": "Jornal de Brasília",
-          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNdFFYRlhlYXVXOHdfNzJ3YXpiVHRVa3FqdGhmdU52WlNLVVJBTUYtVk90bWZkamFoZ0RaUTRnRUFlRnpNNUtDXzVkalJtR2JyM2hibVlaMFpfQ1RWeE16Q3NHc01SYVlCZFFKV3IxZFdHeC1JWHh5Z0NRdnJMVHZCYm1NN0ptZmlQdzZ4TnFVOG1ReGtkTHlyQzVzSjhudnFzWmhiMG9MWGFwNC16MnN4bXZKOGlTemFKM05odHBheWpkdkNBZUxwUW9wUFBVQQ?oc=5"
-        },
-        {
-          "title": "Witnesses describe terror following the mass shooting in Krakow",
-          "original_title": "El atentado en Cracovia deja a Polonia en estado de ‘shock’: “Es lo más aterrador que he vivido. Esto se nos va a quedar”",
-          "original_language": "es",
-          "summary": "Witnesses describe the shocking mass shooting in Krakow, Poland, as authorities investigate the incident as an act of terrorism.",
-          "published": "2026-11-08T19:46:42+00:00",
-          "source": "EL PAÍS",
-          "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPcFNXcndLY2Y4Z3oyVk02VDRRbGRzM3EtMXZYSEIwWmdkRzdzUEhjZ0tWalFWN2F5dDVoOEthS0JKWkwyZEl6X0ZDeHltX1BvT1hLdTJaZFZlNVlCal83TlNxRVM5VXRVMXg2Mm9DMF9STGtDNnE3TGpUUlV3Qjl1QlVrbHQxWnNKeEEzcXNkN1k3S3U3dEg0cHhrcm1HMWhaR29kTExMR3EwbTlsd2I0RWw5aWRDZUNjUFd2SzhQeUtjRTBSZjRLZE01RDJIemI2NXFLZlk5aFFJUDQ4U1JCdXpBR0d5Z3NJR21aOHV0N1pmYWRNREdr0gGLAkFVX3lxTFBhWE1HaUdVUS13NnRuWG9mMGtkZ1VuTjJ2OTVSREhuT0hLUGpuWUd5NkRkYUxQRkF3YXlMbTBTN3FrSHlxMWRNQjYwVzNfQW9mN1VsaWMyeFpuWXZVZVdGLUdzZG9LUVJMNUZwenlTazB5aVFiY08zbGFWcXlLNXJFME5GeVhCaHRreFY3WVNsbTlYVkdLbEYxRVBuMWtycDBOLU5INTFKcTJtcEU4d3ZTckYzY1l6WVBtQk1YQ2hwTnlCSmpwVzNDOFBreUlTSXBzQ1RmWkllLV9JQjdJQTZGNGlOSXZmZVhmd0hJRU10M0J3cXVPQk1CTHhZVnZTVXlMYTRJSDY3cUxyWQ?oc=5"
-        },
-        {
-          "title": "Bloody attack in Krakow: 25-year-old opens fire on crowd, killing 5",
-          "original_title": "Krakov'da kanlı saldırı: 25 yaşındaki şahıs kalabalığa ateş açtı, 5 kişi hayatını kaybetti (video)",
-          "original_language": "tr",
-          "summary": "A 25-year-old individual opened fire on a crowd in Krakow, resulting in five fatalities.",
-          "published": "2026-11-07T17:37:00+00:00",
-          "source": "Zamin.uz",
-          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNcWpFZDB2eFBkMzhRVXRJQTZQc1k0TkpZMmNxWkp6b0huUzNteTdqQ1lmMEI2VXZrN2JMODAwMVktWU9YdjBsTEJUVG5pbXA3RmxoMEhwOG5BTDJobktveXpjeU5qQzdjT1BsaUdvNVpCUFFTeUYwT1FKV3hlb015Y0VFUG1iTFV0WXp0NHFrbHZ0YTU1eC1uZ2xBS0NKSGdkME1FN29vb21kcWFkUjh6Vnk2VmJwblE5OU9qelRESlNXUGk1djhQYmdYQQ?oc=5"
-        },
-        {
-          "title": "Poland announces mourning after bloody terrorist attack in Krakow",
-          "original_title": "فيديو: بولونيا تعلن الحداد بعد هجوم إرهابي دامٍ في مدينة كراكوف",
-          "original_language": "ar",
-          "summary": "Poland declared national mourning following a deadly terrorist attack in the city of Krakow.",
-          "published": "2026-11-08T10:47:00+00:00",
-          "source": "2M",
-          "url": "https://news.google.com/rss/articles/CBMi6wNBVV95cUxPcm5yeFlHMkZYUUlIdW5ZMHpEYWxGQ2VPc1FnME03YlBZbVNTVmZMLU9wZGxfa3FnU21Vc2hhbUtkNkNUcDVEWm1RNkYzWVdJeExJaFZQVXhxa2o5b1gwZEw4aXZac3pLaDJiajZBUGJZakNFRkQzRDNXOUNpUzZFWFdtYjlKZlpSOFd5NVZ5SHBjSGpmN0xmVlVFTXRzdHZnUEIzS014V3ozZ1doTV9hU3pTaUtwTzUxQ01yLUdRSzU2YVZ0MFpCUG9PejBmaVUtRDZ3Z3dxVVpGdHoyeEhtbVVvcDdlRTRBanRtcFdKdWNMV0lXWmJRRnNLZkhRM3o1NXVlVHJFNG1QeTFlNVJlWDJzZUxjZmhmenQweHM2VnpIS0c5MnJLREV0bGljNm9ueXJUaTlRbjJGaUNkVFJ6MWpta09hTi1FeERHZElCUkNSd05Fc3VZZkM1WDAxOVo3dHJkNDlrR09aOUJJbEJ6RlRPRjBPLXF4WFQ1SmRxM01WX1NLQkJQTkVPTFVvMnNJWWFWblg1Q3BGUXUwdFpBVVNtclJrZ0lVUGtyUkFmZG9OQXNEUXREOW5ZcVA2eVdYcE5WSGJDeXh4akl6dDJldEp2ajhvUGRKZmZsUmVQc3FEcVk1c3JWQzVsZw?oc=5"
-        },
-        {
-          "title": "Mourning in Poland following shooting attack and terrorism probe",
-          "original_title": "حداد في بولندا غداة مقتل ستة أشخاص وفتح تحقيق في عمل إرهابي",
-          "original_language": "ar",
-          "summary": "Poland declared a day of mourning following a deadly shooting attack investigated as terrorism.",
-          "published": "2026-11-08T11:06:10+00:00",
-          "source": "مونت كارلو الدولية",
-          "url": "https://news.google.com/rss/articles/CBMivARBVV95cUxQenhyMmtDRnd2Z05VQm44UzA2SWFtdlhQY2lhdjFDQnhBOV91ODMwTzE4ZnhVSGxIUG82ZDJ4OTF4aUpZM3RVd3FXSnpYeXFYc3ExXy0wUE41QmRBU0ItcjlWVkUtLU56WE13TzhiTUdELV9JaHd0SFlFQ09vYTVTOFBSRGd6bUhMaXlUWEEyTW5IaDdocTBIeDRncmNjVDAtWVFPYVM3cEtuZ3k1allQR1FlbG9ZVGVJb2VtZDdFNU5VMWo5QkJuOGtFeGpMN25sOVk1bkR2WVBIckhUM19oRFhEVjlCU3FwYU9kTWVocnlZSzdpbjhueVhITm1GZnEybVgtSVFhNUM4cjBubEdqS2RhakNlY2xUZmRuVkxTYWpIZ0JuaE5JTzlsRERUYWlWek0wcUFZckYza1Rrb3NPRV9YTDVRQWpScDR1bEQ0WndDYW43dWhGOVdiZ3duUWxFNkZKSGdhTklNYUg3S0FySXE0d0stVkluZmlOaElPUFdwRnhKeXk5MVJiTGhTYzZrd0RyOU1kRFZaV2JoeU1CNFVNUkNiTDNMSXJidU9zbDBnQWtFZDE5MjJacDRsc2s0OGRVUndVWDZNSHl1VzRWRzBFNy11Y3dUbVYyVmRSMzlpQ2ktRU1YNHRnN210UG1lWmVhaENNSWpOeXktcWRKUzJPXzBGSW9rcHRvQWFPOExFUnZ5Vlh6aENyTFIzeVpGQmVTS0JRMWpwOEJUNFBaVFFXWTJhQndzUFRpNA?oc=5"
-        },
-        {
-          "title": "Poland in shock: State mourning declared after Krakow attack",
-          "original_title": "Polen unter Schock: Staatstrauer nach Anschlag in Krakau",
-          "original_language": "de",
-          "summary": "Poland declared state mourning following the fatal shooting attack in Krakow.",
-          "published": "2026-11-08T08:36:21+00:00",
-          "source": "ORF",
-          "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE0xMVVZWWJoM3VqSzV4Q2JqVURjMU9WeHFkSllEdl9zajFMVmlES3AtNmFVcWFtNGphVTBvRDhGQ1UtTjFzUGFiRjdnUHFOOHBmU0J6SXh3RVBNYkk?oc=5"
-        },
-        {
-          "title": "Poland in mourning the day after the bloody Krakow attack",
-          "original_title": "بولندا في حداد غداة هجوم كراكوف الدموي",
-          "original_language": "ar",
-          "summary": "Poland observed a day of mourning following the bloody shooting attack in Krakow.",
-          "published": "2026-11-08T15:52:40+00:00",
-          "source": "صحيفة الخليج",
-          "url": "https://news.google.com/rss/articles/CBMiyANBVV95cUxQanp5RzFvTFhBNmt6bFRFV0VHR0p0MlNRcWxDelQwTGNWaGhxV2J5b0RTai02RU5kaUZWejNaWnRyZDRDbmhQNTRhZGVENzRBTHF4NWg1emNOVkUwOWJYbGI3UzVOV01OUTBaOWF3SHl2bVBjSmVQRVVJcGM3ZmQ2OWxxSGVOM1dqeG1HUm9SaWw1RHdVTFlwdkllNmhob2lwQmNYU3FpZUZIeVBBQ3NFZlRFMVpqS1NFN05KTE9MMmRfTDJtck9FSlRkeTBaSzZGd1hadllVQ1pBc3Q1bFNpdFBCSHlpYUtUSVFSS1ptM0hQRWJnRWNfQ25XZUxrZkZqazdpSE1YRVBGQ2kwMmpETlh0alJyaWJWbzk0eHZ1RlBzWVByd1MyN2hpcUxKTnFyM1dYcVM4Q2hHMUJsQlV3WVpNdXZCaFVReHE1ZXotemlvMEFJZHhWclJtbFFPWERjU3ZMdlpjUjJDN2dxeGRwSDJBajNLZzhRdUYwRVdUaTJ2ZjJiTVJCbW1mblpEV1NidFY1QXYxbmlxSjNrSjJNWkJhdWZpSzFzUmVZUTN5UEVLVy1pY1EwVElfS2U4VEI3QkVzNjZ4RGk?oc=5"
-        },
-        {
-          "title": "Shock and mourning in Poland after ultranationalist shooting attack",
-          "original_title": "Choque e luto na Polônia após ataque de atirador \"ultranacionalista\"",
-          "original_language": "pt",
-          "summary": "Poland enters a period of shock and mourning following the deadly shooting spree carried out by an ultranationalist gunman.",
-          "published": "2026-11-08T18:00:00+00:00",
-          "source": "DW.com",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNZm4wSExIemdEVnNaVk9tYTMzLUJDdS1BRjZOcndlT2Zlckx3bERWTlprQmNNaW4yVUItZWt4LWdLNHBFakNaY1RhTW4zS2s1V1NUMDFOXzMzR2pJS3JrcERiZGFQSlJyelNJaTY0NE1UQkR1VFA4d1RJVUVWaVVZWFZHVm50SkktWktzRFRGaERLd1l5V2JyRmQ2aUN3eXpaTEs1N0NTTk91aHpUa2tJY2R30gGyAUFVX3lxTFBWQnlzeHZySlB5NlE2ajM5Sy10c2phQVJxTDY2eWlpbjJUQWVuLVdlSTVhcko5SjRyckRqTE9HNDFibVgtQUJyaHJEUmNJdGxtcE1uVUMzTEZFdmh3TndjZTlFWTNhUVFxOU9lVW5oOXkxeGJqa2dfem9ZUTR6LXhkRjRPQkkwWXlROGZZODdnQVE3YWtiSzRzcU5iZm1zc1hFanVXNjhrQnNhT1BpUmpFdlE?oc=5"
-        },
-        {
-          "title": "State mourning in Poland: Attack claims six victims",
-          "original_title": "Staatstrauer in Polen: Anschlag fordert sechs Todesopfer",
-          "original_language": "de",
-          "summary": "Poland declares national mourning following the terrorist attack that claimed multiple lives.",
-          "published": "2026-11-08T18:56:29+00:00",
-          "source": "ORF",
-          "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE41eGJFV21XODNCSFhaVHllUXgxVWp2NmxDOU1hYk5DMUJjTmZ2eFdLemVXaldkZjk2SldjSnJxeG5vWEJzbkx6dVhnbnhINHFpc0lsVmZvWDcwWlk?oc=5"
-        },
-        {
-          "title": "Shooting in Krakow investigated under terrorism article",
-          "original_title": "Видео. Стрельба в Кракове расследуется по статье \"терроризм\"",
-          "original_language": "ru",
-          "summary": "Video report discussing the shooting in Krakow being investigated under terrorism provisions.",
-          "published": "2026-11-08T08:08:26+00:00",
-          "source": "Euronews.com",
-          "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1vbTh5MHQya0loY2ZKcEdJYlphTlJ1a0FDZTdFTDliWUthRmd5Sk5MODQzZlg3WEpFbUttbmdiaTh2ZzNXeS1VUEFydzBRV1RGQ2w4NmZVc3NFM2dhcHdpREF4d0MtWUI1WGFiVG5R?oc=5"
-        },
-        {
-          "title": "Mourning Poland confronts terrorism from within",
-          "original_title": "La Pologne en deuil confrontée au \"terrorisme de l'intérieur\"",
-          "original_language": "fr",
-          "summary": "France 24 reports on Poland mourning and confronting internal terrorism following the Krakow attack.",
-          "published": "2026-11-08T10:04:00+00:00",
-          "source": "France 24",
-          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQSlREV25NVkFLVWU2RW91ZWZuVlo2Um1MMVNkRkw5NkZWcmg2MlRVWmxhVlN0eDR5Y1hlT19wei1EdF9ncWxLZ0lrRTZMNjFpTlY2QjlBbDFnM3NhUmszMTdtME9GNmt2UTlUaE13VXlJVUsxNnFnYWUyRG44YzlsUkVqYUhqaFZBcmI5S0lkNXg1RjFTN3kydFpKaDlnMkk5dGlnRU9QLWNSUFZNUXhIRjZ1LXdOU2R2dUd5OFRKbw?oc=5"
-        },
-        {
-          "title": "« C’est terrible que cela arrive en Pologne » : avec l’attaque de Cracovie, le pays se retrouve confronté au terrorisme",
-          "original_title": "« C’est terrible que cela arrive en Pologne » : avec l’attaque de Cracovie, le pays se retrouve confronté au terrorisme",
-          "original_language": "fr",
-          "summary": "« C’est terrible que cela arrive en Pologne » : avec l’attaque de Cracovie, le pays se retrouve confronté au terrorisme Ouest-France",
-          "published": "2026-11-08T16:32:18+00:00",
-          "source": "Ouest-France",
-          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxNRFEzN1VhM3hyZXhfbUNMcElyMDVKVEVDb21BRzBMY2VCVUlEUjJWdWRKRG82aVpQRzl0bEs0a3VaZm5iLV9QUlZkWTFCcll0Mi1TR19SN0hYdGU3YnVwamRjdnp5NnQwT1g2OGNSSDFuTnNXX2ZsUUNEUE9JbThtQ2FjdjRtU0JzRDJocHE0dHFrTGZPRU05VWtjc2FxZHNvUXlGQkt3bEZMN0hSOVJ6cmtZNzZRanpPaGhZTkNzSFVwTzBlWE10NTVybExLdGNNeXFEOGg3NmhYNGRWVHZtNQ?oc=5"
-        },
-        {
-          "title": "After the Krakow attack, the shattered dream of a safe Poland",
-          "original_title": "\"Notre ville ne sera plus jamais la même\" : après l’attentat de Cracovie, le rêve brisé d’une Pologne sûre qui ne l’est plus",
-          "original_language": "fr",
-          "summary": "Local reactions and reflections in France and Poland following the deadly terrorist attack in Krakow.",
-          "published": "2026-11-08T16:19:14+00:00",
-          "source": "lanouvellerepublique.fr",
-          "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxNMUNaeTNYLXAwQ1U1Yjh6T09VbUFWajlaQkxzVjgtVmxWdWF1amF0MHE4SEViUk03Q2dYRWlXNGxJbFJoQm1DUTg1QzIyUW1NX2duYXJ4cXU1ZnRVeVUzb3pLeEhfb1lwZ2JyREx5Um1tNExaQ3NQNkFoTXIzNXBSNHNjQ3gyUm9VcENES0l5M3ZFNldTSU1LUWV2cmM1TnhhZ1p3bmNaYXF4V01GUnpLRnlVblBuLUJmTkpXNkdYS2tNTk5lUUI3dGJxaUkxVzRhN09zdFpBZTkzTHcyRTYtREYyZjNFUVYwTmtNUlNqWVJhaXczTTJ3eUtKVmVoakxsMURRdFlR?oc=5"
-        },
-        {
-          "title": "Poland confronted with domestic terrorism amid political crisis",
-          "original_title": "Europe. La Pologne rattrapée par le terrorisme domestique, sur fond de crise politique",
-          "original_language": "fr",
-          "summary": "Analysis of Poland confronting domestic terrorism following the events in Krakow.",
-          "published": "2026-11-08T19:31:16+00:00",
-          "source": "Le Dauphiné Libéré",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNbGhSMGxDUWp5dF8tZ29jSkczeHE1WWFRbTNBUXd6dHRZN1pib3RuNnNRb0RrMjhDNGpmZEFZN0pQVGdPVlpsd2JWVW5aN3FfeUJMWUdIZUEtb0c0RjMyWnhvUjVzcU1WWnNJbHlCLXhoNDVXVzRraTc2a1ZCUHR6S1VQOFpsM2tuSmRldzBMOUdzS2RveFZhMlZfSTNMTWJSenVsTkxJczBHck83akJ6RnRlRFJ0WEk1eTlOdjh3T19yN0lBSXNaQkRybDRqdzd6YXc?oc=5"
-        },
-        {
-          "title": "Terrorist attack in Poland: Who are the victims?",
-          "original_title": "Attentat terroriste en Pologne : qui sont les victimes ?",
-          "original_language": "fr",
-          "summary": "CNews reports on the identities and backgrounds of the victims affected by the terrorist attack in Poland.",
-          "published": "2026-11-08T10:24:24+00:00",
-          "source": "CNews",
-          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOU3NlX3FKTURNZjRnR2N3eFRXX29NSW41bHdSZVFwMHpnQTh5a1VCOXdrQ0lGc3pGRVQxdkdVSExad3JMbjNXUGsyaXZSMU1DOWg4cVhZbjVwU1BEQjRFM2Q5bGZBRDM2TzZjZVlOM0ZIRWNhZjFrZmhyMFFuMEVVcF9QeldtVzhELVJlMjJHbWNqSUFvMkpaZVZkRXR0blHSAaQBQVVfeXFMUGNTcGl6UVhybW11OHY2Z1NhU0RnVTJheGY3Z09xTk5VeElSQW84eDllLS1sNzltMndRVWduRmlEdWdyLWFjemExcG9INGlQTWVlajdtVmZhaThCci1wRmJqdU0ycTI4NFpUMXU0WU5lY2ZPWWt4R3MwSGpIdlRxSUhyTmhYSVVHY3lja1k1eHFFRGxjRHZ6ZkpYWUJxaVktTndzb2M?oc=5"
-        },
-        {
-          "title": "Italian Witness Recounts Cracovia Shooting Attack",
-          "original_title": "Attentato Cracovia, la testimonianza di un italiano: \"Momenti indescrivibili, pensavo di morire\"",
-          "original_language": "it",
-          "summary": "An Italian witness recounts the harrowing moments of the shooting attack in Krakow's main market.",
-          "published": "2026-11-08T12:10:00+00:00",
-          "source": "la Repubblica",
-          "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPSnMyV2huUDkwQks1cXhNZC1BcHplUjB6SXc0WWRvVWtHZnhnMWVrRjAyQVhVTGVnYVVLN1JHM2tkTzl3aFpUcjZ6Y1BUdDNuVm9aTlZGOGtvdE1rcTFLdkg2elFPRFVvRkdhcUxSVUY3QUViTzJSTm9idjZNdmY5ajRTTTFoa0FpeklmSmFpd3dpN29VUFpnaHVvY3VLdWU0MFEyQnA0X1pzN2swMVNuQjdqQmdUV1pZUXBqUE1sYWN5OWU1bTJxSVBNc19yOWIzTmM5T0tqSm92MzFyOG51RnBuSFpvb1k?oc=5"
-        },
-        {
-          "title": "Manipulative fake news after suspected right-wing extremist terrorist attack in Poland",
-          "original_title": "Manipulative Fake News nach mutmaßlich rechtsextremem Terroranschlag in Polen",
-          "original_language": "de",
-          "summary": "Der Standard reports on manipulative disinformation and fake news following the recent terrorist attack in Poland.",
-          "published": "2026-11-08T12:42:00+00:00",
-          "source": "Der Standard",
-          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNTWtfTDhaQVpESkcwYWMzaDBaTDBPSml0Ulo1bnpVX3k3SGVyN2h3WmVCR2IzZklPU0NlUUlGT3lGeG1pRlkxMU12Q3ZabFNlUjBGeC1IVlBpemZlWXoyelhsMndKRHFmUmZTWXdvSV8wdklSaXhjX283X0cxU3d1VnBVSzU4UklCZ2xRcVp3eHFpeUdIREVuajI4R3VNUU83a1psd3pMdUpqN2VxYUZMbmZqc0ZGVUREM3NMUTB4el9Odw?oc=5"
-        },
-        {
-          "title": "Epoch Times details suspect profile and terrorism investigation for Polish shooting",
-          "original_title": "Profil du suspect, bilan des victimes, enquête pour terrorisme… ce que l’on sait de la fusillade en Pologne",
-          "original_language": "fr",
-          "summary": "Epoch Times details the victim count, suspect profile, and terrorism inquiry regarding the Krakow shooting.",
-          "published": "2026-11-08T13:09:31+00:00",
-          "source": "Epoch Times",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNdEhoWmhPdWRPWDRTZ2RqS2kyTUNramswbFNPOHlEZno2M2tsbll2ZWFqNmtubXRKYzFzMEVCbDE0NTJYa1dqZkJueXE5T3dNNkFqczJhTEhjVUU0MC15VFkzREp3WThyTEtDZjlINzlNSzBRVGIxbnBoTTNoT01veXlLbHVxRWNheFljTHN2Q0RWNzZZZllwODRUTlBWT3hCWXBVaTlwNHJJa0J2dmVuMG5VLWlNbkZndERFY3ZDV2lMZjB1N0ZIYWFxcVF3LVZPelE?oc=5"
-        },
-        {
-          "title": "Poland in mourning, investigation opened for terrorist act",
-          "original_title": "La Pologne en deuil, enquête ouverte pour \"acte terroriste\"",
-          "original_language": "fr",
-          "summary": "Boursorama reports on Poland mourning the victims as investigators pursue a terrorist act inquiry.",
-          "published": "2026-11-08T15:17:15+00:00",
-          "source": "Boursorama",
-          "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOMVNjSEd5MDl4bU5kZmZ0dG1OSTVWVmdMT1FWbzlVVldnTzVMS0pPTjRsNDFEdmU1T1JHdlI0WnVhQW01TDJidE0zakpFZGVVNFpLYkN4dDRYc0IxeUY3MGlhMjRMNVhRUlhtUlJJc2FPRVJIZTZ2cjlaaENBZldRS1ZlVGhPNDVud0FYSk9EY1h3RnZXZXlBdEw5d3NIVnRQRTZmdDVWMmJrLWdBOG1qeDNsNU5YNmtVWHZnelFoaHA1ZjQzSkNEa0FmUHpOTlN2Y0RaM2ZkZXAtR2Rfd283YnpwekpZcmvSAecBQVVfeXFMTjFTY0hHeTA5eG1OZGZmdHRtTkk1VlZnTE9RVm85VVZXZ081TEtKT040bDQxRHZlNU9SR3ZSNFp1YUFtNUwyYnRNM2pKRWRlVTRaS2JDeHQ0WHNCMXlGNzBpYTI0TDVYUVJYbVJSSXNhT0VSSGU2dnI5WmhDQWZXUUtWZVRoTzQ1bndBWEpPRGNYd0Z2V2V5QXRMOXdzSFZ0UEU2ZnQ1VjJiay1nQThtangzbDVOWDZrVVh2Z3pRaGhwNWY0M0pDRGtBZlB6Tk5TdmNEWjNmZGVwLUdkX3dvN2J6cHpKWXJr?oc=5"
-        },
-        {
-          "title": "Nine dead including family members: Terrorist track prioritized in Poland after Krakow massacre",
-          "original_title": "Neuf morts, dont ses parents et sa sœur : après le massacre de Cracovie, la piste terroriste privilégiée en Pologne",
-          "original_language": "fr",
-          "summary": "Charente Libre reports that investigators are prioritizing the terrorist angle following the massacre in Krakow.",
-          "published": "2026-11-08T16:08:09+00:00",
-          "source": "Charente Libre",
-          "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxOZHVRc2VmcDVpelM4RWpGM2U1aUxwdk15dFlSekdhS09wb3k5eUxuY2dEZURqMndkVXVYUXczbEFZdzRpeHk0X3BHYlN6RTVrSDVyZXJpVWNydGtib2N2c1FVa25mNU80eGhYMWZOaHpRZGJ1aTRjdW9HWF83V1RtTlVVSDAzTzJkOGZ5bVBRV201dllVWGJ5NkE4VDNKTlBuakJGUTI0NjhrUTlSWjFEYVYxOWFVSlRfTk0tX1cxMzhlTWZ5WTdFR2ZCcF80NUZHNlRGU2duRTQtM1Z4U1RjN0NIMUJUa1ZSYkRpdHVydG9pRktq?oc=5"
-        },
-        {
-          "title": "Poland: Investigation continues into the circumstances of the Krakow attack",
-          "original_title": "بولندا: التحقيق مستمر في ملابسات هجوم كراكوف",
-          "original_language": "ar",
-          "summary": "Investigations remain active into the background and circumstances of the terrorist attack in Krakow.",
-          "published": "2026-11-08T16:46:40+00:00",
-          "source": "France 24",
-          "url": "https://news.google.com/rss/articles/CBMipwNBVV95cUxOMTBHWUxCOU8tdGRuaUJMaVA3blEteE1JZmhwaHFDcU5WbkVvR1Y1MmRxVjZiMFFNLTRYbDRzNXBLX2o4SjhfZE5FVXRac2tPSHI2WFpSa3FaamF5TFI3eElWUFgyei1MY2laWTZHTGdPTEx5ZDJjdUgyWHYyLTlLTll1dEtURVBDbGZEUE82a09aUmNjc2xQUlhqMThsY2h0MjFnc0lWay1yREhFazVtZTNzMTJWXzBHUU5GTlhiYl9BR2ZMdG9Hby1uQUVVS2NMUXltaGRSNkdWU2lVRUtmb1hpbGRVU2dRMzViNGhpMnZxbk4wUUZFZVhNY1d6RXN6TTcwTl9QZG56S3pscEg5OS1ySTQtdTR5V1Zodm0wd3d6c3phSi1iOE9WU1FsLWcxRnpac3hIOUN3TjVYTjdQY3ZyY0dlOGlwZFZZM0pab1dNSmY4NGRWMXdKRVFOU3dtRkxXOF91NGlUekVCanRYNDlBWnZUZmlGUDRYc1d3RGgwVmM4dTZuNXJhdHhSQUJRQ3JIV3hkU2FpdjVpT2hndzZwT29mMHc?oc=5"
-        },
-        {
-          "title": "Deadly terrorist attack in Poland among weekend highlights",
-          "original_title": "Attentat meurtrier en Pologne, mouvement social en France, meeting de Mélenchon… Cinq infos à retenir du week-end",
-          "original_language": "fr",
-          "summary": "Le Nouvel Obs summarizes key weekend events, including the deadly terrorist attack in Poland.",
-          "published": "2026-11-08T17:04:41+00:00",
-          "source": "Le Nouvel Obs",
-          "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOaTlQSFNsdFQ1MW1SamZ0RWY0cHJoMFhwd2V6ZjhmZ1g0MGNfMGNTMm92cENrMVU2RnJtWTlsMm8xOExVTXpkc25mSm1BME05ajlHOFR1bXh2NnczY0ZNOVFzQzBYUGlyZGdlanBkVDBhVGhsRjBWc2hCUFg3Vkh1MUVaZVVpY01PbVZ1Q20zQUFhSklqeHg5dm43Tk51bXZXaUp6WXlFX1l3WE1IYTVYTTJ0eFB5dnEwdXlIVDh3RUpjX0h3NVRlU2tvdnc4YnBEaHFnWjdQTG9WOW5UdFh3cVk0Mjh5R1BEc3BEVDNnLXU2bnU4OE9hQkJR?oc=5"
-        },
-        {
-          "title": "Weekend news roundup features far-right terrorist attack in Poland",
-          "original_title": "Fichage des profs et des élèves mobilisés, Eisenkot doit former le prochain gouvernement d’Israël, attentat d’extrême droite en Pologne… Ce qu’il ne fallait pas manquer ce week-end",
-          "original_language": "fr",
-          "summary": "L'Humanité highlights the far-right terrorist attack in Poland in its weekend news summary.",
-          "published": "2026-11-08T17:16:59+00:00",
-          "source": "L'Humanité",
-          "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxOUnpEejVQeDZYZTFGUTlfVW5GVTZ5RHNPSk8wSS1hdV9aejZXd0h5ZVlvS0cxUUdkX1FQN3RNT05PQzJ5NDA3ZW53MVdqSXliMkYxd1c5bktpMUowczJhSDBMYk8ySzU1TUg3YmJqc2lqVjIzRU04Sk81cW5oZnA4V25adWdRdGJYYXNrS1FXLURSbWFQelV0OVBKeXY2bHUtS21qYWsxc0NVUE5yTXJnTDJpcmxON0VRMnpDcWRFekRyVEh0eHRndndpU1lOamMxcW0xbmh5WXRKalpUa2g3V3Q5cUhpYVB3bG9laDBpUGRJc1RtRXRxTVZnQmR4OUZJdG5YNDZVYU1PZ2I5OVZrWVNfSDlocHdROGtUdDhNSGV4dFY3T0E?oc=5"
-        },
-        {
-          "title": "Survivors and police account of the Krakow shooting massacre",
-          "original_title": "“Será fogo de artifício?” Não era. “Foi como um mau filme policial, com balas por todo o lado”: Michał O., os nove mortos, as 11 armas, o polícia que o travou e as histórias de quem sobreviveu ao massacre de Cracóvia",
-          "original_language": "pt",
-          "summary": "Survivors recount the deadly shooting spree in Krakow involving numerous weapons and a quick police response.",
-          "published": "2026-11-08T17:14:26+00:00",
-          "source": "CNN Portugal",
-          "url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxOY096MTcyUG1EY1U3NjE1dzQzSjRkV3FYNTVnSHk2WENXa1lsMnQwTGdFNi1KQnc2ajJvYlJDMnNFX3pLbXpqb2hrX0o2bk5Dd0RoTmFUVXp5QnFwVHhmUlN4RklmcVhvZzBVZVhuQWRNUHd5ak9xMElweHRQYWJ4X3NGaXJQbWVlWk56aTQzNDB0T1hUamU5RGJ5cTd4enkzby1YMU9nVmxZVGxiZVc5Y3FQeGFIREZGaXFBR1hvemh4SFFFc1BiY3Z2V1F0MUd3UmtZekcyeWJscjlqdHFsUmZhdUNqaWZXemVlYjY1OG5IQWR4bW11eEZ3LVlhT1UxZlJnODYxcXRmQi1ydnl3WTFuWXQ0dE9HWFg0bHZGMkJfVWVxcFhpOVRLLXd5NlJXY0RMbnF1LWk1VFVyWTB3VHplN3J1NDlna0dTcFRQbGN1YklqZkpBYldNQmZQZVdoUWM4cW9JVF9RVm9IcmlNVzdneUM1Mm9aR2JVRmJnbktkaERNT2ZmdHJrYWkwb2Y1RXRj?oc=5"
-        },
-        {
-          "title": "Poland in shock after deadly shooting in Krakow",
-          "original_title": "«Nous n’avions jamais connu d’actes de terrorisme aussi brutaux» : la Pologne sous le choc après une fusillade meurtrière à Cracovie",
-          "original_language": "fr",
-          "summary": "Le Figaro reports on the shock in Poland following the brutal terrorist acts in Krakow.",
-          "published": "2026-11-08T17:38:13+00:00",
-          "source": "Le Figaro",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOMjNJTWVLMzV6V29ZVjRETVgyTDZweVFLdUlqd1V5MXRBX0xLWDIzdlgtRDhsQldkdTI2Tm1meHJueFpTNEdyNzduWmFFUlpEcVdvdTNsbXJRSWdOZko2WUJRTDBLUy10YjVRQ212RGI0VXp5b1FGREY5Y2ltTFdLdzhCUElrMEJFZUozSU9uZE5xTi1DV21pcHNQenVXVFd4NWFJTVdQX3ppUTc5X2NpbnZR?oc=5"
-        },
-        {
-          "title": "Attack in Poland: From the center of society",
-          "original_title": "Anschlag in Polen: Aus der Mitte der Gesellschaft",
-          "original_language": "de",
-          "summary": "An analytical report examining the background of the deadly shooting attack in Poland.",
-          "published": "2026-11-08T19:05:10+00:00",
-          "source": "taz.de",
-          "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5FRUdLVjJQSkVCV2tMZ1IzVkxwTWpjRUxFQWg4SnI1Vkd3M0lYZ0hOZlZVOGplaHR2emo2cEMzTTV3N2drUUlnZWFBaEVfVkZfS2VQUw?oc=5"
-        },
-        {
-          "title": "Mourning in Poland after shooting attack and terrorism probe",
-          "original_title": "حداد في بولندا غداة مقتل ستة أشخاص وفتح تحقيق في عمل إرهابي",
-          "original_language": "ar",
-          "summary": "Poland observed a day of mourning and opened a terrorism investigation after a shooting attack in Krakow.",
-          "published": "2026-11-08T11:07:50+00:00",
-          "source": "France 24",
-          "url": "https://news.google.com/rss/articles/CBMivARBVV95cUxNVy1Ncm9zTkhDcURUbFIyS3ZpeEFDUmdQRXkwUUtsY3ktTC15ZEkzR281cjFHbDdZTWpMTThYN19wdzJsckFYZ2ROMEhFUGhUTXVjUGRwZjNhRzE4NGVTT3BoRnd2TkczaUw3VmVHcWJtMG96OERfX1lkcktOYm9iaTVOQ2stSjFNeG1tc1RWYkpNcWh6WVJPcVhFYlNoSThXTno4a29LcXoxcFBicmRXTjNvTFV6dDh6dEtFVTlSUjJ5a1dvbV8wUndsbVpLUEFiTlhLRHF3N0VGNG5SQXdSbS1nX1NZc1hCUGl3bmhHZ0JjV0tsdnBJM0M0dWdQSzRWVEVET2UzT3lsa2VsdWdkWDhQR3Z1OGJxeGhQa1l5bHFBSnBjdTFyMDgzMERyTWd6YkY0M0w2aGRSRXRFUU1jdERPcjdaSnRrN2U5MFBqUzU3VkYtaGZXOXp0MlhaZ2x3NDhnWVFIX0RTSVRqbHRjQ3ZJQjBjUmt0NVVxSGdKNDVtaHZtU3M0WWJIUGlkWXJhNEtKdEhkZDJUS3gwakh1Wl9TeVlmM3NEYnFBSzl1N2R4TXRFTkc2X2JkZFB2QmZPRDY2RVM4a3lyTUNNTlpybkVSM1o5Y1hGTlE1Z3hKSFRTMWNPLTJNU2Z6ZXBuUUxKOFBBOGpyN0FISVEtZUlVRXFZVFhwclhhMEpJZm83RTBKSHRYZG1ESVpSX2Q0cDRhYjdPblpqcUpZcl9ERm1zU0JIM1had3M4SkFqcg?oc=5"
-        },
-        {
-          "title": "Chancellor expresses outrage over cowardly attack in Krakow",
-          "original_title": "\"Feiger Angriff\" – Kanzler nach Krakau-Anschlag erbost",
-          "original_language": "de",
-          "summary": "Government leaders expressed severe condemnation over the fatal shooting attack in Krakow.",
-          "published": "2026-11-08T19:26:00+00:00",
-          "source": "Heute",
-          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOZE0ybEp2VlhBVXJuZ2I3MjNGR2dkb2tlbzNablhtVzJzd2hIVG5NcFB1a2FVT3NTb2xBX2Z3V0FhMVpDdi1hNlRoLS1ralRORmZnUTlnS1RDZ0tnMW83OEVXYnJLUFdTeFZMZmNSZHlGUkh2WHllaHROMUVBc0F4WDFwTGZOUU5SQ2xn?oc=5"
-        },
-        {
-          "title": "Brazilian national sheltered in church during Krakow attack",
-          "original_title": "Potiguar se abrigou em igreja durante ataque na Polônia; investigação agora aponta para terrorismo",
-          "original_language": "pt",
-          "summary": "A Brazilian tourist sheltered inside a church during the Krakow shooting attack as investigations point toward terrorism.",
-          "published": "2026-11-08T20:20:09+00:00",
-          "source": "Blog do Dina",
-          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE05Tnh4bFJGcUlZWFI2Ti1SQUNCdzBldjRZUlppLVpDRThjdWgzNHRoNDQ1ZlVGeWNKYkZVMW1xUjRocHFQekVTOVlSM29HUlRkSVBZYXg0d0V4Wi1hS2t3OVZ0WU9uX0ZsNHZZaTV4TElDV1JadHZWNjlRTjY?oc=5"
-        },
-        {
-          "title": "Lukashenko reacts to terrorist attack in Krakow",
-          "original_title": "Лукашенко отреагировал на теракт в Кракове – вот его слова",
-          "original_language": "ru",
-          "summary": "Belarusian leader Alexander Lukashenko makes public remarks reacting to the terrorist attack in Krakow, Poland.",
-          "published": "2026-11-08T20:23:00+00:00",
-          "source": "Blizko.by",
-          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQN1RZdXp3QV9BSVpGYnhicDhzTExmQ3JSai10eVlENU1qa1A1dmhNeFE1eUxqWEVxTUg4ZWVCaG85Yk9qNzEzZ3EtQm9TZlEzSndRcmE5RlNfQnNXdHd2Z3M5UVhjVmJtWURuSHd5ZmtmYlpveGk5VlZtQTJ4R0RDeEtrTU9EWGJhc0tVdQ?oc=5"
-        },
-        {
-          "title": "Krakow in the aftermath of the terrorist attack",
-          "original_title": "Krakau nach dem Anschlag",
-          "original_language": "de",
-          "summary": "Media report detailing the situation in Krakow following the deadly shooting attack.",
-          "published": "2026-11-08T20:45:00+00:00",
-          "source": "ZDFheute",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPTmFFbUQ3elFHM2s1X2lXc1NPMlVGWjBscHVFLVNSZHZIeG1CSkQtU3paSGJQZlR1MmtZRHBycHRZbWN1SXhaREZGTkYxTGhiMGRnV25tQmI4d2pyLTZZaUw5b1c5dm92bDdqR1pZSkt3MDNQaG0zMVppbkw0Q3lvemJEdExUSktp?oc=5"
-        }
-      ],
-      "article_count": 35,
-      "first_reported": "2026-11-07T17:37:00+00:00",
-      "last_reported": "2026-11-08T20:45:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 100,
-      "ai_relevance_reason": "Reporting on the Krakow shooting attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Krakow main market shooting attack 2026-11-07",
-      "update_type": "FOLLOW_UP",
-      "incident_id": "inc-e6ebcb9161c1e2af",
-      "translated_to_english": false,
-      "ai_canonical_event": "Terror probe into deadly Krakow shooting",
-      "title_variants": [
-        "Krakow shooting attack Poland"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "reported_status": "CONFIRMED",
-      "primary_source_published": "2026-11-08T19:11:11+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_normalized_title",
-        "very_high_title_similarity",
-        "title_plus_anchor",
-        "same_incident"
-      ],
-      "dedup_review_required": true,
-      "location_method": "ai_city_geonames",
-      "excluded_from_map": false,
-      "location_confidence_score": 0.95,
-      "location_evidence": [
-        "Authorities are conducting a terrorism investigation into a deadly shooting rampage in Krakow."
-      ],
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The shooting and subsequent terror probe took place in Krakow, Poland.",
-      "ai_geo_fingerprint": "ae0779e8d3c500f5fa3d6254011ff780a6ab36d6b70bd1a1eaeef6a3380d367c",
       "ai_geo_inferred": false
     },
     {
@@ -20673,18 +20211,18 @@
         "Counter Terrorism Action",
         "Online / Cyber / AI"
       ],
-      "title": "Shooting in Poland leaves at least five dead and several injured, gunman arrested",
-      "summary": "A shooting in Poland resulted in at least five deaths and several injuries, and the gunman was apprehended.",
-      "original_title": "Une fusillade en Pologne fait au moins cinq morts et plusieurs blessés, le tireur interpellé",
-      "original_summary": "Une fusillade en Pologne fait au moins cinq morts et plusieurs blessés, le tireur interpellé France 24",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
+      "title": "Terror probe into deadly Krakow shooting",
+      "summary": "Authorities are conducting a terrorism investigation into a deadly shooting rampage in Krakow.",
+      "original_title": "Six O'Clock News | Terror probe into deadly Krakow shooting",
+      "original_summary": "Six O'Clock News | Terror probe into deadly Krakow shooting BBC",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
       "published": "2026-11-06T19:24:31+00:00",
-      "source": "France 24",
-      "source_count": 214,
-      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNc1BpSWdybE9nUmJUQzhkVUdiR0JuV3NZNkk3ekxzbWR4NGRkUlJHaTBqV2lHTnFRR0E5REhKWWt5TTdBc0xfcXJ3bHFiRkIzNWFySnl2R0lGVXlqUGJHc090WGdoSFJrV0cycEIxb1VzTG1RQ2pxeFJkVndyRnowbm5QM1JNYndBTGhzMklHQTVUVzFqVzJVVmVrQTl4WGNsd0xfT0tCNlpTOUt3Yy1EUDctT2F1THhXRzZHdnlxQVl0QXVNeEE?oc=5",
+      "source": "BBC",
+      "source_count": 227,
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE81ekhKQm5wUFphVFRSUU0wYmFGRnFodTJ1LU82YlRSbmZFM25aYlh1R1N1eFJnZnRXYTVFZHhUeXNfTzRFc3lvUEg1MFNLM1Q1?oc=5",
       "collector": "Google News RSS",
       "country": "Poland",
       "country_code": "PL",
@@ -20706,6 +20244,7 @@
         "039d64fb7a77dc7b4c1866286b442b44a970e6ada9918436936c851928420f25",
         "03b38023b1fb08c2a5fb11fc0ef64c0ce88aa92247cea774bc9c418c31f686c6",
         "0452a1cc5a34ddf24daa67ae2ac02c1e8f6389d9ee763b0e0fd61e259c9f64f0",
+        "046bed4f40f38eb6349394220b36c37e0a1766ee2750b8fdff12a6a78516e3a3",
         "06947e7d7b468ae100cd6aa3c2b7d34081c071a1a3a446e2b315a541573a47b0",
         "06c698cdea2b393127716cb1c1bc2067bde5d8d30dae4a56ae9e65fdc1e69c37",
         "0705d4963467ef6788dccbcb7eec813156fc1d181f3731bf7d225ed1db72e79c",
@@ -20726,9 +20265,11 @@
         "10d9482b67492e99f878fbd26cdb405e2153fa29142c47c4e4242c0be4c0776b",
         "1158522ffd9cc98720b865e14a9d39a775257e54f11deee49821fd46aaad283f",
         "12853532d3eace4016600e4e96e2a4121ae473565d4781c4dc8972499f61c7a7",
+        "12dfcef7430e70ee88778406f2f96a87d510a0f82b0921830708fe0537301a50",
         "1306114a81f8fa6713705d360c507c60c1ede5e2f482b6a2998717793ea3e42a",
         "132e8a06c63e20b892e8267ef86a6878182c7c808b98ddd5215be72a0cbb316e",
         "14f0e6cd86c60d9595e0b9d8763fbce030ef49d4f903ad37fb6210a53008e729",
+        "14f58f753a8a2e16cd146a26ef4d4fd0b1fcef4f06d78b65b9bd454051ad9b54",
         "15919b43844eb546ca5cd61fe7e4366f8221e61cf292b0fb53e421e3869d2506",
         "15ec3b20d8ee343752843be311f3cdadcb7a1d0af249ea851c73221b9fdbcd8e",
         "17dd236625dd10ea7d876709e87a74547ac3a256bd82aad3eb6518e461ca9511",
@@ -20754,6 +20295,7 @@
         "28e99d4eb4543df658a299c962de6757dcde4418d3690b3e2a930a89aebb8741",
         "292b7c5fef48b852fd46ca3ec071e464cb5d0361f254221f1b288c2289834961",
         "2a1281d3e233e40c59c5ffb4ad3ad9bec8f02277e5cdfc38bf12d0d2b7206655",
+        "2a247e8c4d70e396e1a3139e19469247b9ca8aa77ca00134cb3bfdca74ddb393",
         "2a273641de1fbef0be432f9bdfb471f1a85f61978fca8c3258c64aeda5ec6f62",
         "2c4e569959ce02a1967afef1aebc1bdd57888d2f12ab6b62eb91c609016650b4",
         "2c772d2d1138ffd50b2f82a4049067ca599f97a4b0a9e7f48ad4d65dcca811cb",
@@ -20783,6 +20325,7 @@
         "40c38c259f0493c99b35dd1f20c40d85c055dad11cc45ec9284f262817beba38",
         "40dc6d863472b55d512a11691ab63e092606be9e562559e2416eee9658840c4b",
         "41ff90cc3765ae7ce1b271b40b7ad01a280d4f6474cb5af07b1d6bee67cd163d",
+        "436915f8d2c2d552bf12f03b3e5893f5325a2d3854e0a795577d0088df73cde8",
         "43a673a393ff1cd3304f87032b85e157bcb8dd0fb6422b910c0ab6415435f4de",
         "43c5d0f718862831e659ad9287f9153993cebffdc2ee8dec1f9b0ba3988320a5",
         "450b71bbb9a2a9be61d34e77d7c5a7ce66c3af011dbdb406fbe6c45cdef0c733",
@@ -20792,6 +20335,7 @@
         "48f1e6acd940ddbc466a87bde510efac1393fa335d9f0ecfa2962fe05ab1c21a",
         "48f2218a40f4f7783d1b7704048e5896b5d49e46692facea3d38676db2f8b488",
         "4a36ce4ccf3f14610bcf83a5b63ab46e91ff0da98e6593c610654c6119b91fd9",
+        "4a4e907384f757066321aaa95c6b9fd6dea3a38fca2439a36a8aad900eb23ff3",
         "4dd3d46882dd307c1bd91c3f112b2812a4589220f94ebd1b5ae5020952aef290",
         "4e1768963149706741cabfbd4a1cb1077d75fc0b2e2c0b63c544fe38172376c8",
         "4e3797235d24f571d1b4ce880a4f9ddde183f5e9ae1a0fa5503c43ef1ac089cb",
@@ -20817,6 +20361,7 @@
         "560af1b54fee63ed760c018542dfca5edc0e153604d40357a6b7775ad8fc393a",
         "571a89d7a597bccb2d5d83403881ddb63707038e2c740cd9d739a660bbdaa0af",
         "577e93aaf64d9bb5c2014ad53b0452334d345596f8f2edbe051d995c924f98fd",
+        "59462beb05e49f4c61b145de14bc86e64ab3557896458123b2e258421ebb78b0",
         "597c6f4e7c39840065b2731a5244118d39647aabecafaeef293b7380cf3d641d",
         "59805eb43087578616277564debc8065f37ccb8139978c8d49ac2212be4d6a8b",
         "5a65ef832b93ce7755fd576836bb3abcd4234454d0af4021bca7d9ef8b4b2fda",
@@ -20831,6 +20376,7 @@
         "5f4bee53946a2b94cbdbe0f27533ac2f2c2b50f65beecbdcdb7f4fe063b63dd2",
         "5f4ecb812eb442e4760941a0a3bb037e7ced6860eddd77f24eba4fe8b01175fa",
         "5fd73934da0f3bf4fb94e515203c4242383b228e1667ddaf9141ae27fbf59bde",
+        "601c209947c235a98abcf395d7a3236b861a1ef02540948e6055882747f142e9",
         "613794c71d72ce2dc9d30ffde16a26996d193ca0b49715d055f7a977ef140de9",
         "614dd766638257e9e5e754ffed332a48d0f9657be6850fefc5e09710b6755f3d",
         "6179342da04e5298247eb8392dd5ebdad0747251137ef11ca6b8af2b182fd26c",
@@ -20884,6 +20430,7 @@
         "87b51b2550b46ad2be737c849063c17a99800b1e512622c419e4f802dd857b28",
         "87e4b5dbf65a661abf105c9ac619981432ca88a8d0d050438843223745482594",
         "882a214c0b6fe69c2c23c39e05fd39aebde7f5af3da415b233a7efbca7138bb1",
+        "8845f5a2de71860f866bafa70bb3a3df12c11d81c75ece3b1e3dcc5f215417f4",
         "88a843d1aa3840c6387552d600750260df8864ed614eb40923b3347995b20353",
         "890d93f02fc355f5f723c385511ab76c7ad5f220f6bdc0d0a386259b30cb2e79",
         "8ab498d444f27e735d9123bc33a5e868b97c18d6eb62d9f052011b07c45bf1aa",
@@ -20919,6 +20466,7 @@
         "a3613c9c9dd2d9165a080813454c662eb420b96d8cdfda785501c6c43ce5075d",
         "a37dcfef35af05b398c4d1563b00d640f5fe11607edd5a68c89fe77700d260ba",
         "a3cf5f8bd416c69c04f612b34f2950f3bad67c79adeb2d0a8e27a8ae2adc0ddf",
+        "a60637c6dbcdbaa57fb29be96f31630a4872003cee95401ae888b555d1fe8d04",
         "a627298368fffb48d03bf97db7bc6b3cdb6cc7cc3a7afffb72c1b8c2882b2eee",
         "a800cc99a7a622b336459cd09d5a27b59417d47ecc316e3ffa39f6768c193081",
         "a857215f56ba23830ae2b41f617955f0c87de05212f3f701775d2cfba5f48597",
@@ -20927,6 +20475,7 @@
         "a96d0084cd122cacdc9e0f77ac2101c34cc300ae27ccb8c2c9656967c2f2a054",
         "a9f7e65e03f73c72148def3ece6a5e16ca3c2793a7df228a5e76b492a70216e8",
         "aa15d1717a67386ee53fdc5281aa03ce9bd69ed98edfa03a65aaec1acca27efd",
+        "aa5ede3aa87c14b8261ab8c4c6430d61192fa89ad325de843997e27c2406e7d5",
         "aae6a724316696b810ba55366e8cfaa2be57ebb1fa7e4dbd8324e023f0c43bd3",
         "ab42e5581b11835ef379dc9185b0707513ecf1f5d8ea11abe08cf291f204e638",
         "abbf1d18695d3e4707fb63ca9b74a03b86a833abca146b68031deeeaf457f28c",
@@ -20936,31 +20485,43 @@
         "ae7ec7347bdd3e359e18abc91c452da214c23e9b37b112c769188bbda9132d45",
         "af003c074d1520185b633285bb3248cdeb64a907410e4ab3a6f581affebee1d9",
         "aff461a5c308903679c4a1eb3496bd8824693b18277e86094c24e7027d414d0b",
+        "b0289d1e7e75535aee2434040ddd28997c37c0a902298c716cc5e06ddc5b03f8",
         "b08ddc0cca263ae4e8e4100ae2cef327fc2d37301c56a6214c0fa47565ece1bb",
         "b0c9384347f5644432c7e186d463e1551de8abdf73fbdd1cb8bc8cf5cc617384",
         "b120133d748e7c7ad090d3fa02d93b4e2974391059f5edec0160f3c2ba61a67e",
         "b1254de3278e6bc375c546734e2d5a9db8c17b3d12090a8b7d4f9ad11ce8accd",
         "b1f2bfa9d7c4fe2e737b2978d270b87809a20f675582ba04a540b3948a96baa2",
+        "b3c8af962f4e71d40bf9d5f4ed5aca926e700aadc2937c6dd047e76f4d9c9819",
         "b3ee08747a1503e81b66225fd96a706b46fb68b650776b63c7dd49fd3161871b",
         "b50b3887fb7a5f42304470515da55dc4b21e92c5fe8c45d9197540c3ad3362f1",
         "b57770a7379c466139dcdff0fe6466b05183e72d77a239b906f1bd222e9de9b8",
         "b5d45de35d5db52e23b313f759d57c159978debcf8237d8a9bd0dd54529dee86",
         "b6101f418bca67942d311086fe63de712edbaea04c4ecf681c7536375bab815a",
         "b6389d2da9ad0e8d093124cbe1e9342badf842f63420f2325f52c8bf6655b12e",
+        "b66cf4b5798291508af8535755a203ebb1bd4258450e4b52af9ca46dae05a2b5",
+        "b68603743a71cc1a4f1450cc28d6238584a53d08036bba6e052f885f2d850c05",
         "b6e32de56e49cc53a1e2c2f23b0354e315ec1e1e502a0887cabab91125017257",
+        "b6fb887bb5dd4ad1ba0fa3ab14cd03a501023549942a85886ba3a25b0754ada4",
+        "b7cd5b2877d04346e22e345fb08865c74472bd78571dde6d6de2f7422d1a0b40",
         "b82df880cdfb45b45bc1e254c55d45bb78886f3df4af8de6f220d012d32e86e2",
         "b84844c55cdea1f889582573f9f2688d1624b778a59b31b62d370eb0e3f5d698",
         "b93ad0f513611b8bf242c567075fbf9a02ff20c92fad755d4db17ccf7b369293",
+        "b9592164d2b34faa350494b9733db306f9417bbca7607d5053132bb8be939d63",
         "b9a86d1bb0d7f1adad3622db5ae148a26a24e3916f3d900624b5e91482c7251a",
         "bbf58726e95ed9e943a91d4e28464cc091cc251c3720a740463c12003afdba45",
+        "bd7cc458daca83dcc2ecf0bbd627560396942a44a40cbb896036db3c3157bcc5",
         "bd8027f8afa91e7d1e70bcc21ced3b18a00bc5f32ed6fddf55f149e6cde12a9a",
         "bdb1b89de3062af24e6e5787b092f38598c2d0df5497eba8c28b3cad3c7fa296",
+        "bef39426a2ab2aff790241714b43f13384d43efa08c91aeb5c4bcece67d6b56a",
+        "bf6237af0df51df1b5757803a23514d57ee033c19b02b809b77c9378875967ab",
         "c0e8bde3ff33df4222cf82f6a57230d356e838a98462ee20e818213f22449942",
+        "c146a61fa005c414bf61110c7c3bdefdc185ddd20116ded56e17a4ec831fd02c",
         "c2125210d6ab4de4f24ef74a80aec95b8cbf1447086ca0eb50e1c98690b1290c",
         "c3b3ea456565b11076d9782125cc9175f5c4fb8dc619fdfa5c72bf8274c205f7",
         "c3b654259586b71182ea609faa2ee851679dea5b8ee48391eeae0dbdd5664a72",
         "c43b898b033dbbf66591103fb99bb4e1c2d470907d9186f29639d9bb757173e1",
         "c5ccb5309c7875fc3ae3d79c5ad3b8cb8fedbb584acff133531dc6e4d9444dcf",
+        "c5dc65a6307614efaeccb5fc2df451bbd395e6864abb3ff04f99a7719eeae316",
         "c68531d6b5ae50a50ecd54de9b3bdad32a098ca76b9cc629b1940de64a29c995",
         "c6a2058c07792c92eda142e182bd4f27eb96c422c51c28b725429267fefa383b",
         "c6b1b8d89ee0de05f8816b7e83d38f2b5471cfc561e47c12429674b643c99ad1",
@@ -20970,7 +20531,9 @@
         "c8d1936a8d3fa190011f366bf8f44a6c001a3d670b25747f45346942666d49d6",
         "c8f2ef6afe07fe347c8594191f540c89bfe3b7790944b41b5470a95a4dc5b412",
         "c920c430e3686a530c02d0dd45afb7f3942d313e4c2f3a2beca8e074199f8d9c",
+        "c9d23b1b8a3ab7f0bfdd70445ea13c0c1f869902643bb2c83cfc6a0466e46c3e",
         "ca0f64ed928871f2460f86624598c7180eccc5131c407653c1b25b0c38b2b9fe",
+        "ca1c942d11bf924530b491e2de415e4f26a85a25b0bb9f60db82670602c43660",
         "cb92157537fe399803fb6d22effbc975924bf419e220e2b0f9d47d8a9c4fe429",
         "cbe2c5e207571e0f7b9f8777eeda4e5a249c1eb74bbb231768d852e326207fd1",
         "ce0d32fdb9cd5354ad4b94e3f8a6b08e149c1de5013087104fa9c0f20f706e1c",
@@ -20979,6 +20542,7 @@
         "cfcc26f7864383c583714810837c592cf1c9dff2e7343a88fe7df3837185ca8d",
         "d135c18a16435c1704359ca389ab09fbcebb9b341b87bd9fdaa9f8c146440e04",
         "d18744254f22c79ec062b38858ed0d3fee70dce27ba5e55898b377f625a0b2e9",
+        "d1a55ea4a63d05d4a857b0729e50588d84e7ee4f605ae01bf829052c3a65fe36",
         "d228cbda249236a003aa32912ff94cd73235feb245937a5e960c2bad4fd63cb6",
         "d2b827eefbc5661bd3d0b466925f983677bef95d83f87d16e4e783be51228469",
         "d342dea4c6b67cbac7596a5577295b44adec14701722746d584d5809dbf7f56f",
@@ -20992,7 +20556,9 @@
         "d6a41099eadb35531d6bfd2610d471af0e4cead0415e47f94d4cc108b6e7b6d7",
         "d6b0720f9e975d58e6caafbbf64a4b5663594326adc45ccd8ddb87c45354b82c",
         "d6b72bb5869cd158402c25d04caf07c96b8b3cbeb9cf7069f282b31df551ba30",
+        "d6f7eddfae67b639a118dd373cefd8354fc2e9a10fc6f705e621f11228545cd2",
         "d70b235191271174af3db15f2073e76ff0af1c85f45729362fad83866805a3e8",
+        "d99de4fcb7d3f3cdaed98b40ee79878182515863a32a90a0359b8b8dfa14dc2a",
         "da658e09259a6d6600bc85def821cf2e299333e103c9d13b459621f721763e40",
         "daf9c4fb62088b00b8f2791a4a291101566fb64d032f67f59956a5b133430722",
         "db5eaee34900ae97160e852ceb16edb878d33294ae8bdda382a67705a93e0065",
@@ -21000,6 +20566,7 @@
         "dc32918e495a4a574ff4d3209c2ae1162821a3152590080479dece86b9748ccf",
         "dde7844b233aa10d473b3ed3d1546b0bcecf461ab07ce088512f819d3673feef",
         "de02384f0eb3219660ae08a4b325171c5c6a49faea00d510bf1eccf27018dd95",
+        "de7b01d6ce98b947205111f00b001294f75cec7f5e2e63e4614d390820fe4d57",
         "df15e092ce4afd9e94816d9bbaa7b4c01c24d23fc89bf16af1e34626a930cfd6",
         "e04e4c26fbabcc22a2237eab36bd8bbc4867621a6b05adffd4c4d3bcaeb76d10",
         "e086f3c50bb9466b7becf7fb1ee47ca31ecc1ccbed300b979b6343d8bd688e18",
@@ -21008,6 +20575,7 @@
         "e27e99cb08972f120a697a5caa1cf33ed9544c52f968cae6ead20c1ceab95c13",
         "e297613a9ffc9cf2acd3424de55831fff1070eda0ded9ec4f1282dd7f28e8899",
         "e2c27dc3b210b3fec92ae6724aec47d5353392c603b4c441e8a04292b4756c33",
+        "e2f1d05677d7484561320443b0dc5615ba15528e3943da8a289c607d30a47046",
         "e3b37c287d7fe4d7e8631006d1926bc11fadf643196dbd0ea9d65e98a576d18e",
         "e400c572f6ad7bd6e5845c94519ae6e1e6a8d49995ef1edd425e89855a028d8f",
         "e43a11283701ae1961a93e551faf6be5e8bfb03ac84dcb8be9f68f467a4f35b3",
@@ -21016,6 +20584,7 @@
         "e6e54f105b2a6fde5584db5186d3bba40f7289a5d2de1902d89a1b2168919fde",
         "e97492b3d0332b23a4e7c6ff2315a58b6a3ed8eb3102dc31c8ef690747ba21a5",
         "ea5ba33f4c65a39740e2a32eb430032c392f2ea515620744f090d79ea6ed706b",
+        "eaf2737c79204ece12ea5d019d4164835d651af3addbb78e18a9b9343d071fff",
         "eb8ee24127e1ad4ae219ef203f3e4a3b83059292314f55bb521f3d7cf35df5cb",
         "ec614d475acffb5d98b61cbb1db71d25af1dcbb9747f321021f450b6c864bdeb",
         "ed68afdb8c9f20a30b39ffe99c7913ace27ecb5a61964d729ea9a753286e65ab",
@@ -21024,18 +20593,22 @@
         "f161fed78fa5b61fac079ebb3b2eddb5f2db835af435c0ecfa3b4c1826f8135e",
         "f2a6a55336567234c85a2ec72406efa888ae3e4f5f9e7a5205f9373a8d01506a",
         "f317895e83aa9292dfea6f3b16ab953b8c06164698ae29ea5dea33025b5e3745",
+        "f3367117dda37224fc00fef705a34a4a88385e157993e779a718ee680aec303c",
         "f42e06e493af06212adf3c18b4c7e74286ff11bd618e632d95008317578ea4ca",
         "f5fd54ca1f1b1a4efe88544dae241c6a6b780b2abfd2653d97a21148686dad02",
         "f66f120b0fe032017033320657f44f5513c928482d095a9a773ad627b473206e",
         "f6e80664e7661223cd88bfc5450af4e3f1c10cebdb6825347c2c24440097e245",
         "f81f50d2c65daa3469616444ecc5e4108eb219981d7750f7ee0d1e7aa8acb463",
+        "f87c154a4ef904e25573ce050b5d0dad04c453200377daf5cac3bf1d122e3a2c",
         "f9cb9e0a32b7cd272f61c6fb05fb5cd18b90150581726d18f7257fd83b2e416d",
+        "fa2e66b44aa77844fe9ed8f4426f305b727bd08d63ad045cfc9226f511d0c2b4",
         "fa65a5051c0d83062b4b55d343a84b7c8c7dd81fbf2a9a5a00b4e253fbfc0d45",
         "fc0ac298d8aa4663a352829251869c7dc275fd9533f350ef874f539bf5dcdaa8",
         "fc0e82f58f93db54b31cd9e6480a0b816a5cc1c840119cb49033b2e050e74829",
         "fc88cc8ede7aae47c1c633fb96ee27ec09ee7f29520dc003ebfe048d724c9397",
         "fc8cf0d62649810d1b0c6a0a8ef63de2e581dd1c520d1337d28661547a89ca56",
         "fcb91a70677eb79c42af54ed7b436143c259e5002d65f0a1fe6051c3188e5ac2",
+        "fe249ce0366a9e5b53885a8dabc715854c3bb66650551351e223311851853b96",
         "fe2f3ce66f345d898577df5b282485989cff3025b61e301caeced63e5665e75b",
         "fe41ca40c669ab7397b933e9b613d3057941716863703d099c670df1487218b6",
         "fe6ebb16e5925d3ea05c1be00f5da0c5c3b89a6516fe08516f81e9e934eeb246"
@@ -21254,7 +20827,20 @@
         "Hespress",
         "Arte-TV",
         "berita prioritas",
-        "Le Nouvel Obs"
+        "Le Nouvel Obs",
+        "Zamin.uz",
+        "প্রথম আলো",
+        "2M",
+        "The Hindu",
+        "Jornal de Brasília",
+        "صحيفة الخليج",
+        "Le Dauphiné Libéré",
+        "Epoch Times",
+        "taz.de",
+        "BBC",
+        "Blog do Dina",
+        "Blizko.by",
+        "ZDFheute"
       ],
       "related_articles": [
         {
@@ -21976,12 +21562,21 @@
           "published": "2026-11-08T09:07:00+00:00",
           "source": "The Star, Kenya",
           "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQSU1HQVJxbkJnbDBydGtDSVhtc3BQOS1Jal91eTB5WG5NY2w2Wkc2X1pzUHBsZ1FjZnd4d1RJUFh5VzFWazJ3RENwQ1dubG1KZzVKeEdfZUZ4U2E1TXl5cEE5SlpHZnk3TkVLbW5hM0FvUmZTTmtVTEU1cUhoNF9QUEU3ZzdqUDg3YkM2TFVXU2FqUlhPaklR?oc=5"
+        },
+        {
+          "title": "Shooting in Poland leaves at least five dead and several injured, gunman arrested",
+          "original_title": "Une fusillade en Pologne fait au moins cinq morts et plusieurs blessés, le tireur interpellé",
+          "original_language": "fr",
+          "summary": "A shooting in Poland resulted in at least five deaths and several injuries, and the gunman was apprehended.",
+          "published": "2026-11-07T15:29:36+00:00",
+          "source": "France 24",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNc1BpSWdybE9nUmJUQzhkVUdiR0JuV3NZNkk3ekxzbWR4NGRkUlJHaTBqV2lHTnFRR0E5REhKWWt5TTdBc0xfcXJ3bHFiRkIzNWFySnl2R0lGVXlqUGJHc090WGdoSFJrV0cycEIxb1VzTG1RQ2pxeFJkVndyRnowbm5QM1JNYndBTGhzMklHQTVUVzFqVzJVVmVrQTl4WGNsd0xfT0tCNlpTOUt3Yy1EUDctT2F1THhXRzZHdnlxQVl0QXVNeEE?oc=5"
         }
       ],
-      "article_count": 104,
+      "article_count": 105,
       "first_reported": "2026-11-06T19:24:31+00:00",
       "last_reported": "2026-11-08T15:15:54+00:00",
-      "primary_source_published": "2026-11-07T15:29:36+00:00",
+      "primary_source_published": "2026-11-08T19:11:11+00:00",
       "cbrn_subgroups": [],
       "dedup_confidence": 1.0,
       "dedup_methods": [
@@ -21992,7 +21587,7 @@
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 95,
+      "ai_relevance_score": 100,
       "ai_relevance_reason": "Follow-up coverage of the Krakow shooting incident.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -22002,8 +21597,8 @@
       "incident_anchor": "Krakow main market shooting attack 2026-11-07",
       "update_type": "FOLLOW_UP",
       "incident_id": "inc-e6ebcb9161c1e2af",
-      "translated_to_english": true,
-      "ai_canonical_event": "Shooting attack and arrest in Poland 2026-11-07",
+      "translated_to_english": false,
+      "ai_canonical_event": "Terror probe into deadly Krakow shooting",
       "title_variants": [
         "Krakow main market shooting attack"
       ],
@@ -734385,117 +733980,6 @@
       "threat_categories": []
     },
     {
-      "id": "44e1473de8043624",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Somali Pirates Hijack Cargo Ship in Fifth Attack",
-      "summary": "Somali pirates hijacked another cargo ship off East Africa, marking the fifth such attack since April.",
-      "original_title": "Somali pirates hijack cargo ship in fifth attack since April",
-      "original_summary": "Somali pirates hijack cargo ship in fifth attack since April Gulf News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-08-17T14:25:06+00:00",
-      "source": "Gulf News",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPWFZBUDVSbFprU0ZsMjFFYVVGRVhESTVFX2VSN0FwNm5ZVWJLdVZLNGUzVFhRaENXdGZoVWVJbVBITjRpX1J0Z2FVQ1lwLXVSRER3a0VMMUtEcDFyZjN2d0lPVXNFM0Y1OXJNTFBaMVFsYXdVUUZlbXk4bGY4YjNLS21jbzNEM2U5SjJlME05QVRUSmtwR1A2amZCeml1NFh4Z2JobnZvRmFQd9IBvAFBVV95cUxPcFpkSnU2clE0M3NJR25veXJITFZnSVUyc25EeWNja043VmdwMWEzOThiMXhVczM0WWhyV2tUT3VrQ00xV0c5b2tGWU9ZQ3FrZHhFMlNIbjFJcElDQmxMN1hIWFRKc0JXMGloV1JWRV9DXzYtQ1paRVFyUTNzWlczOFRYb25NY0pfMDFxNnYxeGtTWVM0ZW5YZXBhdVpLckg2X0lKWW5QWlZ4azZteE9BRDRmWVl2YzFQUUJnVA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "sources": [
-        "Gulf News",
-        "Dawn",
-        "International Business Times",
-        "TradeWinds News"
-      ],
-      "related_articles": [
-        {
-          "title": "Somali pirates use seized vessel for more attacks",
-          "original_title": "Somali pirates use seized vessel for more attacks",
-          "original_language": "en",
-          "summary": "Somali pirates use seized vessel for more attacks Dawn",
-          "published": "2026-08-19T07:00:00+00:00",
-          "source": "Dawn",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBTN2Q3Vi1rODZ0WEYwd3Y2VUw4VkpHRlRDSUloQVhrVWwxdmdiSk9yM3kzQXhBNUdZS25udkMxWlpmOW9wT0psadIBTkFVX3lxTE9TMElqeUtxaUg1U2JoU1ZFQU9kX3AyVjNxaVZnT3lxSXFxQWdKVWszQmRpWEV1WE9IQml5SGlLaXZCUURwT1JfT0JxcXBZZw?oc=5"
-        },
-        {
-          "title": "Turkish Vessel Seized by Somali Pirates",
-          "original_title": "Somali Pirates Have Returned To The Seas. A Turkish Vessel Was Seized This Week.",
-          "original_language": "en",
-          "summary": "Reports indicate that Somali pirates have returned to the seas and seized a Turkish vessel this week.",
-          "published": "2026-08-20T15:11:03+00:00",
-          "source": "International Business Times",
-          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOczJBT1ZMU1BQek9vN3cwVWRqTDZqU25RRkt3cWNUMXlvbmFXeWotOG1HWTNrVlRyNGpYb2s1MWg1OEpBaF81Ymt5UUlkcVpQeFVYTmJ3NDVlT2xmTFAwNU93aUlJb2RZVEhoNTJPYmhucHI4cElkUGNaWS1QODFRSDNpS0Z6Z1JPQVIxbEZhWm43VnYtMUpGSHdnYTlsaERjdFRF?oc=5"
-        },
-        {
-          "title": "Armed Somali Pirates Hijack Ship in Fifth Strike in As Many Months",
-          "original_title": "Armed Somali pirates hijack ship in fifth strike in as many months",
-          "original_language": "en",
-          "summary": "Armed Somali pirates hijacked a ship, marking their fifth successful strike in as many months.",
-          "published": "2026-08-17T14:25:06+00:00",
-          "source": "TradeWinds News",
-          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPVlNGSjAzc0RYSDBaVUF2SjllR3JaNUxDcXdZUm0xT0podEx0NEpyLUdQM2oxMU1aZzRJUkl2X292dDhHd04wTW83ZGo5dmdENHNobU0tMk5fRkIxU3doaXQwOUdYS2ttQlJtODJTd0lZN1V4UVpVRGJCaHF6blhfbGxrY3dGQ25JNnRQYmtPZENieERUUWxtWkRMNUdFOGFZeVRyMjZSZ3NfZS1uVFVidlRpU3ZITXFB?oc=5"
-        }
-      ],
-      "article_count": 4,
-      "first_reported": "2026-08-17T14:25:06+00:00",
-      "last_reported": "2026-08-20T15:11:03+00:00",
-      "dedup_confidence": 0.891,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "title_plus_anchor",
-        "very_high_title_similarity"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete maritime pirate attack and vessel hijacking.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Somali pirates hijack cargo ship off East Africa",
-      "title_variants": [
-        "Somali pirates hijack cargo ship in fifth recent attack",
-        "Somali pirates hijack cargo ship off East Africa"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somali pirates hijack cargo ship off East Africa"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Maritime piracy incident perpetrated by Somali pirates off the coast of East Africa/Somalia.",
-      "ai_geo_fingerprint": "6299b1cf67fa52c87873f94520152e81e8f55e62aeba319e484e0ec4fa2c3838",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "incident_id": "inc-0d3e2f098aaf9640",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Somali pirate cargo ship fifth attack 2026",
-      "update_type": "INITIAL",
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "source_article_fingerprints": [
-        "b32f930b710063a6f20fb90571d4aed8c7c87c04499b8588951e96b40513f16d"
-      ],
-      "threat_categories": []
-    },
-    {
       "id": "7f22121fc053845c",
       "category": "Terrorist Financing",
       "categories": [
@@ -734649,20 +734133,21 @@
       "id": "5259ee119e4a2ab5",
       "category": "Maritime Piracy",
       "categories": [
-        "Maritime Piracy"
+        "Maritime Piracy",
+        "Weapons"
       ],
-      "title": "Somali Pirates Hijack Two Cargo Ships with 22 Indians On Board",
-      "summary": "Somali pirates have hijacked two cargo ships carrying 22 Indian nationals.",
-      "original_title": "Somali Pirates Hijack 2 Ships With 22 Indians On Board",
-      "original_summary": "Somali Pirates Hijack 2 Ships With 22 Indians On Board IndiaWest",
+      "title": "Pirates hijack cargo ship carrying Turkish weapons off Somalia's coast",
+      "summary": "Official sources report that pirates have hijacked a cargo ship carrying Turkish weapons and Indian crew members off the coast of Somalia.",
+      "original_title": "Pirates hijack cargo ship carrying Turkish weapons off Somalia’s coast, official says",
+      "original_summary": "Pirates hijack cargo ship carrying Turkish weapons off Somalia’s coast, official says AP News",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
       "published": "2026-08-17T07:00:00+00:00",
-      "source": "IndiaWest",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOb2JxeVlIRHF5bUF2SzhRcHJqNlQ4SnFpYzJhVk1odTh1VkswT1pqa1kxV3FlV05Cb1hwdTdXTVhnMUh6TXBOazFSc1A1Rk1FQzQ5TGxMWlRBTUVuNGFDaUlsQUswMkRYbHlBTHVVaEVXcWtBTGZabHVNc0ZrMDZJUWdhdw?oc=5",
+      "source": "AP News",
+      "source_count": 23,
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPdHpBYmdGbFVEcElrSlVXaDZpV2t2b29LNHZuZ0hZR3A0RWI4T1IyY1FYZDBiRGRFWENZZ1ZWTkh4MWlpT3ZSTl96SnVOdGc5TmUzODZQcGs2TlYzRDlJM25YZGFQYnpsaEJEXy03NWdZZnk5cWkwNlhhaHhqNzJWWVdyZEVYS2lCOE9ZLVFDSUxJR0c1SFpuUUIyMzh0Y3pqVmc?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
       "country_code": "SO",
@@ -734676,7 +734161,26 @@
         "IndiaWest",
         "The Business Standard",
         "INDIA New England News",
-        "The Maritime Executive"
+        "The Maritime Executive",
+        "Seatrade Maritime News",
+        "NDTV",
+        "The Tribune",
+        "rediff.com",
+        "The Economic Times",
+        "AzerNews",
+        "IndexBox",
+        "ABC News - Breaking News, Latest News and Videos",
+        "TheWire.in",
+        "AP News",
+        "The Indian Express",
+        "Bhaskar English",
+        "Shabelle Media Network",
+        "Splash247",
+        "Hiiraan Online",
+        "Gulf News",
+        "Dawn",
+        "International Business Times",
+        "TradeWinds News"
       ],
       "related_articles": [
         {
@@ -734714,14 +734218,150 @@
           "published": "2026-08-24T07:00:00+00:00",
           "source": "The Maritime Executive",
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQa3JhOVBPRGRBTXFpWHphUmMxNXZURDczd2xBNGEtdExfblM3NU1ydEU2OHA2SG4yY215UUNZRng5NXdHaVFpWF9OaDVzOWc3R1BxRGtESXVXemFJSXlzV1BGMkk0bDBSTE8wc004Z21KbFdOYkdmSzRRZ3ZscHRWdEJ3cVZCZUx3cE5yREdpSlg0WkV6bV9MSg?oc=5"
+        },
+        {
+          "title": "2 Ships With 22 Indians Hijacked By Armed Pirates Off Yemen, Somalia",
+          "original_title": "2 Ships With 22 Indians Hijacked By Armed Pirates Off Yemen, Somalia",
+          "original_language": "en",
+          "summary": "2 Ships With 22 Indians Hijacked By Armed Pirates Off Yemen, Somalia NDTV",
+          "published": "2026-08-21T07:00:00+00:00",
+          "source": "NDTV",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNcjlKaWUxaks2M0pXck5RVkZMN1Zfd2lOS19WTi1rY3hZcVJReURrMkZNc1BiV2ZUYjV3U0xsSWRZUnRIbVhQRWxGNmx6dGtnUnBRU0kzeU10YnNYcmNhdGkyR1pISDJYM0l6bm5SX1NvRmtNRkEyRHoyNDZZeFhPN0RUUi1TZU4tYlYwOGdCTllCNUQ0VkVYMERUZHNQYWdmV1EtUzk5cDdqZTda0gG0AUFVX3lxTE92NWxGM3hNY2g2RmtaVUFOWFVwSUtZQ1hXM19MNy1KZVVHWUVkLTdmSU1BTll0T1BJWWRuX2JRXzZ3LW5zUEpwRmE2YVFIYTV3NlV2S0tEcnF4ZDVBV2VlQ3ZlREVVZzAxajliM2ktLVZiNGR5TERQZzF5aXpkSFpZVXZNMGZneWEzX3BLQnQ2UTNYY0dTZnhoRkRjUkI0eXBiWUtiMk5PckxmdmRGOVpXbFVoTw?oc=5"
+        },
+        {
+          "title": "2 vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
+          "original_title": "2 vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
+          "original_language": "en",
+          "summary": "2 vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia The Tribune",
+          "published": "2026-08-21T07:00:00+00:00",
+          "source": "The Tribune",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOeEFhYVJockNZS2xEQkdzcUc0bzdxa0lHQzlaVXdfcFdQZ2x2cDl4cGNyNW01S0xzT2xkTzM1emsyMmk2a0ZyZFhucnhmbVJhVlNHY2FqZDI1RWtJdkZkN3E2RUpJLWxTSDdfMzk3LUdJdnBBQVI5V29ibVhlWUFGSFNsS0pxXy1WNVNUTnlRUHFLY05FQUxfN01rcWh3SURwMXRaSlNCOFpwNVlicEtteGpn0gG2AUFVX3lxTE5VWUFERUpsNFV4TGVqTUFLWFpGVzZwMkVRQlNuWko0eG85emJHSV9DMDJ3T3llYWN4eFFxR0NjbVpxZV9UMXVzOEhib1FOYTJ5eXI4d3NyNFZYdzE5OE11N3JtcEZZMU9kSTNzczNSRzdDVkJWOFFGWjBXLWttWUl3aHItOWV5N1FPX0FlRnVvLW5BamNQeGstUWc0Ny0xLUxzYUdaaFlFeTVHdmRVeDhIS3dEVGV3?oc=5"
+        },
+        {
+          "title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
+          "original_title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
+          "original_language": "en",
+          "summary": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia rediff.com",
+          "published": "2026-08-21T07:00:00+00:00",
+          "source": "rediff.com",
+          "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPelRWNGYyRER6Skdta2ZpX0tZeFBGZi03VVZpNTMzbGhiRXl2R1FQc1U5SThVdnAxaTNFOFF5RW1SeW9lQk84eFJtWDl6MG5SeHdaZW9nRjM1WldXaGVjemFGTXB2Q3hfMVRJUGU3WThkTTZyUmJHMGpnRGRWMnR2eWhOVENuZnZidmdja01GSEFMaVdCdzRTNXNiS3NodzBpUWhaWmNVMjhVUnVqeDBEYlVMdlgwZnNmczFzYVlqUFlnaHBheTM2MXlwdmU4QUVzQ0ZXdEZoeHgxck01X0hlVDk1aU1mVGQ4SktGWWd3?oc=5"
+        },
+        {
+          "title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
+          "original_title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
+          "original_language": "en",
+          "summary": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia The Economic Times",
+          "published": "2026-08-21T07:00:00+00:00",
+          "source": "The Economic Times",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNMmhhU0lnNTZ3ZGFuRUhzRk9CWndRUlh2NVQtaXBxTnZicDRfVG9tb1BsYzZSUlZsYTlHdGgxakJuWlBzNkhCbVdKUl9QSzZwUnVMYmxiZHVJNDBuVV9YWE9WeU5uaFV2OVdDcHBsaUJZbTFyZGZHZE0zZGItYzVtZDV3MENIMzN5TWlZbjIzbGNlclFyZ2ROdmMwajNxcGJOMjVXUFhxczlYc1ZDSXM0N19zT1dsTHdTZHEtR1ZQQVRmdWtBUzBhMmNHRTdOaXMxU0d2U3J5aDVOTHlUaE5V0gHkAUFVX3lxTE9sUWV6Q09jQkk1UzhlSHNsZkwtZ1dPU2RrcDVxbms3VWF4eXVmaFliblFDaUNSY29lVjhTMkRKZzkxU25DSDdEUU9ReW43cE1xdFNCbXBSMzZYZ1hfRnhtZU03X1B6NmFnVDRVeTIzeGctd0lVX2RleURrSGJYRVR1MW9VN193SnhPQ3ZjUzBreFI3UUJxcnFHYWhVLTlUdWZVWVNJQUl2bDB5SVoya3JCc1B5d1VVendhaFNNeWphN3FWZmxjMUN6aGdneGk3Qi11U0dlYm1GbTFTZXp1Z0NaSXhXZA?oc=5"
+        },
+        {
+          "title": "Two ships hijacked in separate pirate attacks near Yemen and Somalia",
+          "original_title": "Two ships hijacked in separate pirate attacks near Yemen and Somalia",
+          "original_language": "en",
+          "summary": "Two ships hijacked in separate pirate attacks near Yemen and Somalia AzerNews",
+          "published": "2026-08-21T10:36:00+00:00",
+          "source": "AzerNews",
+          "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBWWFYxRk1nVWpHUTY1c25MQlF2NzhBcVNaN3lnSmY3VWdyTXJaUGtFb3c0U3l6QkR3Zy1NVGk1Y25GNGpnOEkyaGU3ZUZaeWVHeXNJUQ?oc=5"
+        },
+        {
+          "title": "Piracy Incident Off Somalia: Cargo Ship Boarded, Crew Safe, EUNAVFOR Investigating",
+          "original_title": "Piracy Incident Off Somalia: Cargo Ship Boarded, Crew Safe, EUNAVFOR Investigating - News and Statistics",
+          "original_language": "en",
+          "summary": "EUNAVFOR is investigating a piracy incident off the coast of Somalia where a cargo ship was boarded, though the crew remains safe.",
+          "published": "2026-08-17T16:41:00+00:00",
+          "source": "IndexBox",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPNFpRYVJwX2o5ZEdUS3UzUmt5MWVtRnBENU55aWtOUS1vQk9XQjg1Sko4NmxUaThxUDFjcUQ5a1YyZXR0aDhNU2hMcGwzcTVrc19acHNnVmdNNXNIc3NlMVNLenFqd2I3NlU3U2tNcXNlV25YWGx6NnR5a29aOTNobS1lNU00cUw4X0FXS0VIaEhnVnEw?oc=5"
+        },
+        {
+          "title": "Cargo ship Lutuf hijacked by armed pirates off Somalia",
+          "original_title": "Cargo ship Lutuf hijacked by armed pirates off Somalia",
+          "original_language": "en",
+          "summary": "The cargo ship Lutuf was hijacked by armed pirates off the coast of Somalia, part of a wider series of vessel seizures involving Indian crews.",
+          "published": "2026-08-17T07:00:00+00:00",
+          "source": "Seatrade Maritime News",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQSXVSRTJhTmd5emxScEU3a1FiMHhSVDdYYnZUbllLM2M0dFQyamIwWlVWWTNRaXBnOU5CT3g1ckhyV2xNUFJaTVB5bG5ySkh5ZXgyTTkxYUtMcVYwWWd2R3c4QU5mUEhlOEFuWkRLejUyWFNDUzI0am93NF9nSGRObTg5QmliLWdPTUtVenVOdGNtMllNNTZPdjI1dXJjZw?oc=5"
+        },
+        {
+          "title": "Somalia: Pirates Seize Commercial Cargo Ship",
+          "original_title": "Somalia: Pirates seize commercial cargo ship",
+          "original_language": "en",
+          "summary": "Pirates off the coast of Somalia seized a commercial cargo ship.",
+          "published": "2026-08-18T07:00:00+00:00",
+          "source": "Shabelle Media Network",
+          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE02Wk5EcTFJTjdQQUZ1TmcySFVWRG5XM0lXMGFBY2RDRUx4UXdpU0xGb2JtODRpd2I4cmtHMmxuNzJiWXlZUE04Vmo2TDVnLVFlUXNLNndqUXVxcFE1VjZMMkRBQzUxZDA5NXlSTEJDeVpMR2Jlalp5cGZB?oc=5"
+        },
+        {
+          "title": "Cameroon-flagged ship hijacked off Somalia",
+          "original_title": "Cameroon-flagged ship hijacked off Somalia",
+          "original_language": "en",
+          "summary": "A Cameroon-flagged vessel was hijacked by pirates off the coast of Somalia.",
+          "published": "2026-08-18T07:00:00+00:00",
+          "source": "Splash247",
+          "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5Ba0ZtQ3pENDNHZjZNcG1UMjAxb3BHQ056NGlaWEpkazFfRnVwV0RMbU1EZmVSaVNSeEFVRmw0RHdMajF0dVk4S3dQOTE0VkhYbnBIZ2YxSFJaendRQWZKb0FTMUN0NXZTdDQxMl9zaUtUSnc?oc=5"
+        },
+        {
+          "title": "Pirates seize cargo ship off Somalia",
+          "original_title": "Pirates seize cargo ship off Somalia amid renewed maritime attacks",
+          "original_language": "en",
+          "summary": "A cargo ship has been seized by pirates off the Somali coast amidst renewed maritime attacks.",
+          "published": "2026-08-18T07:00:00+00:00",
+          "source": "Hiiraan Online",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxONlBtSzQyRUdxSFhRWEZTQ0dsd0NzbEZ2SjZQZWtyWkpuSllaS05nUUNuZExmX1ZTcWFPTGhRT25Bd3dVWk9UWmNqQ2hYNTc5c0tHVzNHcndLMllITTFlSGhFNVhsenFjdS0ybWlVSzZ0ejJpd3E5aEQ1VWJ3NFE2YVhId2RoaTlDMHRpb3RfTXJFdk1Ta1l5OFNTRmEtOFIyLUJqOHMybVI1WG5pUFp0Nlg0eHM3YVpv?oc=5"
+        },
+        {
+          "title": "Somali Pirates Hijack Two Cargo Ships with 22 Indians On Board",
+          "original_title": "Somali Pirates Hijack 2 Ships With 22 Indians On Board",
+          "original_language": "en",
+          "summary": "Somali pirates have hijacked two cargo ships carrying 22 Indian nationals.",
+          "published": "2026-08-17T07:00:00+00:00",
+          "source": "IndiaWest",
+          "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOb2JxeVlIRHF5bUF2SzhRcHJqNlQ4SnFpYzJhVk1odTh1VkswT1pqa1kxV3FlV05Cb1hwdTdXTVhnMUh6TXBOazFSc1A1Rk1FQzQ5TGxMWlRBTUVuNGFDaUlsQUswMkRYbHlBTHVVaEVXcWtBTGZabHVNc0ZrMDZJUWdhdw?oc=5"
+        },
+        {
+          "title": "Somali Pirates Hijack Cargo Ship in Fifth Attack",
+          "original_title": "Somali pirates hijack cargo ship in fifth attack since April",
+          "original_language": "en",
+          "summary": "Somali pirates hijacked another cargo ship off East Africa, marking the fifth such attack since April.",
+          "published": "2026-08-17T14:25:06+00:00",
+          "source": "Gulf News",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPWFZBUDVSbFprU0ZsMjFFYVVGRVhESTVFX2VSN0FwNm5ZVWJLdVZLNGUzVFhRaENXdGZoVWVJbVBITjRpX1J0Z2FVQ1lwLXVSRER3a0VMMUtEcDFyZjN2d0lPVXNFM0Y1OXJNTFBaMVFsYXdVUUZlbXk4bGY4YjNLS21jbzNEM2U5SjJlME05QVRUSmtwR1A2amZCeml1NFh4Z2JobnZvRmFQd9IBvAFBVV95cUxPcFpkSnU2clE0M3NJR25veXJITFZnSVUyc25EeWNja043VmdwMWEzOThiMXhVczM0WWhyV2tUT3VrQ00xV0c5b2tGWU9ZQ3FrZHhFMlNIbjFJcElDQmxMN1hIWFRKc0JXMGloV1JWRV9DXzYtQ1paRVFyUTNzWlczOFRYb25NY0pfMDFxNnYxeGtTWVM0ZW5YZXBhdVpLckg2X0lKWW5QWlZ4azZteE9BRDRmWVl2YzFQUUJnVA?oc=5"
+        },
+        {
+          "title": "Somali pirates use seized vessel for more attacks",
+          "original_title": "Somali pirates use seized vessel for more attacks",
+          "original_language": "en",
+          "summary": "Somali pirates use seized vessel for more attacks Dawn",
+          "published": "2026-08-19T07:00:00+00:00",
+          "source": "Dawn",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBTN2Q3Vi1rODZ0WEYwd3Y2VUw4VkpHRlRDSUloQVhrVWwxdmdiSk9yM3kzQXhBNUdZS25udkMxWlpmOW9wT0psadIBTkFVX3lxTE9TMElqeUtxaUg1U2JoU1ZFQU9kX3AyVjNxaVZnT3lxSXFxQWdKVWszQmRpWEV1WE9IQml5SGlLaXZCUURwT1JfT0JxcXBZZw?oc=5"
+        },
+        {
+          "title": "Turkish Vessel Seized by Somali Pirates",
+          "original_title": "Somali Pirates Have Returned To The Seas. A Turkish Vessel Was Seized This Week.",
+          "original_language": "en",
+          "summary": "Reports indicate that Somali pirates have returned to the seas and seized a Turkish vessel this week.",
+          "published": "2026-08-20T15:11:03+00:00",
+          "source": "International Business Times",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOczJBT1ZMU1BQek9vN3cwVWRqTDZqU25RRkt3cWNUMXlvbmFXeWotOG1HWTNrVlRyNGpYb2s1MWg1OEpBaF81Ymt5UUlkcVpQeFVYTmJ3NDVlT2xmTFAwNU93aUlJb2RZVEhoNTJPYmhucHI4cElkUGNaWS1QODFRSDNpS0Z6Z1JPQVIxbEZhWm43VnYtMUpGSHdnYTlsaERjdFRF?oc=5"
+        },
+        {
+          "title": "Armed Somali Pirates Hijack Ship in Fifth Strike in As Many Months",
+          "original_title": "Armed Somali pirates hijack ship in fifth strike in as many months",
+          "original_language": "en",
+          "summary": "Armed Somali pirates hijacked a ship, marking their fifth successful strike in as many months.",
+          "published": "2026-08-17T14:25:06+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPVlNGSjAzc0RYSDBaVUF2SjllR3JaNUxDcXdZUm0xT0podEx0NEpyLUdQM2oxMU1aZzRJUkl2X292dDhHd04wTW83ZGo5dmdENHNobU0tMk5fRkIxU3doaXQwOUdYS2ttQlJtODJTd0lZN1V4UVpVRGJCaHF6blhfbGxrY3dGQ25JNnRQYmtPZENieERUUWxtWkRMNUdFOGFZeVRyMjZSZ3NfZS1uVFVidlRpU3ZITXFB?oc=5"
         }
       ],
-      "article_count": 5,
+      "article_count": 20,
       "first_reported": "2026-08-17T07:00:00+00:00",
       "last_reported": "2026-08-21T15:45:52+00:00",
-      "dedup_confidence": 0.857,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
@@ -734731,7 +734371,7 @@
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": false,
-      "ai_canonical_event": "Somali pirates hijack two cargo ships with Indian crew",
+      "ai_canonical_event": "Pirate hijacking of cargo ship carrying weapons off Somalia",
       "title_variants": [
         "hijacking of two cargo ships with Indian crew by Somali pirates",
         "Somali pirates hijack two cargo ships with Indian crew"
@@ -734760,9 +734400,15 @@
       "reported_status": "CONFIRMED",
       "threat_categories": [],
       "source_article_fingerprints": [
+        "82254b2a2d44ffe2f584fc530ff312e6052ad948e6658c7fd0478d8678f276f4",
         "a874bc5a8205c8702d3115966112feb19766b1b7c7713309221df53ccf6df2f1",
-        "e17e26542e42027d3cedb068ff81d4d9bdb1a70b80d2034873b53ec0aa9eb08a"
-      ]
+        "b32f930b710063a6f20fb90571d4aed8c7c87c04499b8588951e96b40513f16d",
+        "e17e26542e42027d3cedb068ff81d4d9bdb1a70b80d2034873b53ec0aa9eb08a",
+        "ed6d18d2ee9e41b2a0144db79b7197b9d08405d3642e6aefc3c5a0fa09b2436b",
+        "ed9dd19c327ab3105d27d46295915f2e3ea2c7ed9cd9770d9a6b5961c0dd3ddd",
+        "f6225fcb32caa1ce90fe6d800c3d534336ea9ea737e3405b85b49d3f25c34e42"
+      ],
+      "primary_source_published": "2026-08-17T07:00:00+00:00"
     },
     {
       "id": "002f74ffa34eade7",
@@ -734903,206 +734549,6 @@
       "ai_geo_reason": "Operation occurred in Anbar Governorate, Iraq.",
       "ai_geo_fingerprint": "1cbda4b381cebb06c627aa1172eb5ec4528f261d722b31b4219cf8a9a33765c7",
       "ai_geo_inferred": false
-    },
-    {
-      "id": "8bac168242f69dd3",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy",
-        "Weapons"
-      ],
-      "title": "Pirates hijack cargo ship carrying Turkish weapons off Somalia's coast",
-      "summary": "Official sources report that pirates have hijacked a cargo ship carrying Turkish weapons and Indian crew members off the coast of Somalia.",
-      "original_title": "Pirates hijack cargo ship carrying Turkish weapons off Somalia’s coast, official says",
-      "original_summary": "Pirates hijack cargo ship carrying Turkish weapons off Somalia’s coast, official says AP News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-08-17T07:00:00+00:00",
-      "source": "AP News",
-      "source_count": 15,
-      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPdHpBYmdGbFVEcElrSlVXaDZpV2t2b29LNHZuZ0hZR3A0RWI4T1IyY1FYZDBiRGRFWENZZ1ZWTkh4MWlpT3ZSTl96SnVOdGc5TmUzODZQcGs2TlYzRDlJM25YZGFQYnpsaEJEXy03NWdZZnk5cWkwNlhhaHhqNzJWWVdyZEVYS2lCOE9ZLVFDSUxJR0c1SFpuUUIyMzh0Y3pqVmc?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Coastal Waters off Somalia",
-      "latitude": 5.152149,
-      "longitude": 49.199554,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "sources": [
-        "Seatrade Maritime News",
-        "NDTV",
-        "The Tribune",
-        "rediff.com",
-        "The Economic Times",
-        "AzerNews",
-        "IndexBox",
-        "ABC News - Breaking News, Latest News and Videos",
-        "TheWire.in",
-        "AP News",
-        "The Indian Express",
-        "Bhaskar English",
-        "Shabelle Media Network",
-        "Splash247",
-        "Hiiraan Online"
-      ],
-      "related_articles": [
-        {
-          "title": "2 Ships With 22 Indians Hijacked By Armed Pirates Off Yemen, Somalia",
-          "original_title": "2 Ships With 22 Indians Hijacked By Armed Pirates Off Yemen, Somalia",
-          "original_language": "en",
-          "summary": "2 Ships With 22 Indians Hijacked By Armed Pirates Off Yemen, Somalia NDTV",
-          "published": "2026-08-21T07:00:00+00:00",
-          "source": "NDTV",
-          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNcjlKaWUxaks2M0pXck5RVkZMN1Zfd2lOS19WTi1rY3hZcVJReURrMkZNc1BiV2ZUYjV3U0xsSWRZUnRIbVhQRWxGNmx6dGtnUnBRU0kzeU10YnNYcmNhdGkyR1pISDJYM0l6bm5SX1NvRmtNRkEyRHoyNDZZeFhPN0RUUi1TZU4tYlYwOGdCTllCNUQ0VkVYMERUZHNQYWdmV1EtUzk5cDdqZTda0gG0AUFVX3lxTE92NWxGM3hNY2g2RmtaVUFOWFVwSUtZQ1hXM19MNy1KZVVHWUVkLTdmSU1BTll0T1BJWWRuX2JRXzZ3LW5zUEpwRmE2YVFIYTV3NlV2S0tEcnF4ZDVBV2VlQ3ZlREVVZzAxajliM2ktLVZiNGR5TERQZzF5aXpkSFpZVXZNMGZneWEzX3BLQnQ2UTNYY0dTZnhoRkRjUkI0eXBiWUtiMk5PckxmdmRGOVpXbFVoTw?oc=5"
-        },
-        {
-          "title": "2 vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
-          "original_title": "2 vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
-          "original_language": "en",
-          "summary": "2 vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia The Tribune",
-          "published": "2026-08-21T07:00:00+00:00",
-          "source": "The Tribune",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOeEFhYVJockNZS2xEQkdzcUc0bzdxa0lHQzlaVXdfcFdQZ2x2cDl4cGNyNW01S0xzT2xkTzM1emsyMmk2a0ZyZFhucnhmbVJhVlNHY2FqZDI1RWtJdkZkN3E2RUpJLWxTSDdfMzk3LUdJdnBBQVI5V29ibVhlWUFGSFNsS0pxXy1WNVNUTnlRUHFLY05FQUxfN01rcWh3SURwMXRaSlNCOFpwNVlicEtteGpn0gG2AUFVX3lxTE5VWUFERUpsNFV4TGVqTUFLWFpGVzZwMkVRQlNuWko0eG85emJHSV9DMDJ3T3llYWN4eFFxR0NjbVpxZV9UMXVzOEhib1FOYTJ5eXI4d3NyNFZYdzE5OE11N3JtcEZZMU9kSTNzczNSRzdDVkJWOFFGWjBXLWttWUl3aHItOWV5N1FPX0FlRnVvLW5BamNQeGstUWc0Ny0xLUxzYUdaaFlFeTVHdmRVeDhIS3dEVGV3?oc=5"
-        },
-        {
-          "title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
-          "original_title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
-          "original_language": "en",
-          "summary": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia rediff.com",
-          "published": "2026-08-21T07:00:00+00:00",
-          "source": "rediff.com",
-          "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPelRWNGYyRER6Skdta2ZpX0tZeFBGZi03VVZpNTMzbGhiRXl2R1FQc1U5SThVdnAxaTNFOFF5RW1SeW9lQk84eFJtWDl6MG5SeHdaZW9nRjM1WldXaGVjemFGTXB2Q3hfMVRJUGU3WThkTTZyUmJHMGpnRGRWMnR2eWhOVENuZnZidmdja01GSEFMaVdCdzRTNXNiS3NodzBpUWhaWmNVMjhVUnVqeDBEYlVMdlgwZnNmczFzYVlqUFlnaHBheTM2MXlwdmU4QUVzQ0ZXdEZoeHgxck01X0hlVDk1aU1mVGQ4SktGWWd3?oc=5"
-        },
-        {
-          "title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
-          "original_title": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia",
-          "original_language": "en",
-          "summary": "Two vessels with 22 Indians on board hijacked by pirates in Yemen, Somalia The Economic Times",
-          "published": "2026-08-21T07:00:00+00:00",
-          "source": "The Economic Times",
-          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNMmhhU0lnNTZ3ZGFuRUhzRk9CWndRUlh2NVQtaXBxTnZicDRfVG9tb1BsYzZSUlZsYTlHdGgxakJuWlBzNkhCbVdKUl9QSzZwUnVMYmxiZHVJNDBuVV9YWE9WeU5uaFV2OVdDcHBsaUJZbTFyZGZHZE0zZGItYzVtZDV3MENIMzN5TWlZbjIzbGNlclFyZ2ROdmMwajNxcGJOMjVXUFhxczlYc1ZDSXM0N19zT1dsTHdTZHEtR1ZQQVRmdWtBUzBhMmNHRTdOaXMxU0d2U3J5aDVOTHlUaE5V0gHkAUFVX3lxTE9sUWV6Q09jQkk1UzhlSHNsZkwtZ1dPU2RrcDVxbms3VWF4eXVmaFliblFDaUNSY29lVjhTMkRKZzkxU25DSDdEUU9ReW43cE1xdFNCbXBSMzZYZ1hfRnhtZU03X1B6NmFnVDRVeTIzeGctd0lVX2RleURrSGJYRVR1MW9VN193SnhPQ3ZjUzBreFI3UUJxcnFHYWhVLTlUdWZVWVNJQUl2bDB5SVoya3JCc1B5d1VVendhaFNNeWphN3FWZmxjMUN6aGdneGk3Qi11U0dlYm1GbTFTZXp1Z0NaSXhXZA?oc=5"
-        },
-        {
-          "title": "Two ships hijacked in separate pirate attacks near Yemen and Somalia",
-          "original_title": "Two ships hijacked in separate pirate attacks near Yemen and Somalia",
-          "original_language": "en",
-          "summary": "Two ships hijacked in separate pirate attacks near Yemen and Somalia AzerNews",
-          "published": "2026-08-21T10:36:00+00:00",
-          "source": "AzerNews",
-          "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBWWFYxRk1nVWpHUTY1c25MQlF2NzhBcVNaN3lnSmY3VWdyTXJaUGtFb3c0U3l6QkR3Zy1NVGk1Y25GNGpnOEkyaGU3ZUZaeWVHeXNJUQ?oc=5"
-        },
-        {
-          "title": "Piracy Incident Off Somalia: Cargo Ship Boarded, Crew Safe, EUNAVFOR Investigating",
-          "original_title": "Piracy Incident Off Somalia: Cargo Ship Boarded, Crew Safe, EUNAVFOR Investigating - News and Statistics",
-          "original_language": "en",
-          "summary": "EUNAVFOR is investigating a piracy incident off the coast of Somalia where a cargo ship was boarded, though the crew remains safe.",
-          "published": "2026-08-17T16:41:00+00:00",
-          "source": "IndexBox",
-          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPNFpRYVJwX2o5ZEdUS3UzUmt5MWVtRnBENU55aWtOUS1vQk9XQjg1Sko4NmxUaThxUDFjcUQ5a1YyZXR0aDhNU2hMcGwzcTVrc19acHNnVmdNNXNIc3NlMVNLenFqd2I3NlU3U2tNcXNlV25YWGx6NnR5a29aOTNobS1lNU00cUw4X0FXS0VIaEhnVnEw?oc=5"
-        },
-        {
-          "title": "Pirates hijack cargo ship carrying Turkish weapons off Somalia's coast",
-          "original_title": "Pirates hijack cargo ship carrying Turkish weapons off Somalia’s coast, official says",
-          "original_language": "en",
-          "summary": "Official sources report that pirates have hijacked a cargo ship carrying Turkish weapons and Indian crew members off the coast of Somalia.",
-          "published": "2026-08-20T07:00:00+00:00",
-          "source": "AP News",
-          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPdHpBYmdGbFVEcElrSlVXaDZpV2t2b29LNHZuZ0hZR3A0RWI4T1IyY1FYZDBiRGRFWENZZ1ZWTkh4MWlpT3ZSTl96SnVOdGc5TmUzODZQcGs2TlYzRDlJM25YZGFQYnpsaEJEXy03NWdZZnk5cWkwNlhhaHhqNzJWWVdyZEVYS2lCOE9ZLVFDSUxJR0c1SFpuUUIyMzh0Y3pqVmc?oc=5"
-        },
-        {
-          "title": "Cargo ship Lutuf hijacked by armed pirates off Somalia",
-          "original_title": "Cargo ship Lutuf hijacked by armed pirates off Somalia",
-          "original_language": "en",
-          "summary": "The cargo ship Lutuf was hijacked by armed pirates off the coast of Somalia, part of a wider series of vessel seizures involving Indian crews.",
-          "published": "2026-08-17T07:00:00+00:00",
-          "source": "Seatrade Maritime News",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQSXVSRTJhTmd5emxScEU3a1FiMHhSVDdYYnZUbllLM2M0dFQyamIwWlVWWTNRaXBnOU5CT3g1ckhyV2xNUFJaTVB5bG5ySkh5ZXgyTTkxYUtMcVYwWWd2R3c4QU5mUEhlOEFuWkRLejUyWFNDUzI0am93NF9nSGRObTg5QmliLWdPTUtVenVOdGNtMllNNTZPdjI1dXJjZw?oc=5"
-        },
-        {
-          "title": "Somalia: Pirates Seize Commercial Cargo Ship",
-          "original_title": "Somalia: Pirates seize commercial cargo ship",
-          "original_language": "en",
-          "summary": "Pirates off the coast of Somalia seized a commercial cargo ship.",
-          "published": "2026-08-18T07:00:00+00:00",
-          "source": "Shabelle Media Network",
-          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE02Wk5EcTFJTjdQQUZ1TmcySFVWRG5XM0lXMGFBY2RDRUx4UXdpU0xGb2JtODRpd2I4cmtHMmxuNzJiWXlZUE04Vmo2TDVnLVFlUXNLNndqUXVxcFE1VjZMMkRBQzUxZDA5NXlSTEJDeVpMR2Jlalp5cGZB?oc=5"
-        },
-        {
-          "title": "Cameroon-flagged ship hijacked off Somalia",
-          "original_title": "Cameroon-flagged ship hijacked off Somalia",
-          "original_language": "en",
-          "summary": "A Cameroon-flagged vessel was hijacked by pirates off the coast of Somalia.",
-          "published": "2026-08-18T07:00:00+00:00",
-          "source": "Splash247",
-          "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5Ba0ZtQ3pENDNHZjZNcG1UMjAxb3BHQ056NGlaWEpkazFfRnVwV0RMbU1EZmVSaVNSeEFVRmw0RHdMajF0dVk4S3dQOTE0VkhYbnBIZ2YxSFJaendRQWZKb0FTMUN0NXZTdDQxMl9zaUtUSnc?oc=5"
-        },
-        {
-          "title": "Pirates seize cargo ship off Somalia",
-          "original_title": "Pirates seize cargo ship off Somalia amid renewed maritime attacks",
-          "original_language": "en",
-          "summary": "A cargo ship has been seized by pirates off the Somali coast amidst renewed maritime attacks.",
-          "published": "2026-08-18T07:00:00+00:00",
-          "source": "Hiiraan Online",
-          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxONlBtSzQyRUdxSFhRWEZTQ0dsd0NzbEZ2SjZQZWtyWkpuSllaS05nUUNuZExmX1ZTcWFPTGhRT25Bd3dVWk9UWmNqQ2hYNTc5c0tHVzNHcndLMllITTFlSGhFNVhsenFjdS0ybWlVSzZ0ejJpd3E5aEQ1VWJ3NFE2YVhId2RoaTlDMHRpb3RfTXJFdk1Ta1l5OFNTRmEtOFIyLUJqOHMybVI1WG5pUFp0Nlg0eHM3YVpv?oc=5"
-        }
-      ],
-      "article_count": 11,
-      "first_reported": "2026-08-17T07:00:00+00:00",
-      "last_reported": "2026-08-21T10:36:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "same_url",
-        "very_high_title_similarity",
-        "paraphrase_entity_context",
-        "same_normalized_title"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete maritime piracy attack involving the hijacking of a cargo ship carrying weapons off Somalia.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Pirate hijacking of cargo ship carrying weapons off Somalia",
-      "title_variants": [
-        "Cargo ship Lutuf hijacked by armed pirates off Somalia",
-        "Pirate hijacking of cargo ship carrying weapons off Somalia"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Pirates hijack cargo ship carrying Turkish weapons off Somalia's coast"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The ship was hijacked off the coast of Somalia.",
-      "ai_geo_fingerprint": "6c4f48340f58168d0f91da7524372f9bd9094db981276730557c6b75f1b345f4",
-      "ai_geo_inferred": true,
-      "source_article_fingerprints": [
-        "82254b2a2d44ffe2f584fc530ff312e6052ad948e6658c7fd0478d8678f276f4",
-        "ed6d18d2ee9e41b2a0144db79b7197b9d08405d3642e6aefc3c5a0fa09b2436b",
-        "ed9dd19c327ab3105d27d46295915f2e3ea2c7ed9cd9770d9a6b5961c0dd3ddd",
-        "f6225fcb32caa1ce90fe6d800c3d534336ea9ea737e3405b85b49d3f25c34e42"
-      ],
-      "actor_group": "",
-      "incident_id": "inc-ab764cca27b2283b",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "cargo ship hijacking Somalia 2026-08-17",
-      "update_type": "INITIAL",
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "threat_categories": []
     },
     {
       "id": "d965568cbd4a62c2",
@@ -740851,7 +740297,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "38514950c1eb8509",
@@ -740997,7 +740444,8 @@
       "ai_geo_reason": "Multi-location attacks across several cities/regions in Mali.",
       "ai_geo_fingerprint": "92559250cab5be9dcf24d3d9b50f9f45f36fb4f846e8948c3ec0f52ab2a2f287",
       "ai_geo_inferred": false,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "4fd86c253b3684c5",
@@ -745840,7 +745288,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The attack and counter-operation took place in Zamfara.",
       "ai_geo_fingerprint": "4c9c79e9bf81a313b44565bb713c48e9fec7c78d89429c0ed6b93436a322edc9",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "eace47ee2be9d958",
@@ -746023,7 +745472,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "7ad3108e1ee3c59a",
@@ -751561,7 +751011,8 @@
       "dedup_confidence": 0.675,
       "dedup_methods": [
         "paraphrase_entity_context"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "68b5c196a4e75ca6",
@@ -751905,7 +751356,8 @@
       "ai_geo_reason": "Security troops arrested a wanted soldier supplying military equipment; reported by Nigerian media.",
       "ai_geo_fingerprint": "fb5f3e35ca25a5664971085ce380097d891a056618f31fd904651ebf8fb3ee3c",
       "ai_geo_inferred": true,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "f8bd0a9f392b775c",
@@ -767775,7 +767227,8 @@
       "cbrn_subgroups": [],
       "source_article_fingerprints": [
         "a9f7ea0eee9afa7b3ad5acf4f9a0c92c3f40d48ee1dce9a659dd5a5eaf4029c9"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "97741ee1a8e45940",
@@ -768418,7 +767871,8 @@
       "ai_geo_reason": "The text explicitly mentions military operations repelling attacks in Katsina and Zamfara states, Nigeria.",
       "ai_geo_fingerprint": "db17043b65c66347d8d32879e87d6dbc8675eb4ecf84a21961e054c95e58ebfb",
       "ai_geo_inferred": false,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "0b5b829015569501",
@@ -772556,7 +772010,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "National financial directive issued in Nigeria without a specific localized physical enforcement point.",
       "ai_geo_fingerprint": "4d234c98783fb2ae5e2e85bab9fd9bbc1ab3876de9f014a71bb292b6a5caa98b",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "c72475fca6de36c7",
@@ -772810,7 +772265,8 @@
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "update_type": "INITIAL",
-      "source_article_fingerprints": []
+      "source_article_fingerprints": [],
+      "dedup_review_required": true
     },
     {
       "id": "c51105092c09516d",
@@ -773061,7 +772517,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "6594c222efa064cd",
@@ -773463,7 +772920,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Operation by Turkish police in Turkey; no specific city is provided.",
       "ai_geo_fingerprint": "2c68cb406822f43073b890d356fb7e93aba7ee93f3a65863e6c3224658b3bad1",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "d883bc093a351ee4",
@@ -779184,7 +778642,8 @@
         "Chemicals and Explosives"
       ],
       "legacy_category": "CBRN",
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "b612974eacb77a04",
@@ -779799,7 +779258,8 @@
       "source_article_fingerprints": [
         "1547b0db3cc833b00b614972ad68feeafa87ebc6b33cbe699ba77433a4793646",
         "bcd38e3a4bc6ebfd857fce5dd555eeb24bc73f75777b4b29cc28db441de71a3b"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "e2f7d191d5fb3104",
@@ -781400,7 +780860,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The operation took place in Nasarawa State, Nigeria.",
       "ai_geo_fingerprint": "ca8a09805a57165db2a9e912376e73d720217890af90b07bad268d29306317b3",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "16927b0345032d09",
