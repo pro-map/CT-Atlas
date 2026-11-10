@@ -1,5 +1,498 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T18:27:58.175814+00:00",
-  "events": []
+  "updated_at": "2026-11-10T23:20:41.603724+00:00",
+  "events": [
+    {
+      "id": "1b90aaa00226c531",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "How Lamu rose from years of terror to a global peace model",
+      "summary": "How Lamu rose from years of terror to a global peace model Daily Nation",
+      "original_title": "How Lamu rose from years of terror to a global peace model",
+      "original_summary": "How Lamu rose from years of terror to a global peace model Daily Nation",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-06-30T07:00:00+00:00",
+      "source": "Daily Nation",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOODdnRHl5Q0d0U3dVcldPaFBGdWVfNjRZNDJJNW9UWDhyZk5oTWxhRHRSallaM3ZqQUgyckNiQ1l3RzlZVk1Xa2RFdGZQLXlMWDNxQ0Z0clY1bU55M3Z6N2xDZ3J3bndJVmJXVjg0Rmcxek9yUTdGdVVFSzFiVVBZY1dESFpGSzVUV3lBejVnc19ieVBZbE5XUlFmSDVnWmg4ZEZLcmhodTZuUlZX?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "nation.africa",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "3dfb0fc6b4f926424934895928235a28e6e3948e8cefaea96f26433bd52595a0"
+      ],
+      "sources": [
+        "Daily Nation"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-06-30T07:00:00+00:00",
+      "last_reported": "2026-06-30T07:00:00+00:00"
+    },
+    {
+      "id": "a1c3f738e6d58493",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Images d'exécution des militaires : L'État-major des Armées appelle les médias à la prudence",
+      "summary": "Images d'exécution des militaires : L'État-major des Armées appelle les médias à la prudence Maliweb",
+      "original_title": "Images d'exécution des militaires : L'État-major des Armées appelle les médias à la prudence",
+      "original_summary": "Images d'exécution des militaires : L'État-major des Armées appelle les médias à la prudence Maliweb",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-07-24T07:00:00+00:00",
+      "source": "Maliweb",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQbE1lMWM4aUF4TTduZFBtNjhsSktwelFZLU1vMXBtbGpGNXJFeklQSEluSnpFejdWZzk3RTdzRGF5MDJ1SkFlSGpCa2J6Qm9JZ0U2c3drN2M1MWpLMlpycmc1bFN4OUNLLVNSX3hWeGppZlJUSk80M25XM0RMcFFid3VIaXdncldKSnpvSHpTR2dwNlF6UFFhWE5XTmJPVlA0bUhVVFdiUHFPRjNMTURsMmtqYkhTVUtUbDNlZnJ1cC1ZZzUzNTlnOVluUTFvRklUX1E?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "maliweb.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "1c4fcf4778e245c4537c047819c38fa8eb05e285b5f97abb1cc80311375ea458"
+      ],
+      "sources": [
+        "Maliweb"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-24T07:00:00+00:00",
+      "last_reported": "2026-07-24T07:00:00+00:00"
+    },
+    {
+      "id": "ea21397400ab3364",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Five killed in Mandera terror attack",
+      "summary": "Five killed in Mandera terror attack Daily Nation",
+      "original_title": "Five killed in Mandera terror attack",
+      "original_summary": "Five killed in Mandera terror attack Daily Nation",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-07-28T07:00:00+00:00",
+      "source": "Daily Nation",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPZnpBRVlhOXFjdXZjNnhUV0xxM2pEY0NzSkYtVk0tNnY4YnhmamdNOXpZNkl6cS1UQm15a05UbmpBTnlOMkkwWi0yYk11N2xsM3pTRE5wV1FETjhuaGZ4TnEyTGRxWVBma0g0OTRXeGEwZFpmNEhmRHdxWVQ5V01wbS03SjdDRGgwZ19sRXVUZHlyWmc?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "nation.africa",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "691d75e33fecb600aa46892493fa7d6400d1bb162d6cda94286cdfa0337af6bf"
+      ],
+      "sources": [
+        "Daily Nation"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-28T07:00:00+00:00",
+      "last_reported": "2026-07-28T07:00:00+00:00"
+    },
+    {
+      "id": "92e712c3969c36bd",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "العراق يفتح ملف \"داعش\".. 6 فرنسيين أمام القضاء",
+      "summary": "العراق يفتح ملف \"داعش\".. 6 فرنسيين أمام القضاء سكاي نيوز عربية",
+      "original_title": "العراق يفتح ملف \"داعش\".. 6 فرنسيين أمام القضاء",
+      "original_summary": "العراق يفتح ملف \"داعش\".. 6 فرنسيين أمام القضاء سكاي نيوز عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-09-20T07:00:00+00:00",
+      "source": "سكاي نيوز عربية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi-gJBVV95cUxOVEtQSU9NYUNYUW5BMXNFeThsRWtwcmYtLVFvRFpGcEg5SWZHbjduVm1KWmRBcnRaNnRyVno2NXE3Z0JkbG1ySDhvV3BIV3c2dUVTQzFiTjhkX2hzUnJtbVFHR3cxZGd2N1BiY3Z0b3VJX1lrVU1WdlF4cXpUMFVqcm1uR0huUHlmejVPRkJTeE9uUGtpY0VxeloxT25HY0Fwbjc4OWpBTVY1WEFHcnpFWWcxdE5UWlYtOEVNcTIySFIyT1B5UWZJVGZhY0pJVEpVZU1pQ0ppVWdVTUNyUmEwYS12eFNHUzhKNlc5Y2dmeTVjZ2R2M3JFVHhoV0h1cUpyVW1KYlowM1d6ekJMVU1ZVjRuQW1DaWdMYTNySFJQb2g0d1ZwdlBZYnQwSGVRaC15SUFhRXJ1TjBBQVhwT3ZIZ2E1cm9sdnhuVkxjeDJqUkZKRjB6YU44TUtZaUNKejdpU2NiT0x0QTF3T1pDTmJsM2dpY19JRkxkNVHSAf8CQVVfeXFMT2NTbXZ6SUlNc1dZXzRsblB0LVdFUGtRSnlvYUR2d1ZFSDAzclFibDgxNFh1MGc5ZmNSOENJZHdBdmVyQWZyQjJvbDdpbklaYWNKVjVxT1o3aFpMY2tJcWdPSWhySlV5OXNFVVQwNHpqQVcxeGk0SDRVNXBCU29YeDg5Y3R6UlVjR0dSaFEwZ01XYmJqQlRpcjJ4OUpIM1lsSmFwaXRhVjZSUmN3Z0dpNjZDWE5mWnhvdXdEVWJtNlBPR01zVmZmak5BMzM0cGVMQV9uNk56bm8yeTlSMTFHdFJhOHY4cDdQbXYyZTVBZ1VGaE80VUhYcy16eEd6QWZXZzNBZEJRQkxoMkgwRWlUWmVKTFNQZGRpZng4emJHYXd4aUNidk5KelVtdmFSV2NwX1FNNFFmUWJHaFhZMFktdUVEUVAtNmpPR2dIU012YkZwekZZUGdUSjRUTHA4aVN1bENqS25MREpldE00dFMtNmVKcm9SNEY0aUQ3eFI4MlU?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "skynewsarabia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "5b9d07caff9166ed71c717d7a7fe0899a5d6b2e3084cfb9b9c074db76ec833e6"
+      ],
+      "sources": [
+        "سكاي نيوز عربية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-20T07:00:00+00:00",
+      "last_reported": "2026-09-20T07:00:00+00:00"
+    },
+    {
+      "id": "84a4a15e19710a78",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "The enemy in your phone: How extremists target youth online",
+      "summary": "The enemy in your phone: How extremists target youth online Daily Nation",
+      "original_title": "The enemy in your phone: How extremists target youth online",
+      "original_summary": "The enemy in your phone: How extremists target youth online Daily Nation",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-09-21T07:00:00+00:00",
+      "source": "Daily Nation",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxORG12Y3hhZnN5dGhMaWl0LTdEMVlleDJWdXFaQWhnZ0x4TE5JZk9DT0J5VlF2LTdOdWt0TlFPMFpJckRhQW9kUDNIZWhlX0g1Smc1N0x4Tk9vUGhiNmRldDdJNlZyc1MyNjYwbEdMWFVwZ2JSRHZVZTRsSl9yUEZFc3BBelluSHFSZzlXaS1nbS1MSmNYY1NMX2pQYm90OU43?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "nation.africa",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "cdd95dd4f2f5fd46f38109493e8865a3257d3641afd0d7904082a661f75eed95"
+      ],
+      "sources": [
+        "Daily Nation"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-21T07:00:00+00:00",
+      "last_reported": "2026-09-21T07:00:00+00:00"
+    },
+    {
+      "id": "ce71b8999b7be2eb",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Terror arrests: New Bill seeks six-hour deadline to notify families, lawyers",
+      "summary": "Terror arrests: New Bill seeks six-hour deadline to notify families, lawyers Daily Nation",
+      "original_title": "Terror arrests: New Bill seeks six-hour deadline to notify families, lawyers",
+      "original_summary": "Terror arrests: New Bill seeks six-hour deadline to notify families, lawyers Daily Nation",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-03T07:00:00+00:00",
+      "source": "Daily Nation",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPVmRCMS1WNFZsZTJmSTQyWUM3dWVuWTZXeHFLQldhV3czZGtDMWlQSHVfa2lvRkR5QXczX3ZORGdWRUJTN1NpVkM2ckgxdnhGN21KcGhvNVlnM0ZHZ09VYkFmVGFCeW5yS0N0WnZ4MkVaNC1Nb2hacEtpNm5NcDJxRllpRmtkandJR095UURwTWtCcXRtX0N6RG1jS05Gc2poOU9wU3NTcGFlUUhQbzJiZDVzYzVXdw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "nation.africa",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "25ba46e519aaf897ffc782e90c3b18d8662b1ee834060e3bd2f624b39de7b52e"
+      ],
+      "sources": [
+        "Daily Nation"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-03T07:00:00+00:00",
+      "last_reported": "2026-10-03T07:00:00+00:00"
+    },
+    {
+      "id": "e327a941d87a739a",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "النعمان: 4000 منتسب من وحدات حماية سنجار سيندمجون في القوات الأمنية الاتحادية » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "النعمان: 4000 منتسب من وحدات حماية سنجار سيندمجون في القوات الأمنية الاتحادية » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "النعمان: 4000 منتسب من وحدات حماية سنجار سيندمجون في القوات الأمنية الاتحادية » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "النعمان: 4000 منتسب من وحدات حماية سنجار سيندمجون في القوات الأمنية الاتحادية » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-26T10:17:20+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBlYVpiNUc1QTBwWk5GM2NOVGUxZUdxVGtLczBvU0EyRjRvRFd4VHpoNm4tYTRCZ2k3Zm43Um1qTjZZMldjOFBjSWZvOFJVMUQ5aXdWdFpn?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "e77f5971d840a45106a9d4ccb2958cec380166f645cef087396f993876a820b9"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-26T10:17:20+00:00",
+      "last_reported": "2026-10-26T10:17:20+00:00"
+    },
+    {
+      "id": "697b0a3267108d28",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "وزير الدفاع يصل إلى محافظة المثنى للاطلاع على الواقع الأمني وجاهزية القطعات العسكرية",
+      "summary": "وزير الدفاع يصل إلى محافظة المثنى للاطلاع على الواقع الأمني وجاهزية القطعات العسكرية وكالة الانباء العراقية (واع)",
+      "original_title": "وزير الدفاع يصل إلى محافظة المثنى للاطلاع على الواقع الأمني وجاهزية القطعات العسكرية",
+      "original_summary": "وزير الدفاع يصل إلى محافظة المثنى للاطلاع على الواقع الأمني وجاهزية القطعات العسكرية وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-28T07:46:58+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5ZLVpnb21Wamc4TXJBU0xILWtzdnJpZFJZakRheXVQdmMwZDR5REdmWHhDMVZYUHZxU0JsZWhreHZIMzQxTjdsQWFwSTVfeTZU?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "f223d324dd073554826a2cc29d9d47e5c460fb86d51507825ff8880d26e88c99"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-28T07:46:58+00:00",
+      "last_reported": "2026-10-28T07:46:58+00:00"
+    },
+    {
+      "id": "ec8ec39f97c333c6",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Terrorism case against Turkish billionaire to start afresh",
+      "summary": "Terrorism case against Turkish billionaire to start afresh standardmedia.co.ke",
+      "original_title": "Terrorism case against Turkish billionaire to start afresh",
+      "original_summary": "Terrorism case against Turkish billionaire to start afresh standardmedia.co.ke",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-11-03T06:38:03+00:00",
+      "source": "standardmedia.co.ke",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQMHdLUHY0T1pWNUFmWXlIV050M1hJRnZJWU1YWm1ObHhNcG1tUW9xMFBBcFdVcDFCOFM5NjdIRFZ6cHZtVGhqcTltS0p4UGtsTTNsNS1CVG5xV3A2Rno3M1Nvbk1lMEpKUGZGLTQzVmtuT3AxVUk4SHZwYzJVeE9McU5SeW1oX2NpRHkzQVBfQ1kxRl9OeDFFNEhndGxrcGQxWGpZNU40NWNEY2JhaUdnX3kwaVNXMU13RGFoWmpMVkJDcWU2ZEE?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "standardmedia.co.ke",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "b42c22c37adef8275bc2ba0d585823f9b0ca725dd39c7e148e0a4fde4d3fea45"
+      ],
+      "sources": [
+        "standardmedia.co.ke"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-03T06:38:03+00:00",
+      "last_reported": "2026-11-03T06:38:03+00:00"
+    },
+    {
+      "id": "5eaf6b715fde2fd9",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Emami to Tinubu: Don’t succumb to blackmail, accuses INEC of flouting President’s intervention on delineation",
+      "summary": "Emami to Tinubu: Don’t succumb to blackmail, accuses INEC of flouting President’s intervention on delineation Vanguard News",
+      "original_title": "Emami to Tinubu: Don’t succumb to blackmail, accuses INEC of flouting President’s intervention on delineation",
+      "original_summary": "Emami to Tinubu: Don’t succumb to blackmail, accuses INEC of flouting President’s intervention on delineation Vanguard News",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-11-04T13:41:12+00:00",
+      "source": "Vanguard News",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPNkVRMHJnVUFuYTB4ZDVCeVk4ckpmaDBsTm1lanRET0dMQk1tQ3JxZW4wNFh6N2cwQjNpdWxUd1hEa1FSTlYwWEdnVWVFTm4zdE1kaUgwQWZZTjZfRm9Ca3QxXzZjR0RfaHFVOFpDOGoySENlRlVTOTRJOEpTR29LVjZ5SVd0RXZXTUpabkVVRi1YZFZ1RFJhRFhDVDRqMEw5Q1NaYm5heGhXYWw2dDRrZkl1OGh5bjFBMGdULU03d3oyTGdzZzJ6amdpZ3NyMEZlSjdzeHZyNUloQdIB3wFBVV95cUxNQ3JCOUNmY1V4dUNvdExTY3l5al81RVJya0UybkExbWk5NjhOMkRTbGJMcG5KR0k0cHlsNDNhbWdUVXBadFdFUTR4U2g5Z0RVdi1GcnItVU9iUWY0Q2UyYTVMem5ycWlLbzl3aU1ZVTA0MDRsaEVsVmJzOHpraC1NWGRybi1zSG5ROXM2NFh2V3JyNmpMZTNtNFViY3BldDJ0X19hdGY1cWlKOHlhVmxtdnY5ZGVIRXM1TU1VRDRZVVZoM21yXzQyeW95cGRZTjBxMHFjbkhNREFPSldVZ1Vn?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "vanguardngr.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "b085b6eeedd7b0d07ef3d73c099df7cae9b488a3fe8561967169ec2b8f7ba74f"
+      ],
+      "sources": [
+        "Vanguard News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-04T13:41:12+00:00",
+      "last_reported": "2026-11-04T13:41:12+00:00"
+    },
+    {
+      "id": "cde57c903a8b23af",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "title": "Markey Machine Announces Ownership Transition and New Leadership",
+      "summary": "Markey Machine Announces Ownership Transition and New Leadership The Maritime Executive",
+      "original_title": "Markey Machine Announces Ownership Transition and New Leadership",
+      "original_summary": "Markey Machine Announces Ownership Transition and New Leadership The Maritime Executive",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
+      "published": "2026-11-07T08:00:00+00:00",
+      "source": "The Maritime Executive",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOV01FUzVQQko0bkJUTWp5bk9aN3pWTWlGTzZNc0ZFRUlTZHZ0Nm0xODRkRjBoSExmdzA5eVh3N2VvN1RXX2xPaWhabTJrd2FQUWpQMG1taDI1Yk82dkdaeVpUSkxpeXYzUjRBSmFDQVJWQlBmV3NZZUpmMUR3YWxaSjVyMms4SDA1YVV0UXYxejdPcklIcFdIbzQ3Z0JWb0hYYjB4eTJDQWE?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "targeted_source_query",
+      "targeted_source": "The Maritime Executive",
+      "targeted_source_kind": "specialist_media",
+      "source_article_fingerprints": [
+        "253ed2dcfc9a88905c0c1f52500aceb6d111665618c7fb5bfdbb2b942ea7f03c"
+      ],
+      "sources": [
+        "The Maritime Executive"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-07T08:00:00+00:00",
+      "last_reported": "2026-11-07T08:00:00+00:00"
+    },
+    {
+      "id": "976f9271f5a3890c",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "PMU-Mali: Programme officiel du samedi 07 novembre 2026",
+      "summary": "PMU-Mali: Programme officiel du samedi 07 novembre 2026 maliweb",
+      "original_title": "PMU-Mali: Programme officiel du samedi 07 novembre 2026",
+      "original_summary": "PMU-Mali: Programme officiel du samedi 07 novembre 2026 maliweb",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-11-07T08:00:00+00:00",
+      "source": "maliweb",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQYVZHTjZiZmtNVi1YbFdqcjdqd0NvRm9ZNWJGeE1GLWo1R3hkME9wbUhfZUdkMldQVGdTZEdoWWVINUtTTUxyYzB5Zy1tLWZIeDZWWDl4Q0NOWV9kNThlVVp5aUQ2c3lUT0VVMXZ0bXhHSHVhNlpkd09UTmFlUkN5RVh1MktmNm9Ga1g3ajlzcFRRaDNJX1ZRUlV1ck1wM2pyWHc?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "maliweb.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "ab258aae2ab4ace4a18629d241d3370f817371bbf9af42a68dfe688b0fa9a2c5"
+      ],
+      "sources": [
+        "maliweb"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-07T08:00:00+00:00",
+      "last_reported": "2026-11-07T08:00:00+00:00"
+    }
+  ]
 }
