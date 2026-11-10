@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-09T20:45:25.158782+00:00",
+  "removed_at": "2026-11-10T18:25:58.001048+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1052,6 +1052,93 @@
       "country": "United Arab Emirates",
       "ai_relevance_score": 80,
       "ai_relevance_reason": "Concrete, dated operational maritime piracy/hijacking incident.",
+      "related_articles": []
+    },
+    {
+      "id": "d01d276bce4b3b3e",
+      "incident_id": "inc-0fb56167529cefb6",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNNGdCMHk5dHMyTWdELUlPSGdJZkx5ck91SDNLQzg5V0tES004MXdmazg2dGpudk53V2xneHJ5aW9IbXU3WjNlQ09idzBuZlAyQkt5OXlrYWZDdzY1T3E0QnN5NFZsRXVXUnRndHBqUU5QUFZOMTFWd0EwaXU3a3R0TlJ1SklkSHpsZHlCWkJmT3Q5aUUyTXpYNzRaZm5FTnRzaHNwdmRqUEEwckViZ0ZIY1ZPWHpSY3hESGIyTQ?oc=5",
+      "title": "Attack thwarted: Terror suspect arrested ahead of Jerusalem Day events",
+      "summary": "Israeli security forces arrested a terror suspect and successfully thwarted a planned attack ahead of Jerusalem Day events.",
+      "original_title": "Attack Thwarted: Terror Suspect Arrested Ahead Of Jerusalem Day Events",
+      "original_language": "en",
+      "source": "i24NEWS",
+      "published": "2026-05-14T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Israel",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Disruption of a planned terrorist attack and operational arrest by security forces.",
+      "related_articles": []
+    },
+    {
+      "id": "a64c3ad26c1f0b1e",
+      "incident_id": "inc-d9a32d55e9890488",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNRVhTMmFkQ2NSdU9ZWnBReUZfSElZdGxGcm5ySmVOUGU0ejREV0EyV0NCWXdLZzRBVHhxVDlfS0pjd1EwN3g2RS1oaXBYTmlBUFg5UFp6ZmtZbUNmdHp1SWJCbUNpVzZQbVVDOTRqYVRuUFpVeGVUYkN1LTc5YmVjMmNHMXEzVTdmVS1kSGJxUEhmQmV3c3lMZTVmdzVyQdIBoAFBVV95cUxPUzJ2YWFLU3RXTFgwWHBxWnE0NS1EZU5lV0MyOElqSnlka2JNRkdZM0xmWkRsS25HZlFJbXdSZHJFenFzcjk4QkxNVXpFeWxXbjUwNXpXM2NTdEdBcTRIbS1GSnFpbzVqRjYtWHd4Mm5xZUlhMGdhMkxLX09UeDkydFlTOVNUQzlWNnZaXzB4VWJRQnE5SmhMUE1ud3lDVG9J?oc=5",
+      "title": "Suspects arrested with explosives in Meghalaya",
+      "summary": "Security forces arrested several men from Assam found in possession of explosives in the state of Meghalaya.",
+      "original_title": "Assam Men Arrested With Explosives In Meghalaya",
+      "original_language": "en",
+      "source": "Rediff",
+      "published": "2026-05-14T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "India",
+      "region": "Meghalaya",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete operational development: arrest involving illegal possession of explosives, indicating a potential militant or security-relevant nexus.",
+      "related_articles": []
+    },
+    {
+      "id": "2ed4feeb09ff9355",
+      "incident_id": "inc-1de0703fe996bfb8",
+      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9ONU9YenliMkExQU5tR1l1Qlh3bkdna1h5aTBFTWhyTWloUkJWSFNRMlV5MTQxVS1fYUhCV2JCem5rbFpxSkZ1cmMzdlhMOVE5QVhXZjZRaTRIRzFPOG9Ub0hTUjV0YTNhNHhXaU5aa1BvNk5qWXQ4M2lDZVLSAXxBVV95cUxPeHZ5MEhxSTlyY0w0ZXpPZWFZNGVOdHVYVVk0c25lU1NzS2dfYzZPUVNGc2VSRXFnV2ZIY0w0VjVDWWQ3aVlyYXdkNDluVHBkMEs2YjZuaXl2VE1DYUdqQ24tNWZMcnpUQVRUTHNyb1VLREo2NHh2ZjN3RmJP?oc=5",
+      "title": "CJNG and La Familia Michoacana battle for extortion rackets",
+      "summary": "Conflict between CJNG and La Familia Michoacana over control of extortion in 11 municipalities.",
+      "original_title": "Se disputan CJNG y la FM extorsión en 11 municipios",
+      "original_language": "es",
+      "source": "MILENIO",
+      "published": "2026-05-14T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "CJNG",
+      "primary_event_type": "ATTACK",
+      "country": "Mexico",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Reports an ongoing conflict and violent extortion activities by organized crime groups.",
+      "related_articles": []
+    },
+    {
+      "id": "14b11049aa8fd87c",
+      "incident_id": "inc-7b4d45eff743347b",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQeFNXWmtYTlVERGE4azMyZ1dyc1JPOFMtdmNQUVU2OUt2S09ya1JzZ0Q0NlVsbEVKMWg3Q0xIWHdIVlFMY0dKaE5DYnVNZ0EzUk81dkFvT0xXRXVVQVV6SF93V2I4TjBIdnNGWXlTSUNSamxLeUVTY05BZ3haaFJSQmlkQ2h6Y2JxSEVNNmdxekltdUJIMVA4MElNNDBJLS1VZlJPUHZaZ1BQVzA2T2VEbjlOaThBNE9Hd2pz?oc=5",
+      "title": "Somali pirates demand ransom for tanker",
+      "summary": "Somali pirates are reported to be demanding $10 million for the release of a captured product tanker.",
+      "original_title": "Somali pirates reportedly demand $10M to release small product tanker",
+      "original_language": "en",
+      "source": "Hiiraan Online",
+      "published": "2026-05-14T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Ongoing operational piracy incident involving a ransom demand.",
       "related_articles": []
     }
   ]
