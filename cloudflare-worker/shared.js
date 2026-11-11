@@ -8,9 +8,6 @@ const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 // CT Atlas AI ("quick ask"): a single fast Gemini call, not the heavy
 // multi-source Deep Search / Report Generator pipeline, so it gets its own,
 // much more generous quota rather than sharing the 5/day report-gate limit.
-const QUICK_ASK_COOLDOWN_MS = 3 * 1000;
-const QUICK_ASK_DAILY_LIMIT = 60;
-const QUICK_ASK_GLOBAL_DAILY_LIMIT = 800;
 // In-app "Send Feedback": evaluation ratings and one-off issue reports,
 // emailed directly to the CT Atlas owner (never shown in the UI) rather than
 // stored. A separate, lightweight quota since this is just a relay, not an
@@ -1409,9 +1406,6 @@ export {
   CACHE_TTL_MS,
   REPORT_COOLDOWN_MS,
   SESSION_TTL_MS,
-  QUICK_ASK_COOLDOWN_MS,
-  QUICK_ASK_DAILY_LIMIT,
-  QUICK_ASK_GLOBAL_DAILY_LIMIT,
   FEEDBACK_COOLDOWN_MS,
   FEEDBACK_DAILY_LIMIT,
   FEEDBACK_GLOBAL_DAILY_LIMIT,

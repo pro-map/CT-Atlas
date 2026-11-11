@@ -15,7 +15,6 @@ on:
       - "crypto.js"
       - "crypto-report.js"
       - "crypto.css"
-      - "crypto-launcher.js"
       - "usage-auth-fix.js"
       - "usage-admin.js"
       - "usage-admin.css"
@@ -129,7 +128,6 @@ jobs:
           grep -q 'cryptoReportButton' crypto.html
           grep -q 'exportFullReport' crypto.js
           test -s crypto.css
-          test -s crypto-launcher.js
           grep -q 'Behavioral Pattern Detection' crypto.html
           grep -q 'Case Workspace' crypto.html
           grep -q 'Monitoring & Alerts' crypto.html
@@ -173,7 +171,6 @@ jobs:
           node --check crypto.js
           node --check crypto-report.js
           node --check pdf-export.js
-          node --check crypto-launcher.js
       - name: Run the Node regression suite
         # The map and Database logic inline in index.html is covered only by this Node suite.
         # A failure stops this deploy, not the Cloudflare mirror: it also deploys main on its own

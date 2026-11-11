@@ -24,7 +24,7 @@ mkdir -p "$STAGING"
 
 cp index.html main.html crypto.html privacy.html robots.txt ct-atlas-runtime.json \
    pdf-export.js deep-search.js deep-search.css report-illustration.js feedback.js feedback.css \
-   crypto.js crypto-report.js crypto.css crypto-launcher.js \
+   crypto.js crypto-report.js crypto.css \
    intelligence-map.svg crypto-intelligence.svg \
    usage-admin.js usage-admin.css usage-auth-fix.js \
    workspace-ui.js workspace-ui.css sound-effects.js sound-check.html \
@@ -56,8 +56,7 @@ python3 tools/daily_publication_audit.py manifest --directory "$STAGING" --outpu
 
 # The pages request the logo as "CT-ATLAS.png" (exact case), the file the logo
 # workflow versions. GitHub Pages serves it regardless of case, but Cloudflare
-# Workers assets are an exact-match lookup, so stage that exact name (the
-# tracked lowercase ct-atlas.png duplicate is not what the pages use).
+# Workers assets are an exact-match lookup, so stage that exact name.
 cp CT-ATLAS.png "$STAGING/CT-ATLAS.png"
 cp CT-ATLAS-256.png "$STAGING/CT-ATLAS-256.png"
 

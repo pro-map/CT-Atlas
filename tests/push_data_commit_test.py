@@ -25,7 +25,7 @@ DATA_WORKFLOWS = {
     "review-archive-backlog.yml", "daily-radnuc-background.yml",
 }
 # They commit index.html, code rather than data.
-CODE_WORKFLOWS = {"apply-usage-upgrade.yml", "refresh-logo-only.yml"}
+CODE_WORKFLOWS = {"refresh-logo-only.yml"}
 
 
 def git(*args, cwd):
