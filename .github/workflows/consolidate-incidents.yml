@@ -72,6 +72,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
+
       - name: Consolidate incidents
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -89,7 +94,8 @@ jobs:
           set -euo pipefail
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
-          git add events.json incident_consolidation_state.json
+          python3 events_store.py stage
+          git add incident_consolidation_state.json
           # This Pacific day's Gemini requests (the job's daily allocation).
           if [ -f quota/gemini-3.1-consolidation.json ]; then git add quota/gemini-3.1-consolidation.json; fi
           if git diff --cached --quiet; then

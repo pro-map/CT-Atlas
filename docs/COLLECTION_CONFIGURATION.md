@@ -11,6 +11,16 @@ in `collector.py` are not the complete scheduled configuration.
 are a separate interactive search system. Its 14 language/script codes are not
 the daily/specialist pipeline's 21 codes.
 
+## Where the database is committed
+
+Every tool reads and writes `events.json` in the checkout. The committed copy is
+moving to one file per month under `data/events/`
+([STORAGE_MIGRATION.md](STORAGE_MIGRATION.md)): each job first runs
+`python3 events_store.py materialize`, which rebuilds `events.json` from the month
+files (or checks that the two agree), and every data commit stages through
+`python3 events_store.py stage` instead of `git add events.json`. The published
+`events.json` keeps its URL and bytes.
+
 ## Authoritative vocabulary and effective settings
 
 | File/API | Role |

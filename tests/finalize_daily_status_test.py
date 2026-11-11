@@ -316,6 +316,10 @@ class FinalizeDailyStatusTests(unittest.TestCase):
         self.assertEqual(second["finalized_at"], "2026-10-14T13:00:00+00:00")
         self.assertNotEqual(first["finalized_at"], second["finalized_at"])
 
+    def test_the_database_comes_from_events_store_in_every_layout(self):
+        self.assertIs(MODULE.events_store.mode(self.root), "legacy")
+        self.assertEqual(MODULE.baseline_database(self.path, self.root), self.original)
+
     def main_outputs(self, *extra):
         output = self.root / "github-output.txt"
         with patch.dict("os.environ", {"GITHUB_OUTPUT": str(output)}), \
@@ -445,6 +449,55 @@ class FinalizeDailyStatusTests(unittest.TestCase):
         self.assertEqual(result["categories"][0]["candidates"], 500)
         self.assertEqual(result["categories"][0]["recent_pending"], 443)
         self.assertEqual(result["categories"][0]["last_attempt_at"], "2026-10-14T06:12:23Z")
+
+
+class StoreModeFinalizeTests(unittest.TestCase):
+    """After the contract (docs/STORAGE_MIGRATION.md) events.json is not in Git: the
+    restore after a failed collection and the baseline come from data/events/."""
+
+    def setUp(self):
+        FinalizeDailyStatusTests.setUp(self)
+        store = MODULE.events_store
+        root = Path(__file__).resolve().parents[1]
+        (self.root / ".gitattributes").write_bytes((root / ".gitattributes").read_bytes())
+        self.path.write_bytes(store.canonical(self.original))
+        self.git("add", "-A")
+        self.git("commit", "--quiet", "-m", "Canonical snapshot")
+        with patch("sys.stdout", new=io.StringIO()), patch.dict("os.environ", {"GITHUB_ACTIONS": ""}):
+            for direction in ("expand", "contract"):
+                self.git("commit", "--quiet", "-m", store.migrate(self.root, direction)["message"])
+        self.assertEqual(store.mode(self.root), "store")
+
+    def git(self, *args):
+        return subprocess.run(["git", *args], cwd=self.root, check=True, capture_output=True, text=True).stdout
+
+    def stage(self):
+        with patch("sys.stdout", new=io.StringIO()), patch.dict("os.environ", {"GITHUB_ACTIONS": ""}):
+            MODULE.events_store.stage(self.root)
+        return set(self.git("diff", "--cached", "--name-only").split())
+
+    def test_a_failed_collection_restores_the_database_from_the_store(self):
+        self.path.write_text('{"events": [broken', encoding="utf-8")
+        result = self.run_finalize(collect="failure", geo="skipped")
+        database = json.loads(self.path.read_text(encoding="utf-8"))
+        self.assertEqual({key: value for key, value in database.items() if key != "collection_status"}, self.original)
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(self.stage(), {"data/events/meta.json"}, "a failed run publishes its status only")
+
+    def test_an_unchanged_refresh_commits_nothing(self):
+        self.write(self.path, {**self.original, "collection_status": progress(
+            geolocation={"status": "complete", "outcome": "success", "pending": 0})})
+        self.run_finalize(refresh=True)
+        self.stage()
+        self.git("commit", "--quiet", "-m", "Status")
+        meta = (self.root / "data/events/meta.json").read_bytes()
+        with patch.object(MODULE, "datetime", LaterClock):
+            self.run_finalize(refresh=True)
+        self.assertEqual(self.stage(), set())
+        self.assertEqual((self.root / "data/events/meta.json").read_bytes(), meta)
+
+    write = staticmethod(lambda path, value: path.write_text(json.dumps(value), encoding="utf-8"))
+    run_finalize = lambda self, **kwargs: FinalizeDailyStatusTests.run_finalize(self, **kwargs)  # noqa: E731
 
 
 if __name__ == "__main__":

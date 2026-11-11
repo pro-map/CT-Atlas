@@ -43,6 +43,10 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
       - name: Validate progress publication
         run: python -m unittest discover -s tests -p 'finalize_daily_status_test.py'
       - name: Refresh independent collection progress without AI calls
@@ -51,7 +55,8 @@ jobs:
         id: commit
         run: |
           set -euo pipefail
-          git add -- events.json daily-collection-status.json
+          python3 events_store.py stage
+          git add -- daily-collection-status.json
           if git diff --cached --quiet; then
             # The refresh keeps finalized_at when nothing else changed.
             echo "Collection status unchanged; nothing to commit."

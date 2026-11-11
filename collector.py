@@ -5,6 +5,7 @@ import threat_categories
 import collection_config
 import retired_categories
 import daily_pipeline
+import events_store
 import known_incidents
 import feedparser
 import hashlib
@@ -2329,6 +2330,8 @@ def atomic_json_write(path, data, compact=False):
 
 def load_database_strict():
     # A missing database is not an empty one: the run would publish only its own events.
+    # Once the database is committed as data/events/, events.json is rebuilt after checkout.
+    events_store.require_materialized(Path(OUTPUT_FILE).resolve().parent)
     if not os.path.exists(OUTPUT_FILE):
         raise RuntimeError(f"{OUTPUT_FILE} is missing; refusing to start from an empty database.")
     try:

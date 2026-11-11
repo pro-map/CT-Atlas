@@ -14,7 +14,8 @@ const {spawnSync}=require('node:child_process');
 
 const read=file=>fs.readFileSync(file,'utf8');
 const excluded=JSON.parse(read('tools/events-lite-excluded-fields.json'));
-const fullText=read('events.json');
+const {realDatabasePath}=require('./helpers/real-database.cjs');
+const fullText=read(realDatabasePath());
 const full=JSON.parse(fullText);
 
 let liteDir;

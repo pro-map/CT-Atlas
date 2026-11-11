@@ -75,5 +75,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
+
       - name: Sync to D1
         run: python -u tools/sync_background_corpus.py

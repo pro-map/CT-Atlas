@@ -5,19 +5,28 @@
 #
 # A rebase merges events.json as text, so two writers' edits on different lines
 # can merge without a conflict into a database that no longer parses or holds an
-# id twice. When the rebased commit changes events.json, it must pass the
-# snapshot step's rule (daily_reliability.rows) before it is pushed.
+# id twice. When the rebased commit changes events.json or the monthly store
+# (data/events/, docs/STORAGE_MIGRATION.md), `events_store.py check` must pass
+# before it is pushed: valid unique ids, and once the store exists, month files
+# that rebuild events.json exactly. Two store commits always conflict on
+# meta.json's events_sha256 line, so they never merge silently.
 #
 # Exit status 1, with nothing pushed: a rebase conflict (the rebase is aborted),
-# a rebased events.json that fails the check, or 5 failed tries.
+# a rebased database that fails the check, or 5 failed tries.
 #
 # Usage, from the repository root after `git commit`: bash tools/push_data_commit.sh
 set -euo pipefail
 
 check_rebased_database() {
-  if git diff --quiet origin/main HEAD -- events.json; then
+  if git diff --quiet origin/main HEAD -- events.json data/events; then
     return 0
   fi
+  # The rebased tree's own events_store.py knows the layout it committed.
+  if [ -f events_store.py ]; then
+    python3 events_store.py check
+    return
+  fi
+  # A tree without events_store.py: only the legacy layout is possible.
   python3 - <<'PY'
 import json
 import subprocess
@@ -55,7 +64,7 @@ main() {
         exit 1
       fi
       if ! check_rebased_database; then
-        echo "The rebased events.json failed its check. Nothing was pushed." >&2
+        echo "The rebased database failed its check. Nothing was pushed." >&2
         exit 1
       fi
       if git push origin HEAD:main; then

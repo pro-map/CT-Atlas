@@ -171,6 +171,10 @@ jobs:
           node --check crypto.js
           node --check crypto-report.js
           node --check pdf-export.js
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
       - name: Run the Node regression suite
         # The map and Database logic inline in index.html is covered only by this Node suite.
         # A failure stops this deploy, not the Cloudflare mirror: it also deploys main on its own

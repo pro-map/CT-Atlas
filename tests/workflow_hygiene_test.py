@@ -206,7 +206,8 @@ class RunnerImageTests(unittest.TestCase):
         stripped = re.sub(r"(?s)      - name: Set up Python\n.*?(?=      - name: )", "", source)
         self.assertNotEqual(stripped, source)
         for edited in (stripped, stripped.replace("runs-on: ubuntu-24.04", "runs-on: ubuntu-latest")):
-            self.assertEqual(undeclared_python(edited), {"deploy": ["node --test tests/*.test.cjs"]})
+            self.assertEqual(undeclared_python(edited),
+                             {"deploy": ["python3 events_store.py materialize", "node --test tests/*.test.cjs"]})
 
     def test_the_scan_treats_any_runner_but_a_numbered_image_as_moving(self):
         command = "run: python3 tools/check.py"
@@ -350,6 +351,8 @@ class CheckpointSurvivalTests(unittest.TestCase):
         self.git("config", "user.email", "test@example.test")
         self.git("config", "user.name", "Test")
         self.write(cache=0, queue=["reviewed", "waiting"], events=[])
+        # The commit step stages the database through it (docs/STORAGE_MIGRATION.md).
+        (self.root / "events_store.py").write_bytes((ROOT / "events_store.py").read_bytes())
         self.git("add", ".")
         self.git("commit", "--quiet", "-m", "Published snapshot")
 
@@ -364,9 +367,10 @@ class CheckpointSurvivalTests(unittest.TestCase):
         (self.root / "events.json").write_text(json.dumps(
             {"events": [{"id": key} for key in events], "collection_status": {"status": "partial"}}), encoding="utf-8")
 
-    def commit_step(self, *, collect="success", reconcile="success", audit="success", status="success"):
+    def commit_step(self, *, collect="success", reconcile="success", audit="success", status="success",
+                    events=("reviewed",)):
         # After the run: 30 calls spent, "reviewed" published and out of the queue.
-        self.write(cache=30, queue=["waiting"], events=["reviewed"])
+        self.write(cache=30, queue=["waiting"], events=list(events))
         result = subprocess.run([sys.executable, "-c", self.script], cwd=self.root, capture_output=True, text=True,
                                 env={**os.environ, "COLLECT_OUTCOME": collect, "RECONCILE_OUTCOME": reconcile,
                                      "AUDIT_OUTCOME": audit, "STATUS_OUTCOME": status, "REFUSAL_FILE": str(self.refusal)})
@@ -396,6 +400,13 @@ class CheckpointSurvivalTests(unittest.TestCase):
                 self.assertTrue(refusal)
                 self.assertEqual(staged, {"ai_article_selection_cache.json"},
                                  "this queue lost the reviewed articles the refused database carries")
+
+    def test_a_database_events_store_refuses_keeps_the_ledger_and_the_reviews(self):
+        # A duplicated id (or a sudden shrink) used to fail the whole step: the
+        # cache and the ledger were lost with it, and the next run overspent.
+        staged, refusal = self.commit_step(events=("reviewed", "reviewed"))
+        self.assertIn("events_store.py refused the database", refusal)
+        self.assertEqual(staged, {"ai_article_selection_cache.json"})
 
     def test_a_failed_collection_keeps_its_queue_too(self):
         # Its queue was saved before any review, so nothing can be lost by it.

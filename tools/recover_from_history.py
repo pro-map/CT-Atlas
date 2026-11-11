@@ -2,7 +2,9 @@
 """Recover, for the background archive, the map events and related articles
 that left events.json over its git history without being archived.
 
-Every committed version of events.json is read (oldest first). An event (or
+Every committed version of events.json is read (oldest first), from either
+layout: events.json itself, or the monthly store in data/events/
+(docs/STORAGE_MIGRATION.md), rebuilt by events_store.build_ref. An event (or
 related article) present in some version but absent from the current file is
 classified by why it left:
 
@@ -42,6 +44,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+import events_store  # noqa: E402
 RETENTION_DAYS = 180
 # A little slack: the prune runs on the collector's schedule, not at midnight.
 RETENTION_SLACK_DAYS = 2
@@ -83,14 +86,15 @@ def classify(event, removed_by, removed_on, later_score):
 def scan_history(canonical_url):
     """Last known version of every lead event and related article, and the
     commit (date, subject) that removed it."""
-    commits = git("log", "--reverse", "--format=%H|%ad|%s", "--date=iso-strict", "--", "events.json").strip().splitlines()
+    commits = git("log", "--reverse", "--format=%H|%ad|%s", "--date=iso-strict", "--",
+                  events_store.DATABASE, events_store.STORE).strip().splitlines()
     leads, related = {}, {}
     previous_leads, previous_related = set(), set()
     for index, line in enumerate(commits):
         sha, date, subject = line.split("|", 2)
         try:
-            data = json.loads(git("show", f"{sha}:events.json", binary=True).decode("utf-8"))
-        except (subprocess.CalledProcessError, ValueError):
+            data = json.loads(events_store.build_ref(ROOT, sha).decode("utf-8"))
+        except (events_store.StoreError, ValueError):
             continue
         now_leads, now_related = set(), set()
         for event in data.get("events") or []:
@@ -143,6 +147,7 @@ def main(argv=None):
     collector = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(collector)
 
+    events_store.require_materialized(ROOT)
     current = json.loads((ROOT / "events.json").read_text(encoding="utf-8"))
     current_urls, live_events = set(), {}
     for event in current.get("events") or []:

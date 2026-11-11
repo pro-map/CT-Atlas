@@ -75,6 +75,7 @@ class CollectionConfigurationTests(unittest.TestCase):
                 self.assertEqual(p.read_bytes(),raw)
 
     def test_report_does_not_claim_fetched_events_or_write_checkpoints(self):
+        import events_store;events_store.require_materialized(ROOT)
         paths=[ROOT/'events.json',*(ROOT/'quota').glob('*.json'),*(ROOT/'archive').glob('*state.json')]
         before={p:hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
         with patch('requests.sessions.Session.request',side_effect=AssertionError('Network forbidden')):

@@ -16,6 +16,11 @@ runs:
       uses: actions/setup-python@v6
       with:
         python-version: "3.12"
+    # Rebuilds events.json from data/events/ once the store is the database, or checks
+    # that the two agree (docs/STORAGE_MIGRATION.md). The site still serves events.json.
+    - name: Materialize events.json from the store
+      shell: bash
+      run: python3 events_store.py materialize
     - name: Build events-lite.json
       shell: bash
       run: |
@@ -46,3 +51,6 @@ runs:
         rm -f ai_article_selection_cache.json incident_consolidation_state.json
         rm -f map-integrity-decisions.json
         rm -rf archive quota
+        # The monthly store events.json was rebuilt from; the site serves events.json.
+        rm -rf data/events
+        rm -f events.json.store-base

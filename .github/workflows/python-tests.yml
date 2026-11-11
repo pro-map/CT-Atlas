@@ -12,6 +12,7 @@ on:
     paths:
       - "*.py"
       - "*.json"
+      - "data/events/**"
       - ".github/workflows/**"
       - ".github/actions/**"
       - "collector.py"
@@ -37,6 +38,7 @@ on:
     paths:
       - "*.py"
       - "*.json"
+      - "data/events/**"
       - ".github/workflows/**"
       - ".github/actions/**"
       - "collector.py"
@@ -83,6 +85,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
+
+      # The real-file tests read events.json; check refuses a commit whose
+      # month files and events.json disagree (docs/STORAGE_MIGRATION.md).
+      - name: Materialize events.json and check the committed database
+        run: |
+          python events_store.py materialize
+          python events_store.py check
 
       - name: Run the tests
         env:

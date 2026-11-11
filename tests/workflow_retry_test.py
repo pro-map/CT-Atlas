@@ -86,7 +86,7 @@ class MapPublicationRetryTests(unittest.TestCase):
             with self.subTest(workflow=name):
                 source = WORKFLOWS[name]
                 commit = source.split("id: commit\n", 1)[1].split("\n  deploy:", 1)[0]
-                unchanged = commit.index("git add -- events.json\n")
+                unchanged = commit.index("python3 events_store.py stage\n")
                 check = commit.index("if git diff --cached --quiet; then", unchanged)
                 no_op = commit[check:commit.index("          fi\n", check)]
                 self.assertIn("exit 0", no_op)

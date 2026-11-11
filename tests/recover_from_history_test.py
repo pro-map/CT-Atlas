@@ -38,5 +38,56 @@ class ClassifyTests(unittest.TestCase):
                          ("retention_prune", None))
 
 
+class HistoryLayoutTests(unittest.TestCase):
+    """The scan reads every version, before and after the database moved to data/events/."""
+
+    def test_both_layouts_are_scanned(self):
+        import contextlib
+        import io
+        import os
+        import shutil
+        import subprocess
+        import tempfile
+        from pathlib import Path
+        from unittest import mock
+        store = recover.events_store
+
+        def item(key, published):
+            return {"id": key, "url": f"https://news.test/{key}", "title": key, "published": published}
+
+        def save(*events):
+            (root / "events.json").write_bytes(store.canonical({"number_of_events": len(events), "events": list(events)}))
+
+        def git(*args):
+            subprocess.run(["git", *args], cwd=root, check=True, capture_output=True)
+
+        with tempfile.TemporaryDirectory() as folder, mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""}), \
+                contextlib.redirect_stdout(io.StringIO()):
+            root = Path(folder)
+            git("init", "--quiet", "--initial-branch=main")
+            git("config", "user.email", "test@example.test")
+            git("config", "user.name", "Test")
+            shutil.copyfile(Path(recover.ROOT) / ".gitattributes", root / ".gitattributes")
+            a, b, c = item("a", "2026-11-02T00:00:00Z"), item("b", "2026-10-01T00:00:00Z"), item("c", "2026-11-05T00:00:00Z")
+            save(a, b)
+            git("add", "-A")
+            git("commit", "-q", "-m", "Legacy")
+            save(a)
+            git("add", "-A")
+            git("commit", "-q", "-m", "Legacy removal of b")
+            for direction in ("expand", "contract"):
+                git("commit", "-q", "-m", store.migrate(root, direction)["message"])
+            save(c)
+            with mock.patch.dict(os.environ, {"ALLOW_SHRINK": "1"}):
+                store.stage(root)
+            git("commit", "-q", "-m", "Store removal of a")
+            with mock.patch.object(recover, "ROOT", root):
+                leads, _ = recover.scan_history(lambda url: url)
+        self.assertEqual(set(leads), {a["url"], b["url"], c["url"]})
+        self.assertIn("Legacy removal of b", leads[b["url"]]["removed_by"])
+        self.assertIn("Store removal of a", leads[a["url"]]["removed_by"])
+        self.assertIsNone(leads[c["url"]]["removed_by"])
+
+
 if __name__ == "__main__":
     unittest.main()
