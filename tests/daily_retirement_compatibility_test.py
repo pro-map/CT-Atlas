@@ -27,17 +27,20 @@ class RetirementCompatibilityTests(unittest.TestCase):
         taxonomy.annotate(event, {'categories': ['Attacks'], 'cbrn_subgroups': ['RADNUC'], 'actor_scope': 'STATE_ONLY'})
         self.assertNotIn(taxonomy.RN, event['categories'])
 
-    def test_retired_quiz_has_no_automatic_trigger_or_model_secret(self):
-        workflow = (ROOT / '.github/workflows/refresh-daily-quiz.yml').read_text()
-        self.assertNotIn('  schedule:', workflow)
-        self.assertNotIn('  push:', workflow)
-        self.assertNotIn('secrets.', workflow)
-        self.assertNotIn('generate_daily_quiz.py', workflow)
-
-    def test_hub_no_longer_loads_or_launches_quiz(self):
-        page = (ROOT / 'main.html').read_text()
-        self.assertNotIn('mainQuizLauncher', page)
-        self.assertNotIn('daily-quiz.js', page)
+    def test_the_quiz_is_removed_everywhere(self):
+        # Removed for good at the owner's request on 2026-11-11.
+        for path in ('daily-quiz.js', 'daily-quiz.css', 'daily-quiz.json', 'daily-quiz-history.json',
+                     'cloudflare-worker/quiz.js', 'tools/generate_daily_quiz.py',
+                     '.github/workflows/refresh-daily-quiz.yml'):
+            self.assertFalse((ROOT / path).exists(), path)
+        worker = (ROOT / 'cloudflare-worker/index.js').read_text(encoding='utf-8')
+        gate = (ROOT / 'cloudflare-worker/report-gate.js').read_text(encoding='utf-8')
+        self.assertNotIn('/quiz-', worker + gate)
+        self.assertNotIn('quiz_tracking', worker)
+        self.assertNotIn('quiz_answers: 0', (ROOT / 'cloudflare-worker/shared.js').read_text(encoding='utf-8'))
+        for page in ('main.html', 'tools/deploy_mirror.sh', 'usage-auth-fix.js', 'usage-admin.css',
+                     '.github/workflows/live-smoke.yml', '.github/workflows/deploy-current-ct-atlas-ui.yml'):
+            self.assertNotIn('quiz', (ROOT / page).read_text(encoding='utf-8').lower(), page)
 
 if __name__ == '__main__':
     unittest.main()

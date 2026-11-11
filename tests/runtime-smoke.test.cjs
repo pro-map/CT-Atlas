@@ -11,7 +11,6 @@ function check(runtime) {
   const files = {
     '/tmp/runtime.json': JSON.stringify(runtime),
     'ct-atlas-runtime.json': JSON.stringify(expected),
-    '/tmp/quiz.json': JSON.stringify({options: ['A', 'B', 'C'], correct_index: 0}),
     '/tmp/index.html': fs.readFileSync('index.html', 'utf8'),
     '/tmp/pdf-export.js': fs.readFileSync('pdf-export.js', 'utf8'),
   };

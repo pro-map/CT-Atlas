@@ -53,7 +53,7 @@ function withAdminDisplayName(row){
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 // Stored totals keep the counters of retired tools. They are history, not current activity,
 // so the admin statistics leave them out; nothing removes them from storage.
-const RETIRED_USAGE_COUNTERS = Object.freeze(["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups"]);
+const RETIRED_USAGE_COUNTERS = Object.freeze(["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups", "quiz_answers", "quiz_correct", "quiz_incorrect"]);
 const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true });
 function tabAccessTemplate(username = "") {
   return { username, map: 0, crypto: 0 };
@@ -812,10 +812,7 @@ export class ReportGate {
           "blocked_report_requests",
           "quick_ask_requests",
           "blockchain_searches",
-          "feedback_submissions",
-          "quiz_answers",
-          "quiz_correct",
-          "quiz_incorrect"
+          "feedback_submissions"
         ]) {
           row[metric] =
             Number(row[metric] || 0) +
@@ -834,7 +831,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "blockchain_searches", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "blockchain_searches", "feedback_submissions"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -849,10 +846,7 @@ export class ReportGate {
       blocked_report_requests: 0,
       quick_ask_requests: 0,
       blockchain_searches: 0,
-      feedback_submissions: 0,
-      quiz_answers: 0,
-      quiz_correct: 0,
-      quiz_incorrect: 0
+      feedback_submissions: 0
     };
 
     for (const row of rows) {
@@ -869,10 +863,7 @@ export class ReportGate {
         "blocked_report_requests",
         "quick_ask_requests",
         "blockchain_searches",
-        "feedback_submissions",
-        "quiz_answers",
-        "quiz_correct",
-        "quiz_incorrect"
+        "feedback_submissions"
       ]) {
         summary[metric] += Number(row[metric] || 0);
       }
@@ -890,93 +881,6 @@ export class ReportGate {
       generated_at: new Date().toISOString(),
       summary,
       users: rows.map(withAdminDisplayName)
-    };
-  }
-
-  async quizHistory(period) {
-    const dateKeys = new Set();
-    if (period !== "all") {
-      const days = period === "today" ? 1 : Number(period);
-      for (let offset = 0; offset < days; offset++) {
-        dateKeys.add(parisDayKey(Date.now() - offset * 86400000));
-      }
-    }
-
-    const rows = [];
-    let startAfter = "";
-    for (let page = 0; page < 100; page++) {
-      const options = { prefix: "quiz-answer:", limit: 1000 };
-      if (startAfter) options.startAfter = startAfter;
-      const batch = await this.state.storage.list(options);
-      if (!batch || !batch.size) break;
-
-      for (const [key, value] of batch.entries()) {
-        if (!value || typeof value !== "object") continue;
-        const parts = String(key).split(":");
-        const quizDate = String(value.quiz_date || parts[1] || "");
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(quizDate)) continue;
-        if (dateKeys.size && !dateKeys.has(quizDate)) continue;
-
-        const username = normalizeUsername(value.username || parts.slice(2).join(":"));
-        if (!isAllowedUser(username, this.env)) continue;
-
-        const selectedIndex = Number.isInteger(value.selected_index)
-          ? value.selected_index
-          : Number(value.selected_index);
-        const correctIndex = Number.isInteger(value.correct_index)
-          ? value.correct_index
-          : Number(value.correct_index);
-        const optionsList = Array.isArray(value.options)
-          ? value.options.map(item => cleanText(item, 160)).slice(0, 3)
-          : [];
-        const answerLabel = (index, fallback) =>
-          Number.isInteger(index) && index >= 0
-            ? (optionsList[index] || fallback)
-            : fallback;
-        const sourceUrl = /^https:\/\//i.test(String(value.source_url || ""))
-          ? cleanText(value.source_url, 1200)
-          : "";
-
-        rows.push({
-          username,
-          quiz_date: quizDate,
-          category: cleanText(value.category, 120),
-          question: cleanText(value.question, 500),
-          options: optionsList,
-          selected_index: Number.isInteger(selectedIndex) ? selectedIndex : null,
-          selected_answer: cleanText(value.selected_answer, 160) || answerLabel(selectedIndex, "—"),
-          correct_index: Number.isInteger(correctIndex) ? correctIndex : null,
-          correct_answer: cleanText(value.correct_answer, 160) || answerLabel(correctIndex, "—"),
-          correct: value.correct === true,
-          quiz_id: cleanText(value.quiz_id, 128),
-          explanation: cleanText(value.explanation, 700),
-          source_url: sourceUrl,
-          source_checked_at: cleanText(value.source_checked_at, 64),
-          answered_at: cleanText(value.answered_at, 64)
-        });
-      }
-
-      const keys = Array.from(batch.keys());
-      const lastKey = keys[keys.length - 1];
-      if (batch.size < 1000 || !lastKey || lastKey === startAfter) break;
-      startAfter = lastKey;
-    }
-
-    rows.sort((a, b) =>
-      String(b.answered_at || b.quiz_date).localeCompare(String(a.answered_at || a.quiz_date))
-    );
-    const periodLabel =
-      period === "today" ? "Today · Europe/Paris" :
-      period === "7" ? "Last 7 days · Europe/Paris" :
-      period === "30" ? "Last 30 days · Europe/Paris" :
-      "All time";
-
-    return {
-      period,
-      period_label: periodLabel,
-      generated_at: new Date().toISOString(),
-      total: rows.length,
-      answers: rows.map(withAdminDisplayName)
     };
   }
 
@@ -1712,86 +1616,6 @@ export class ReportGate {
       }
 
       return Response.json({ ok: true });
-    }
-
-    if (url.pathname === "/quiz-history") {
-      const username = normalizeUsername(body.username);
-      if (username !== "admin") {
-        return Response.json({ error: "Admin access required." }, { status: 403 });
-      }
-      const period = String(body.period || "today");
-      if (!["today", "7", "30", "all"].includes(period)) {
-        return Response.json({ error: "Unsupported history period." }, { status: 400 });
-      }
-      return Response.json(await this.quizHistory(period));
-    }
-
-    if (url.pathname === "/quiz-answer-record") {
-      const username = normalizeUsername(body.username);
-      const quizDate = String(body.quiz_date || "");
-      const correct = body.correct === true;
-
-      if (!isAllowedUser(username, this.env)) {
-        return Response.json({ error: "Unknown user." }, { status: 400 });
-      }
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(quizDate)) {
-        return Response.json({ error: "Invalid quiz date." }, { status: 400 });
-      }
-
-      const answerKey = `quiz-answer:${quizDate}:${username}`;
-      return this.state.storage.transaction(async txn => {
-      const existing = await txn.get(answerKey);
-      if (existing) {
-        return Response.json({ ok: true, already_recorded: true, ...existing });
-      }
-
-      const quizOptions = Array.isArray(body.options)
-        ? body.options.map(item => cleanText(item, 160)).slice(0, 3)
-        : [];
-
-      const answer = {
-        username,
-        quiz_date: quizDate,
-        correct,
-        selected_index: body.selected_index,
-        quiz_id: body.quiz_id,
-        correct_index: body.correct_index,
-        category: cleanText(body.category, 120),
-        question: cleanText(body.question, 500),
-        options: quizOptions,
-        selected_answer: Number.isInteger(body.selected_index)
-          ? cleanText(quizOptions[body.selected_index], 160)
-          : "",
-        correct_answer: Number.isInteger(body.correct_index)
-          ? cleanText(quizOptions[body.correct_index], 160)
-          : "",
-        source_checked_at: cleanText(body.source_checked_at, 64),
-        explanation: cleanText(body.explanation, 700),
-        source_url: /^https:\/\//i.test(String(body.source_url || ""))
-          ? cleanText(body.source_url, 1200)
-          : "",
-        answered_at: new Date(now).toISOString()
-      };
-      for (const key of [`usage-total:${username}`, `usage-day:${parisDayKey(now)}:${username}`]) {
-        const row = {...usageTemplate(username), ...await txn.get(key)};
-        row.quiz_answers = Number(row.quiz_answers || 0) + 1;
-        row.quiz_correct = Number(row.quiz_correct || 0) + (correct ? 1 : 0);
-        row.quiz_incorrect = Number(row.quiz_incorrect || 0) + (correct ? 0 : 1);
-        row.last_activity = answer.answered_at;
-        await txn.put(key, row);
-      }
-      await txn.put(answerKey, answer);
-      return Response.json({ ok: true, already_recorded: false, ...answer });
-      });
-    }
-
-    if (url.pathname === "/quiz-state") {
-      const username = normalizeUsername(body.username);
-      if (!isAllowedUser(username, this.env) || !/^\d{4}-\d{2}-\d{2}$/.test(String(body.quiz_date || ""))) {
-        return Response.json({error: "Invalid quiz state request."}, {status: 400});
-      }
-      const answer = await this.state.storage.get(`quiz-answer:${body.quiz_date}:${username}`);
-      return Response.json({ok: true, answered: Boolean(answer), answer: answer || null});
     }
 
     if (url.pathname === "/usage-increment") {

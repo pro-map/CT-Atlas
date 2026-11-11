@@ -50,7 +50,7 @@ jobs:
           url = f"CT-ATLAS-256.png?v={version}"
           page = Path("index.html")
           original = page.read_bytes()
-          pattern = rb"""(\b(?:src|href)\s*=\s*["'])(?:\./)?(?:ct-atlas|CT-ATLAS|CT-ATLAS-256|interpol-logo)\.png(?:\?[^"'<>\s]*)?(["'])"""
+          pattern = rb"""(\b(?:src|href)\s*=\s*["'])(?:\./)?(?:CT-ATLAS-256|CT-ATLAS|ct-atlas)\.png(?:\?[^"'<>\s]*)?(["'])"""
           updated, count = re.subn(
               pattern,
               lambda match: match[1] + url.encode("ascii") + match[2],

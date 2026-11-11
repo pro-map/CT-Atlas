@@ -278,7 +278,7 @@ function adminHistoryHtml(rows){
 // A user counts as connected in the selected period when they logged in, opened a workspace
 // or used any feature in it -- a session opened the day before still counts once it is used.
 const ADMIN_TAB_FIELDS=["crypto","map"];
-const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","blockchain_searches","feedback_submissions","quiz_answers"];
+const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","blockchain_searches","feedback_submissions"];
 
 function adminUsername(item){return String(item?.username||"").trim().toLowerCase();}
 

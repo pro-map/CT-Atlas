@@ -16,7 +16,7 @@ import requests
 
 
 # ============================================================
-# INTERPOL CT INTELLIGENCE MAP
+# CT ATLAS INTELLIGENCE MAP
 # GEMINI AI-FIRST GEOLOCATION V5.3 — SOURCE-FIDELITY + NEW EVENTS ONLY
 #
 # Principle:
@@ -2552,7 +2552,7 @@ def main():
     preserved_event_ids = load_preserved_event_ids()
     print()
     print("=" * 72)
-    print("INTERPOL CT Intelligence Map")
+    print("CT ATLAS Intelligence Map")
     print("GEMINI AI-FIRST GEOLOCATION V5.2 — ONE-SHOT RESCUE + CHECKPOINTS")
     print("=" * 72)
     print(

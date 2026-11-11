@@ -71,13 +71,7 @@
 
   <h1>What we collect</h1>
   <ul>
-    <li><strong>Daily quiz results.</strong> When you answer, we store your account
-    username, quiz date and identifier, first selected answer, correctness and
-    server timestamp, together with the correction shown. Earlier pilot records
-    may contain correctness only. The administrator can view per-account answer
-    counts, correct and incorrect totals and success rates for the selected period.
-    Results are shared between the main site and its mirror. This is an educational
-    self-test, not a secure examination or a measure of professional performance.</li>
+    <li><strong>Daily quiz results (retired).</strong> The daily quiz was removed on 11 November 2026 and no longer records answers. Answers recorded during the pilot (account username, quiz date and identifier, selected answer, correctness, timestamp and the correction shown) stay stored until the administrator deletes them.</li>
     <li><strong>Account credentials.</strong> A username and password.
     Passwords are stored only as a one-way cryptographic hash (SHA-256) and
     are never stored or logged in plain text.</li>
@@ -186,10 +180,7 @@
   <p>Login/security records are retained only as long as needed for security
   auditing; the application keeps a bounded recent login log. Account records
   persist for the duration of the testing/pilot period they were created for.</p>
-  <p>Quiz attempts and aggregate scores are retained during the pilot for learning
-  follow-up and to prevent repeated attempts being counted. They are not currently
-  subject to automatic expiry. You may ask the administrator to delete them.
-  Quiz participation is optional; no quiz result is recorded merely by viewing a question.</p>
+  <p>Answers to the retired daily quiz are kept until the administrator deletes them. You may ask the administrator to delete yours.</p>
   <p>Infrastructure providers may maintain independent operational, security,
   billing, backup or point-in-time-recovery records according to their own service
   terms and retention policies. Application-level deletion therefore does not

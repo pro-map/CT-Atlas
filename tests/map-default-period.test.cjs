@@ -64,7 +64,7 @@ test("heat zones and the offices layer are always on (no toggles), and a missing
   assert.match(html,/let showHeat\s*=\s*true;/);
   assert.ok(!html.includes('id="heatToggle"'),"the heat toggle was removed: heat is always on");
   assert.ok(!html.includes('id="officesToggle"'),"the offices toggle was removed: offices are always shown");
-  assert.match(html,/let showInterpolOffices\s*=\s*true;/);
+  assert.match(html,/let showOfficeLocations\s*=\s*true;/);
   // Both the render guard and the start-up fallback must tolerate the CDN plugin not loading.
   assert.match(html,/showHeat\s*&&\s*typeof L\.heatLayer === "function"/);
   assert.match(html,/typeof L\.heatLayer !== "function"[\s\S]{0,200}showHeat\s*=\s*false;/);

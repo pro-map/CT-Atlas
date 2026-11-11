@@ -336,9 +336,6 @@ function usageTemplate(username = "") {
     quick_ask_requests: 0,
     blockchain_searches: 0,
     feedback_submissions: 0,
-    quiz_answers: 0,
-    quiz_correct: 0,
-    quiz_incorrect: 0,
     last_activity: ""
   };
 }

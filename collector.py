@@ -47,7 +47,7 @@ except Exception:
 
 
 # ============================================================
-# INTERPOL CT INTELLIGENCE MAP
+# CT ATLAS INTELLIGENCE MAP
 # OSINT COLLECTOR V13 — RESUMABLE DAILY COLLECTION
 #
 # EFFECTIVE CONFIGURATION (not the historical defaults in this file):
@@ -647,7 +647,6 @@ CORE_SEARCH_QUERIES = {
 #   - U.S. Treasury / OFAC
 #   - Europol
 #   - UK Government / Counter-Terrorism
-#   - INTERPOL English News
 #
 # Results still pass through the normal CT relevance filter and
 # the intelligent event deduplication layer, so the same incident
@@ -667,9 +666,6 @@ OFFICIAL_SOURCE_QUERIES = {
         '(terrorist OR terrorism OR ISIS OR ISIL OR Hamas OR Hizballah OR Hezbollah OR al-Qaeda) '
         '("material support" OR financing OR funding OR money laundering OR cryptocurrency)',
 
-        'site:interpol.int/en/News-and-Events/News '
-        '("terrorism financing" OR "terrorist financing")',
-
     ],
 
 
@@ -682,10 +678,6 @@ OFFICIAL_SOURCE_QUERIES = {
         'site:justice.gov '
         '(terrorist OR terrorism OR ISIS OR extremist) '
         '(weapon OR weapons OR firearms OR explosives OR bomb OR drone)',
-
-        'site:interpol.int/en/News-and-Events/News '
-        '(terrorism OR terrorist) '
-        '(weapons OR firearms OR explosives)',
 
     ],
 
@@ -707,10 +699,6 @@ OFFICIAL_SOURCE_QUERIES = {
         '(terrorism OR terrorist OR extremist) '
         '(online OR radicalised OR radicalized OR propaganda OR social-media)',
 
-        'site:interpol.int/en/News-and-Events/News '
-        '(terrorism OR terrorist) '
-        '(online OR social-media OR cyber OR technology)',
-
     ],
 
 
@@ -727,10 +715,6 @@ OFFICIAL_SOURCE_QUERIES = {
         'site:counterterrorism.police.uk/news '
         '(terrorism OR terrorist) '
         '(attack OR plot OR bombing OR shooting OR stabbing)',
-
-        'site:interpol.int/en/News-and-Events/News '
-        '(terrorism OR terrorist) '
-        '(attack OR attacks OR operation)',
 
     ],
 
@@ -753,10 +737,6 @@ OFFICIAL_SOURCE_QUERIES = {
         '(terrorism OR terrorist OR extremist) '
         '(arrested OR arrest OR detained)',
 
-        'site:interpol.int/en/News-and-Events/News '
-        '(terrorism OR terrorist) '
-        '(arrest OR arrests OR apprehended)',
-
     ],
 
 
@@ -774,10 +754,6 @@ OFFICIAL_SOURCE_QUERIES = {
         '(terrorism OR terrorist) '
         '(raid OR operation OR neutralised OR eliminated)',
 
-        'site:interpol.int/en/News-and-Events/News '
-        '(terrorism OR terrorist) '
-        '(raid OR operation OR neutralized)',
-
     ],
 
 
@@ -792,10 +768,6 @@ OFFICIAL_SOURCE_QUERIES = {
         'site:gov.uk/government/news '
         '(terrorism OR terrorist OR extremism OR extremist) '
         '("artificial intelligence" OR AI OR online OR technology)',
-
-        'site:interpol.int/en/News-and-Events/News '
-        '(terrorism OR terrorist) '
-        '("artificial intelligence" OR AI OR technology OR emerging)',
 
     ],
 
@@ -975,7 +947,6 @@ CBRN_SOURCE_SITES = [
     ("IAEA public reporting", "iaea.org", "intergovernmental_source"),
     ("FBI CBRN reporting", "fbi.gov", "official_law_enforcement"),
     ("DOJ CBRN reporting", "justice.gov", "official_law_enforcement"),
-    ("INTERPOL CBRN reporting", "interpol.int", "official_law_enforcement"),
     ("Europol CBRN reporting", "europol.europa.eu", "official_law_enforcement"),
     ("UK Government CBRN reporting", "gov.uk", "official_government"),
     ("CBRNe World", "cbrneworld.com", "specialist_media"),
@@ -1108,10 +1079,6 @@ OFFICIAL_BROAD_QUERIES = [
     {
         "name": "GOV.UK",
         "query": 'site:gov.uk/government/news (terrorism OR terrorist OR extremism)',
-    },
-    {
-        "name": "INTERPOL",
-        "query": 'site:interpol.int/en/News-and-Events/News (terrorism OR terrorist OR "foreign terrorist fighters")',
     },
 ]
 
@@ -1565,7 +1532,6 @@ SOURCE_PRIORITY = {
     "GOV.UK": 124,
     "UK Government": 124,
     "Home Office": 124,
-    "INTERPOL": 122,
     "ACLED": 118,
     "Reuters": 105,
     "Associated Press": 100,
@@ -3314,7 +3280,7 @@ def collect_multilingual(days, profiles=None):
 def _collect_all_once(days):
     print()
     print("=" * 70)
-    print("INTERPOL CT Intelligence Map")
+    print("CT ATLAS Intelligence Map")
     print("OSINT Collector V13 — resumable daily collection")
     print("=" * 70)
     print(f"Window: {days} days")
@@ -9633,7 +9599,7 @@ def save_database(events, trend_summary=None):
         threat_categories.annotate(event)
     output = {
         "project":
-            "INTERPOL CT Intelligence Map",
+            "CT ATLAS Intelligence Map",
         "database_type":
             "Rolling CT situational awareness",
         "retention_days":
@@ -9765,7 +9731,6 @@ def save_database(events, trend_summary=None):
                 "Counter Terrorism Policing UK",
                 "Europol",
                 "UK Government / Counter-Terrorism",
-                "INTERPOL English News",
             ],
         "last_updated":
             datetime.now(

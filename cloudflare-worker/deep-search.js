@@ -1541,7 +1541,7 @@ function evidencePriority(row) {
   }
   score += Math.min(18, (row.sources?.length || 1) * 4.5);
   if (row.atlas_status === "potential_gap") score += 3;
-  if (row.search_engine === "acled" || /justice|interpol|europol|government|police|treasury|ministry|prosecut|united nations|unodc|customs|counter narcotics|interior/i.test(row.source || "")) score += 9;
+  if (row.search_engine === "acled" || /justice|europol|government|police|treasury|ministry|prosecut|united nations|unodc|customs|counter narcotics|interior/i.test(row.source || "")) score += 9;
   return score;
 }
 
