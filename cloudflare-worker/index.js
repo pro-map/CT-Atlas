@@ -105,12 +105,6 @@ return handleDatabaseEvents(request, env);
 if (url.pathname === "/database-stats" && request.method === "GET") {
 return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);
 }
-// The daily quiz was removed on 2026-11-11 and the owner had its stored answers erased.
-// The first call erases them (report-gate.js); every later call only shows what was done.
-if (url.pathname === "/retired-quiz-purge" && request.method === "GET") {
-const purge = await gateCall(env, "/retired-quiz-purge", {}).then(response => response.json()).catch(() => null);
-return jsonResponse(purge?.done ? purge : { ok: false, done: false }, purge?.done ? 200 : 503, env);
-}
 if (url.pathname === "/health" && request.method === "GET") {
 return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.44", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_risk_version: RISK_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, schedule_dispatcher_configured: Boolean(env.GITHUB_DISPATCH_TOKEN),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }

@@ -53,13 +53,7 @@ function withAdminDisplayName(row){
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 // Stored totals keep the counters of retired tools. They are history, not current activity,
 // so the admin statistics leave them out; nothing removes them from storage.
-const RETIRED_USAGE_COUNTERS = Object.freeze(["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups", "quiz_answers", "quiz_correct", "quiz_incorrect"]);
-// The daily quiz was removed on 2026-11-11 and the owner had its stored answers erased.
-// purgeRetiredQuiz runs once: it deletes every answer and the quiz counters kept in usage
-// rows, then this marker records what it did so it never runs again.
-const RETIRED_QUIZ_PURGE_MARKER = "__retired_quiz_purge";
-const RETIRED_QUIZ_ANSWER_PREFIX = "quiz-answer:";
-const RETIRED_QUIZ_COUNTERS = Object.freeze(["quiz_answers", "quiz_correct", "quiz_incorrect"]);
+const RETIRED_USAGE_COUNTERS = Object.freeze(["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups"]);
 const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true });
 function tabAccessTemplate(username = "") {
   return { username, map: 0, crypto: 0 };
@@ -536,55 +530,6 @@ export class ReportGate {
     return nextExpiry;
   }
 
-  async purgeRetiredQuiz() {
-    if (this.retiredQuizPurge) return this.retiredQuizPurge;
-    const done = await this.state.storage.get(RETIRED_QUIZ_PURGE_MARKER);
-    if (done) return (this.retiredQuizPurge = done);
-
-    let answersDeleted = 0;
-    for (let page = 0; page < 1000; page++) {
-      const batch = await this.state.storage.list({ prefix: RETIRED_QUIZ_ANSWER_PREFIX, limit: 128 });
-      if (!batch.size) break;
-      answersDeleted += Number(await this.state.storage.delete(Array.from(batch.keys())) || 0);
-    }
-    if ((await this.state.storage.list({ prefix: RETIRED_QUIZ_ANSWER_PREFIX, limit: 1 })).size) {
-      throw new Error("Retired quiz answers remain; the next request continues.");
-    }
-
-    let usageRowsCleared = 0;
-    for (const prefix of ["usage-total:", "usage-day:"]) {
-      let startAfter = "";
-      for (let page = 0; page < 1000; page++) {
-        const options = { prefix, limit: 500 };
-        if (startAfter) options.startAfter = startAfter;
-        const batch = await this.state.storage.list(options);
-        if (!batch.size) break;
-        const writes = [];
-        for (const [key, row] of batch.entries()) {
-          if (!row || typeof row !== "object" || !RETIRED_QUIZ_COUNTERS.some(counter => Object.hasOwn(row, counter))) continue;
-          const kept = { ...row };
-          for (const counter of RETIRED_QUIZ_COUNTERS) delete kept[counter];
-          writes.push([key, kept]);
-        }
-        for (let i = 0; i < writes.length; i += 128) {
-          await this.state.storage.put(Object.fromEntries(writes.slice(i, i + 128)));
-        }
-        usageRowsCleared += writes.length;
-        const keys = Array.from(batch.keys());
-        if (batch.size < 500) break;
-        startAfter = keys[keys.length - 1];
-      }
-    }
-
-    const marker = {
-      answers_deleted: answersDeleted,
-      usage_rows_cleared: usageRowsCleared,
-      completed_at: new Date().toISOString()
-    };
-    await this.state.storage.put(RETIRED_QUIZ_PURGE_MARKER, marker);
-    return (this.retiredQuizPurge = marker);
-  }
-
   async alarm() {
     const nextExpiry = await this.purgeExpired(Date.now());
     if (nextExpiry != null) await this.state.storage.setAlarm(nextExpiry);
@@ -945,10 +890,6 @@ export class ReportGate {
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
 
-    // /health calls this: the first call after the deploy erases, every later one reads the marker.
-    if (url.pathname === "/retired-quiz-purge") {
-      return Response.json({ ok: true, done: true, ...await this.purgeRetiredQuiz() });
-    }
 
     if (url.pathname === "/migration-status") {
       return Response.json({
