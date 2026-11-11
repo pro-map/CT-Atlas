@@ -156,5 +156,13 @@
       "starved_min_waiting": 100,
       "degraded_min_waiting": 600
     }
+  },
+  "data_maintenance": {
+    "kind": "reviewed_map_evidence_repair",
+    "applied_at": "2026-11-11T10:10:20.723270+00:00",
+    "changed_records": 5,
+    "removed_records": 0,
+    "new_records": 0,
+    "ai_calls": 0
   }
 }
