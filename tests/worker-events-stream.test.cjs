@@ -61,6 +61,7 @@ function findPython(){
 }
 
 before(()=>{
+ require('./helpers/real-database.cjs').realDatabasePath();
  const python=findPython();
  assert.ok(python,'python is required to build events-lite.json');
  dir=fs.mkdtempSync(path.join(os.tmpdir(),'events-stream-'));

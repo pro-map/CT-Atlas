@@ -11,10 +11,17 @@ It measures the staged blob, which is what the commit will hold, not the file
 in the working tree. Names given as arguments are paths in the index, relative
 to the repository root.
 
+The monthly store (data/events/, docs/STORAGE_MIGRATION.md) warns earlier, at
+40 MiB a month file: a busier month may need half-month files, which takes one
+verified migration commit. Once the store is the database (authority "store"),
+staging events.json again is an error: it is rebuilt after checkout, and
+committing it would bring back the 100 MiB problem.
+
     python tools/check_committed_sizes.py
 """
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -22,6 +29,8 @@ import sys
 MIB = 1024 * 1024
 WARN_BYTES = int(float(os.getenv("COMMITTED_FILE_WARN_MIB", "80")) * MIB)
 LIMIT_BYTES = 100 * MIB
+STORE_PREFIX = "data/events/"
+STORE_WARN_BYTES = int(float(os.getenv("STORE_FILE_WARN_MIB", "40")) * MIB)
 
 
 def staged_files():
@@ -39,9 +48,25 @@ def staged_size(name):
     return int(result.stdout) if result.returncode == 0 else None
 
 
+def staged_store_authority():
+    """The authority in the staged data/events/meta.json, or None."""
+    result = subprocess.run(["git", "cat-file", "blob", ":data/events/meta.json"], capture_output=True)
+    if result.returncode:
+        return None
+    try:
+        return json.loads(result.stdout.decode("utf-8")).get("authority")
+    except (ValueError, AttributeError):
+        return None
+
+
 def main(files=None):
     status = 0
-    for name in staged_files() if files is None else files:
+    names = staged_files() if files is None else files
+    if staged_store_authority() == "store" and staged_size("events.json") is not None:
+        print("::error title=events.json staged again::data/events is the database; events.json is rebuilt "
+              "from it and must not be committed (git rm --cached events.json).")
+        status = 1
+    for name in names:
         size = staged_size(name)
         if size is None:
             continue
@@ -51,6 +76,9 @@ def main(files=None):
             status = 1
         elif size >= WARN_BYTES:
             print(f"::warning title=File approaching GitHub's 100 MiB limit::{name} is {size / MIB:.1f} MiB.")
+        elif name.startswith(STORE_PREFIX) and size >= STORE_WARN_BYTES:
+            print(f"::warning title=Month file growing::{name} is {size / MIB:.1f} MiB; at about 50 MiB "
+                  "split the store into half-month files (docs/STORAGE_MIGRATION.md).")
     return status
 
 

@@ -32,6 +32,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
       - name: No-provider regression tests and shared-queue safety
         run: |
           python -m unittest discover -s tests -p 'workflow_concurrency_test.py'
@@ -85,7 +89,7 @@ jobs:
           set -euo pipefail
           git config user.name 'CT Intelligence Map Bot'
           git config user.email 'actions@github.com'
-          git add -- events.json
+          python3 events_store.py stage
           if git diff --cached --quiet; then
             # Nothing left to correct: the empty receipt stays in the run
             # artifact only. Committing it made a bot commit, a Pages deploy and

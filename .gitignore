@@ -19,3 +19,6 @@ zz-*.html
 # Outlet addresses, collector state and original evidence remain local/private.
 private-outlet-watch/
 *.sqlite
+
+# Which data/events/ build a local events.json came from (events_store.py).
+/events.json.store-base

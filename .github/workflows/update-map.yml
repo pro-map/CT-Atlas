@@ -91,6 +91,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
+
       # A broken main fails here, in seconds, before any step touches the data.
       # collector.py imports daily_source_retry and map_evidence_integrity only
       # mid-run, so they are imported explicitly. No tests run here: a flaky
@@ -298,6 +303,16 @@ jobs:
               refusal = 'Metadata reconciliation failed; refusing to publish'
           elif os.environ['STATUS_OUTCOME'] != 'success':
               refusal = 'Progress finalization failed; refusing to publish an unverified checkpoint'
+          if not refusal:
+              # Finalization has restored the Git database when collection failed.
+              # Its status-only update still needs publication so failures are visible.
+              db = json.loads(Path("events.json").read_text(encoding="utf-8"))
+              if not isinstance(db, dict) or not isinstance(db.get("events"), list) or not isinstance(db.get("collection_status"), dict):
+                  raise RuntimeError("Invalid database/status checkpoint; recovery artifact retained")
+              # Stages events.json, and the month files of data/events/ once they exist,
+              # after its checks (ids, count, no sudden shrink: docs/STORAGE_MIGRATION.md).
+              if subprocess.run([sys.executable, "events_store.py", "stage"]).returncode:
+                  refusal = 'events_store.py refused the database (see its annotation); recovery artifact retained'
           cache = Path("ai_article_selection_cache.json")
           if cache.exists():
               obj = json.loads(cache.read_text(encoding="utf-8"))
@@ -318,12 +333,6 @@ jobs:
               # run would review them again and overspend the daily budget.
               Path(os.environ["REFUSAL_FILE"]).write_text(refusal, encoding="utf-8")
               sys.exit(0)
-          # Finalization has restored the Git database when collection failed.
-          # Its status-only update still needs publication so failures are visible.
-          db = json.loads(Path("events.json").read_text(encoding="utf-8"))
-          if not isinstance(db, dict) or not isinstance(db.get("events"), list) or not isinstance(db.get("collection_status"), dict):
-              raise RuntimeError("Invalid database/status checkpoint; recovery artifact retained")
-          subprocess.run(["git", "add", "--", "events.json"], check=True)
           if Path("daily-collection-status.json").exists():
               subprocess.run(["git", "add", "--", "daily-collection-status.json"], check=True)
           if os.environ["COLLECT_OUTCOME"] == "success":
@@ -359,6 +368,8 @@ jobs:
             # Only that checkpoint leaves this runner: the refused files are in the
             # recovery artifact, and the push script's rebase needs a clean worktree.
             git checkout -- .
+            # Month files a refused stage may have left (docs/STORAGE_MIGRATION.md).
+            git clean -fdq -- data/events
           else
             git commit -m "Update CT database and resumable AI checkpoints"
           fi

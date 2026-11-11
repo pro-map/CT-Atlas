@@ -27,6 +27,10 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
       - name: Verify retirement policy and evidence preservation
         run: python -m unittest discover -s tests -p 'retire_judicial_test.py'
       - name: Archive retired records and clean active category labels
@@ -62,9 +66,12 @@ jobs:
           retention-days: 7
       - name: Commit preserved evidence and active database
         shell: bash
+        # The retirement removed 21.2% of the database on purpose.
+        env:
+          ALLOW_SHRINK: "1"
         run: |
           set -euo pipefail
-          git add -- events.json
+          python3 events_store.py stage
           if [ -f archive/removed-events-judicial-retired-20261014.json ]; then
             git add -- archive/removed-events-judicial-retired-20261014.json
           fi

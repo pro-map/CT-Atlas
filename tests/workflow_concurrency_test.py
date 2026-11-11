@@ -57,7 +57,7 @@ class WorkflowConcurrencyTests(unittest.TestCase):
         required = {
             "update-map.yml", "repair-map-evidence.yml", "refresh-daily-status.yml",
             "reconcile-daily-integrity.yml", "deploy-current-ct-atlas-ui.yml",
-            "refresh-sanctions.yml",
+            "refresh-sanctions.yml", "migrate-events-store.yml",
         }
         self.assertTrue(required <= members, f"Critical publishers lost their common lock: {sorted(required - members)}")
         self.assertEqual(problems, [],

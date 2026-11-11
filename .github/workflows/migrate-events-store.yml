@@ -1,0 +1,350 @@
+name: Migrate the events store
+# The steps of docs/STORAGE_MIGRATION.md that change where the database is committed:
+#   expand      add data/events/ (one file per month) next to events.json, which stays
+#               the source of truth (dual-write);
+#   contract    stop tracking events.json: data/events/ is the database, events.json is
+#               rebuilt after every checkout;
+#   uncontract  undo contract (track events.json again), while it stays under ~95 MiB;
+#   collapse    undo expand (remove data/events/) during dual-write.
+# Each is one forward commit made here and verified record by record. Never `git revert`
+# them. Only the owner dispatches this, in the protected environment data-migration. A dry
+# run (the default) does everything on the runner but the push.
+
+on:
+  workflow_dispatch:
+    inputs:
+      direction:
+        description: "expand, contract, uncontract (undo contract) or collapse (undo expand)"
+        required: true
+        type: choice
+        options:
+          - expand
+          - contract
+          - uncontract
+          - collapse
+      dry_run:
+        description: "Verify on the runner only; push nothing"
+        required: true
+        default: true
+        type: boolean
+      confirm:
+        description: "For a real run, type the direction again"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+
+# Every data writer holds this lock, so nothing changes the database during a migration.
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  migrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    # Required reviewers on this environment (Settings > Environments) make the owner's
+    # approval part of every run, so no agent or bot can migrate or roll back alone.
+    environment: data-migration
+    outputs:
+      pushed_sha: ${{ steps.commit.outputs.pushed_sha }}
+      s0: ${{ steps.before.outputs.s0 }}
+      publication: ${{ steps.publication.outputs.digest }}
+    env:
+      DIRECTION: ${{ inputs.direction }}
+      DRY_RUN: ${{ inputs.dry_run }}
+    steps:
+      - name: Check the request
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          case "$DIRECTION" in
+            expand|contract|uncontract|collapse) ;;
+            *) echo "::error::Unknown direction $DIRECTION"; exit 1 ;;
+          esac
+          if [ "$DRY_RUN" != "true" ] && [ "$CONFIRM" != "$DIRECTION" ]; then
+            echo "::error::A real run needs confirm to repeat the direction ($DIRECTION)."
+            exit 1
+          fi
+
+      - name: Checkout main with its history
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Require the newest main and a consistent database
+        run: |
+          set -euo pipefail
+          remote="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$remote" != "$(git rev-parse HEAD)" ]; then
+            echo "::error::main moved to $remote during the checkout; dispatch again."
+            exit 1
+          fi
+          python3 events_store.py check
+
+      - name: Record the database before the migration (S0)
+        id: before
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/before" "$RUNNER_TEMP/receipts"
+          python3 events_store.py build --ref HEAD --out "$RUNNER_TEMP/before/events.json"
+          echo "s0=$(sha256sum "$RUNNER_TEMP/before/events.json" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the database from before the migration for 90 days
+        uses: actions/upload-artifact@v6
+        with:
+          name: events-before-${{ inputs.direction }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/before/events.json
+          retention-days: 90
+          compression-level: 9
+          if-no-files-found: error
+
+      # In store mode events.json is not in the checkout; elsewhere this checks it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
+
+      - name: Migrate (staged on this runner, not committed yet)
+        id: migrate
+        run: |
+          set -euo pipefail
+          python3 events_store.py migrate "$DIRECTION" --receipt "$RUNNER_TEMP/receipts/migration.json"
+          # The staged tree: every check below reads it, and the commit must be exactly it.
+          echo "tree=$(git write-tree)" >> "$GITHUB_OUTPUT"
+
+      - name: The migrated tree is consistent and rebuilds the same bytes
+        env:
+          TREE: ${{ steps.migrate.outputs.tree }}
+        run: |
+          set -euo pipefail
+          python3 events_store.py check --ref "$TREE"
+          python3 events_store.py build --ref "$TREE" --out "$RUNNER_TEMP/after-events.json"
+          cmp "$RUNNER_TEMP/before/events.json" "$RUNNER_TEMP/after-events.json"
+
+      # Shares no code with events_store.py: the month files are read straight from
+      # the staged tree and compared with S0 record by record.
+      - name: Verify record by record, independently of events_store.py
+        env:
+          TREE: ${{ steps.migrate.outputs.tree }}
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+
+          tree, direction = os.environ["TREE"], os.environ["DIRECTION"]
+          before = open(os.path.join(os.environ["RUNNER_TEMP"], "before", "events.json"), "rb").read()
+          old = json.loads(before)
+
+          def blob(path):
+              result = subprocess.run(["git", "cat-file", "blob", f"{tree}:{path}"], capture_output=True)
+              return result.stdout if result.returncode == 0 else None
+
+          def digest(record):
+              text = json.dumps(record, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+              return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+          def home(record):
+              published = record.get("published")
+              if isinstance(published, str) and re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])", published[:7]):
+                  return published[:7]
+              return "undated"
+
+          problems = []
+          meta_bytes, committed = blob("data/events/meta.json"), blob("events.json")
+          layout = {"expand": (True, True), "contract": (True, False),
+                    "uncontract": (True, True), "collapse": (False, True)}[direction]
+          if (meta_bytes is not None, committed is not None) != layout:
+              problems.append(f"after {direction}: store present {meta_bytes is not None}, "
+                              f"events.json tracked {committed is not None}")
+          if committed is not None and committed != before:
+              problems.append("the committed events.json changed")
+          if meta_bytes is not None:
+              meta = json.loads(meta_bytes)
+              authority = {"expand": "events.json", "contract": "store", "uncontract": "events.json"}[direction]
+              if meta.get("authority") != authority:
+                  problems.append(f"authority is {meta.get('authority')}, not {authority}")
+              records = []
+              for month, seal in meta["months"].items():
+                  data = blob(f"data/events/{month}.jsonl") or b""
+                  if len(data) != seal["bytes"] or hashlib.sha256(data).hexdigest() != seal["sha256"]:
+                      problems.append(f"{month}.jsonl does not match its seal")
+                  lines = data[:-1].split(b"\n") if data.endswith(b"\n") else []
+                  if len(lines) != seal["events"]:
+                      problems.append(f"{month}.jsonl holds {len(lines)} records, its seal {seal['events']}")
+                  for line in lines:
+                      record = json.loads(line)
+                      if home(record) != month:
+                          problems.append(f"{record.get('id')} is filed in {month}")
+                      records.append(record)
+              if [e["id"] for e in old["events"]] != [e["id"] for e in records]:
+                  problems.append("the id sequence differs")
+              new = {e["id"]: digest(e) for e in records}
+              changed = [e["id"] for e in old["events"] if new.get(e["id"]) != digest(e)]
+              if changed:
+                  problems.append(f"{len(changed)} records differ, such as {changed[:5]}")
+              if meta["top_level_keys"] != list(old) or list(meta["metadata"]) != [k for k in old if k != "events"]:
+                  problems.append("the top-level keys or their order differ")
+              for key, value in old.items():
+                  if key != "events" and digest(meta["metadata"].get(key)) != digest(value):
+                      problems.append(f"metadata {key} differs")
+              rebuilt = {key: (records if key == "events" else meta["metadata"].get(key)) for key in meta["top_level_keys"]}
+              body = (json.dumps(rebuilt, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+              if body != before:
+                  problems.append("the month files do not rebuild the bytes of S0")
+              if hashlib.sha256(body).hexdigest() != meta["events_sha256"]:
+                  problems.append("events_sha256 does not match")
+          pairs = "\n".join(sorted(f"{e['id']}\t{digest(e)}" for e in old["events"]))
+          receipt = {"direction": direction, "tree": tree, "s0": hashlib.sha256(before).hexdigest(),
+                     "events": len(old["events"]), "id_record_digest": hashlib.sha256(pairs.encode("utf-8")).hexdigest(),
+                     "problems": problems}
+          with open(os.path.join(os.environ["RUNNER_TEMP"], "receipts", "independent.json"), "w", encoding="utf-8") as out:
+              json.dump(receipt, out, indent=2)
+          for problem in problems:
+              print(f"::error title=Independent verification::{problem}")
+          if problems:
+              sys.exit(1)
+          print(f"Independent verification: {len(old['events'])} records identical to S0 after {direction}.")
+          PY
+
+      - name: Publication dry run (the published files from S0 and from the migrated tree)
+        id: publication
+        env:
+          TREE: ${{ steps.migrate.outputs.tree }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/publication-before" "$RUNNER_TEMP/publication-after"
+          cp "$RUNNER_TEMP/before/events.json" "$RUNNER_TEMP/publication-before/events.json"
+          python3 events_store.py build --ref "$TREE" --out "$RUNNER_TEMP/publication-after/events.json"
+          for side in before after; do
+            dir="$RUNNER_TEMP/publication-$side"
+            python3 tools/build_events_lite.py --input "$dir/events.json" --output "$dir/events-lite.json"
+            python3 tools/build_events_map.py --input "$dir/events.json" --output "$dir/events-map.json"
+            python3 tools/daily_publication_audit.py manifest --directory "$dir" --output "$dir/publication-manifest.json"
+          done
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          import sys
+
+          def comparable(side):
+              path = os.path.join(os.environ["RUNNER_TEMP"], f"publication-{side}", "publication-manifest.json")
+              files = json.load(open(path, encoding="utf-8"))["files"]
+              return {name: [entry["sha256_bytes"], entry["sha256_canonical_json"], entry["record_count"]]
+                      for name, entry in sorted(files.items())}
+
+          before, after = comparable("before"), comparable("after")
+          if before != after:
+              print(f"::error title=Publication dry run::the published files would change: {before} / {after}")
+              sys.exit(1)
+          digest = hashlib.sha256(json.dumps(after, sort_keys=True).encode("utf-8")).hexdigest()
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"digest={digest}\n")
+          print(f"The three published files are identical: {after}")
+          PY
+
+      - name: Commit, and push unless this is a dry run
+        id: commit
+        env:
+          TREE: ${{ steps.migrate.outputs.tree }}
+        run: |
+          set -euo pipefail
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
+          message="$(python3 -c 'import json, os; print(json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "receipts", "migration.json")))["message"])')"
+          git commit -m "$message"
+          if [ "$(git rev-parse 'HEAD^{tree}')" != "$TREE" ]; then
+            echo "::error::The commit is not the verified tree."
+            exit 1
+          fi
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Dry run: \"$message\" verified and committed on this runner only; nothing was pushed."
+            exit 0
+          fi
+          bash tools/push_data_commit.sh
+          echo "pushed_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the receipts for 90 days
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: events-store-receipts-${{ inputs.direction }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/receipts/
+            ${{ runner.temp }}/publication-before/publication-manifest.json
+            ${{ runner.temp }}/publication-after/publication-manifest.json
+          retention-days: 90
+          if-no-files-found: ignore
+
+  # A fresh runner, from the pushed commit alone: what every later job will see.
+  verify:
+    needs: migrate
+    if: ${{ needs.migrate.outputs.pushed_sha != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      S0: ${{ needs.migrate.outputs.s0 }}
+      PUBLICATION: ${{ needs.migrate.outputs.publication }}
+    steps:
+      - name: Checkout the pushed migration
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.migrate.outputs.pushed_sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Rebuild events.json and require the bytes from before the migration
+        run: |
+          set -euo pipefail
+          python3 events_store.py materialize
+          python3 events_store.py check
+          actual="$(sha256sum events.json | cut -d' ' -f1)"
+          if [ "$actual" != "$S0" ]; then
+            echo "::error::events.json on a fresh runner is $actual, not S0 $S0."
+            exit 1
+          fi
+
+      - name: Build the published files as a deploy does and compare with the dry run
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/publication"
+          mkdir -p "$dir"
+          cp events.json "$dir/events.json"
+          python3 tools/build_events_lite.py --input "$dir/events.json" --output "$dir/events-lite.json"
+          python3 tools/build_events_map.py --input "$dir/events.json" --output "$dir/events-map.json"
+          python3 tools/daily_publication_audit.py manifest --directory "$dir" --output "$dir/publication-manifest.json"
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          import sys
+
+          path = os.path.join(os.environ["RUNNER_TEMP"], "publication", "publication-manifest.json")
+          files = json.load(open(path, encoding="utf-8"))["files"]
+          comparable = {name: [entry["sha256_bytes"], entry["sha256_canonical_json"], entry["record_count"]]
+                        for name, entry in sorted(files.items())}
+          digest = hashlib.sha256(json.dumps(comparable, sort_keys=True).encode("utf-8")).hexdigest()
+          if digest != os.environ["PUBLICATION"]:
+              print(f"::error title=Publication after the migration::differs from the dry run: {comparable}")
+              sys.exit(1)
+          print("The published files built on a fresh runner match the dry run.")
+          PY

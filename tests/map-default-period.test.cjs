@@ -54,7 +54,7 @@ test("the 6-month rolling retention already exists: the collector prunes events 
   const runtime=JSON.parse(fs.readFileSync("ct-atlas-runtime.json","utf8"));
   assert.equal(runtime.retention_days,180);
   // The stored database must actually respect it (a stale file would show accumulation).
-  const db=JSON.parse(fs.readFileSync("events.json","utf8"));
+  const db=JSON.parse(fs.readFileSync(require("./helpers/real-database.cjs").realDatabasePath(),"utf8"));
   const oldest=db.events.map(event=>Date.parse(event.published)).filter(Number.isFinite).sort((a,b)=>a-b)[0];
   const slackDays=3; // updates run twice a day; allow for a missed run or two
   assert.ok(Date.now()-oldest<=(180+slackDays)*86400000,"events.json holds data older than the retention window");

@@ -10,6 +10,8 @@ on:
     # two watches every staged file.)
     paths:
       - "events.json"
+      - "data/events/**"
+      - "events_store.py"
       - "tools/deploy_mirror.sh"
       - "tools/compact_mirror_json.py"
       - "tools/mirror-worker.mjs"

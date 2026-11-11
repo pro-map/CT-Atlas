@@ -7,3 +7,7 @@
 # Never text, whatever the content looks like.
 *.png  binary
 *.jpg  binary
+
+# The monthly database store (docs/STORAGE_MIGRATION.md): LF on every machine,
+# or the seals in data/events/meta.json no longer match the files.
+data/events/** text eol=lf

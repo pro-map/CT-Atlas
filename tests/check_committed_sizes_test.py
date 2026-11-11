@@ -3,6 +3,7 @@ thresholds scaled down so that no test writes 100 MiB."""
 import contextlib
 import importlib.util
 import io
+import json
 import os
 import subprocess
 import sys
@@ -44,6 +45,29 @@ class CommittedSizeTests(unittest.TestCase):
                 contextlib.redirect_stdout(out):
             status = sizes.main(files)
         return status, out.getvalue()
+
+    def test_a_month_file_warns_earlier(self):
+        (self.root / "data/events").mkdir(parents=True)
+        self.write("data/events/2026-10.jsonl", 300)
+        self.write("other.json", 300)
+        self.git("add", "data", "other.json")
+        with mock.patch.object(sizes, "STORE_WARN_BYTES", 200):
+            status, out = self.check()
+        self.assertEqual(status, 0)
+        self.assertIn("data/events/2026-10.jsonl is 0.0 MiB", out)
+        self.assertNotIn("other.json", out)
+
+    def test_events_json_staged_while_the_store_is_the_database_is_an_error(self):
+        (self.root / "data/events").mkdir(parents=True)
+        for authority, refused in (("events.json", False), ("store", True)):
+            with self.subTest(authority=authority):
+                (self.root / "data/events/meta.json").write_text(
+                    json.dumps({"authority": authority}), encoding="utf-8")
+                self.write("events.json", 10)
+                self.git("add", "data", "events.json")
+                status, out = self.check()
+                self.assertEqual(status, int(refused), out)
+                self.assertEqual("events.json staged again" in out, refused)
 
     def test_a_staged_file_at_the_limit_is_an_error(self):
         self.write("events.json", 1000)

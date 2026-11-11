@@ -29,6 +29,10 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24"
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
       - name: Validate Worker JavaScript and full regression suite
         run: |
           for file in cloudflare-worker/*.js; do

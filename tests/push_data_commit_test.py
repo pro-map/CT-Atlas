@@ -6,6 +6,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -22,7 +23,7 @@ RACE = ('git() { if [ "$1" = push ] && [ ! -e "$RACE_FLAG" ]; then : > "$RACE_FL
 DATA_WORKFLOWS = {
     "update-map.yml", "refresh-daily-status.yml", "consolidate-incidents.yml", "cleanup-events.yml",
     "repair-map-evidence.yml", "reconcile-daily-integrity.yml", "retire-judicial.yml", "refresh-sanctions.yml",
-    "review-archive-backlog.yml", "daily-radnuc-background.yml",
+    "review-archive-backlog.yml", "daily-radnuc-background.yml", "migrate-events-store.yml",
 }
 # They commit index.html, code rather than data.
 CODE_WORKFLOWS = {"refresh-logo-only.yml"}
@@ -195,6 +196,64 @@ class PushDataCommitTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("failed 5 times", result.stderr)
         self.assertEqual(self.recorded_sleeps(), [4, 8, 12, 16])
+
+
+class StoreModePushTests(unittest.TestCase):
+    """Once data/events/ exists (docs/STORAGE_MIGRATION.md), the rebased tree's
+    events_store.py check decides: the month files must rebuild events.json."""
+    clone, commit, push = PushDataCommitTests.clone, PushDataCommitTests.commit, PushDataCommitTests.push
+    remote_main = PushDataCommitTests.remote_main
+
+    def setUp(self):
+        PushDataCommitTests.setUp(self)
+        for name in ("events_store.py", ".gitattributes"):
+            (self.writer / name).write_bytes((ROOT / name).read_bytes())
+        self.commit(self.writer, {}, "Store code")
+        # A clone made before .gitattributes may hold CRLF on Windows; expand needs HEAD's bytes.
+        blob = subprocess.run(["git", "show", "HEAD:events.json"], cwd=self.writer, capture_output=True, check=True)
+        (self.writer / "events.json").write_bytes(blob.stdout)
+        self.store(self.writer, "migrate", "expand")
+        self.commit(self.writer, {}, "Expand")
+        git("push", "--quiet", "origin", "HEAD:main", cwd=self.writer)
+        git("pull", "--quiet", "origin", "main", cwd=self.other)
+
+    def store(self, repo, *args):
+        result = subprocess.run([sys.executable, "events_store.py", *args], cwd=repo, capture_output=True, text=True,
+                                env={**os.environ, "GITHUB_ACTIONS": ""})
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def staged_commit(self, repo, events, message):
+        (repo / "events.json").write_bytes(database(*events).encode("utf-8"))
+        self.store(repo, "stage")
+        git("commit", "--quiet", "-m", message, cwd=repo)
+        return git("rev-parse", "HEAD", cwd=repo)
+
+    def test_a_store_commit_is_pushed_and_checked(self):
+        head = self.staged_commit(self.writer, [*SEED, ("f", "Event f")], "Add f")
+        result = self.push(self.writer)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("data/events is consistent (dual mode)", result.stdout)
+        self.assertEqual(self.remote_main(), head)
+
+    def test_two_store_commits_never_merge_silently(self):
+        theirs = self.staged_commit(self.other, [(k, "Event a, by them" if k == "a" else t) for k, t in SEED], "a")
+        git("push", "--quiet", "origin", "HEAD:main", cwd=self.other)
+        self.staged_commit(self.writer, [(k, "Event e, by us" if k == "e" else t) for k, t in SEED], "e")
+        result = self.push(self.writer)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("does not rebase onto main", result.stderr)
+        self.assertEqual(self.remote_main(), theirs)
+
+    def test_events_json_committed_without_stage_stops_the_next_push(self):
+        # Another writer changed events.json alone; its line merges cleanly into ours.
+        theirs = self.commit(self.other, {"events.json": database(
+            *[(k, "Event a, by hand" if k == "a" else t) for k, t in SEED])}, "Bypass stage")
+        git("push", "--quiet", "origin", "HEAD:main", cwd=self.other)
+        self.staged_commit(self.writer, [(k, "Event e, by us" if k == "e" else t) for k, t in SEED], "e")
+        result = self.push(self.writer)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("disagree at HEAD", result.stdout + result.stderr)
+        self.assertEqual(self.remote_main(), theirs)
 
 
 class DataWorkflowTests(unittest.TestCase):

@@ -72,6 +72,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
+
       - name: Validate archive-only RadNuc rules without network calls
         run: |
           test -s tests/radnuc_background_test.py
@@ -149,7 +154,8 @@ jobs:
                           if not isinstance(row, dict) or not valid_article(row):
                               raise RuntimeError(f'Invalid archive-only RadNuc article at index {index}')
           PY
-          if ! git diff --quiet -- events.json events-lite.json events-map.json; then
+          if ! git diff --quiet -- events.json events-lite.json events-map.json data/events ||
+             [ -n "$(git status --porcelain -- data/events)" ]; then
             echo "Archive-only collection unexpectedly modified map data; refusing to commit."
             exit 1
           fi
@@ -196,6 +202,11 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      # Rebuilds events.json from data/events/ once the store is the database, or checks
+      # that the two agree (docs/STORAGE_MIGRATION.md). Before anything reads it.
+      - name: Materialize events.json from the store
+        run: python3 events_store.py materialize
 
       - name: Sync committed background corpus using existing D1 rules
         run: python -u tools/sync_background_corpus.py --cleanup apply

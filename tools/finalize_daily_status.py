@@ -14,7 +14,6 @@ import json
 import math
 import os
 import statistics
-import subprocess
 import sys
 import tempfile
 from collections import Counter
@@ -24,6 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from daily_reliability import PACIFIC, recovery_wanted
+import events_store
 
 LANES = ("recent", "backlog", "maintenance")
 DERIVED_REASONS = {"recent_pending", "backlog_pending", "maintenance_pending", "category_pending",
@@ -88,17 +88,15 @@ def located(event):
 
 
 def restore_database(path, repository):
-    """Restore first: a partial/invalid collector swap can never reach the site."""
+    """Restore first: a partial/invalid collector swap can never reach the site.
+    events_store rebuilds the committed events.json in every layout (docs/STORAGE_MIGRATION.md)."""
     relative = path.resolve().relative_to(repository.resolve())
-    subprocess.run(["git", "restore", "--source=HEAD", "--staged", "--worktree", "--", str(relative)],
-                   cwd=repository, check=True)
+    events_store.restore(repository.resolve(), relative)
 
 
 def baseline_database(path, repository):
     relative = path.resolve().relative_to(repository.resolve())
-    result = subprocess.run(["git", "show", f"HEAD:{relative.as_posix()}"], cwd=repository,
-                            check=True, capture_output=True, text=True)
-    value = json.loads(result.stdout)
+    value = json.loads(events_store.committed_bytes(repository.resolve(), relative).decode("utf-8"))
     if not isinstance(value, dict) or not isinstance(value.get("events"), list):
         raise ValueError("The published database is invalid")
     return value

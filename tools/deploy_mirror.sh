@@ -18,6 +18,11 @@ if [ -n "${CT_ATLAS_MIRROR_REHEARSAL_CAP+set}" ] && [ "${1:-}" != "--prepare-onl
 fi
 cd "$(dirname "$0")/.."
 
+# Rebuilds events.json from data/events/ once the store is the database, or checks
+# that the two agree (docs/STORAGE_MIGRATION.md). The month files are never staged:
+# the mirror serves events.json, in byte chunks once it outgrows the asset cap.
+python3 events_store.py materialize
+
 STAGING=_pages_mirror
 rm -rf "$STAGING"
 mkdir -p "$STAGING"

@@ -194,12 +194,14 @@ CHILD_ENV.PYTHONIOENCODING = "utf-8";
 // tools/deploy_mirror.sh works in the folder above its own: the tracked tree as hard links
 // (copies where a link is refused), with the synthetic events.json in place of the real one,
 // and without the uploader, so that a script going past --prepare-only fails instead of
-// deploying the synthetic database to the real mirror.
+// deploying the synthetic database to the real mirror. Without the month files of
+// data/events/ either: they hold the real database, which the synthetic one replaces.
 // The script writes only into its staging folder, so no linked file is ever written.
 function plantTree(tree) {
   const listed = execFileSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard"], { cwd: ROOT, encoding: "utf8" });
   for (const name of new Set(listed.split("\0"))) {
-    if (!name || name === "events.json" || name === "tools/wrangler_retry.py") continue;
+    if (!name || name === "events.json" || name.startsWith("data/events/") ||
+        name === "tools/wrangler_retry.py") continue;
     const source = path.join(ROOT, name), target = path.join(tree, name);
     // Skips a file deleted here, an untracked repository or worktree (listed as its folder),
     // and on Windows the case twin of one already planted.

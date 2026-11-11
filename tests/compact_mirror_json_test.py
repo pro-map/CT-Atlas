@@ -210,6 +210,9 @@ class CompactMirrorJsonTests(unittest.TestCase):
 
     def test_full_repository_snapshot_preserved_when_present(self):
         source = ROOT / "events.json"
+        sys.path.insert(0, str(ROOT))
+        import events_store
+        events_store.require_materialized(ROOT)  # a store without events.json fails, not skips
         if not source.exists():
             self.skipTest("Repository snapshot not present")
         raw = source.read_bytes()
