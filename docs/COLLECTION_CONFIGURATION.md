@@ -111,9 +111,8 @@ reviewed/pending counts. Missing evidence never becomes a complete status.
 
 ## Historical continuity
 
-Judicial collection and its keywords are retired. The historical backfills and
-their code were removed; their checkpoints stay in `archive/` and `quota/` as
-records. `daily_pipeline.CANCELLED_BACKLOG_CATEGORIES` keeps older queued reporting
+Judicial collection and its keywords are retired. The historical backfills, their code
+and their checkpoints were removed. `daily_pipeline.CANCELLED_BACKLOG_CATEGORIES` keeps older queued reporting
 in the cancelled categories out of review; recent reporting in those categories
 is still collected every day. Configured searches describe discovery capability,
 not exhaustive coverage or proof of a completed update.

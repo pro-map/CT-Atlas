@@ -13,6 +13,8 @@ events-map.json
 # Local UI test harness pages (stubbed session, embedded database): never
 # committed or published.
 zz-*.html
+# Local Claude Code permissions of this machine.
+.claude/settings.local.json
 
 # Outlet addresses, collector state and original evidence remain local/private.
 private-outlet-watch/

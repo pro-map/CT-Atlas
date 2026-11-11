@@ -12,9 +12,9 @@ WORKFLOWS = ROOT / ".github/workflows"
 MIRROR = "deploy-cloudflare-mirror.yml"
 UI = "deploy-current-ct-atlas-ui.yml"
 REFRESH = "refresh-daily-status.yml"
-# A finished one-shot patch whose Pages steps are being retired: the UI deploy
-# already publishes the same files, with verification. It must not be listed.
-NOT_MIRRORED = {"apply-usage-upgrade.yml"}
+# Pages publishers the mirror must not follow (none since the one-shot usage
+# upgrade workflow was deleted on 2026-11-11).
+NOT_MIRRORED = set()
 # Pages publishers whose commits change no file the mirror serves: following them
 # only redeployed identical files. They must not be listed either, and
 # test_a_publisher_the_mirror_skips_commits_nothing_it_serves holds them to that.

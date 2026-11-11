@@ -57,7 +57,7 @@ class WorkflowConcurrencyTests(unittest.TestCase):
         required = {
             "update-map.yml", "repair-map-evidence.yml", "refresh-daily-status.yml",
             "reconcile-daily-integrity.yml", "deploy-current-ct-atlas-ui.yml",
-            "apply-usage-upgrade.yml", "refresh-sanctions.yml",
+            "refresh-sanctions.yml",
         }
         self.assertTrue(required <= members, f"Critical publishers lost their common lock: {sorted(required - members)}")
         self.assertEqual(problems, [],
@@ -67,21 +67,14 @@ class WorkflowConcurrencyTests(unittest.TestCase):
 
     # The October 7 repair-source-geolocation migration was deleted (it could
     # only fail or replay stale corrections); its dispatch-only test went too.
-    def test_completed_migrations_are_manual_and_the_usage_upgrade_never_publishes(self):
-        for name in ("apply-usage-upgrade.yml", "retire-judicial.yml"):
+    def test_completed_migrations_are_manual(self):
+        for name in ("retire-judicial.yml",):
             with self.subTest(workflow=name):
                 source = (ROOT / ".github/workflows" / name).read_text(encoding="utf-8")
                 triggers = re.search(r"^on:\n((?:[ \t].*\n|\n)+)", source, re.M)
                 self.assertIsNotNone(triggers)
                 self.assertEqual(re.findall(r"^  ([\w-]+):", triggers[1], re.M), ["workflow_dispatch"],
                                  "A push replayed the migration and redeployed Pages without verification")
-        usage = (ROOT / ".github/workflows/apply-usage-upgrade.yml").read_text(encoding="utf-8")
-        for publishing in ("actions/configure-pages", "actions/upload-pages-artifact", "actions/deploy-pages",
-                           "build-events-lite", "github-pages", "pages: write", "id-token: write"):
-            self.assertNotIn(publishing, usage)
-        commit = usage.split("- name: Commit upgraded index", 1)[1]
-        self.assertIn("git rebase origin/main", commit)
-        self.assertLess(commit.index("git fetch origin main"), commit.index("git push origin HEAD:main"))
 
 
 if __name__ == "__main__":

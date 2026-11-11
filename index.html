@@ -305,8 +305,7 @@ body {
 }
 
 
-.time-buttons,
-.layer-buttons {
+.time-buttons {
 
     display:
         grid;
@@ -957,47 +956,6 @@ body.locked #main {
     color: #666;
 }
 
-.office-legend {
-    margin-top: 8px;
-    padding: 9px;
-    background: #202f3b;
-    border: 1px solid #324756;
-    border-radius: 5px;
-    font-size: 10px;
-    line-height: 1.7;
-}
-
-.office-legend-row {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.office-legend-symbol {
-    width: 11px;
-    height: 11px;
-    display: inline-block;
-    border: 1px solid white;
-    background: #d71920 !important;
-    box-shadow: 0 0 6px rgba(215,25,32,.8);
-}
-
-.office-legend-symbol.hq {
-    border-radius: 2px;
-}
-
-.office-legend-symbol.regional {
-    border-radius: 50%;
-}
-
-.office-legend-symbol.representative {
-    transform: rotate(45deg);
-}
-
-.office-legend-symbol.liaison {
-    border-radius: 2px;
-}
-
 /* Attacks: bright red with a pulsing red ring (a pseudo-element: the
    marker's own box-shadow is fixed with !important further down). */
 .ct-marker.attacks {
@@ -1436,51 +1394,6 @@ body::before {
     margin-top: 6px;
 }
 
-#headerKpis {
-    flex: 1;
-    min-width: 0;
-    height: 58px;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(94px, 1fr));
-    max-width: 560px;
-    border-left: 1px solid var(--cc-border-soft);
-    border-right: 1px solid var(--cc-border-soft);
-}
-
-#headerKpis .kpis {
-    display: contents !important;
-}
-
-#headerKpis .kpi {
-    min-width: 0;
-    padding: 3px 18px 0;
-    border-right: 1px solid var(--cc-border-soft);
-    background: transparent;
-    border-radius: 0;
-    box-shadow: none;
-    text-align: left;
-}
-
-#headerKpis .kpi:last-child {
-    border-right: 0;
-}
-
-#headerKpis .kpi-number {
-    color: #f4f8fb;
-    font-size: 24px;
-    line-height: 1.08;
-    font-weight: 540;
-    font-variant-numeric: tabular-nums;
-}
-
-#headerKpis .kpi-label {
-    color: #758fa2;
-    font-size: 9px;
-    margin-top: 7px;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-}
-
 #commandMeta {
     min-width: 220px;
     display: flex;
@@ -1513,53 +1426,6 @@ body::before {
     line-height: 1.65;
     text-transform: uppercase;
     letter-spacing: .08em;
-}
-
-#situationStrip {
-    height: 38px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 0 18px;
-    background: #08131c;
-    border-bottom: 1px solid var(--cc-border);
-    color: #a8bac7;
-    position: relative;
-    z-index: 1190;
-    font-size: 10px;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-}
-
-#situationStrip .strip-label {
-    color: #d8e5ec;
-    font-weight: 650;
-    min-width: 148px;
-}
-
-#situationSummary {
-    display: flex;
-    gap: 18px;
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-#situationSummary span strong {
-    color: #f1f6f9;
-    font-weight: 650;
-}
-
-#coverageStrip {
-    margin-left: auto;
-    padding-left: 18px;
-    border-left: 1px solid var(--cc-border-soft);
-    white-space: nowrap;
-}
-
-#coverageStrip strong {
-    color: #edf5f8;
-    margin-left: 7px;
 }
 
 #main {
@@ -1619,8 +1485,7 @@ body::before {
     font-size: 11px;
 }
 
-.time-buttons,
-.layer-buttons {
+.time-buttons {
     gap: 5px;
 }
 
@@ -2084,20 +1949,12 @@ body::before {
 }
 
 @media (max-width: 860px) {
-    #headerKpis {
-        display: none;
-    }
-
     #commandMeta {
         min-width: auto;
     }
 
     #main {
         grid-template-columns: 210px minmax(0,1fr);
-    }
-
-    #situationSummary {
-        gap: 9px;
     }
 }
 
@@ -2256,13 +2113,6 @@ body::before {
     background: transparent !important;
 }
 
-/* Keep map-layer controls unchanged as two-column buttons. */
-.layer-buttons {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 5px !important;
-}
-
 
 /* ============================================================
    COMPACT TIME PERIOD + SLIM 30-DAY ACTIVITY STRIP
@@ -2345,13 +2195,6 @@ body::before {
     color: #9fc9df !important;
     border: 0 !important;
     background: transparent !important;
-}
-
-/* Keep operational/map buttons as 2 columns. */
-.layer-buttons {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 5px !important;
 }
 
 /* Slimmer lower activity timeline — preserves data, returns map space. */
@@ -2461,33 +2304,6 @@ body::before {
     #headerSituationBrief {
         display: none;
     }
-}
-
-
-/* ============================================================
-   V11.1 — EQUAL 2x2 OPERATIONAL BUTTON GRID
-   ============================================================ */
-
-.layer-buttons {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 5px !important;
-    width: 100% !important;
-}
-
-.layer-buttons .layer-button {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 34px !important;
-    margin: 0 !important;
-    padding: 6px 4px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    font-size: 8.3px !important;
-    line-height: 1.05 !important;
 }
 
 
@@ -2701,31 +2517,7 @@ body {
 }
 
 
-/* V11.3 — strict 2x2 controls and explicit brief CTA */
-.layer-buttons {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    grid-template-rows: repeat(2, 34px) !important;
-    gap: 5px !important;
-    width: 100% !important;
-}
-.layer-buttons .layer-button {
-    width: 100% !important;
-    height: 34px !important;
-    min-width: 0 !important;
-    min-height: 34px !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 5px 4px !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    font-size: 8.2px !important;
-    line-height: 1 !important;
-}
+/* V11.3 — explicit brief CTA */
 #headerSituationText {
     font-size: 11.3px !important;
     line-height: 1.43 !important;
@@ -2734,54 +2526,14 @@ body {
 
 
 /* ============================================================
-   V11.4 — FINAL FIX: TRUE 2x2 MAP CONTROL BLOCK
+   V11.4 — FINAL FIX: #chronologyToggle PLACEMENT
    Legacy #chronologyToggle grid-column:span 2 is overridden.
    ============================================================ */
-
-.layer-buttons {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    grid-template-rows: repeat(2, 34px) !important;
-    gap: 5px !important;
-    width: 100% !important;
-}
-
-#markersToggle {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-}
-
-#heatToggle {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-}
 
 #chronologyToggle {
     grid-column: 1 !important;
     grid-row: 2 !important;
     width: 100% !important;
-}
-
-#officesToggle {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-    width: 100% !important;
-}
-
-.layer-buttons .layer-button {
-    width: 100% !important;
-    height: 34px !important;
-    min-width: 0 !important;
-    min-height: 34px !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 5px 4px !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    white-space: nowrap !important;
 }
 
 
@@ -2965,29 +2717,7 @@ html, body {
         font-size: 6px !important;
     }
 
-    /* Keep the requested true 2x2 operational block. */
-    .layer-buttons {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0,1fr)) !important;
-        grid-template-rows: repeat(2,28px) !important;
-        gap: 4px !important;
-    }
-
-    #markersToggle { grid-column: 1 !important; grid-row: 1 !important; }
-    #heatToggle { grid-column: 2 !important; grid-row: 1 !important; }
     #chronologyToggle { grid-column: 1 !important; grid-row: 2 !important; }
-    #officesToggle { grid-column: 2 !important; grid-row: 2 !important; }
-
-    .layer-buttons .layer-button {
-        width: 100% !important;
-        height: 28px !important;
-        min-height: 28px !important;
-        padding: 3px 2px !important;
-        margin: 0 !important;
-        font-size: 6.4px !important;
-        line-height: 1.05 !important;
-        white-space: normal !important;
-    }
 
     /* Right-side analytics become a small overlay. */
     #analyticsRail {
@@ -3053,8 +2783,7 @@ html, body {
     }
 
     /* Large panels fit completely inside iPhone screen. */
-    #chronologyPanel,
-    #healthPanel {
+    #chronologyPanel {
         width: calc(100vw - 16px) !important;
         max-width: calc(100vw - 16px) !important;
         max-height: calc(100dvh - 80px) !important;
@@ -3324,27 +3053,11 @@ html, body {
     border: 1px solid #203b4a;
 }
 
-.report-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.report-field > span,
 .report-compare > span {
     color: #7896a7;
     font-size: 7px;
     font-weight: 750;
     letter-spacing: .07em;
-}
-
-.report-field select {
-    height: 31px;
-    padding: 0 8px;
-    border: 1px solid #2b4b5e;
-    background: #081923;
-    color: #d3e2e9;
-    font-size: 9px;
 }
 
 .report-compare {
@@ -3633,78 +3346,6 @@ html, body {
     flex: 0 0 auto !important;
 }
 
-#ctAtlasVisual {
-    position: relative;
-    flex: 1 1 auto;
-    min-width: 0;
-    height: 71px;
-    overflow: hidden;
-    border-radius: 2px;
-    background: #111d28;
-    box-shadow:
-        inset 0 0 16px rgba(0,0,0,.18),
-        0 0 10px rgba(0,0,0,.08);
-}
-
-#ctAtlasVisual::before,
-#ctAtlasVisual::after {
-    content: "";
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    bottom: 0;
-    width: 18px;
-    pointer-events: none;
-}
-
-#ctAtlasVisual::before {
-    left: 0;
-    background: linear-gradient(
-        90deg,
-        #111d28 0%,
-        rgba(17,29,40,.55) 45%,
-        transparent 100%
-    );
-}
-
-#ctAtlasVisual::after {
-    right: 0;
-    background: linear-gradient(
-        270deg,
-        #111d28 0%,
-        rgba(17,29,40,.55) 45%,
-        transparent 100%
-    );
-}
-
-#ctAtlasVisual img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-    opacity: .98;
-}
-
-/* Access screen uses the same visual identity, but larger. */
-.ctatlas-access-visual {
-    width: min(100%, 390px);
-    height: 142px;
-    margin: 2px auto 14px;
-    overflow: hidden;
-    border-radius: 3px;
-    background: #0d1821;
-    box-shadow:
-        inset 0 0 22px rgba(0,0,0,.24),
-        0 7px 24px rgba(0,0,0,.16);
-}
-
-.ctatlas-access-visual img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-}
-
 /* Remove the old textual title area if any stale style remains. */
 #title {
     display: none !important;
@@ -3718,10 +3359,6 @@ html, body {
     #logo {
         height: 41px !important;
     }
-
-    #ctAtlasVisual {
-        height: 64px;
-    }
 }
 
 @media (max-width: 1000px) {
@@ -3731,10 +3368,6 @@ html, body {
 
     #logo {
         height: 37px !important;
-    }
-
-    #ctAtlasVisual {
-        height: 57px;
     }
 }
 
@@ -3747,10 +3380,6 @@ html, body {
     #logo {
         height: 32px !important;
     }
-
-    #ctAtlasVisual {
-        height: 49px;
-    }
 }
 
 @media (max-width: 600px) {
@@ -3760,10 +3389,6 @@ html, body {
 
     #logo {
         height: 27px !important;
-    }
-
-    #ctAtlasVisual {
-        height: 42px;
     }
 }
 
@@ -4458,25 +4083,6 @@ html, body {
     font-size: 9px;
     letter-spacing: 0.04em;
 }
-
-.database-background {
-    margin-top: 10px;
-    padding: 9px 8px;
-    border: 1px solid rgba(143, 208, 255, .3);
-    border-radius: 3px;
-    background: rgba(14, 26, 34, .65);
-    font-size: 10px;
-}
-.database-background[hidden] { display: none; }
-.database-background h3 { margin: 0 0 5px; color: #a8d9f2; font-size: 11px; }
-.database-background p { margin: 4px 0; color: #9fb4c0; line-height: 1.4; }
-.database-background .background-counts { color: #e3f1f8; }
-.database-background-list { max-height: 230px; overflow-y: auto; margin: 7px 0 0; padding: 0; list-style: none; }
-.database-background-list li { padding: 7px 0; border-top: 1px solid rgba(143, 208, 255, .15); }
-.database-background-list a, .database-background-list strong { color: #d4edff; font-size: 10.5px; line-height: 1.4; }
-.database-background-list .background-meta { display: block; margin-top: 3px; color: #9fb4c0; font-size: 9px; }
-.database-background-list details { margin-top: 4px; color: #b4c5d0; }
-.database-background-list summary { cursor: pointer; font-size: 9px; }
 
 .database-intro {
     margin: 2px 0 8px;
@@ -10437,55 +10043,6 @@ function parseEventOccurrenceDate(event) {
 }
 
 
-function parisNowParts() {
-
-    const parts =
-        new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone:
-                    "Europe/Paris",
-                year:
-                    "numeric",
-                month:
-                    "2-digit",
-                day:
-                    "2-digit",
-                hour:
-                    "2-digit",
-                minute:
-                    "2-digit",
-                second:
-                    "2-digit",
-                hour12:
-                    false
-            }
-        )
-        .formatToParts(
-            new Date()
-        );
-
-    const obj = {};
-
-    parts.forEach(
-        part => {
-            if (
-                part.type
-                !==
-                "literal"
-            ) {
-                obj[
-                    part.type
-                ] =
-                    part.value;
-            }
-        }
-    );
-
-    return obj;
-}
-
-
 // Building an Intl.DateTimeFormat is what froze the page: this ran for every
 // event, several times per pass, once a minute. One formatter serves every call
 // and each timestamp is formatted once; the bound keeps a tab left open for
@@ -11324,24 +10881,6 @@ function extractStrict24hDeathCount(
         extractStrict24hCasualtyBreakdown(
             event,
             "death"
-        );
-
-    return (
-        breakdown.terrorist
-        +
-        breakdown.victim
-    );
-}
-
-
-function extractStrict24hWoundedCount(
-    event
-) {
-
-    const breakdown =
-        extractStrict24hCasualtyBreakdown(
-            event,
-            "wounded"
         );
 
     return (
