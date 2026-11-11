@@ -623,10 +623,30 @@ test('attacks pulse in red on the map, clusters holding one too; the offices are
   assert.match(css,/\.marker-cluster\.attack-cluster div::after \{[\s\S]*?animation: attackMarkerRing/);
   assert.match(css,/className: "marker-cluster marker-cluster-" \+ size \+ \(attack \? " attack-cluster" : ""\)/);
   assert.match(css,/ctAttack:\s*style\.className === "attacks"/);
-  const office=css.slice(css.indexOf('.interpol-office-marker {'),css.indexOf('.interpol-office-hq {'));
+  const office=css.slice(css.indexOf('.interpol-office-marker {'),css.indexOf('.office-popup-title {'));
   assert.ok(!/animation/.test(office),'offices do not pulse');
   assert.ok(!/interpolOfficePulse/.test(css));
-  assert.match(css,/\.interpol-office-hq \{\n    width: 22px;/);
+  assert.match(office,/\.interpol-office-marker \{\n    width: 22px;\n    height: 22px;/);
+});
+
+test('every INTERPOL office shows the same bold white office icon, with no letters on the map',()=>{
+  const css=html.replace(/\r\n/g,'\n');
+  const office=css.slice(css.indexOf('.interpol-office-marker {'),css.indexOf('.office-popup-title {'));
+  assert.match(office,/\.interpol-office-marker path \{\n    fill: #ffffff;/);
+  assert.match(office,/stroke: #0b1620;/,'a dark outline keeps the white icon readable over labels');
+  assert.ok(!/#d71920|#e3191f/.test(office),'offices are no longer red like the attacks');
+  // One icon for all: no per-type class, no letter code in the data or the marker.
+  assert.ok(!/interpol-office-(hq|igci|regional|representative|liaison)/.test(css));
+  const offices=css.slice(css.indexOf('const interpolOffices = ['),css.indexOf('const interpolOfficesLayer'));
+  assert.equal((offices.match(/^ {8}name: /gm)||[]).length,14);
+  assert.ok(!/\bcode:|markerClass:/.test(offices));
+  const marker=extract('createInterpolOfficeMarker');
+  assert.match(marker,/\$\{INTERPOL_OFFICE_ICON_SVG\}/);
+  assert.ok(!/office\.code|markerClass/.test(marker));
+  // The name stays reachable: in the popup and for screen readers, not drawn on the map.
+  assert.match(marker,/aria-label="\$\{escapeHtml\(office\.name\)\}"/);
+  assert.match(marker,/bindPopup\(/);
+  assert.match(css,/const INTERPOL_OFFICE_ICON_SVG =\n    `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 2h16v20H4z /);
 });
 
 
