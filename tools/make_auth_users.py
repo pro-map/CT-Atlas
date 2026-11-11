@@ -11,15 +11,15 @@ that already exists there keeps its current password.
 Default accounts: group-i-11..20, group-s-11..20, group-p-11..20.
 
 Same rule for every account (asked once, then confirmed):
-    py -3.11 tools/make_auth_users.py --template
+    py -3.12 tools/make_auth_users.py --template
   The rule may use {group} (i, s, p), {GROUP} (I, S, P), {number} (11..20)
   and {username} (group-i-11 ...), e.g. a rule like  Name-{GROUP}{number}!
 
 One password per account (each asked twice):
-    py -3.11 tools/make_auth_users.py
+    py -3.12 tools/make_auth_users.py
 
 Send it straight to Cloudflare without saving it anywhere:
-    py -3.11 tools/make_auth_users.py --template | npx wrangler secret put AUTH_USERS_EXTRA_JSON --config cloudflare-worker/wrangler.toml
+    py -3.12 tools/make_auth_users.py --template | npx wrangler secret put AUTH_USERS_EXTRA_JSON --config cloudflare-worker/wrangler.toml
 """
 import argparse
 import getpass
