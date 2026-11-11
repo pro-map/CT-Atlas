@@ -40,9 +40,6 @@ on:
       - "CT-ATLAS.png"
       - "CT-ATLAS-256.png"
       - "vendor/**"
-      - "daily-quiz.js"
-      - "daily-quiz.css"
-      - "daily-quiz.json"
       - "intelligence-map.svg"
       - "crypto-intelligence.svg"
       - "tab-health.js"
@@ -117,11 +114,6 @@ jobs:
           grep -q 'DOWNLOAD PDF' index.html
           if grep -q 'window.onload=()=>window.print()' index.html; then
             echo "Legacy print dialog code is still present" >&2
-            exit 1
-          fi
-          # The quiz is retired: validate its absence, not the old launcher.
-          if grep -q 'mainQuizLauncher\|<script[^>]*daily-quiz.js' main.html; then
-            echo "Retired quiz launcher or client is still active" >&2
             exit 1
           fi
           grep -q 'id="feedbackButton"' main.html

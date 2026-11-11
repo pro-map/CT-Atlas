@@ -38,7 +38,6 @@ jobs:
           node --test tests/*.test.cjs
       - name: Validate supporting Python scripts
         run: |
-          python3 tests/quiz_source_test.py
           python3 tests/update_sanctions_test.py
           python3 tests/build_events_lite_test.py
           python3 tests/build_events_map_test.py

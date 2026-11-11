@@ -17,13 +17,12 @@ const pattern=new RegExp(NAME,'i');
 
 const TEXT=/\.(html|js|mjs|cjs|css|py|yml|yaml|md|txt|toml|sh|svg|patch)$|(^|\/)\.git(ignore|attributes)$/;
 const DATA_DIRS=/^(archive|data|quota|tests\/fixtures)\//;
-// Hand-maintained JSON: keyword lists, runtime pins, the retired quiz file.
+// Hand-maintained JSON: keyword lists and runtime pins.
 const CONFIG_JSON=new Set([
   '.claude/launch.json',
   'bio-monitoring-keywords.json',
   'chinese-map-backfill-queries.json',
   'ct-atlas-runtime.json',
-  'daily-quiz.json',
   'radnuc-background-keywords.json',
   'radnuc-keywords.json',
   'threat-category-keywords.json',

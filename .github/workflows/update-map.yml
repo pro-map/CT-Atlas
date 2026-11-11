@@ -257,7 +257,6 @@ jobs:
           CT_ATLAS_RUN_STARTED_AT: ${{ steps.prepare.outputs.started_at }}
         run: python -u tools/daily_publication_audit.py receipt --output "$RUNNER_TEMP/daily-publication-audit.json"
 
-      # Quiz generation is retired; it consumes no model or deployment resources.
       # The OFAC list has its own workflow, refresh-sanctions.yml.
       - name: Preserve recovery files even if a previous step failed
         if: ${{ always() && steps.checkout.outcome == 'success' }}

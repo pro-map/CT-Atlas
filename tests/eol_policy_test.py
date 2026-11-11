@@ -11,10 +11,7 @@ KEEP_THEIR_ENDINGS = {
     "requirements.txt": "crlf",
     "crypto.css": "mixed",
     "crypto.js": "mixed",
-    "daily-quiz.js": "mixed",
     "tests/exchange-paths.test.cjs": "mixed",
-    "tests/quiz-freshness.test.cjs": "mixed",
-    "tools/generate_daily_quiz.py": "mixed",
 }
 
 

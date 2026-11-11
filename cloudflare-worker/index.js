@@ -27,7 +27,6 @@ callGemini
 } from "./shared.js";
 import { handleDeepSearch, DEEP_SEARCH_VERSION } from "./deep-search.js";
 import { handleFeedback, FEEDBACK_VERSION } from "./feedback.js";
-import { handleQuiz } from "./quiz.js";
 import { handleCrypto, CRYPTO_VERSION } from "./crypto.js";
 import { RISK_VERSION } from "./crypto-risk.mjs";
 import { handleExchangeAttribution, EXCHANGE_ATTRIBUTION_VERSION } from "./exchange-attribution.js";
@@ -107,7 +106,7 @@ if (url.pathname === "/database-stats" && request.method === "GET") {
 return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.44", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_risk_version: RISK_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, schedule_dispatcher_configured: Boolean(env.GITHUB_DISPATCH_TOKEN),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.44", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_risk_version: RISK_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, schedule_dispatcher_configured: Boolean(env.GITHUB_DISPATCH_TOKEN),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/health/status" && request.method === "GET") {
 return handleHealthStatus(env, {
@@ -230,17 +229,6 @@ if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: 
 const statsResponse = await gateCall(env, "/tab-access-stats", { period, username: "admin" });
 return jsonResponse(await statsResponse.json(), statsResponse.status, env);
 }
-if (url.pathname === "/quiz-history" && request.method === "GET") {
-const token = cleanText(request.headers.get("X-Session-Token"), 160);
-if (!token) return jsonResponse({ error: "Admin session required." }, 401, env);
-const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
-const session = await sessionResponse.json();
-if (!sessionResponse.ok || session?.username !== "admin") return jsonResponse({ error: "Admin access required." }, 403, env);
-const period = cleanText(url.searchParams.get("period") || "today", 16);
-if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: "Unsupported history period." }, 400, env);
-const historyResponse = await gateCall(env, "/quiz-history", { period, username: "admin" });
-return jsonResponse(await historyResponse.json(), historyResponse.status, env);
-}
 if (url.pathname === "/usage-history" && request.method === "GET") {
 const token = cleanText(request.headers.get("X-Session-Token"), 160);
 if (!token) return jsonResponse({ error: "Admin session required." }, 401, env);
@@ -256,7 +244,6 @@ if (!/^[a-z_]+(?::[a-z]+)?$/.test(metric)) return jsonResponse({ error: "Unsuppo
 const historyResponse = await gateCall(env, "/usage-history", { period, username: "admin", target_username: targetUsername, metric });
 return jsonResponse(await historyResponse.json(), historyResponse.status, env);
 }
-if (["/quiz-answer", "/quiz-state"].includes(url.pathname)) return handleQuiz(request, env);
 if (url.pathname === "/deep-search" && request.method === "POST") {
 return handleDeepSearch(request, env, ctx);
 }

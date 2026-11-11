@@ -16,7 +16,6 @@ on:
       - "crypto.css"
       - "crypto-launcher.js"
       - "ct-atlas-runtime.json"
-      - "daily-quiz.json"
       - "sanctions-crypto.json"
       - "cloudflare-worker/**"
       - "cloudflare-worker/wrangler.toml"
@@ -88,7 +87,6 @@ jobs:
             sleep 10
           done
           curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ct-atlas-runtime.json >/tmp/runtime.json
-          curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/daily-quiz.json >/tmp/quiz.json
           node - <<'NODE'
           const fs = require("fs");
           const runtime = JSON.parse(fs.readFileSync("/tmp/runtime.json", "utf8"));
@@ -113,11 +111,8 @@ jobs:
           if (!html.includes("max-height: 42px")) throw new Error("Situation 24H text height missing");
           if (html.includes("window.onload=()=>window.print()")) throw new Error("Legacy print dialog still deployed");
           if (!pdfExporter.includes("window.CTAtlasPdf")) throw new Error("PDF exporter missing");
-          const quiz = JSON.parse(fs.readFileSync("/tmp/quiz.json", "utf8"));
           if (runtime.ai_selection_threshold !== expectedRuntime.ai_selection_threshold) throw new Error("Runtime threshold drift");
           if (!Array.isArray(runtime.language_codes) || JSON.stringify(runtime.language_codes) !== JSON.stringify(expectedRuntime.language_codes)) throw new Error("Runtime language drift");
-          if (!Array.isArray(quiz.options) || quiz.options.length !== 3) throw new Error("Quiz shape invalid");
-          if (!Number.isInteger(quiz.correct_index) || quiz.correct_index < 0 || quiz.correct_index > 2) throw new Error("Quiz answer invalid");
           console.log("Public assets valid.");
           NODE
 
@@ -183,7 +178,7 @@ jobs:
           node - <<'NODE'
           const fs = require("fs");
           const health = JSON.parse(fs.readFileSync("/tmp/health.json", "utf8"));
-          for (const key of ["ok", "deep_search", "quiz_tracking"]) {
+          for (const key of ["ok", "deep_search"]) {
             if (health[key] !== true) throw new Error("Worker health flag is not true: " + key);
           }
           if (!health.crypto_version) throw new Error("Crypto backend version missing");

@@ -202,11 +202,11 @@ class CompactMirrorJsonTests(unittest.TestCase):
     def test_only_publication_routes_can_be_chunked_or_reconstructed(self):
         self.source.write_bytes(b'{"events":[]}')
         with self.assertRaises(ValueError):
-            mirror.write_mirror_copy(self.source, self.target.parent / "daily-quiz.json")
+            mirror.write_mirror_copy(self.source, self.target.parent / "daily-collection-status.json")
         with self.assertRaisesRegex(ValueError, "Missing publication dataset"):
             mirror.read_mirror_bytes(self.target.parent, "events-map.json")
         with self.assertRaisesRegex(ValueError, "Missing publication dataset"):
-            mirror.read_mirror_bytes(self.target.parent, "daily-quiz.json")
+            mirror.read_mirror_bytes(self.target.parent, "daily-collection-status.json")
 
     def test_full_repository_snapshot_preserved_when_present(self):
         source = ROOT / "events.json"

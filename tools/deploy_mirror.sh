@@ -26,7 +26,6 @@ cp index.html main.html crypto.html privacy.html robots.txt ct-atlas-runtime.jso
    pdf-export.js deep-search.js deep-search.css report-illustration.js feedback.js feedback.css \
    crypto.js crypto-report.js crypto.css crypto-launcher.js \
    intelligence-map.svg crypto-intelligence.svg \
-   daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \
    workspace-ui.js workspace-ui.css sound-effects.js sound-check.html \
    tab-health.js tab-health.css tab-access.js \
