@@ -36,6 +36,9 @@ class RetirementCompatibilityTests(unittest.TestCase):
         worker = (ROOT / 'cloudflare-worker/index.js').read_text(encoding='utf-8')
         gate = (ROOT / 'cloudflare-worker/report-gate.js').read_text(encoding='utf-8')
         self.assertNotIn('/quiz-', worker + gate)
+        # The one-shot purge of the stored answers ran on 2026-11-11 and was then removed.
+        self.assertNotIn('quiz', gate.lower())
+        self.assertNotIn('retired-quiz-purge', worker)
         self.assertNotIn('quiz_tracking', worker)
         self.assertNotIn('quiz_answers: 0', (ROOT / 'cloudflare-worker/shared.js').read_text(encoding='utf-8'))
         for page in ('main.html', 'tools/deploy_mirror.sh', 'usage-auth-fix.js', 'usage-admin.css',
