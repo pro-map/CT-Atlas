@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - run: pip install -r requirements.txt
       - name: No-network safety regressions
         run: python -m unittest discover -s tests -p 'daily_reliability_test.py'

@@ -35,7 +35,7 @@ Build it locally with `tools/make_auth_users.py`. It asks for the passwords at h
 Run it from PowerShell or cmd, where the prompts stay hidden, and pipe it straight into Cloudflare:
 
 ```
-py -3.11 tools/make_auth_users.py --template | npx wrangler secret put AUTH_USERS_EXTRA_JSON --config cloudflare-worker/wrangler.toml
+py -3.12 tools/make_auth_users.py --template | npx wrangler secret put AUTH_USERS_EXTRA_JSON --config cloudflare-worker/wrangler.toml
 ```
 
 Or paste the JSON into Cloudflare dashboard → Workers & Pages → ct-report-generator →

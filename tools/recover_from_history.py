@@ -26,7 +26,7 @@ Outputs (read by tools/sync_background_corpus.py, which deduplicates them):
                                             review
 
 Needs the full git history, so it runs locally (CI checkouts are shallow):
-    py -3.11 tools/recover_from_history.py [--dry-run]
+    py -3.12 tools/recover_from_history.py [--dry-run]
 """
 from __future__ import annotations
 

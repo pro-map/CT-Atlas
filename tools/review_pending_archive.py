@@ -16,7 +16,7 @@ Every batch is saved as soon as it is reviewed (the output gains its events,
 the pending file loses them), so a run stopped by its timeout or a quota keeps
 all its work and the next run continues where it stopped.
 
-    GEMINI_API_KEY=... py -3.11 tools/review_pending_archive.py [--max-calls N] [--dry-run]
+    GEMINI_API_KEY=... py -3.12 tools/review_pending_archive.py [--max-calls N] [--dry-run]
 """
 from __future__ import annotations
 

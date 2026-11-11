@@ -13,7 +13,7 @@ reports alike) is not added twice. The archive files are
 left untouched: the sync drops archive rows that repeat a map event, and an
 event that later ages out of the map is archived by what happened last.
 
-    py -3.11 tools/restore_removed_events.py archive/removed-events-20261002-175602.json ... [--dry-run]
+    py -3.12 tools/restore_removed_events.py archive/removed-events-20261002-175602.json ... [--dry-run]
 """
 from __future__ import annotations
 

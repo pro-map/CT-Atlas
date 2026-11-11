@@ -54,7 +54,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Validate the updater
         run: |
           if ! python -m unittest discover -s tests -p 'update_sanctions_test.py'; then
