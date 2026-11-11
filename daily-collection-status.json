@@ -1,42 +1,40 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-10T22:22:09.909193+00:00",
-  "last_attempt_at": "2026-11-10T22:22:09.909193+00:00",
-  "published_at": "2026-11-10T23:20:28.748371+00:00",
+  "run_started_at": "2026-11-11T17:10:31.239705+00:00",
+  "last_attempt_at": "2026-11-11T17:10:31.239705+00:00",
+  "published_at": "2026-11-11T18:08:00.259076+00:00",
   "recent": {
-    "candidates": 3354,
-    "reviewed": 3354,
-    "cached": 2556,
-    "new_reviews": 798,
+    "candidates": 3700,
+    "reviewed": 3700,
+    "cached": 1852,
+    "new_reviews": 1848,
     "official_auto_accepted": 0,
-    "retained": 173,
-    "rejected": 3181,
+    "retained": 394,
+    "rejected": 3306,
     "pending": 0,
     "status": "complete",
-    "calls": 40,
+    "calls": 75,
     "primary_calls": 30,
-    "overflow_calls": 10,
+    "overflow_calls": 45,
     "reasons": [],
-    "window_start": "2026-11-07T22:22:09.909193+00:00",
-    "window_end": "2026-11-10T22:22:09.909193+00:00"
+    "window_start": "2026-11-08T17:10:31.239705+00:00",
+    "window_end": "2026-11-11T17:10:31.239705+00:00"
   },
   "backlog": {
     "candidates": 590,
-    "reviewed": 578,
-    "cached": 578,
-    "new_reviews": 0,
+    "reviewed": 590,
+    "cached": 544,
+    "new_reviews": 46,
     "official_auto_accepted": 0,
-    "retained": 0,
-    "rejected": 578,
-    "pending": 12,
-    "status": "partial",
-    "calls": 3,
+    "retained": 1,
+    "rejected": 589,
+    "pending": 0,
+    "status": "complete",
+    "calls": 2,
     "primary_calls": 0,
-    "overflow_calls": 3,
-    "reasons": [
-      "transient_error"
-    ]
+    "overflow_calls": 2,
+    "reasons": []
   },
   "maintenance": {
     "candidates": 0,
@@ -56,8 +54,8 @@
   "source": {
     "google": {
       "retry_waves": 0,
-      "successful": 1222,
-      "empty_feeds": 473,
+      "successful": 1220,
+      "empty_feeds": 457,
       "deduplicated_urls": 288
     },
     "gdelt": {},
@@ -65,15 +63,13 @@
     "status": "complete"
   },
   "reasons": [
-    "transient_error",
-    "backlog_pending",
     "category_pending",
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 3925,
-    "retired": 287,
-    "cancelled_history": 196,
+    "expired": 3911,
+    "retired": 280,
+    "cancelled_history": 197,
     "duplicates": 0,
     "from_queue": {
       "expired": 0,
@@ -87,28 +83,28 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 55,
       "per_day": 110,
-      "used_this_run": 13,
-      "used_today": 64
+      "used_this_run": 47,
+      "used_today": 47
     },
     "historical_calls_per_run": 20,
-    "historical_calls_used": 3,
+    "historical_calls_used": 2,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 6995,
-    "unlocated": 237,
-    "completed_unlocated": 237,
+    "located": 7077,
+    "unlocated": 247,
+    "completed_unlocated": 247,
     "outcome": "success",
-    "processed_this_run": 61,
-    "review_required": 151
+    "processed_this_run": 115,
+    "review_required": 152
   },
   "categories": [
     {
@@ -133,19 +129,19 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-11-10T23:24:22.772787+00:00",
+  "finalized_at": "2026-11-11T18:12:55.191707+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success",
   "temporary_failures": {
-    "gemini-3.5-flash-lite:503": 10,
-    "gemini-3.1-flash-lite:503": 13
+    "gemini-3.5-flash-lite:503": 27,
+    "gemini-3.1-flash-lite:503": 1
   },
   "health": {
     "state": "healthy",
     "reasons": [],
-    "events_published_last_24h": 133,
-    "events_published_median_14d": 141.5,
-    "new_reviews": 798,
+    "events_published_last_24h": 136,
+    "events_published_median_14d": 136.5,
+    "new_reviews": 1848,
     "recent_pending": 0,
     "review_share": 1.0,
     "thresholds": {
@@ -156,13 +152,5 @@
       "starved_min_waiting": 100,
       "degraded_min_waiting": 600
     }
-  },
-  "data_maintenance": {
-    "kind": "reviewed_map_evidence_repair",
-    "applied_at": "2026-11-11T10:10:20.723270+00:00",
-    "changed_records": 5,
-    "removed_records": 0,
-    "new_records": 0,
-    "ai_calls": 0
   }
 }

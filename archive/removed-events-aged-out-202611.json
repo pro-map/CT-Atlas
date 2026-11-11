@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-10T18:25:58.001048+00:00",
+  "removed_at": "2026-11-11T18:07:26.689843+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1139,6 +1139,164 @@
       "country": "Somalia",
       "ai_relevance_score": 70,
       "ai_relevance_reason": "Ongoing operational piracy incident involving a ransom demand.",
+      "related_articles": []
+    },
+    {
+      "id": "f34a995e0b0b120d",
+      "incident_id": "inc-64791193844c61d6",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBGdG5Na0t0THVqZWZRTExrRS1iOHZUaGlQY2JBMkp4c01BdEg3ZnBNdG9KZ0YwUlNxU0FxcVZIdVhkWFhUUDRNV19WZGl2a2U5TXdjLXI5eTUwWVF6VXJqWTBmUnJfVHZ3VDRmUjB0WUgwNFhZeXfSAXtBVV95cUxNd3FZMWxhclhnczRXQkhRbE0xRFUzSE9HbjdRY3NrSjRlaHNLeUFGNjItNk9HeTlQQlcxMjFOeWlydDhFSkZlUk1sa2JTeFh4cnp4Z1NhZTFPZjR4eHlRUkt1TnN2LUluOU5oVENNUGh6RVhrbWxpNUZoUVE?oc=5",
+      "title": "School attack: 42 students abducted",
+      "summary": "Forty-two students were abducted following a militant attack on a school.",
+      "original_title": "Okul saldırısı: 42 öğrenci kaçırıldı",
+      "original_language": "tr",
+      "source": "Nefes Gazetesi",
+      "published": "2026-05-15T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete militant attack and mass kidnapping.",
+      "related_articles": [
+        {
+          "title": "Terrorists attack school in Borno, students abducted",
+          "original_title": "Several Students Feared Abducted As Terrorists Attack School In Borno",
+          "original_language": "en",
+          "summary": "Militants attacked a school in Borno State, Nigeria, leading to the suspected abduction of several students.",
+          "published": "2026-05-15T07:00:00+00:00",
+          "source": "Channels Television",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQZHcxWG4yNjRkSmdhSXNnRVlHdEdaVlIzc3htazFTdTNmLWw0d2NoOXVoZnEzc0NlNHRXZ2VMcFMtWW9zWGgxVzNwMkFkZVhFTlhrYVNqVUR1TEpvN08wWktnZ2c2dEhZbjV6cWltX19WM3lNYXdBVkhmYnBGd09pQVU0WUpLYTFSak9QWlRKbHdYUmdRRFFaNTVyRnQ5M3Q4OEpGWEN2bU9sNUN0?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "9b77e2d57b5ee482",
+      "incident_id": "inc-b8ff76e218391603",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQUDg1b2VmNUxWWGpWQlM0eFdfa2s4OXhrQ2NBODRPTjFDYTJ2YVR0Tld2cldtb0NZZGlBM0l3eng0ODhsSEhMdmY1RFN2QnphLXlhYl81VDdrMklVc2YzX1o0NjNnQXBPNkQ0VHIxdk0zRUF6Yi13SWE1TE9KR0ZjNDIySkkyby1fOHRnNDdMRUZ6MnUyOGdjbVpEVVY0aXpiXzNoT2pwZVdyeUVfb295ZUVCZkNMT2FyZFE?oc=5",
+      "title": "Iraqi national arrested and charged with providing material support to Iranian-backed terrorist organizations and directing attacks targeting U.S. citizens and interests",
+      "summary": "An Iraqi national has been arrested and charged in the U.S. for providing material support to Iranian-backed terrorist organizations and directing attacks against U.S. targets.",
+      "original_title": "Iraqi National Arrested and Charged with Providing Material Support to Iranian-Backed Terrorist Organizations and Directing Attacks Targeting U.S. Citizens and Interests",
+      "original_language": "en",
+      "source": "Department of Justice (.gov)",
+      "published": "2026-05-15T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "country": "United States",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline.",
+      "related_articles": [
+        {
+          "title": "Southern District of New York | Iraqi National Arrested And Charged With Providing Material Support To Iranian-Backed Terrorist Organizations And Directing Attacks Targeting U.S. Citizens And Interests",
+          "original_title": "Southern District of New York | Iraqi National Arrested And Charged With Providing Material Support To Iranian-Backed Terrorist Organizations And Directing Attacks Targeting U.S. Citizens And Interests",
+          "original_language": "en",
+          "summary": "Southern District of New York | Iraqi National Arrested And Charged With Providing Material Support To Iranian-Backed Terrorist Organizations And Directing Attacks Targeting U.S. Citizens And Interests Department of Justice (.gov)",
+          "published": "2026-05-15T07:00:00+00:00",
+          "source": "Department of Justice (.gov)",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPb2NCWWcxRGxRWGUxcTl0MmNudFpWR2dyZDJpNXhXbmdBdHJvTXA2SnRnRFFjUGFNVTRhUDRzc2VtZG8xa1JDRUZOeTFwb1VnUnoxaFJCaDZmdGJueW5EMmhvVnBGQkhHMFR2TklKX0pFNDktZ3ptdUpSbWxFR0ktOWZieDkxT2k2eXUzb1dkS0ZSYlJ2QmpoSE5IZTQ1S2lvdVVKZzVuRVZZOHUyOG5ZaGFhRkM?oc=5"
+        },
+        {
+          "title": "Iraqi terrorist with IRGC ties charged in NYC for planning synagogue attack",
+          "original_title": "NYC: Iraqi terrorist with ties to IRGC charged with planning to attack targets including synagogues",
+          "original_language": "en",
+          "summary": "An Iraqi national with alleged ties to the IRGC has been charged in New York City with planning terrorist attacks against targets including synagogues.",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "i24NEWS",
+          "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQLUR2Sm4tcm1OSWQ5TThXeEJjS19UNlk4QmNsbDZ0TGFzNldJbjZLZ2VpYXBIUDNLX3ktcURIVGdNb2pNQnJTcDlGYUdnS1ZBTUF4by0yVGZFX0s1Z2l4VHg5dl9ZNmtYSFZhdzY5QUNFZ3hnMGRRZ1dPdHNmdkhKLU5NNzFIRmc2ZWRzbGl6cGFHUnZJd3RMSm1yb3FrV0RQOVBhZzExMThZUkJucFpHS0p2ODh0SlozTWZ1MjlPVXVyeno4MnZHek1BWU8xaEJ2M19sUWZLdW45Y3h1bXN3M0trUk9Cd1NRWUtORVln?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "e2b730afc395c76b",
+      "incident_id": "inc-f4d7fdd23f557077",
+      "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxQeTVkY2FHS09DalpGNm94cWc4T0lIZmdnbEl3Q3g4YzlmVGQ5U0hDc0stdUF2dmRtZkRPWEZubTYtNjd2T08wNEV6Xy12Mk9TQzhKZEw0Y2h5QTFxOXl2QVNWN1BldEtFYnNlOXVtWGUwTDhjclpJSTdTUDNvaEJkOEhEU3UxZmNCY1Fpbkc0TkwwOTM2MWxFeVdkMmZkOFJPZHdTcXltOEJNSzd6M1FwNFQxRDJodENWQ3N3N3A2UlpsRXpGbXI4b2dnZFRKY204dURoRVhOUTJkdHc3R0xlNFZaOEktcnZaRGtwQTJ1VlcwRnNWXzh6cFJ4SFhOVGtSTXh2eXVERWl6bjB5YWNyQ0NRUkdnTk1ZMnlPN0FjMXM1T2Rwd3c?oc=5",
+      "title": "18-year-old ISIS supporter planning truck-ramming attack arrested in Spain with FBI assistance",
+      "summary": "An 18-year-old ISIS supporter planning a truck-ramming attack was arrested in Spain with assistance from the FBI.",
+      "original_title": "Il projetait un attentat au camion-bélier comme celui de Nice en 2016 : un jeune de 18 ans qui aurait prêté allégeance à Daech arrêté en Espagne avec l’aide du FBI",
+      "original_language": "fr",
+      "source": "L'Indépendant",
+      "published": "2026-05-15T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ARREST",
+      "country": "Spain",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Disruption of an attack plot and operational arrest of an ISIS supporter with international cooperation.",
+      "related_articles": []
+    },
+    {
+      "id": "d5ad47c432130345",
+      "incident_id": "inc-b612b91cdff79938",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOQ2dWeXhfY2I3a0hUWUZIbzZJWnpUbmVDT0dFeC1CR25wMkwwQlE2MVdPcFB5bEdEUmN3aU8wOWdFb2VvSGxGSUJ1QzJ2RUJoX0JnMC1JRjNqZTRxTFBHVVFRenZrOG9jbkhtbHVZc1gzejg0dXdzWWJCd3ZuTzVfRjBhenhaYjFSc0wtUXY5czZGV2VhZlhEbUY0NNIBngFBVV95cUxNLXJkd19faHFmcGZkb3hGN3hQdEU4bjBPbjVLWTBWMVBXUi1lcGRZYjk1Y1RKYVIyUGVCNUNiYWlqcWdJaWpBdUw3SlY1alZmQmo4MUJUSGpPMUphdnpCNHlnRXA5WHhmSk5sUERVZlJfWXdPZ0F2UHQ3QUNlUXJLN2NZWUNsQkJjU3VVdG1EMW5adUR0alZ0YXpkUENnZw?oc=5",
+      "title": "Maharashtra ATS arrests suspect in Pune hospital IED case",
+      "summary": "The Maharashtra Anti-Terrorism Squad (ATS) has arrested a man in connection with an IED case linked to a hospital in Pune.",
+      "original_title": "Maharashtra ATS Arrests Man In Pune Hospital IED Case",
+      "original_language": "en",
+      "source": "Rediff",
+      "published": "2026-05-15T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "India",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete operational development: an arrest in a terrorism-related explosive device investigation.",
+      "related_articles": []
+    },
+    {
+      "id": "a144f08418a0586a",
+      "incident_id": "inc-63d3f384216ba8a3",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPeno1RnRteUZUMkVBcV8tU2pXUWdUX09xZm5ib1c0VGxaaTBCaS1tbE1HajdaQlNJMWV0c05vY1FOOXd0VnJlbFlvRlR0RnZRSlZtT1Q0X2NUU2VZVTdfYjIwQWp2T2RvNGxQczFIVkFJOGRucW1CRjRmTUZxVmZraFNOZEdXSGlPMlRzUkhvV1hJMDBadzlCaWpyTk9LZw?oc=5",
+      "title": "Militant attack on security compound in Pakistan",
+      "summary": "A militant attack on a security compound in Pakistan has resulted in the deaths of nine people.",
+      "original_title": "Militant attack on security compound kills 9 in Pakistan",
+      "original_language": "en",
+      "source": "Arab News PK",
+      "published": "2026-05-15T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Pakistan",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "The report provides specific, current operational details regarding a deadly terrorist/militant attack against a security installation.",
+      "related_articles": []
+    },
+    {
+      "id": "f05c33f0dc33536b",
+      "incident_id": "inc-a74135494e873eb4",
+      "url": "https://news.google.com/rss/articles/CBMi8ANBVV95cUxPNTRmQUhWazNoeF9HRGxTeXRNeXFLc3Z6Z2lDSTBiTlpTREl0dUtfbmRPbW9BLWp6TC1BMzEzaVJSenFwbjRoV0o3VXhJY0ROU3hQRDlpYzlJdEp1bkJwb2hSUW9nV1I0Y0pyS1NJNjNIVFprM0RPcGpsU1U0UUZ1am1DQnRLMzFIUGVnT1lvX2w2LVNpMUV5eU5YZm56Uk40TzVNYk9NVWFUVWlUUUhHamtVYTVhcXRROExXOXIxZjhabG9IcFA0bEJ3SldQcWNSU3dNUmtqejhJR2xhZm0tMmd2d1ZFLTN3djdvZ0Y2ZG5fdmVtVHlhX3ItWFJ0d3o1UmdCaVNPMGh5RUo4U2c2NnhYdjNzdkwtUEtNNmFtYl9hYWFjQVdwVkFLNmxJeVhlV2h5TmxuUHUtZXYwaWtvc2FaOTBnWXAzUGdlbEtlU2RNOTBJQ1VsdmpyLXJtRDZuSnBnZ05tUldrNjVmOUdCS01MaTJGNHFOcW9ZTXRFamZkbnkyamttTlNNU1ZFcGtKX1c4alp0b3JSaDAtYXB0Z2w3dXBtTlFadUJUQmlYUEVOZzkwV3VURVJGczl2X0FLVEpnZmZkV1F0c3hkdGJpbm1mZVNlSVZIRGVFc3BNSlVXRXp3MGo4djFCQTFXNnRT0gH2A0FVX3lxTFBOTVYyTDBNMzFPXzc0NGw2alhxVFhYemhWMVgxRWYzdjVQQ2x3MVJFYUxsdGFnZGpsV2diM2tlam5IR0xXT2hLUHVBSGZsQldzZzRUSXptRWxzbEZJTkJRSG5uanJMMF82QXp4VGtYTGxVci1IRVJwOE13QUM4NTBFYTFRR3pMaEM2MVpjWi1abmwxRkFkSWQ1ZkpJOUt5WUFidXhkS2hvZ1ZjNjBCbkpoSHF2TFZhNFdJbUxnRk8yZ09tZ1UxVndrbHRLb0J3RUEwN2EtYXR6LVQwM0xZaGVNZHN2RmlJWHNiY05ZQzczX0pJZzhLaWJNYzFlajVZb3RPNENTbERzam0zU25TYUJxWUZYVGZWTzBzT203Sy1iUHN4TnFjb1J4Ti1tMU9uWVZTS29ZWjg2YVQ2Z2xUbW53UHNqcTIwS3Q4cU5hOThtMXZQSXQyQWRmcFh3Rm1DQk5OOWQ5OFZNa1RNZll5WW94N0c4TzNGeUptUTdRb09rVFk4Nk5LX3Rmc2RHZkxhdVBGdjlTU0pYY1BQa094TlpzS1VYaHYyNXppMGJSRkQyeFV5QjJqQVh0OHIxTUhzRTI2cWM3LW5zRVVCQzE4UUlZR0dlNzZjUm9xOS1VWjRHc3I4dHA0ZXhNMzlIVVNZSkdVNm5PM0E?oc=5",
+      "title": "Nigeria seizes Starlink devices used by terrorists",
+      "summary": "Nigerian authorities have seized Starlink equipment as part of an effort to counter the use of advanced technology by terrorist groups in Africa.",
+      "original_title": "نيجيريا تصادر أجهزة ستارلينك.. الإرهاب يتمدد تقنيا بأفريقيا",
+      "original_language": "ar",
+      "source": "سكاي نيوز عربية",
+      "published": "2026-05-15T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Concrete operational seizure of assets linked to terrorist activity.",
       "related_articles": []
     }
   ]
