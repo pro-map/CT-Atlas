@@ -3912,636 +3912,141 @@
   "2cb275bf59f0878e": "2026-11-10T17:11:18.857018+00:00",
   "4e4853728c0bd9df": "2026-11-10T17:11:18.857018+00:00",
   "4734b3387d2bd7fe": "2026-11-10T17:11:18.857018+00:00",
-  "8c782af525100cb3": "2026-11-10T17:11:18.857018+00:00"
+  "8c782af525100cb3": "2026-11-10T17:11:18.857018+00:00",
+  "9bd09a7283d8bc4f": "2026-11-11T17:19:23.443242+00:00",
+  "fc8b926967c153f2": "2026-11-11T17:19:23.443242+00:00",
+  "d099d5694b135387": "2026-11-11T17:19:23.443242+00:00",
+  "b90df12ebafa34e7": "2026-11-11T17:19:23.443242+00:00",
+  "973b8d63dc82daba": "2026-11-11T17:19:23.443242+00:00",
+  "321ca5d4b48e4e36": "2026-11-11T17:19:23.443242+00:00",
+  "ec9732134469f555": "2026-11-11T17:19:23.443242+00:00",
+  "7b400c827ea1d7c4": "2026-11-11T17:19:23.443242+00:00",
+  "799827de80294a1f": "2026-11-11T17:19:23.443242+00:00",
+  "d516f3d19991e561": "2026-11-11T17:19:23.443242+00:00",
+  "04456be89fa5e1db": "2026-11-11T17:19:23.443242+00:00",
+  "7bc695b773de17f7": "2026-11-11T17:19:23.443242+00:00",
+  "261535b69dc78258": "2026-11-11T17:19:23.443242+00:00",
+  "42940fda9c72498d": "2026-11-11T17:19:23.443242+00:00",
+  "9578c9ef6b843e56": "2026-11-11T17:19:23.443242+00:00",
+  "b83a610995e98078": "2026-11-11T17:19:23.443242+00:00",
+  "20bfd1b1e24aa3c5": "2026-11-11T17:19:23.443242+00:00",
+  "a9641b693896c38e": "2026-11-11T17:19:23.443242+00:00",
+  "6a66723decf711c5": "2026-11-11T17:19:23.443242+00:00",
+  "9116285621f6b0ff": "2026-11-11T17:19:23.443242+00:00",
+  "393ca305c2dbe7d1": "2026-11-11T17:19:23.443242+00:00",
+  "c84c3b3b20bcc3b6": "2026-11-11T17:19:23.443242+00:00",
+  "25ce1a5cbe17e252": "2026-11-11T17:19:23.443242+00:00",
+  "1d6a74e042f19da8": "2026-11-11T17:19:23.443242+00:00",
+  "3767c8d376739fb0": "2026-11-11T17:19:23.443242+00:00",
+  "ccd363c04e75d9c2": "2026-11-11T17:19:23.443242+00:00",
+  "dd83525e126f9b6f": "2026-11-11T17:19:23.443242+00:00",
+  "1daa414c87d497e8": "2026-11-11T17:19:23.443242+00:00",
+  "7f12ff8cddccd886": "2026-11-11T17:19:23.443242+00:00",
+  "7e24605be792366f": "2026-11-11T17:19:23.443242+00:00",
+  "0582af85483d9523": "2026-11-11T17:19:23.443242+00:00",
+  "3fcdc0c515eaabe0": "2026-11-11T17:19:23.443242+00:00",
+  "9eaa41c09881f784": "2026-11-11T17:19:23.443242+00:00",
+  "9fae74b19c1262ce": "2026-11-11T17:19:23.443242+00:00",
+  "4fdab9a8a39d6726": "2026-11-11T17:19:23.443242+00:00",
+  "41f63bdbabdaa15f": "2026-11-11T17:19:23.443242+00:00",
+  "dfc98d5c4ee0c3e5": "2026-11-11T17:19:23.443242+00:00",
+  "106333ea018f8cf7": "2026-11-11T17:19:23.443242+00:00",
+  "6905a63b52c26d00": "2026-11-11T17:19:23.443242+00:00",
+  "0dc737e8d99baaa7": "2026-11-11T17:19:23.443242+00:00",
+  "cc568629590a4ea1": "2026-11-11T17:19:23.443242+00:00",
+  "8d278a69709209dd": "2026-11-11T17:19:23.443242+00:00",
+  "59f3bc5a3edbfef3": "2026-11-11T17:19:23.443242+00:00",
+  "1d967d7e16f90ed2": "2026-11-11T17:19:23.443242+00:00",
+  "5ba9487db8608790": "2026-11-11T17:19:23.443242+00:00",
+  "72d18cbc39adf1a5": "2026-11-11T17:19:23.443242+00:00",
+  "6b4220b5edf525f5": "2026-11-11T17:19:23.443242+00:00",
+  "fbbb77d4907ba5eb": "2026-11-11T17:19:23.443242+00:00",
+  "c984b5d0754ea35f": "2026-11-11T17:19:23.443242+00:00",
+  "caa34141d0cd9eba": "2026-11-11T17:19:23.443242+00:00",
+  "13c3cfced347dc9d": "2026-11-11T17:19:23.443242+00:00",
+  "9b9b978f1eb01e66": "2026-11-11T17:19:23.443242+00:00",
+  "b9aff562c6274a35": "2026-11-11T17:19:23.443242+00:00",
+  "9b9c6030c34871bd": "2026-11-11T17:19:23.443242+00:00",
+  "df78cc16e10002f9": "2026-11-11T17:19:23.443242+00:00",
+  "23f39f96d4f46dcb": "2026-11-11T17:19:23.443242+00:00",
+  "ed8cfffeb6fc20da": "2026-11-11T17:19:23.443242+00:00",
+  "ed2adf04f342e610": "2026-11-11T17:19:23.443242+00:00",
+  "78a44c60f8e85ca8": "2026-11-11T17:19:23.443242+00:00",
+  "39aec29866493769": "2026-11-11T17:19:23.443242+00:00",
+  "847dbe875829d231": "2026-11-11T17:19:23.443242+00:00",
+  "036a8e8cd57c3723": "2026-11-11T17:19:23.443242+00:00",
+  "8159a6cad1851fce": "2026-11-11T17:19:23.443242+00:00",
+  "55518f1d5644c5a4": "2026-11-11T17:19:23.443242+00:00",
+  "522f2d51fcee51dd": "2026-11-11T17:19:23.443242+00:00",
+  "8a25bc3d51d76513": "2026-11-11T17:19:23.443242+00:00",
+  "c879edd4f011ff5a": "2026-11-11T17:19:23.443242+00:00",
+  "2ee3f0fa00ba38ec": "2026-11-11T17:19:23.443242+00:00",
+  "e7ea17ca18abbd53": "2026-11-11T17:19:23.443242+00:00",
+  "59dba23851d27455": "2026-11-11T17:19:23.443242+00:00",
+  "8823674387119045": "2026-11-11T17:19:23.443242+00:00",
+  "0e72cf1bb637297c": "2026-11-11T17:19:23.443242+00:00",
+  "96c717b9255a579a": "2026-11-11T17:19:23.443242+00:00",
+  "b8aa401f3385fe8b": "2026-11-11T17:19:23.443242+00:00",
+  "747670421535e9e5": "2026-11-11T17:19:23.443242+00:00",
+  "7905431df8d5377f": "2026-11-11T17:19:23.443242+00:00",
+  "092a5ec122866184": "2026-11-11T17:19:23.443242+00:00",
+  "2179ac2d0f4371ba": "2026-11-11T17:19:23.443242+00:00",
+  "807e880a2e2087a5": "2026-11-11T17:19:23.443242+00:00",
+  "d631875e349ab427": "2026-11-11T17:19:23.443242+00:00",
+  "31fecfd67f1edbae": "2026-11-11T17:19:23.443242+00:00",
+  "b415be8a3569afa4": "2026-11-11T17:19:23.443242+00:00",
+  "1ee05781d5c8fa35": "2026-11-11T17:19:23.443242+00:00",
+  "741e94e4c8238164": "2026-11-11T17:19:23.443242+00:00",
+  "d8b33cef88c5a9c7": "2026-11-11T17:19:23.443242+00:00",
+  "a698eece477ba22a": "2026-11-11T17:19:23.443242+00:00",
+  "711acd5465cdfa23": "2026-11-11T17:19:23.443242+00:00",
+  "5e2a76c74481b503": "2026-11-11T17:19:23.443242+00:00",
+  "e044c7d6b73eb97c": "2026-11-11T17:19:23.443242+00:00",
+  "3a576428fcf1fbb9": "2026-11-11T17:19:23.443242+00:00",
+  "e0cf0d6be6e43087": "2026-11-11T17:19:23.443242+00:00",
+  "19c1340bc3d3b4ce": "2026-11-11T17:19:23.443242+00:00",
+  "21425dd66fb5b703": "2026-11-11T17:19:23.443242+00:00",
+  "01235cd412aa4e49": "2026-11-11T17:19:23.443242+00:00",
+  "7085462f92629b93": "2026-11-11T17:19:23.443242+00:00",
+  "4c4995dbca3e1b6b": "2026-11-11T17:19:23.443242+00:00",
+  "786911e96ee13e67": "2026-11-11T17:19:23.443242+00:00",
+  "57660bdf85bdd8e2": "2026-11-11T17:19:23.443242+00:00",
+  "043dd74747043864": "2026-11-11T17:19:23.443242+00:00",
+  "fc8563e71e0d063b": "2026-11-11T17:19:23.443242+00:00",
+  "cad0c346a172e8b0": "2026-11-11T17:19:23.443242+00:00",
+  "fc8545a16e124318": "2026-11-11T17:19:23.443242+00:00",
+  "ccee003e2a49b385": "2026-11-11T17:19:23.443242+00:00",
+  "4fe50f5db81b1efb": "2026-11-11T17:19:23.443242+00:00",
+  "bcdcf8be69207dcc": "2026-11-11T17:19:23.443242+00:00",
+  "6159e8677973c44e": "2026-11-11T17:19:23.443242+00:00",
+  "3405196acb0dabcc": "2026-11-11T17:19:23.443242+00:00",
+  "0995447a2c342247": "2026-11-11T17:19:23.443242+00:00",
+  "455cd37b28947ce3": "2026-11-11T17:19:23.443242+00:00",
+  "69410f844745cc82": "2026-11-11T17:19:23.443242+00:00",
+  "b642f9984f77f065": "2026-11-11T17:19:23.443242+00:00",
+  "b893f5b8f9ecd9a5": "2026-11-11T17:19:23.443242+00:00",
+  "8850e576af6e725e": "2026-11-11T17:19:23.443242+00:00",
+  "d6805d179d80f128": "2026-11-11T17:19:23.443242+00:00",
+  "23dcb040f36d352f": "2026-11-11T17:19:23.443242+00:00",
+  "a730269d0cd708c5": "2026-11-11T17:19:23.443242+00:00",
+  "19e4072d3e76a513": "2026-11-11T17:19:23.443242+00:00",
+  "3872bd898bab5024": "2026-11-11T17:19:23.443242+00:00",
+  "bd6c5ad5803ab353": "2026-11-11T17:19:23.443242+00:00",
+  "c373b7202ac3955d": "2026-11-11T17:19:23.443242+00:00",
+  "940c25aa62ca5269": "2026-11-11T17:19:23.443242+00:00",
+  "14a9f1ea4fb3abaf": "2026-11-11T17:19:23.443242+00:00",
+  "6fb8448a4470d7bf": "2026-11-11T17:19:23.443242+00:00",
+  "a887eb2b57ae76f9": "2026-11-11T17:19:23.443242+00:00",
+  "54fa97d6835eef54": "2026-11-11T17:19:23.443242+00:00",
+  "ca6317b96bf77b16": "2026-11-11T17:19:23.443242+00:00",
+  "c7cb56f782ee46e2": "2026-11-11T17:19:23.443242+00:00",
+  "4c26c8d87685d101": "2026-11-11T17:19:23.443242+00:00",
+  "bd02f34446392671": "2026-11-11T17:19:23.443242+00:00",
+  "55c72871c4682129": "2026-11-11T17:19:23.443242+00:00",
+  "db64c9a7e43fb541": "2026-11-11T17:19:23.443242+00:00",
+  "db11a0d12bf8781c": "2026-11-11T17:19:23.443242+00:00"
  },
  "pending": [
-  {
-   "id": "4f2e1d4ad30106c8",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "25th-anniversary PET/CT: USZ's Hüllner on clinical innovation and adoption",
-   "summary": "25th-anniversary PET/CT: USZ's Hüllner on clinical innovation and adoption AuntMinnieEurope",
-   "original_title": "25th-anniversary PET/CT: USZ's Hüllner on clinical innovation and adoption",
-   "original_summary": "25th-anniversary PET/CT: USZ's Hüllner on clinical innovation and adoption AuntMinnieEurope",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-10T22:14:30+00:00",
-   "source": "AuntMinnieEurope",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOdzY1dnJiYnZCRkdKbExUM1Y2UnBQYzNpclliYml4MHkzWk1VSVptR0tlMDBvS2poSmlYdUlMNXFvQnlERVR3TjNQN0Q1Z2R1N1MwcDhTT2hZcW5zVkhQVnBnd214VE84VU1xRnY4cEt1UFpQRmJZUkVFOVhhVU13U0NPMUcyZEoxWDJFak95VnZQUUszZnBCcFZGZHRqeEIzNjRvLUtaSk82QjNxdVhteGJQX3ZTbFlRQk52ZDVibjZyajVZQnYtTlZfRElmNjROSXdsTFNqd1p1LUU2OVgwOWwyU2RFOEhlR05remJCU181Zm1XODJSUGpZNXk?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "632d3da5af15eb72a1f4ac04b8d9337fbd23850eb661b3d73cd6e21410cc85e6"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "f8ed7c351697d10d",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "عاجل| إيران تصعّد احتجاجها أمام الأمم المتحدة ضد المكافأة الأمريكية المرتبطة ببرنامجها النووي",
-   "summary": "عاجل| إيران تصعّد احتجاجها أمام الأمم المتحدة ضد المكافأة الأمريكية المرتبطة ببرنامجها النووي شبكة تواصل الإخبارية",
-   "original_title": "عاجل| إيران تصعّد احتجاجها أمام الأمم المتحدة ضد المكافأة الأمريكية المرتبطة ببرنامجها النووي",
-   "original_summary": "عاجل| إيران تصعّد احتجاجها أمام الأمم المتحدة ضد المكافأة الأمريكية المرتبطة ببرنامجها النووي شبكة تواصل الإخبارية",
-   "original_language": "ar",
-   "collection_language": "ar",
-   "collection_language_name": "Arabic",
-   "collection_locale": "SA:ar",
-   "published": "2026-11-10T22:13:13+00:00",
-   "source": "شبكة تواصل الإخبارية",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5xMWlFN3NDeEFOWGdMZENMXzU1MjlkT1FPLWhwSUptM041ODd2czVSa0Vac01nZWZSS3hMSmxhbTM5bm1HM2hVbjJuTk5QSHJ5S0lj?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "974b037e396478a5cd49c5709b1d92779a73f5486767811497abcea261a1fd88"
-   ],
-   "background_query_language": "ar"
-  },
-  {
-   "id": "3d2ed01447ee3643",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Centrus Energy adds nuclear expert Kevin Graney to its Board to boost uranium enrichment expansion.",
-   "summary": "Centrus Energy adds nuclear expert Kevin Graney to its Board to boost uranium enrichment expansion. Pluang",
-   "original_title": "Centrus Energy adds nuclear expert Kevin Graney to its Board to boost uranium enrichment expansion.",
-   "original_summary": "Centrus Energy adds nuclear expert Kevin Graney to its Board to boost uranium enrichment expansion. Pluang",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-10T22:09:01+00:00",
-   "source": "Pluang",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNWGFJSmJGMWdvMzhhYWV1OEdHY0xQUURMSDlZSGVKNFRpWlV2cU51YzJUU2ZJNm1wX1h0WEJ6anFWVUVoOFV5ZUo2RlExUHFiYm1BZmhuREJwTy1rTFBYNXA3Q0YxbmUwdjlOZ2QzaVB3X2Jna3A0czlyaEtHa1Vfb1pHb1dJcmstQ1Q0OHlwSk10YXBYLVc1a01ZdmZhTVUzaDNLcTBtOE4yUzdXblVzVw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "bfcd5eabd6132ba66d848ac7a205c949a06195a31e2e80c6e9fc57b1eece8e69"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "c3e64529fe20146c",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Powered by AI: Inside the global resurgence of nuclear energy",
-   "summary": "Powered by AI: Inside the global resurgence of nuclear energy Kursiv Media",
-   "original_title": "Powered by AI: Inside the global resurgence of nuclear energy",
-   "original_summary": "Powered by AI: Inside the global resurgence of nuclear energy Kursiv Media",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-10T22:03:07+00:00",
-   "source": "Kursiv Media",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNbkw5bzRFVHA1dXktMjNVVnY3MnoxRWNzaWFaUDFTZklNSHh6Q0RSUFNLMUJycm15QTQtci1QRmtyd2czMVBGeVNzc3dSc1hCQWJXN1FoYUJ3VTdTcmc3MmVpZ3ZxbjB4dXRub0syNlIwU0NISVNWTUwweGs2WVNsSHNJSjM4bWNtVFJqeDlRZFFidHpNVmdHamF0cnZfbFNlaUtxYUxnRVI5eVpKaHc?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "5fd14c0770f9559d2df61101002e470e80905d597fe3c9a1b1a0b528669284be"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "f35f2d23ef8a8b7b",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "【即時新聞】亞馬遜(AMZN)重金卡位！X-energy獲准建首批小型核反應爐，AI電力需求迎爆發",
-   "summary": "【即時新聞】亞馬遜(AMZN)重金卡位！X-energy獲准建首批小型核反應爐，AI電力需求迎爆發 CMoney投資網誌",
-   "original_title": "【即時新聞】亞馬遜(AMZN)重金卡位！X-energy獲准建首批小型核反應爐，AI電力需求迎爆發",
-   "original_summary": "【即時新聞】亞馬遜(AMZN)重金卡位！X-energy獲准建首批小型核反應爐，AI電力需求迎爆發 CMoney投資網誌",
-   "original_language": "zh-Hant",
-   "collection_language": "zh-Hant",
-   "collection_language_name": "Chinese (Traditional)",
-   "collection_locale": "TW:zh-Hant",
-   "published": "2026-11-10T22:00:49+00:00",
-   "source": "CMoney投資網誌",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNT2hHWWlfX05BaUFlZ09vVHZvQk00XzI4VV96UTRVTGZwUnJYOVNTUTIwcTRfb3BvSklYY1BDdE5rRjBidnVwYndlYzBSV0pkZFBvOXBTYXBsOG5ZQ2Z4V21TNDh1WnpZQV9LdWt1VlpIRC1ieG1ZblAzeHcxS3JGT3dkUjZFY2hSalM4S2tBOFI?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "4d247f0d34941b9c21ab7b74c532345a10ec26048e609a6b1293d158ba9b9d66"
-   ],
-   "background_query_language": "zh-Hant"
-  },
-  {
-   "id": "0fa9a290dd7a06a7",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Zelensky: Giving Up Donbas Would Not Stop Russia's Next War - Oj",
-   "summary": "Zelensky: Giving Up Donbas Would Not Stop Russia's Next War - Oj Odessa Journal",
-   "original_title": "Zelensky: Giving Up Donbas Would Not Stop Russia's Next War - Oj",
-   "original_summary": "Zelensky: Giving Up Donbas Would Not Stop Russia's Next War - Oj Odessa Journal",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-10T21:33:50+00:00",
-   "source": "Odessa Journal",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPdGplY3ZFMm1PVzE3SExyNGREbmJFcmJ2WFdyQnNPT1V4N196NVh3YnZ3VGlUMUM0S3ZHbXBCT3NKNDBHcEx5LUM1VGs2RzUweFdDc1dBbDFqWFgxMzJmN3ZKb1BVMHFGM2V2dW5RNXkyYWx2bjgzQTJyN0pCRTdpMHh5UEVraTNOLUliT1gxT2RIQzBNN2hRUjhEbkNCMW90dFFBNEt6WQ?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "48426aa6df5293e8953e125cdb6497c5754b39b2ad9f577b362e089e5068f87e"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "04b1df6a48ad808a",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "NRC issues construction permit for Dow/X-energy Long Mott project",
-   "summary": "NRC issues construction permit for Dow/X-energy Long Mott project American Nuclear Society",
-   "original_title": "NRC issues construction permit for Dow/X-energy Long Mott project",
-   "original_summary": "NRC issues construction permit for Dow/X-energy Long Mott project American Nuclear Society",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-10T21:01:34+00:00",
-   "source": "American Nuclear Society",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOUjczdS1DdVp1QklhRXVpMzNMcHZCdlQ5Q1BPQWFVVkl3NWdDdlRRTXQwbUt6anJRMWxwMXJuT3pmYnVhRm5uc2JRUmV2VmVfSE43WlFSWERfcUtGS1d3NkgxQ1k1ZDdUMXpvSVNDQVc0bk1aamZsbTkxMXFPa3Y5RnN6dkNURmVEWDdGVTBRdHQwU0s5RDVRRDYwOHh2Y2tfQWxDZw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "1e7b2c99a4f42f43599fa9ab55d777b3592139f368e3d802d5bd1de3bb8caad7"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "c5171416f4519b48",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Gold and copper shape Namibia’s next mining chapter",
-   "summary": "Gold and copper shape Namibia’s next mining chapter The Mercury",
-   "original_title": "Gold and copper shape Namibia’s next mining chapter",
-   "original_summary": "Gold and copper shape Namibia’s next mining chapter The Mercury",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-10T20:49:05+00:00",
-   "source": "The Mercury",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxOYmdLRkhfN3ZBNXVPTUFsMmFhRGFSNjVab01fZko2Sk9GYzA1bDlOM0IyQmk2MlkzZU84T0RaS2UyQU1pTFQ0SzhDQTA2VlpPcGgxNmI3bzBsR0E5OWhPclFVaDNQelZpcnRaR0pzSmotVnEyM0tYNTFMRldQclVYSXF5eFRiM2gxYWRIU1NuUlNPTXd4TnkxamdURGI3cGN2OV9fZHBEUE1ubDBudlNyOWlnVGJUZ2ZVenlZT194ZXFsUmhvRmlucnlxUktzSExsQmU1bDZ6MjlyQk5hQThfb05yaHg0TkZxb0ZHYjJzRWtLQjQ?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "472cb1ac6ef23184ddae9fcf631ade614e6b91ad78642897166eb8e1537672e2"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "af71667dd0d6fe6a",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "El desarrollo de la IA impulsa el consumo eléctrico en Estados Unidos a niveles récord",
-   "summary": "El desarrollo de la IA impulsa el consumo eléctrico en Estados Unidos a niveles récord El Economista - Últimas noticias económicas y financieras",
-   "original_title": "El desarrollo de la IA impulsa el consumo eléctrico en Estados Unidos a niveles récord",
-   "original_summary": "El desarrollo de la IA impulsa el consumo eléctrico en Estados Unidos a niveles récord El Economista - Últimas noticias económicas y financieras",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-11-10T20:31:00+00:00",
-   "source": "El Economista - Últimas noticias económicas y financieras",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQOGxGcE94d3N3NXktbG1KY2NLdktVMGhLejJGdVlQRkd0Y0hFWXNaSjBUVDhfeDY0VTZiSXMtekVMRE1rNGNnUXdjQkJsWldIMW5iYjFaa0lQdVpQVnV2dDVIOUtZalVGMEdRanh3SmpSMVNDc1dxOVBXMGdXVXlpc21BdnpLWGdLbzViT1R3Ml9fUlUyWHNDYzI4RVFIQkxySkd6Zk1NekEwcWktQ3Rma2Q4T3VHQnlfLXQ0VmtB0gHDAUFVX3lxTFBMcC1CX1JWZWdoUDJQX1JiTm55WkIxNmRaMk9QbVNEZ2ZDYjFVQ3B3aElHQjNFeW9reUQ3eE04c0NVcE9KcUFzZHN0Y2c0bGxBMHloaHE5THJNU19xR3YzUmhvbVQ3UHpBNkduOE43aTU1TENrRV9ZYi1SRFVJOE11cDNvVmp5SGVsYllWSXo1c2FCR0RubENGZUp2Q05wTlNlT1ozbnBmZ0RHRUQydlBZOGpfbmFMa0ljR2NLeUxqMmR0TQ?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "27b25c4ed88b2378e6999812f853b1345b82ad9fc43cb113cd1a182ece060684"
-   ],
-   "background_query_language": "es"
-  },
-  {
-   "id": "f8ee31e44f0b1135",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Another novel nuclear project gets green light to start construction",
-   "summary": "Another novel nuclear project gets green light to start construction Canary Media",
-   "original_title": "Another novel nuclear project gets green light to start construction",
-   "original_summary": "Another novel nuclear project gets green light to start construction Canary Media",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-10T20:30:00+00:00",
-   "source": "Canary Media",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPMmdJbUw4MEJDT1BVYjR1M21RNmhkMVdZSDVqOERaQUp0STVLdFJTNk5IUXUzUVdjWlRNYXhKV2hkdjdGYmxUY01yQ1FmeWxJUkN1aVJtUThQNnRGZk9ScDdTa1RVeExZaURIa0RNSUhVellGR2hqdmlCeTc0YkZtVDFjWm1TLS11dHlnUUlaUDhMWXI4QUE?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "d537a161040f40373953d18003290cd62e4104a11201bcd4cc31c363f2e02664"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "d06b74f243e7b835",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Una idea olvidada de los años 80 puede hacer que los reactores de fusión funcionen",
-   "summary": "Una idea olvidada de los años 80 puede hacer que los reactores de fusión funcionen El Confidencial",
-   "original_title": "Una idea olvidada de los años 80 puede hacer que los reactores de fusión funcionen",
-   "original_summary": "Una idea olvidada de los años 80 puede hacer que los reactores de fusión funcionen El Confidencial",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-11-10T20:15:00+00:00",
-   "source": "El Confidencial",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNZGtMcFFOcnpuRXhtd0VBclhNTjMwb0QxSWdmN2lRWDVIRXhGVnR6NzE4cE9uaE5DQXVBRmg3NXloUkxNT0pjTDJiZC14NU5WdFZWNjVwUVIwU2UxTE5INEJFSmppUkNkd1NWZGY4bk9JNlBQek8wSTM4aXRtWjdrMmVMS3JEWF9tTjZDVkYtRXNJTXhnV01QUFB0NFR3S00xa2o1NUxsa25TTXljcWpGaHQyR2lhSTZIQ1pr?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "4f4cbb1d00653c6bce054541db0ce7dac58bed6214c98aa9f5112c8791e03da0"
-   ],
-   "background_query_language": "es"
-  },
-  {
-   "id": "a51511b3d680edaa",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Souverainetés économiques : quels impacts sur l’inflation et les taux ?",
-   "summary": "Souverainetés économiques : quels impacts sur l’inflation et les taux ? Zoom Invest",
-   "original_title": "Souverainetés économiques : quels impacts sur l’inflation et les taux ?",
-   "original_summary": "Souverainetés économiques : quels impacts sur l’inflation et les taux ? Zoom Invest",
-   "original_language": "fr",
-   "collection_language": "fr",
-   "collection_language_name": "French",
-   "collection_locale": "FR:fr",
-   "published": "2026-11-10T20:14:46+00:00",
-   "source": "Zoom Invest",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQMDlIX21EMFpaME5RTEVQWlFKTGxQSjNqWjQwTHY4SWZOaTJNREFEcmRSZDNJVXgzRGU1M2U1YWMyclRRWEZiYXpkQ0c4OFFKTkVMY25EMFhaUEt1WUVaVUdMQkI5SDhqZ09QdW1FTHA4UWgxWkxQN1RNOGlUS2hkclhOQnlWV0ZtNWUwSEM5T0tWcHRjQzVIUmFRUnFBTnJjS25WZFlBRjRFanpfMGZFeHdsanFjaktWUkNtV3pPaGdodw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "b7469557dc59a2537102d23d6bba691a70eed2d176856e9be170d36fa29ccf57"
-   ],
-   "background_query_language": "fr"
-  },
-  {
-   "id": "63813b374dba4de1",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "太乙核能获种子轮投资",
-   "summary": "太乙核能获种子轮投资 搜狐网",
-   "original_title": "太乙核能获种子轮投资",
-   "original_summary": "太乙核能获种子轮投资 搜狐网",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-11-10T20:11:00+00:00",
-   "source": "搜狐网",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPems1RkhlM0w2NzkxdjdVeWIwUjNPUFlMUkd4VmN0UjRWM09RR3VyZDA3WVgzZGlMVXdDeUZHdW15RHdqMFVwc3pMYTFOTlc1UXNMV0tLZEJSdGxjNVBOV1N6Sjl3Z08wV2xlZFRGbV9rZHM0dnNVRGl0RXZFZVVxTTNBaWFnYWYt?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "355ee12954df3461bcc3b65ac4c87c98796731fc4b4fdc5baf898ecb943d50e4"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "87c3b991debe109c",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Fusión Hub: 8 startups andaluzas ante inversores en Sevilla",
-   "summary": "Fusión Hub: 8 startups andaluzas ante inversores en Sevilla El Ecosistema Startup",
-   "original_title": "Fusión Hub: 8 startups andaluzas ante inversores en Sevilla",
-   "original_summary": "Fusión Hub: 8 startups andaluzas ante inversores en Sevilla El Ecosistema Startup",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-11-10T20:06:53+00:00",
-   "source": "El Ecosistema Startup",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxObDdiVzZjWE9LcW9OUE1wR040eEpUTkRCSlY2ZXljNEJxU2UwaDdQa2s2RW9NODFUNTVhYmQ5dFppOHhpMnNNdTY2YmxwTlg4eXUwTVFGalNKOTUtTVFlUHJvb2E0MVh2Yi14QU8wanF6eW5TY1dmX2Z2S0s0QWlxUTdMTTA1WUhPY1NYNmdoWU9ZaGM?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "42ff153c2dbddfba345d6fd510c3ea15c19d01cec0524e2cecf85c687d8f42ef"
-   ],
-   "background_query_language": "es"
-  },
-  {
-   "id": "567036ce0b2e84ad",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Çin, dünyanın ilk hibrit nükleer santralinin inşaatına başladı",
-   "summary": "Çin, dünyanın ilk hibrit nükleer santralinin inşaatına başladı DonanımHaber",
-   "original_title": "Çin, dünyanın ilk hibrit nükleer santralinin inşaatına başladı",
-   "original_summary": "Çin, dünyanın ilk hibrit nükleer santralinin inşaatına başladı DonanımHaber",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-11-10T20:00:00+00:00",
-   "source": "DonanımHaber",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOejRTQ2hWSkU3bDg0YkJzbHl1T1RoY2JCUlRPSlZGWUZpMlZKTW0xY2YxTjF5aXVkR1dncHdLam13dUZzX3pXaHNBQjN5ZWVvYnFlRlRGRE44WmpPMkRuWlRjT0lrei1MQS1aWEo2d1hLaVE5RWNlWHYyTHk4Q0hWMG1UUGlJVkdxVU5YV1lzUkNKazlUcFBaQjVfNHVlSm8?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "a7a69dd044703a531959cb81e7c52cbcd0086d3158f7cf70f9f00b6d947055b7"
-   ],
-   "background_query_language": "tr"
-  },
-  {
-   "id": "84b2f729889c06ed",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "FEAR FACTORY anunciam «Roboticist», o 11.º álbum de estúdio chega em Abril de 2027",
-   "summary": "FEAR FACTORY anunciam «Roboticist», o 11.º álbum de estúdio chega em Abril de 2027 LOUD!",
-   "original_title": "FEAR FACTORY anunciam «Roboticist», o 11.º álbum de estúdio chega em Abril de 2027",
-   "original_summary": "FEAR FACTORY anunciam «Roboticist», o 11.º álbum de estúdio chega em Abril de 2027 LOUD!",
-   "original_language": "pt",
-   "collection_language": "pt",
-   "collection_language_name": "Portuguese / Brazil",
-   "collection_locale": "BR:pt-419",
-   "published": "2026-11-10T19:58:12+00:00",
-   "source": "LOUD!",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9oYWR2NUhnbmZHSVMyaFdjM2hqZmxlZy1zdG5LSDd0ekpuNE13emFHTm5pNHNUSDN5cDNRZEhESmdMdmxELXNZRXR6Y3pMSGl4MGM4Wm1XRkYtRk9JLV9za1F4b0JTTkRCQnc?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "643bd81d0c1600997c9dbdbe945ac679fd9ec93b18ff158e2e78ab2185384443"
-   ],
-   "background_query_language": "pt"
-  },
-  {
-   "id": "f50b5a1517849ffa",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "La película de ciencia ficción sobre inteligencia artificial que se convirtió en símbolo de una huelga: Hollyw",
-   "summary": "La película de ciencia ficción sobre inteligencia artificial que se convirtió en símbolo de una huelga: Hollyw Diario AS",
-   "original_title": "La película de ciencia ficción sobre inteligencia artificial que se convirtió en símbolo de una huelga: Hollyw",
-   "original_summary": "La película de ciencia ficción sobre inteligencia artificial que se convirtió en símbolo de una huelga: Hollyw Diario AS",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-11-10T19:40:00+00:00",
-   "source": "Diario AS",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiowJBVV95cUxQaFJENTZOREJPUUx4ZV95c0JwRHlDODJIVV94QmZMaTMzV19XYVhsYU0zY2stVnRmcjFzXzM2cTVpOUtZM3R5cFM0M0JqMHV3NVFJOHBOalRESm80T0IxOC1pTy1jdk1rd3k0eEF4RGJMWEVlZVV3VzdZRE9KNTUxWUJfeXhsR3RvWk5ybEY5OXVLTnl6Y3ZvMmRncVRYYWI1eGpOZjRvbnJ0M2xwYldYT2ktN3FMZVJDS3BoZlo2dzJ3Z2V3R1VtNU54UERqZDhTUVRIU3dsbTQtY29iUE9YQ3B1RG92Ul83RFdjVUZYS1dDZTVseU1US25ScTNPNkJhaHNqbTFYZmJiWmp0amVtYjE5X0tWOUt6MWhzdzVrWHdyRG_SAbcCQVVfeXFMUDFmSnlSajUwdTRQLTZ5YWVoT3pNTXg1LXdWV3pqWGIxb2cwSkNtS2F6VlFJRXZnU3NhNEp6OVJJZTZUaU95Xzg1S0xYS1dPZm5MZkh3NElOYjBiVkZ5TWZJY0o0aXpNd292SEU5Ti1jdndhb2lfQTVKaE0tbjVxbmMzUUVpek5RdEJkcU9LQkd1VjhTTk5XUnpYbUpEWkR2LVhLVGg2NWlHYkxZY1E3RWtKTUcyZVBJdGROZkpKMnZmWEZycmE0VnI0bkswVXRHX001cEpGUVNXdDZxNXl3NXY2cko4QzBHWDlZV1VRNXZWM2RCOXNCY0p2a2ZZZDQ4OTBiNWc3MjR3NXY1cExKTXJuZGFYNWtYSndacnBiSXNITVZ1dEw2Nk1sMjFiVnp3bUU4UkEtSGc?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "673f72c572885de83a56c2039b4c2276d49bafb9c39af556f6e35e94947425f8"
-   ],
-   "background_query_language": "es"
-  },
-  {
-   "id": "b809f0cd95f230ee",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "احتجاجات بسبب فشل المجموعة الأفريقية في الحصول على بند مستقل لمناقشة التمويل",
-   "summary": "احتجاجات بسبب فشل المجموعة الأفريقية في الحصول على بند مستقل لمناقشة التمويل وطنى",
-   "original_title": "احتجاجات بسبب فشل المجموعة الأفريقية في الحصول على بند مستقل لمناقشة التمويل",
-   "original_summary": "احتجاجات بسبب فشل المجموعة الأفريقية في الحصول على بند مستقل لمناقشة التمويل وطنى",
-   "original_language": "ar",
-   "collection_language": "ar",
-   "collection_language_name": "Arabic",
-   "collection_locale": "SA:ar",
-   "published": "2026-11-10T19:36:29+00:00",
-   "source": "وطنى",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi0AJBVV95cUxNRlFPaFdqWWFtRGVCVkpjeklWWnVSOUdDVzdONlhtdWJIT3Fvd1pwaU1WYWZIZWZXek9SdW1kQXd2RHFLVGJMb2NhMnBsc0xoYnNCaXFXY3BkbGY4QVJEVFRSUlJDRXJNWEJ5N3IwcTVRSzNrN3FMUGk3MDR3Mi1qc3hYQWJ5b2lCRTZEVjcySWdBandZQlF0S3hkTGl3bUhSZmhoTDVOWWRPRGNSMWFxUXNvRzY5dlotUkZNYk5NSGxFS2o0Mk8taXVDaXFHS2hDYVNpcGpKRE9LSWZwZE5vYVFOSEhic3NGX3JxbUxNQVlidDJKY0NMZk1OaGZMR1lYTzRPYkhrZjlKaHZyLWNiR2ZVLVU3M3NDVFNXcWZaUWRPb2tRMGhDdXhxcXR1RC0wc0EtU29mSG1YNGZKbnRPQWcta3RSakJ0cy15N0lvVFc?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "d551a55514f544321fdae558ab150dcd63ac404f20b33d1694ad3651058f694c"
-   ],
-   "background_query_language": "ar"
-  },
-  {
-   "id": "05d019408573107e",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Reunido em Paris, G7 defende arquitetura internacional para controlar riscos da inteligência artificial",
-   "summary": "Reunido em Paris, G7 defende arquitetura internacional para controlar riscos da inteligência artificial Terra",
-   "original_title": "Reunido em Paris, G7 defende arquitetura internacional para controlar riscos da inteligência artificial",
-   "original_summary": "Reunido em Paris, G7 defende arquitetura internacional para controlar riscos da inteligência artificial Terra",
-   "original_language": "pt",
-   "collection_language": "pt",
-   "collection_language_name": "Portuguese / Brazil",
-   "collection_locale": "BR:pt-419",
-   "published": "2026-11-10T19:21:00+00:00",
-   "source": "Terra",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMioAJBVV95cUxQSE0tazdVVjdPR3JORmk5ZjlEX0ZQRjJKX21DTnREOGdHTVl1T0paekkyZmVkWkdKRDJhVGV4aGpXZXp6UWVtSGdOLUFnbUxvcjZmSlc4MGstM0ZpWHZ1TmxPTHhCNWpZM0RUNlBpOFZaQTJRRlkyb3ZlUzRobXFnQjBnNWI3akVZNGx1SC1RWlVaM3ZJOUxrQlB1ZXVjSUY3NjFKV3hJc1JCWXRWUWZuc3Z0VjFEUmpydnFGT2RfLWlNOHdmSEI1SDVmaVRVQ2IzaXI0SlR0R1I1VTBnT1VuT3JXdnluLWdTWkQ5MlptTFZrZm9pelZGNkNsWHNLUTRBZFZ0Q2V6cXNqakJaQUpfaVJkeHBfd2lNUk1mUDFyTWk?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "0e4f75e2becea19a1e18d256dd8b313885688840898aac1cc8ebb1504f6eb7c7"
-   ],
-   "background_query_language": "pt"
-  },
   {
    "id": "74d16bc7366090e5",
    "category": "Radiological/Nuclear",
@@ -4576,6 +4081,39 @@
    "background_query_language": "tr"
   },
   {
+   "id": "116c7921fd14346e",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Mariotti (ENEA): \"“La transizione energetica sarà pluralista: il nucleare sarà parte integrante del mix delle fonti”",
+   "summary": "Mariotti (ENEA): \"“La transizione energetica sarà pluralista: il nucleare sarà parte integrante del mix delle fonti” Il Giornale d'Italia",
+   "original_title": "Mariotti (ENEA): \"“La transizione energetica sarà pluralista: il nucleare sarà parte integrante del mix delle fonti”",
+   "original_summary": "Mariotti (ENEA): \"“La transizione energetica sarà pluralista: il nucleare sarà parte integrante del mix delle fonti” Il Giornale d'Italia",
+   "original_language": "it",
+   "collection_language": "it",
+   "collection_language_name": "Italian",
+   "collection_locale": "IT:it",
+   "published": "2026-11-10T18:53:55+00:00",
+   "source": "Il Giornale d'Italia",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxQQWNCLVdOU2xYdmFfb2tSWDJrMXUtOGprODJpRWU3Vm1IbjR3Ujg5UHVYVGJYcDV2NWVZNGxVeFRBVFdoWjc3RDIwaGtFTlhqNXl3M1cyQU9WcXJWeG1WdHlzYjdTdzJZTDc1empiRmVrOXo4d0FkZG9pbWU2eVBVdE5FRTRESlZMazdBMkxRMTA1QzdqN1NGTWJsbzZub3FJNWtfTWJobmVVLWlmZHdWcEp6NGRqTEhvdHNYX0xwb1U5bHdFLXJ5OW1IcnBvZzlkWGhQakU3YWxPZXY2UmR1WTFZNWhFSXNrZERMWGpsaHNZRURVRWNnbnRtb2xURnp3NS1lSA?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "3e0dafda227977f5e2035c2b3d251d4a6c2dc49aade28e1259b7ec0b09c37415"
+   ],
+   "background_query_language": "it"
+  },
+  {
    "id": "a08b47cd1dfa709f",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -4605,6 +4143,39 @@
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
     "8961494bb4c5764610b7a928867887075c5cac6ae29083dad8e1c0505376e7f8"
+   ],
+   "background_query_language": "pt"
+  },
+  {
+   "id": "560e3cf9129370d5",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Irã apóia tratado nuclear mesmo com a linha dura levantando perspectiva de bomba",
+   "summary": "Irã apóia tratado nuclear mesmo com a linha dura levantando perspectiva de bomba Jornal Impresso Brasil",
+   "original_title": "Irã apóia tratado nuclear mesmo com a linha dura levantando perspectiva de bomba",
+   "original_summary": "Irã apóia tratado nuclear mesmo com a linha dura levantando perspectiva de bomba Jornal Impresso Brasil",
+   "original_language": "pt",
+   "collection_language": "pt",
+   "collection_language_name": "Portuguese / Brazil",
+   "collection_locale": "BR:pt-419",
+   "published": "2026-11-10T17:52:00+00:00",
+   "source": "Jornal Impresso Brasil",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQcFpmWElRdzBOalY0V29TNUU1MWpvaXJYamNSd2tiU3dSS1ZmaEVCbG1LTU5kQkJwemRqTU5RWkd2bTAtQWJWdXhFa2FwVnZmMEZRaTIySWQ2VF9tWXU0dmg0WFV6N2VSQnotOXZTVzhobmJQV213dS1WRHd6Z2lTcl92RThETHZkVDF2WnRxLVlYYTZOSDRJQ3lvXzh6Rjk3MkgxNm5qeHl3VUt0NDBJNUtNTXI2VWhISm5hckItQmpqYllJUlRvcmtET2sydS0ybkNFOHl0d3FaVXNjV29IbHl4cHp5UQ?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "a0186efc621463088f7c143550cf30af8da9fd5ed5d704499d0f6af334a37d68"
    ],
    "background_query_language": "pt"
   },
@@ -4906,6 +4477,39 @@
    "background_query_language": "tr"
   },
   {
+   "id": "7d5d93da0546a948",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "विषैले पदार्थों, विकिरण और परमाणु घटनाओं से संबंधित दुर्घटनाओं से निपटने के लिए 2026 के आपातकालीन चिकित्सा प्रशिक्षण पाठ्यक्रम का उद्घाटन समारोह।",
+   "summary": "विषैले पदार्थों, विकिरण और परमाणु घटनाओं से संबंधित दुर्घटनाओं से निपटने के लिए 2026 के आपातकालीन चिकित्सा प्रशिक्षण पाठ्यक्रम का उद्घाटन समारोह। Vietnam.vn",
+   "original_title": "विषैले पदार्थों, विकिरण और परमाणु घटनाओं से संबंधित दुर्घटनाओं से निपटने के लिए 2026 के आपातकालीन चिकित्सा प्रशिक्षण पाठ्यक्रम का उद्घाटन समारोह।",
+   "original_summary": "विषैले पदार्थों, विकिरण और परमाणु घटनाओं से संबंधित दुर्घटनाओं से निपटने के लिए 2026 के आपातकालीन चिकित्सा प्रशिक्षण पाठ्यक्रम का उद्घाटन समारोह। Vietnam.vn",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-11-10T17:09:57+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNWWF4WnZzd3d4V1F0Q201ZVB4SVV5YnlGLTVOS2U3QWktZWU4Ty0tVnIxOGdjMk5sTUVWa1lycU14SXJEaHVPekdDS0xvZVJXWGRkd25WSUlBQ09HUjlpaERQX01XRzhDc0pPRmhoYW1uU2p6RHUtSHJXdEtiV1BGOElmVWFaTWcxMVFZSzVBbnpUcHR4MHlmX0JkTGNrWjFyTGt5bGJvQnViTTh0TDd0c09CSmEwb1ZaUUcw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "4446deace0fc8aec9ab43b368d0ae7def81d98ca03d24af6f3c157790507420d"
+   ],
+   "background_query_language": "hi"
+  },
+  {
    "id": "c3e0f49a61797671",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -5005,6 +4609,39 @@
    "background_query_language": "id"
   },
   {
+   "id": "96f9f6b4ac329840",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Google ने Gemini 4 Carbon की पहुँच साइबर सुरक्षा रक्षकों से आगे बढ़ाई",
+   "summary": "Google ने Gemini 4 Carbon की पहुँच साइबर सुरक्षा रक्षकों से आगे बढ़ाई Unite.AI",
+   "original_title": "Google ने Gemini 4 Carbon की पहुँच साइबर सुरक्षा रक्षकों से आगे बढ़ाई",
+   "original_summary": "Google ने Gemini 4 Carbon की पहुँच साइबर सुरक्षा रक्षकों से आगे बढ़ाई Unite.AI",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-11-10T16:33:01+00:00",
+   "source": "Unite.AI",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPcjFFYWhBMEw1LXRBazhFTnkzT29yVnlUbDJGOFY2M3EzSExSQ0VrcTdKazJBTFRvQXNRNGlMclBPUUZEYjBGSFZ0UUhXX00ycXA0YUExTGFBYmVaMnhRZFR6SFVhV3J1aHowQ202UVhIenJjeDRNYnFNcW1XOGF6eTktTld1QjRzeFVkVFJFWktsT2RpNzdRYg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "8db6fcb7cc774dba68753f75d3e9b07850ec4d07483801e4899d858bdb2928f6"
+   ],
+   "background_query_language": "hi"
+  },
+  {
    "id": "35febf5b59ed664f",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -5036,6 +4673,72 @@
     "ff4160c977e624dbdc6a82408376f86cba7f4fec12e61aae077d185b25cab20f"
    ],
    "background_query_language": "en"
+  },
+  {
+   "id": "028a09e0af44e131",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Enel et Leonardo s’associent pour développer des technologies énergétiques et des solutions de sécurité destinées à l’Italie",
+   "summary": "Enel et Leonardo s’associent pour développer des technologies énergétiques et des solutions de sécurité destinées à l’Italie Defensehere",
+   "original_title": "Enel et Leonardo s’associent pour développer des technologies énergétiques et des solutions de sécurité destinées à l’Italie",
+   "original_summary": "Enel et Leonardo s’associent pour développer des technologies énergétiques et des solutions de sécurité destinées à l’Italie Defensehere",
+   "original_language": "fr",
+   "collection_language": "fr",
+   "collection_language_name": "French",
+   "collection_locale": "FR:fr",
+   "published": "2026-11-10T16:21:03+00:00",
+   "source": "Defensehere",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNQ0FlblpGOHcyUUduSHJaQkQ0LVJSdXZIbGVHOUhMU3Vwb0Q2cnJnaXJKZEpiU0pTRVhrUF9TbFZmX0FHN0s3dTdWTUVHRFJ5d3VoWDJTeEFrZklDaVJtaDJMeGE3X3lERkRmNzN3RkFqVzV1UWJTVEMwaV8wYUJmQ2tzM3pEZF9xT25LcUM1NTJCVWVVNHV1RUt1MllIZnpKSEVWc3VWUWpibEI1OGpyb3lLc09LSmZxNGgtVFNtazZCMjRpQ2stcVljdXRlVURQR3BPbzRMRWhCOEZLZ1lMSFAzYUs?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "efd080f5b7dcf4a269de4e1069b754de69d9a4de1c1969291f6be13e52259094"
+   ],
+   "background_query_language": "fr"
+  },
+  {
+   "id": "e4faef31bfa80b2b",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Le logiciel Hivemind de Shield pilote pour la première fois plusieurs avions de combat collaboratifs",
+   "summary": "Le logiciel Hivemind de Shield pilote pour la première fois plusieurs avions de combat collaboratifs Defensehere",
+   "original_title": "Le logiciel Hivemind de Shield pilote pour la première fois plusieurs avions de combat collaboratifs",
+   "original_summary": "Le logiciel Hivemind de Shield pilote pour la première fois plusieurs avions de combat collaboratifs Defensehere",
+   "original_language": "fr",
+   "collection_language": "fr",
+   "collection_language_name": "French",
+   "collection_locale": "FR:fr",
+   "published": "2026-11-10T16:01:27+00:00",
+   "source": "Defensehere",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQZ1UzcVdJWnZJZzhFU21rZnl2ZUE3MzlOMmZlVm0wcTdVQ3JIVW5CbF94LTM1Uk1lMG8tZ2RCcS10MVNTY2xhMFpnUHMxYllHdDgwZjN2bkJQTlVGT2Z5NGdQbm43Q01jRnZfOGRDZ3g3NnlaalBvYXNQdVJLbDRYMHg4WlZaeDhsNE5GU3pVX05TRTY1bHpZLVd0aWVXV2dHbTNMdWRpR0hfSjZfRlpUc0Q2dEdtY0wtNUVsdmg5ODZ4ZnN5R193?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "559cefdebdceac97b423174ef6336ab52591ca6ebbd66a543170a9878fa95c23"
+   ],
+   "background_query_language": "fr"
   },
   {
    "id": "930a64b0f7dca20f",
@@ -5203,6 +4906,39 @@
    "background_query_language": "it"
   },
   {
+   "id": "6a7db66451317cc5",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "বিষাক্ত পদার্থ, তেজস্ক্রিয়তা এবং পারমাণবিক ঘটনা সম্পর্কিত জরুরি চিকিৎসা প্রশিক্ষণ কোর্সের ২০২৬ সালের উদ্বোধনী অনুষ্ঠান।",
+   "summary": "বিষাক্ত পদার্থ, তেজস্ক্রিয়তা এবং পারমাণবিক ঘটনা সম্পর্কিত জরুরি চিকিৎসা প্রশিক্ষণ কোর্সের ২০২৬ সালের উদ্বোধনী অনুষ্ঠান। Vietnam.vn",
+   "original_title": "বিষাক্ত পদার্থ, তেজস্ক্রিয়তা এবং পারমাণবিক ঘটনা সম্পর্কিত জরুরি চিকিৎসা প্রশিক্ষণ কোর্সের ২০২৬ সালের উদ্বোধনী অনুষ্ঠান।",
+   "original_summary": "বিষাক্ত পদার্থ, তেজস্ক্রিয়তা এবং পারমাণবিক ঘটনা সম্পর্কিত জরুরি চিকিৎসা প্রশিক্ষণ কোর্সের ২০২৬ সালের উদ্বোধনী অনুষ্ঠান। Vietnam.vn",
+   "original_language": "bn",
+   "collection_language": "bn",
+   "collection_language_name": "Bengali",
+   "collection_locale": "BD:bn",
+   "published": "2026-11-10T14:26:09+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNUE1GaWlEbTRxSFNUY1VJTVNKYXBhSnJDRk1Od1dYTHpQR0dCU09WeFRneEtPT1B3Zzk0cm9oM2hFYU5kQnVFM3EwRUxPV1FzRE01ZjNlejBXMzlvUVhjY2NqSEVOWEFBdlozNTFlQWNBMERrUTdaazFYZGszcmVVZFl1dXlEcGJJRUpocVVURFBPUHUzZW1hMUhyMXo5Zm9mZEdtQi1uank2Z0E4a25wUXRjeVFaSnlIQ1U4?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "0f4f9856ba920c3aa5f6e55b10e1dce1a4c259800eb0e8953e546148a48b63e4"
+   ],
+   "background_query_language": "bn"
+  },
+  {
    "id": "27ebc4fa3b5f358c",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -5368,6 +5104,39 @@
    "background_query_language": "pt"
   },
   {
+   "id": "ad4219d4a1cee7cf",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Uzbekistan registers nuclear safety regulations for NPP reactors",
+   "summary": "Uzbekistan registers nuclear safety regulations for NPP reactors Daryo",
+   "original_title": "Uzbekistan registers nuclear safety regulations for NPP reactors",
+   "original_summary": "Uzbekistan registers nuclear safety regulations for NPP reactors Daryo",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-10T13:01:32+00:00",
+   "source": "Daryo",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQMlo3cWVKcFpFQkwyZ1A3dlB4ZDJTSEZYbFE4bjlfZnFETEgxdWhKbE1salI2cGNnX0l4amJ4MjFvUnp6aGVTQTh1bVp5VGczOGJKRlh0ZWh6RjBSaFJpRlUtcG5rMW1fd0trVnNZUldyQ09uaUJPdjk1d2VNbUl1NjZWVDZXUWkzanFyYVJENDBmNUtFSVRvd1NheFk?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "eec3a5d29103141aead474d0c9c8cd80781b3d088c1c8d0431610339ad977b5d"
+   ],
+   "background_query_language": "en"
+  },
+  {
    "id": "bfc42f5f666d45af",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -5399,6 +5168,39 @@
     "55c2ec3e11c33834a0fe26e6184f5f9e2a6e307ca6a6c72846e5c7e740b55f38"
    ],
    "background_query_language": "zh"
+  },
+  {
+   "id": "366d3033300d1950",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Estonia Shortlists Three Locations For First BWRX-300 Nuclear Power Plant",
+   "summary": "Estonia Shortlists Three Locations For First BWRX-300 Nuclear Power Plant NucNet",
+   "original_title": "Estonia Shortlists Three Locations For First BWRX-300 Nuclear Power Plant",
+   "original_summary": "Estonia Shortlists Three Locations For First BWRX-300 Nuclear Power Plant NucNet",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-10T11:49:37+00:00",
+   "source": "NucNet",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNMVdhZklVNDFzVG55MTBBejhNSkhaak15V2FSd044WjhmOGZSd3ZSMDdlZVk1eHNxOXpHc0cxc2g1ZXBzemdwWnhzbElldWVWZUVOZDBtRVZiUk5SYy1EenRFYk5kaUdtbnBBQ1AzdDd1bjcyb1BhUkJVb0JsbUxtc2ZWQTlLTUVEcWk2bXh0anpuZlNaMGdmMXhNS0UweHFteVB5MWsxdVRGWUZ4X1M3Vg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "d0870b57fca20cc8cffe9bb53a13cfe5a7ec76c285cc1cf3017ad39b44f9b1fe"
+   ],
+   "background_query_language": "en"
   },
   {
    "id": "7cfd80237cb54c96",
@@ -5434,6 +5236,72 @@
    "background_query_language": "en"
   },
   {
+   "id": "5497e18564d2304a",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Le quantique, une solution pour rendre l’IA moins énergivore?",
+   "summary": "Le quantique, une solution pour rendre l’IA moins énergivore? magazine GEO",
+   "original_title": "Le quantique, une solution pour rendre l’IA moins énergivore?",
+   "original_summary": "Le quantique, une solution pour rendre l’IA moins énergivore? magazine GEO",
+   "original_language": "fr",
+   "collection_language": "fr",
+   "collection_language_name": "French",
+   "collection_locale": "FR:fr",
+   "published": "2026-11-10T11:29:00+00:00",
+   "source": "magazine GEO",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQeUJ6R3h3ODNaODJIZG9QNEdqaUVSVEhNNzh3SHNUaU9MV0ViTGMwaENiREpxLUlFNWs2RmN0cWotNW5wNWFIS21HdnAtYmlXM2hsSkE1TXNBTHczaFNhQWdHLXkxWUdELTBfWkFqTzZNcmxreGlIUzFnT2RRbnROLURsNXNENlMxVWRMZ3hsUkg1YXVaZFBUdw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "2201c0700ded52ebbffa0104193135a5c526ce528282cac8b37b89ee9048745f"
+   ],
+   "background_query_language": "fr"
+  },
+  {
+   "id": "565df1ecb89351db",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "الذكاء الاصطناعي يقتحم عالم الأحياء.. من التنبؤ بالبروتينات إلى تصميم الجينات وتطوير الأدوية",
+   "summary": "الذكاء الاصطناعي يقتحم عالم الأحياء.. من التنبؤ بالبروتينات إلى تصميم الجينات وتطوير الأدوية المعلومة",
+   "original_title": "الذكاء الاصطناعي يقتحم عالم الأحياء.. من التنبؤ بالبروتينات إلى تصميم الجينات وتطوير الأدوية",
+   "original_summary": "الذكاء الاصطناعي يقتحم عالم الأحياء.. من التنبؤ بالبروتينات إلى تصميم الجينات وتطوير الأدوية المعلومة",
+   "original_language": "ar",
+   "collection_language": "ar",
+   "collection_language_name": "Arabic",
+   "collection_locale": "SA:ar",
+   "published": "2026-11-10T11:00:54+00:00",
+   "source": "المعلومة",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi-ANBVV95cUxOTVdzSTdzMlo0V0g1WFNUWUhrc1dOT3diZnRWTUxPOENSWTFkS3BjbGZUNUhCVGJhVXJMak1BZTVuVVNWbTJJdWtIU042NzlXOTN6ZThPSHVMUVNxai05RVhVc0FhYWN4SnNIeEJXeTM5MDBFUU41NUVqZGhhelBmRG14dHVpT3lhZ0ZFalFHRjAta1ZlVVBYTHU3dmFuRUg4RGxFcU83RDk1MnlCVFpJMUppVXRzUE5RRGduVGFZbmx2NWh6YVlMNURESXFRSlpBRXFMQVZudGZ4MlNwRjVYWFdDTnRxc0I3NkRGeUNRR3VOcGZieVJ6T1ZRQ3hLOURsbE5GdlE5b1FjNWMwTVdpbmJRdm9QV3hRUlRKOGJJb2s4WUVmRlBSMXg1RU1OeXZaZllQTkg3OHdReF9Ta0FmRU1mYVBZVUtSOHpBWFloUVBSOXc4cTlUVzlSaHVXc2s4ZXJWNWlndkw1WnhlTW1paW5UT3JVeWxKamxBSlVGeG9SNWFQQWg1S0VlYU9xQ0hhZm1pNXJEMXhvMy1Vc2h6UWpJMlVuMDVFMkpYNU5xaGlScldBN1lZMmFWNmhDXzdRWG16ZGdRWDVtTnIza3NuQV90VDJkVlE3emtJOGdULXh5RTlEUFFoNWpxQ1ZoSWNoRTNGUHlLSGg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "3789310698b6cc49ecd8ecfd9519babc1d0f4963f48ecc0f4d5e9bab5252230b"
+   ],
+   "background_query_language": "ar"
+  },
+  {
    "id": "1c8ff0831b4db423",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -5467,6 +5335,39 @@
    "background_query_language": "en"
   },
   {
+   "id": "d279d2ceb0e5f1b6",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Le projet Omega mise 80 millions de dollars sur des déchets nucléaires dont l'élimination n'est pas financée",
+   "summary": "Le projet Omega mise 80 millions de dollars sur des déchets nucléaires dont l'élimination n'est pas financée Business Model Analyst",
+   "original_title": "Le projet Omega mise 80 millions de dollars sur des déchets nucléaires dont l'élimination n'est pas financée",
+   "original_summary": "Le projet Omega mise 80 millions de dollars sur des déchets nucléaires dont l'élimination n'est pas financée Business Model Analyst",
+   "original_language": "fr",
+   "collection_language": "fr",
+   "collection_language_name": "French",
+   "collection_locale": "FR:fr",
+   "published": "2026-11-10T11:00:00+00:00",
+   "source": "Business Model Analyst",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNRlRENVpDZTMtV0xHazRYNk9Lc05GRmtnRlNObzBSUXdfTkYwQkVOM3FxZXRwSWI0M1gyOUhCeDhDLVVOcVlqZzc2ejFhZy0wMks0c0QtekJfN3VucXdFTDdOcEhBUVRSM3VKNjFFWWl4R0piczFXVUtBa1BQd3Q2U2M0dWxnSk9ENkd1ODB2U0JmeGZSbC1HTg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "bf91017560d267017a84ec7ae5a23e788ec21e27f2c86767532779b988c2effa"
+   ],
+   "background_query_language": "fr"
+  },
+  {
    "id": "5bdebfd098e2eeff",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -5498,6 +5399,39 @@
     "530ab974f92056c914ec6d9daa7535a3c4ba021e74edb31f36e0cf761413ae23"
    ],
    "background_query_language": "id"
+  },
+  {
+   "id": "493c6964f98c4e91",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Geoffrey Hinton, le « parrain de l'IA », sonne l'alarme sur une intelligence artificielle qui pourrait nous échapper",
+   "summary": "Geoffrey Hinton, le « parrain de l'IA », sonne l'alarme sur une intelligence artificielle qui pourrait nous échapper Nessma TV",
+   "original_title": "Geoffrey Hinton, le « parrain de l'IA », sonne l'alarme sur une intelligence artificielle qui pourrait nous échapper",
+   "original_summary": "Geoffrey Hinton, le « parrain de l'IA », sonne l'alarme sur une intelligence artificielle qui pourrait nous échapper Nessma TV",
+   "original_language": "fr",
+   "collection_language": "fr",
+   "collection_language_name": "French",
+   "collection_locale": "FR:fr",
+   "published": "2026-11-10T10:08:39+00:00",
+   "source": "Nessma TV",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOLTB5ck0wcUotTWNfZFJXNkIwVEVENS1ia2txVnN2cERsN0l6MWhsc1lNSFpFc0hnSUpWeFZ5Q081aEM5aldwVWVGeEp0S29ZLXJsZ0RpRGRERFppWVBpaWw2ejMxVXNSeU1ld0hYV3BZTjBJcHE4MHhucEtTRTAtUGZuTm52NFN3RkMwVzZveEpaSEJ0cWI0X1JYVENRcDRjOGV6dG9TVVVyNzY4VEw0X0lqS25ZSFM4S2RHOW94UEIwTHZ6SFNTcHo5RHZZTkJlUDhBQktzQ3Zha3ZyY21aajZNTXZxVy1jcTZRSXRB0gHzAUFVX3lxTE5WbjRnbkZHTlZPZmhMM01TMHVPQjNjaHlxa1hic1dXdjRBRm40YXRjOHlpR3Bzd3lqU3JDS3lhQmx0dFUzN2RoX3JHMXBjaWM2LVVISFdqZjVmalAwcHRaY1RMeVAxR3BLOU9nOFdjMGRLN1hYc0N0Yl8zbUFRY2REUktBb1BEMDVHMkVUS2R4eHlQRGgzVEViYnBuT2o0R2ljWWVvcnlDYmN2WFFJeFVqVkpFY1kySUlOdjRGeXpnSjZwRG44Q3pJRDJ5aF9tTU5PeUk0UXlfc0Y3di0ybFgyUmwzeFVNU2NsX1BwZ1l0WnE1MA?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "6bd87608f02b88f68a9088f781a2ad7cb946da67ab107420d79f64dd76cc6696"
+   ],
+   "background_query_language": "fr"
   },
   {
    "id": "14ad0f480522ab90",
@@ -5731,6 +5665,105 @@
    "background_query_language": "zh-Hant"
   },
   {
+   "id": "1a108eb7cdf94397",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "حفل افتتاح دورة التدريب الطبي الطارئ لعام 2026 حول الاستجابة للحوادث المتعلقة بالمواد السامة والإشعاع والأحداث النووية.",
+   "summary": "حفل افتتاح دورة التدريب الطبي الطارئ لعام 2026 حول الاستجابة للحوادث المتعلقة بالمواد السامة والإشعاع والأحداث النووية. Vietnam.vn",
+   "original_title": "حفل افتتاح دورة التدريب الطبي الطارئ لعام 2026 حول الاستجابة للحوادث المتعلقة بالمواد السامة والإشعاع والأحداث النووية.",
+   "original_summary": "حفل افتتاح دورة التدريب الطبي الطارئ لعام 2026 حول الاستجابة للحوادث المتعلقة بالمواد السامة والإشعاع والأحداث النووية. Vietnam.vn",
+   "original_language": "ar",
+   "collection_language": "ar",
+   "collection_language_name": "Arabic",
+   "collection_locale": "SA:ar",
+   "published": "2026-11-10T08:55:22+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPVE1ZUlJPS1RkQXF2ZGZubS1QN0xzaVlfM2JoNkk5ZEdDdjVpdUtjM2RkWHg5OHcteVAtNWpBWlNOc3RSQ2R1NkptUjdCLTk2TVR0X0NmaHZtVlp0V1hhTXhIOWJydC1mS3JkaTNsT29iaEowenNjUVNJYkExOWNmWFFPekpGc0FGaTFjSHNMSkRmQUVBSWdYZzR0Q3BFZjJ4VHg3bWlKRzhoVVJsa1pzb2xaSzhjV3RuVEZZ?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "61d75c5fe97a518112e2b859516ef640078a327409850aea7f8193affdd50917"
+   ],
+   "background_query_language": "ar"
+  },
+  {
+   "id": "4662749d43cc1837",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Le bénéfice de 410 M$ de Trump Media est-il davantage lié au Bitcoin qu’à son activité ?",
+   "summary": "Le bénéfice de 410 M$ de Trump Media est-il davantage lié au Bitcoin qu’à son activité ? Cryptopolitan",
+   "original_title": "Le bénéfice de 410 M$ de Trump Media est-il davantage lié au Bitcoin qu’à son activité ?",
+   "original_summary": "Le bénéfice de 410 M$ de Trump Media est-il davantage lié au Bitcoin qu’à son activité ? Cryptopolitan",
+   "original_language": "fr",
+   "collection_language": "fr",
+   "collection_language_name": "French",
+   "collection_locale": "FR:fr",
+   "published": "2026-11-10T08:42:14+00:00",
+   "source": "Cryptopolitan",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPLXFzR1d4cTFQbzRWSmY5RmU1NjgzbTAyd0pwRFZlYXZxX2VwdTlCZGFuZklWMDFKaEdOaDh3b1ZmdHcybnI3aG91WlRsazUteXVuQWx5dkxfS1ItNlhuVVZ6aUkyX3VCN25udEZWeVZaTHpGSzJwWmExRnFReXJGeg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "af943609bf30d24e733b2c673c88ee74373ec0752d67fc93f2f617d4d06506af"
+   ],
+   "background_query_language": "fr"
+  },
+  {
+   "id": "960c606efcd2c777",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Il Nobel Hinton avverte: Entro il 2027 rischiamo una Chernobyl dell'intelligenza artificiale",
+   "summary": "Il Nobel Hinton avverte: Entro il 2027 rischiamo una Chernobyl dell'intelligenza artificiale Everyeye Tech",
+   "original_title": "Il Nobel Hinton avverte: Entro il 2027 rischiamo una Chernobyl dell'intelligenza artificiale",
+   "original_summary": "Il Nobel Hinton avverte: Entro il 2027 rischiamo una Chernobyl dell'intelligenza artificiale Everyeye Tech",
+   "original_language": "it",
+   "collection_language": "it",
+   "collection_language_name": "Italian",
+   "collection_locale": "IT:it",
+   "published": "2026-11-10T07:56:00+00:00",
+   "source": "Everyeye Tech",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOcXdLbnBCeUxOR2twZ2tYQ2NvUGsyWVlvQlc0bFVTLXdLSnpWdGNER1JJUW80a2sxYWRpNW5FaUJ0UEJqRXdDLWFGSVpIUW1lVGtxc25vVnlCdmdiOE11bS1SQXdLaEFiZFBvVzFnQm1TMnR5dWZVQ3ZDMF9XX2dMc2VncUxOSm55RFB6eWpLVjR6S2ExMTF6Sll0ZUI2RFZCbnowVUZieGFkaEtSNW5ocW1MZFFLTHdnMFZPZVR3?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "6d843cf838751da9913e30da7ad104e45b334472b90ccb35eee753ae769f3c08"
+   ],
+   "background_query_language": "it"
+  },
+  {
    "id": "c60a9aecd0a7d1f5",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -5958,6 +5991,39 @@
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
     "e1d1f37fe535a80a6c91b6bd885393dc38d3da0848dd61e5993228da3447680a"
+   ],
+   "background_query_language": "he"
+  },
+  {
+   "id": "e2c0c896c38ce8d8",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "טקס פתיחת קורס ההכשרה לרפואה דחופה לשנת 2026 בנושא תגובה לאירועים הקשורים לחומרים רעילים, קרינה ואירועים גרעיניים.",
+   "summary": "טקס פתיחת קורס ההכשרה לרפואה דחופה לשנת 2026 בנושא תגובה לאירועים הקשורים לחומרים רעילים, קרינה ואירועים גרעיניים. Vietnam.vn",
+   "original_title": "טקס פתיחת קורס ההכשרה לרפואה דחופה לשנת 2026 בנושא תגובה לאירועים הקשורים לחומרים רעילים, קרינה ואירועים גרעיניים.",
+   "original_summary": "טקס פתיחת קורס ההכשרה לרפואה דחופה לשנת 2026 בנושא תגובה לאירועים הקשורים לחומרים רעילים, קרינה ואירועים גרעיניים. Vietnam.vn",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-11-10T07:17:06+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxORzkyTGZfWGQ3ekcxY2F0RjA1OGp4Mi1XUXp4RGxUekhabTF0LS1WUE9PZHQ4aVpNS19ndHAzMXU1Ny1wMFFrN2lKZGk4R21pN21OcDA3VHpVejFha0xNSVhWUHJsb0d4NGxmRmVjSzdWcEk2WG9xaWZQOUJsRXNJcVBabTBWSzZnWFdjeVhKeHM5bzhkdTFyb3RhTjJITEhwdkFyNi1aS3ZNZXRaU3FqdGZ6NEtkYlp4RmtV?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "c9c8d2ced0339cd2e091cde8800fe757ec4f2c503f735a4cede4afa796b4fcec"
    ],
    "background_query_language": "he"
   },
@@ -7678,6 +7744,39 @@
    "background_query_language": "zh-Hant"
   },
   {
+   "id": "8d8ec64e9c57f71e",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "U.S. NRC Approves Construction Permit for Advanced Nuclear React",
+   "summary": "U.S. NRC Approves Construction Permit for Advanced Nuclear React GuruFocus",
+   "original_title": "U.S. NRC Approves Construction Permit for Advanced Nuclear React",
+   "original_summary": "U.S. NRC Approves Construction Permit for Advanced Nuclear React GuruFocus",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-09T23:30:25+00:00",
+   "source": "GuruFocus",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOeEhvVkJQaFJOQXNkM1Bub3Q1RjFwcHRCQ25GSUdUYWxoQnVhZVA1SVhPMnM0cmwtQ25zbmdwNHI5ZkhsdEdkX3hUT25nRERya2tmQ1NUY2wxcXIzSWx5TmxvRHlwYjlBVlRaOFFfVXRObnQtTVVtRFIxMVZENzdFQVY5Yk15bm5PNlF5RnFNNHhLT3Q0TFVRSnI2WTRLNGM3UWtiNzFEMW5pU1BWSDZXQmJDeFdkeHFwSUpGS0NacjB5NlFxSDhB?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "47270e86e8a91b51bc56203c08ddf547fc917cc1f1fd412790bd35d7cbc60f94"
+   ],
+   "background_query_language": "en"
+  },
+  {
    "id": "5cf09a9b966a25ef",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -7744,6 +7843,39 @@
    "background_query_language": "es"
   },
   {
+   "id": "0b429959f367f0da",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Dow, X-energy Proposed SMR Project Receives Historic Construction Permit for Nuclear-Powered Industrial Site",
+   "summary": "Dow, X-energy Proposed SMR Project Receives Historic Construction Permit for Nuclear-Powered Industrial Site TradingView",
+   "original_title": "Dow, X-energy Proposed SMR Project Receives Historic Construction Permit for Nuclear-Powered Industrial Site",
+   "original_summary": "Dow, X-energy Proposed SMR Project Receives Historic Construction Permit for Nuclear-Powered Industrial Site TradingView",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-09T23:24:30+00:00",
+   "source": "TradingView",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxPaVZsTDYzNElmY2NyZUJQbzNWdkI1SDB3MzBvNEpqaFRRU3pVcl9Bem0wQWRnaUptOWJOUnpBNmVTV2t6bXVBYWJLTnlLNnAtUG8yenlJTHEwWmpoaE5TdjY4cE40VDhPaklzc2NQNVk3cVpEdXVKUGRRVGF6dXRUQktvbTMxQ3ZIb01sSUpQbnN0TVJBWERoLVBLY0tkSHBxOEZSWWtKMWN3S09Tb1lvVVpzb0FlZVgybW5qc0VfUy1mVk5Nby1zNXFfTjdPazZMRUxOeVhaLTJpUUpxSmY4NGFRanVBU3JHUy1uZ1BDYXJQd1lTVDRTaVBLWWdNLUxYOEhKamI2Wkw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "bddd147f4406c334c9b75641f9f005ad316e38f49dc00980e9ae806e95ed431a"
+   ],
+   "background_query_language": "en"
+  },
+  {
    "id": "c68fc6d53cd2a312",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -7775,6 +7907,39 @@
     "5fe9dd0ed65e2aed92e48c2665aa4818b7d1b322243b13d264777ef246cfaa10"
    ],
    "background_query_language": "zh-Hant"
+  },
+  {
+   "id": "11222cc03e45a3cc",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Dow : Long Mott Generating Station Receives NRC Construction Permit for Proposed Advanced Nuclear Project in Texas",
+   "summary": "Dow : Long Mott Generating Station Receives NRC Construction Permit for Proposed Advanced Nuclear Project in Texas www.marketscreener.com",
+   "original_title": "Dow : Long Mott Generating Station Receives NRC Construction Permit for Proposed Advanced Nuclear Project in Texas",
+   "original_summary": "Dow : Long Mott Generating Station Receives NRC Construction Permit for Proposed Advanced Nuclear Project in Texas www.marketscreener.com",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-09T22:44:21+00:00",
+   "source": "www.marketscreener.com",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOeHNFc19oUUd6ekl6Vk83T0YzY29ETTlhWGoyckxueUxUREJtMzVXSDUyanIza0s2djFHcEFjOFFkOC1TZWdKVkZONmRkaE5UUDB3QXVvTEhjc2tpNWJQQm43YzhUMF9yU3hPZzJIdldiRmFVU0p6ZTZwQjhoQXBrVC1GUXdqb3Bnb1dnZGxlbUVidGpnWC1FTWdSbk9FNllsRDhZYm92MnJHbVBWUHpSVGVwQ1BjeXhxN2ZuNGM3NWxRV0hPZGU4VVJlTUZkbTZfOHhLaWFwM093NklwWDhweW1YV2RMQQ?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "dac2a11c04057d2396481ab03bdd51748a80e649c27ad3758a15d895069c7daf"
+   ],
+   "background_query_language": "en"
   },
   {
    "id": "9a54f12223903511",
@@ -7841,6 +8006,72 @@
     "e4560769b1b4d63e52e41a9fdd5bac4dbaed38484990b36f5cda54a6d40bbd0c"
    ],
    "background_query_language": "ru"
+  },
+  {
+   "id": "a4f729c6ccdced00",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Dow, X-Energy SMR project wins construction permit for nuclear-powered industrial site (XE:NASDAQ)",
+   "summary": "Dow, X-Energy SMR project wins construction permit for nuclear-powered industrial site (XE:NASDAQ) Seeking Alpha",
+   "original_title": "Dow, X-Energy SMR project wins construction permit for nuclear-powered industrial site (XE:NASDAQ)",
+   "original_summary": "Dow, X-Energy SMR project wins construction permit for nuclear-powered industrial site (XE:NASDAQ) Seeking Alpha",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-09T21:31:00+00:00",
+   "source": "Seeking Alpha",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQU1hOMWJ0VTM1NXJVcG5iMXlrMHFoTnF1X29XUHQ2Yzhzd0tSRnRIWjNuQ1FqQnBLQkVNVXlJMnBmUm1UOEg5RnNZanFFMS03MWJaNDd3Y01TWkE5LS1RQmhrRjBZMFJxWThkQWM4U28zTXE4ZUY3clFXYjY0OGcxVFlwcU5mYVlJb3J4XzBlak1xdlBWUHgzQThueEpCUWNQUEJWd2hZOTNDN2FYYUg5QkZJUUJsNDg1S3RMSjdSazI?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "9154a18cecccb6b38739e8826ac30a584c396137b002751d4df224cd92c2daae"
+   ],
+   "background_query_language": "en"
+  },
+  {
+   "id": "1f6e40a4be9f3510",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "A proposed nuclear plant got a construction permit for a Dow industrial site. It could supply power for 60 years.",
+   "summary": "A proposed nuclear plant got a construction permit for a Dow industrial site. It could supply power for 60 years. Stock Titan",
+   "original_title": "A proposed nuclear plant got a construction permit for a Dow industrial site. It could supply power for 60 years.",
+   "original_summary": "A proposed nuclear plant got a construction permit for a Dow industrial site. It could supply power for 60 years. Stock Titan",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-09T21:15:00+00:00",
+   "source": "Stock Titan",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPeFdmZkhOZkRQOHVBUW9OOGRrX2F0ekcxUVlRQjNBSTAxaHVMZExlRzQ5Q1hTY19wMXlnUE1MZl9rMENkZkI5UWtfdllhQzFhckd4NnR5TkExZi1rQlpTSWZSVTU4dzNYUmoxeHZTMTNyeFFLdkdjZ21Td2kzQnNIV1c0LTBDSUtTUjdDcDBwRmJ2RmR0Tnh5Mm9ONURwMzZ6V0hSd0o4VG9kNUpqclAxT1NuOW02Rkls?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "27094556e1c1a1c57c86c04fe58dc7c0857c52edf9005222e9bc1419b0190a2e"
+   ],
+   "background_query_language": "en"
   },
   {
    "id": "ead72833e80bdf73",
@@ -8138,6 +8369,39 @@
     "bf972d18da0f0bbd0e4270ffbbcf9d100f7ca3599b451d926e55691787124bf0"
    ],
    "background_query_language": "zh-Hant"
+  },
+  {
+   "id": "b5c36b424ba81e32",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Grossi, Zaporijya’daki santrallere İHA saldırısını kınadı",
+   "summary": "Grossi, Zaporijya’daki santrallere İHA saldırısını kınadı Canlı Gaste",
+   "original_title": "Grossi, Zaporijya’daki santrallere İHA saldırısını kınadı",
+   "original_summary": "Grossi, Zaporijya’daki santrallere İHA saldırısını kınadı Canlı Gaste",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-11-09T15:59:51+00:00",
+   "source": "Canlı Gaste",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPTkpUS0tMdzRHbDhTQWtBMTZPNmozQXNkbnFFamNvYktXOUFrTnZoNTdsdWZJTktzODFUM183Q2hja012NG5jTjBMWjBuTUJMcmRVdXlEa2VVbmVDcXV6Zm4zcUZRMldlUUhaT09GQzVjWTFTR0tfVEpPUEM2RjRKaEt4cXV3VGxNdG9Ud3lFUnhZRlNrTVE?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "67ed436ea1bd78bdc760cae8e261f8013391f1d3d254b38a927ed60529fbc91d"
+   ],
+   "background_query_language": "tr"
   },
   {
    "id": "4bd05d9c951f4062",
@@ -8503,6 +8767,39 @@
    "background_query_language": "zh"
   },
   {
+   "id": "1373deb79d905cdc",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "記聯與工程師學會赴台山核電基地交流",
+   "summary": "記聯與工程師學會赴台山核電基地交流 TDM",
+   "original_title": "記聯與工程師學會赴台山核電基地交流",
+   "original_summary": "記聯與工程師學會赴台山核電基地交流 TDM",
+   "original_language": "zh-Hant",
+   "collection_language": "zh-Hant",
+   "collection_language_name": "Chinese (Traditional)",
+   "collection_locale": "TW:zh-Hant",
+   "published": "2026-11-09T12:51:30+00:00",
+   "source": "TDM",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOeUtKejZBNFpzOXl2OGt3d0pfVl93T2hqZTQzVnljNDRkSkJYeV9SN19NNnp3QV9iUmNOWndqRERNVWdSRVN6bW5CX1M0blg4RFVmQ095VnRmeElEa1I1eDR0RGhTQkFoVVg0T09SV1JOeXJRcXBoX0I1Rm9wRXlZRGlDUDVvMUJ6TTRaQmtJamVpRkZBYUw1cU0wQnY3eHVsZlp3S0lB?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "1c7fb0caf591f6122315dc4610a396086bbd42a90a65bf2d5e3b0871bb8229fe"
+   ],
+   "background_query_language": "zh-Hant"
+  },
+  {
    "id": "81f48913f0a880ef",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -8800,6 +9097,39 @@
    "background_query_language": "fr"
   },
   {
+   "id": "a615ec6a9070bef4",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "ड्रोन से लेकर परमाणु रिएक्टर तक: 2026 में पैराडाइम ने क्रिप्टो के अलावा किसमें निवेश किया है?",
+   "summary": "ड्रोन से लेकर परमाणु रिएक्टर तक: 2026 में पैराडाइम ने क्रिप्टो के अलावा किसमें निवेश किया है? KuCoin",
+   "original_title": "ड्रोन से लेकर परमाणु रिएक्टर तक: 2026 में पैराडाइम ने क्रिप्टो के अलावा किसमें निवेश किया है?",
+   "original_summary": "ड्रोन से लेकर परमाणु रिएक्टर तक: 2026 में पैराडाइम ने क्रिप्टो के अलावा किसमें निवेश किया है? KuCoin",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-11-09T10:27:00+00:00",
+   "source": "KuCoin",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQNTUyMVVmM0djSnp5YUE1cTA1aG9LZFI4OU1Zcm9UZDJtdzRiODBMOTBqY2c1YmZfZFo1akVvMk5aVWZ2SFZyZW9QM2VhRVRScGxxM0tfMUN2bFpkWjFDS3NCZjNDUVZQV3h0cXktbjQxbHNBUjBJYTAyY1FlRlVPVmpRT0ZzRUxDWXYyYm5FSERqcm9yRkFMZVotLWdqMGNkRFU1aXR4V3c0RlhsVzJiVWxlSUxyTFBX?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "5d976ddf2a2520811ea0b15884c64e06a1f544db827b0cc2f9e3b1d90df12007"
+   ],
+   "background_query_language": "hi"
+  },
+  {
    "id": "45cff644f1802777",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -8998,6 +9328,39 @@
    "background_query_language": "bn"
   },
   {
+   "id": "8b4878b496e578b4",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "גבר בן 26 שאובחן כחולה בסרטן גורם לרופאים לחשוף את האשם שאיים על כל משפחתו.",
+   "summary": "גבר בן 26 שאובחן כחולה בסרטן גורם לרופאים לחשוף את האשם שאיים על כל משפחתו. Vietnam.vn",
+   "original_title": "גבר בן 26 שאובחן כחולה בסרטן גורם לרופאים לחשוף את האשם שאיים על כל משפחתו.",
+   "original_summary": "גבר בן 26 שאובחן כחולה בסרטן גורם לרופאים לחשוף את האשם שאיים על כל משפחתו. Vietnam.vn",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-11-09T08:41:08+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNcDBIdVB6UURVOTdiYjVMNDFRd0FYMm1JdWRCQnpUc1VQTWszTEhZRVVqTnpGVjE5eHJPMFcxUWJFRzVUaHhsQmszeWVrYmhkU3pnX1hkNFFnamhNc2wxU3JMNEsxWkJ6YjJFeHhEMWt1V2dWTVUzdVhXMzU5Q1BIYTMwc0RDOWY1Ql9rRUdUbTBTZ0pKbmIzSUpLc0JEaVE?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "6dfbffa571dbac66b958de091c4f4110cfefb2151897d1e2676f40aee893168e"
+   ],
+   "background_query_language": "he"
+  },
+  {
    "id": "651f0b933bb8ce05",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -9062,6 +9425,39 @@
     "43cfd156b39e6ba276c552ce51fcf76c0ed17b9e26c751854ae579c967b3b0a2"
    ],
    "background_query_language": "hi"
+  },
+  {
+   "id": "e26afe71d9b244d9",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "AutuMN: nuove frontiere della RLT tra dosimetria, intelligenza artificiale e rete Sicilia‑Calabria",
+   "summary": "AutuMN: nuove frontiere della RLT tra dosimetria, intelligenza artificiale e rete Sicilia‑Calabria La Sicilia",
+   "original_title": "AutuMN: nuove frontiere della RLT tra dosimetria, intelligenza artificiale e rete Sicilia‑Calabria",
+   "original_summary": "AutuMN: nuove frontiere della RLT tra dosimetria, intelligenza artificiale e rete Sicilia‑Calabria La Sicilia",
+   "original_language": "it",
+   "collection_language": "it",
+   "collection_language_name": "Italian",
+   "collection_locale": "IT:it",
+   "published": "2026-11-09T08:00:00+00:00",
+   "source": "La Sicilia",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOZVRDdzlIT3c4QjlteHR3UlR3ck9uUi1jMnBTX1hvaG1Td0VPUHViS1RRNFctNHFMWDlCeXhURDBPSDVXS21YdGY5ODk5SGxUTTBybW5LMWZxUUtRSFNyZkl4ZGx2cHZNWTJ4QTJNNENBUlNpQ3ZUMnMtRnpGLTVBM3dPUndqX1M3VHZBWENSTDdlWGNBbnlMVXJ0bERNMGNDbWhXdGc0ZGFxRUUwcDNIcFJkVWpTVVhwTm1pUGp5djlsR2NYeHlPQjJsMTduUmlLRW1IaTUxdWpsNGhzLS1sRHpR?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "52e3ef4a123c1d7c6373f0e4b4ed09b2f77165fe8ea2561ac002650bcb8d088a"
+   ],
+   "background_query_language": "it"
   },
   {
    "id": "d877b21a031ed6de",
@@ -9196,6 +9592,39 @@
    "background_query_language": "bn"
   },
   {
+   "id": "a33416ab81cfe949",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "La corsa all’energia dei colossi dell’intelligenza artificiale è il problema peggiore che abbiamo",
+   "summary": "La corsa all’energia dei colossi dell’intelligenza artificiale è il problema peggiore che abbiamo Zazoom Social News",
+   "original_title": "La corsa all’energia dei colossi dell’intelligenza artificiale è il problema peggiore che abbiamo",
+   "original_summary": "La corsa all’energia dei colossi dell’intelligenza artificiale è il problema peggiore che abbiamo Zazoom Social News",
+   "original_language": "it",
+   "collection_language": "it",
+   "collection_language_name": "Italian",
+   "collection_locale": "IT:it",
+   "published": "2026-11-09T06:07:46+00:00",
+   "source": "Zazoom Social News",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNNmJEY0dpQzV3ZTdDQXlnd29FZmhVQ2Z5dF9oLTdwRENKOVJReFFoV0lOY1FVVmktVTlxOFh2TzJKYzZBeGNBWFJxTVdscjBfSl9NMHFreWVhSXZhVUFTUVhOMHNjbDd1NG9zRjNxdEIyU0JMUnVxRFpkWGF3VzAyMzF2VVRhakw1SUJGbUZlVTNUMnJHS1dCS0UydnJrNjkwaWJISE51WDg0TzdKVUVOcS1OUVl2VlNBRXAtdzdHMVBoVTdZVDh4SlZyUXRBVjVBWEMxNA?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "ca94d93cc38b58cedde88aee34b963280862610aa3b2b1f36f128f166a10eecc"
+   ],
+   "background_query_language": "it"
+  },
+  {
    "id": "aa7337d87634005c",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -9293,6 +9722,39 @@
     "4e1970a6ee05869df8de1b4259512d52c5a6c09657cc269755850b9a965df8c4"
    ],
    "background_query_language": "hi"
+  },
+  {
+   "id": "158e02f3f583789e",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "日越首脑拟就关键矿产及核能合作等发表联合声明| NHK WORLD-JAPAN News",
+   "summary": "日越首脑拟就关键矿产及核能合作等发表联合声明| NHK WORLD-JAPAN News NHKニュース",
+   "original_title": "日越首脑拟就关键矿产及核能合作等发表联合声明| NHK WORLD-JAPAN News",
+   "original_summary": "日越首脑拟就关键矿产及核能合作等发表联合声明| NHK WORLD-JAPAN News NHKニュース",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-11-09T05:45:43+00:00",
+   "source": "NHKニュース",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5TazFITl94T29LV3gtaW5STkxUWnVuWjlld01GQ2laaURYRjdvb0J3b0Q5SnNrY2U3WHloQi1aUFZKOU53enB3ZFprc3d3bUFtX0pnSUxGbUJiQl95c0lHeGYzd3BGM1E?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "68a1ac56cea8b5f3a68684cb40640e09bc8e409f5b3da11e26bea408fa5a14ca"
+   ],
+   "background_query_language": "zh"
   },
   {
    "id": "184df9fd3f7c968c",
@@ -9557,6 +10019,39 @@
     "4b607b4342cb2d55d8032d88eedac4ab018e740a582699e74f24ce6171ae6a77"
    ],
    "background_query_language": "hi"
+  },
+  {
+   "id": "009b6caeb258d899",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Amerika Serikat telah melanjutkan produksi paduan biner setelah jeda selama 20 tahun, material kunci untuk hulu ledak nuklir.",
+   "summary": "Amerika Serikat telah melanjutkan produksi paduan biner setelah jeda selama 20 tahun, material kunci untuk hulu ledak nuklir. Vietnam.vn",
+   "original_title": "Amerika Serikat telah melanjutkan produksi paduan biner setelah jeda selama 20 tahun, material kunci untuk hulu ledak nuklir.",
+   "original_summary": "Amerika Serikat telah melanjutkan produksi paduan biner setelah jeda selama 20 tahun, material kunci untuk hulu ledak nuklir. Vietnam.vn",
+   "original_language": "id",
+   "collection_language": "id",
+   "collection_language_name": "Indonesian",
+   "collection_locale": "ID:id",
+   "published": "2026-11-09T04:32:33+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPczlkclRmcW1IMUN4LV82clNUNjMtV3JkNlVUell0OVd4LTJxd1NvZ0gySmtxZ3l6bVl0ZzVtRkk3MzVsa1BnVk9aUXhsZjZXTDlISURXOFhONWg0bXFrclhyMEtfQUxhNU1wMUZLOHcybnFtNmM1aE55QUgzMHpIUmgwSGdkVks4M3NndXVGaDJLSHB6NldZMUZnVFNGbzFQbDVkeGlXVnB0WDZPTl9KemttUFhHU25SWTRkelln?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "66ba74c7e0f618a5ed62d527f3373fcbb55e935f35b99a4a8d05ffec800cebd2"
+   ],
+   "background_query_language": "id"
   },
   {
    "id": "09436310006e13b9",
@@ -10186,6 +10681,39 @@
    "background_query_language": "zh"
   },
   {
+   "id": "e2faed0ce0439f38",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "İsrail, İran'ı hedef alan eylemlerinin henüz sona ermediği konusunda uyarıda bulundu.",
+   "summary": "İsrail, İran'ı hedef alan eylemlerinin henüz sona ermediği konusunda uyarıda bulundu. Vietnam.vn",
+   "original_title": "İsrail, İran'ı hedef alan eylemlerinin henüz sona ermediği konusunda uyarıda bulundu.",
+   "original_summary": "İsrail, İran'ı hedef alan eylemlerinin henüz sona ermediği konusunda uyarıda bulundu. Vietnam.vn",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-11-09T01:50:33+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNbXpOUW12ekdPSlJ0TGJRLU1NTHI3N2Y2TDAtVUt4RF9Bbm1VdjYzU1RlRzFkU0V5Rkd0VUpVaWVXREtXcDNBeHVpRXdITDF4NnY2R1VmRkhmQm51M0ppeXdjS0ZsNXlNMm8wSzJGajdSVWZfaHF2cUFUY2dmQ09jc2xZQ19YOGpmRWcw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "94305f438fb0135bdf3cad188d521f50854aeabf4a259de765b5cc647619f177"
+   ],
+   "background_query_language": "tr"
+  },
+  {
    "id": "ff2fe755a4dfa2ea",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -10479,6 +11007,39 @@
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
     "037e1ce70822984794f7f40de4c1e105f09e1e187fe8acf0352d2a698953b347"
+   ],
+   "background_query_language": "en"
+  },
+  {
+   "id": "2a63e45e99e64c90",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "3D-printed tungsten tiles advance additive manufacturing for fusion applications",
+   "summary": "3D-printed tungsten tiles advance additive manufacturing for fusion applications Australian Manufacturing",
+   "original_title": "3D-printed tungsten tiles advance additive manufacturing for fusion applications",
+   "original_summary": "3D-printed tungsten tiles advance additive manufacturing for fusion applications Australian Manufacturing",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-09T00:51:30+00:00",
+   "source": "Australian Manufacturing",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQS29IZTJkTWRjbGQybXdIMGFSNEhzQVhfSHpwakdTTUMyNnlDUjZYUUY1NER2cEV1UVRtR2pZOC1VQVVpbkNEaEVBcjZHZG9FYXREbl8zMGYtWElfLTNxeFNOcVNOa3BWSmtVZ3ZEYk13S0JtcS1JUTVIalVVV3dGX0U0ZTQ3NUlzdHZuOHZxSjMwekxHNWRnZ2hfTEwzODBtVTN0Y2VJMzVfc1ZxTzk5OEpsWGhDSWFEQTlKdExfR28xUQ?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "687ffaa6b0e4da0a57b8cbe543696b6170dd9e9c7d665e665ceff0cd8a4c742a"
    ],
    "background_query_language": "en"
   },
@@ -19328,5 +19889,5 @@
   }
  ],
  "cursor": 4,
- "updated_at": "2026-11-10T22:27:03.811941+00:00"
+ "updated_at": "2026-11-11T17:19:23.443242+00:00"
 }
