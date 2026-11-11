@@ -307,6 +307,14 @@
         "starved_min_waiting": 100,
         "degraded_min_waiting": 600
       }
+    },
+    "data_maintenance": {
+      "kind": "reviewed_map_evidence_repair",
+      "applied_at": "2026-11-11T10:10:20.723270+00:00",
+      "changed_records": 5,
+      "removed_records": 0,
+      "new_records": 0,
+      "ai_calls": 0
     }
   },
   "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
@@ -734,7 +742,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-11-10T23:20:28.748371+00:00",
+  "last_updated": "2026-11-11T10:10:20.723270+00:00",
   "number_of_events": 7232,
   "events": [
     {
@@ -140416,7 +140424,7 @@
       "is_attack": true,
       "incident_anchor": "Chocó military drone attack Colombia 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-b3888822143a9591",
+      "incident_id": "inc-review-b586b91fe923feb2",
       "translated_to_english": true,
       "ai_canonical_event": "Drone attack and harassment trapping military troops in rural Chocó, Colombia",
       "title_variants": [
@@ -140448,7 +140456,10 @@
       "dedup_confidence": 0.833,
       "dedup_methods": [
         "title_plus_anchor"
-      ]
+      ],
+      "integrity_review_version": "map-evidence-review-20261022",
+      "integrity_review_reason": "Shared model incident identifier grouped two drone attacks in Choco two weeks apart (2026-10-15 near the Risaralda border, 2026-10-31 against troops in rural Choco); isolate this reviewed record without claiming a new incident.",
+      "integrity_source_evidence": "d10adb99ad6c96b7071019bbf32166155dd2bb67cdaadaed415a15003a08ac5e"
     },
     {
       "id": "cffdd6100cd154e6",
@@ -158523,7 +158534,7 @@
       "is_attack": true,
       "incident_anchor": "King Khalid International Airport attack 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-ecdf36a8fc3317ec",
+      "incident_id": "inc-review-81a99f20dacfda5a",
       "translated_to_english": true,
       "ai_canonical_event": "Attack on King Khalid International Airport condemned by coalition",
       "title_variants": [
@@ -158549,7 +158560,10 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "King Khalid International Airport is located in Riyadh, Saudi Arabia.",
       "ai_geo_fingerprint": "260e0fa1047b3afe0cb07f79a271cf84376fa89821be902587171543b47cb651",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "integrity_review_version": "map-evidence-review-20261022",
+      "integrity_review_reason": "Shared model incident identifier grouped the attack on King Khalid International Airport (Riyadh, 2026-10-30) with an Egyptian defence pledge reported on 2026-10-11; isolate this reviewed record without claiming a new incident.",
+      "integrity_source_evidence": "8ea5252dce3ef6217b7503e65452f3c714868344ba88648c794e5179c5fb85d0"
     },
     {
       "id": "3fd019ab8dda69a6",
@@ -464837,7 +464851,7 @@
       "is_attack": true,
       "incident_anchor": "Arabian Gulf tanker attack 2026-10-07",
       "update_type": "INITIAL",
-      "incident_id": "inc-7a0a54832a882dad",
+      "incident_id": "inc-review-0d09c7467ff8e0d3",
       "translated_to_english": true,
       "ai_canonical_event": "Oil tanker struck by projectile in Strait of Hormuz",
       "title_variants": [
@@ -464868,7 +464882,10 @@
         "title_plus_anchor",
         "very_high_title_similarity"
       ],
-      "threat_categories": []
+      "threat_categories": [],
+      "integrity_review_version": "map-evidence-review-20261022",
+      "integrity_review_reason": "Shared model incident identifier grouped tanker strikes reported in different waters and on different days (Strait of Hormuz 2026-10-10, Arabian Gulf 2026-10-07); uncertain cases stay separate: isolate this reviewed record without claiming a new incident.",
+      "integrity_source_evidence": "c496b9b4c9ad7d2623006bff73b96d9c976ce2157ee236d4a6483e29755a4eee"
     },
     {
       "id": "b2181ef3b8d5d1bb",
@@ -465137,7 +465154,7 @@
       "is_attack": true,
       "incident_anchor": "Saudi airport attack 2026-10-06",
       "update_type": "INITIAL",
-      "incident_id": "inc-df494ec17ba6232b",
+      "incident_id": "inc-review-48d9f7cb0f40ab7e",
       "translated_to_english": true,
       "ai_canonical_event": "Projectile attack on King Fahd Airport.",
       "title_variants": [
@@ -465168,7 +465185,10 @@
       "ai_geo_fingerprint": "ddb9667cef788263ab22d6090f7b8c4b605df00d5f6060ec147abc0b6727ba6f",
       "ai_geo_inferred": false,
       "threat_categories": [],
-      "dedup_review_required": true
+      "dedup_review_required": true,
+      "integrity_review_version": "map-evidence-review-20261022",
+      "integrity_review_reason": "Shared model incident identifier grouped a projectile near King Fahd Airport (Dammam, Saudi Arabia, 2026-10-10) with an explosion near Aden airport (Yemen, 2026-10-06); isolate this reviewed record without claiming a new incident.",
+      "integrity_source_evidence": "551065e1ae931dc30943d0a216af843a54bf807d926e37cc007d095afbb88dd1"
     },
     {
       "id": "1a1627d3f6f8dd3a",
@@ -616193,7 +616213,7 @@
       "is_attack": true,
       "incident_anchor": "Taiz security official car bomb assassination 2026-09-22",
       "update_type": "INITIAL",
-      "incident_id": "inc-d0731968b382f04c",
+      "incident_id": "inc-review-6a73d6fe672e20e9",
       "translated_to_english": true,
       "ai_canonical_event": "Ambush targets Saudi reinforcements in Shabwah Yemen",
       "title_variants": [
@@ -616218,7 +616238,10 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The ambush targeting Saudi reinforcements took place explicitly in Shabwah governorate, Yemen.",
       "ai_geo_fingerprint": "e5444eff3098f5d495525fed13e9d32f045283d07b70a36400932cdf3823e8ac",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "integrity_review_version": "map-evidence-review-20261022",
+      "integrity_review_reason": "Shared model incident identifier grouped an ambush on Saudi reinforcements in Shabwah (2026-09-25) with an IED assassination in Taiz (2026-09-22); isolate this reviewed record without claiming a new incident.",
+      "integrity_source_evidence": "3b5cc44d3d3fdffdc59a1fefe8ba7f0d668d55cc55fe91dffdb16e842f182304"
     },
     {
       "id": "3876d61b18c76801",
@@ -823167,5 +823190,13 @@
       "source_verified_country": 1,
       "source_verified_unlocated": 1
     }
+  },
+  "map_integrity_audit": {
+    "version": "map-evidence-review-20261022",
+    "new_events": 0,
+    "quarantined_records": 0,
+    "folded_duplicate_records": 0,
+    "review_required": 151,
+    "scope": "Structural scan and reviewed source-excerpt corrections; not independent verification of every incident or location."
   }
 }
