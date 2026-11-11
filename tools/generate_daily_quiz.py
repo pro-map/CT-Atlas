@@ -16,12 +16,10 @@ QUIZ_PATH = Path("daily-quiz.json")
 HISTORY_PATH = Path("daily-quiz-history.json")
 MODEL = os.getenv("DAILY_QUIZ_MODEL", "gemini-3.5-flash-lite")
 QUIZ_GENERATION_ATTEMPTS = max(1, int(os.getenv("DAILY_QUIZ_GENERATION_ATTEMPTS", "4")))
-SOURCE_DOMAINS = ('un.org', 'europa.eu', 'interpol.int', 'nato.int', 'fatf-gafi.org', 'fbi.gov', 'state.gov', 'justice.gov', 'dni.gov', 'gov.uk')
+SOURCE_DOMAINS = ('un.org', 'europa.eu', 'nato.int', 'fatf-gafi.org', 'fbi.gov', 'state.gov', 'justice.gov', 'dni.gov', 'gov.uk')
 SOURCE_PAGES = (
-    'https://www.interpol.int/en/How-we-work/Notices/About-Notices',
     'https://www.fatf-gafi.org/en/topics/non-profit-organisations.html',
     'https://www.fatf-gafi.org/en/publications/Methodsandtrends/Risk-terrorist-abuse-non-profits.html',
-    'https://www.interpol.int/en/Who-we-are/What-is-INTERPOL',
 )
 
 

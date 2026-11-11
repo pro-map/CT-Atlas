@@ -901,13 +901,13 @@ body.locked #main {
 
 
 /* =========================================================
-   INTERPOL OFFICES LAYER — ONE STATIC WHITE OFFICE ICON
+   OFFICES LAYER — ONE STATIC WHITE OFFICE ICON
    Every office shows the same bold white building, with no letters,
    so it stands apart from the attacks, which pulse in red
    (see .ct-marker.attacks). The name is in the popup only.
 ========================================================= */
 
-.interpol-office-marker {
+.office-marker {
     width: 22px;
     height: 22px;
     display: block;
@@ -915,13 +915,13 @@ body.locked #main {
     filter: drop-shadow(0 1px 2px rgba(0,0,0,.85));
 }
 
-.interpol-office-marker svg {
+.office-marker svg {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-.interpol-office-marker path {
+.office-marker path {
     fill: #ffffff;
     fill-rule: evenodd;
     stroke: #0b1620;
@@ -3616,7 +3616,6 @@ html, body {
 
 /* ============================================================
    CT ATLAS — FINAL VISUAL BRAND INTEGRATION
-   Real INTERPOL crest remains ct-atlas.png.
    CT ATLAS graphic is embedded directly in this HTML.
    ============================================================ */
 
@@ -5938,16 +5937,16 @@ markerCluster.on("spiderfied", () => { mapSpiderfied = true; });
 markerCluster.on("unspiderfied", () => { mapSpiderfied = false; setTimeout(rebuildAgedMap, 0); });
 
 // ============================================================
-// INTERPOL OFFICES
+// OFFICES
 // Current General Secretariat duty stations
 // Coordinates represent office city locations unless an exact
 // public visitor address is available.
 // ============================================================
 
-const interpolOffices = [
+const officeLocations = [
 
     {
-        name: "INTERPOL General Secretariat Headquarters",
+        name: "General Secretariat Headquarters",
         type: "Headquarters",
         city: "Lyon",
         country: "France",
@@ -5957,13 +5956,13 @@ const interpolOffices = [
     },
 
     {
-        name: "INTERPOL Global Complex for Innovation",
+        name: "Global Complex for Innovation",
         type: "Global Complex",
         city: "Singapore",
         country: "Singapore",
         latitude: 1.3053,
         longitude: 103.8244,
-        note: "INTERPOL Global Complex for Innovation — 18 Napier Road, Singapore 258510."
+        note: "Global Complex for Innovation — 18 Napier Road, Singapore 258510."
     },
 
     {
@@ -6033,7 +6032,7 @@ const interpolOffices = [
         country: "Ethiopia",
         latitude: 9.0300,
         longitude: 38.7400,
-        note: "Special Representative of INTERPOL to the African Union."
+        note: "Special Representative to the African Union."
     },
 
     {
@@ -6043,7 +6042,7 @@ const interpolOffices = [
         country: "Belgium",
         latitude: 50.8503,
         longitude: 4.3517,
-        note: "Special Representative of INTERPOL to the European Union."
+        note: "Special Representative to the European Union."
     },
 
     {
@@ -6053,7 +6052,7 @@ const interpolOffices = [
         country: "United States",
         latitude: 40.7128,
         longitude: -74.0060,
-        note: "Special Representative of INTERPOL to the United Nations."
+        note: "Special Representative to the United Nations."
     },
 
     {
@@ -6063,7 +6062,7 @@ const interpolOffices = [
         country: "Austria",
         latitude: 48.2082,
         longitude: 16.3738,
-        note: "INTERPOL Liaison Office at the United Nations Office on Drugs and Crime."
+        note: "Liaison Office at the United Nations Office on Drugs and Crime."
     },
 
     {
@@ -6073,37 +6072,37 @@ const interpolOffices = [
         country: "Netherlands",
         latitude: 52.0705,
         longitude: 4.3007,
-        note: "INTERPOL Liaison Office at Europol."
+        note: "Liaison Office at Europol."
     },
 
     {
-        name: "INTERPOL Liaison Office for the Caribbean",
+        name: "Liaison Office for the Caribbean",
         type: "Liaison Office",
         city: "Bridgetown",
         country: "Barbados",
         latitude: 13.0975,
         longitude: -59.6167,
-        note: "INTERPOL Liaison Office for the Caribbean region."
+        note: "Liaison Office for the Caribbean region."
     }
 
 ];
 
 
-const interpolOfficesLayer =
+const officeLocationsLayer =
     L.layerGroup();
 
 
-let showInterpolOffices =
+let showOfficeLocations =
     true;
 
 
 // One office building for every duty station: a white tower with
 // three columns of windows and a door, cut out with the even-odd rule.
-const INTERPOL_OFFICE_ICON_SVG =
+const OFFICE_ICON_SVG =
     `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 2h16v20H4z M6.5 4.5h3v2.5h-3z M10.5 4.5h3v2.5h-3z M14.5 4.5h3v2.5h-3z M6.5 8.5h3v2.5h-3z M10.5 8.5h3v2.5h-3z M14.5 8.5h3v2.5h-3z M6.5 12.5h3v2.5h-3z M10.5 12.5h3v2.5h-3z M14.5 12.5h3v2.5h-3z M10 17h4v5h-4z"/></svg>`;
 
 
-function createInterpolOfficeMarker(
+function createOfficeMarker(
     office
 ) {
 
@@ -6118,7 +6117,7 @@ function createInterpolOfficeMarker(
                 "",
 
             html:
-                `<div class="interpol-office-marker" role="img" aria-label="${escapeHtml(office.name)}">${INTERPOL_OFFICE_ICON_SVG}</div>`,
+                `<div class="office-marker" role="img" aria-label="${escapeHtml(office.name)}">${OFFICE_ICON_SVG}</div>`,
 
             iconSize:
                 size,
@@ -6188,18 +6187,18 @@ function createInterpolOfficeMarker(
 }
 
 
-function initialiseInterpolOffices() {
+function initialiseOfficeLocations() {
 
-    interpolOfficesLayer.clearLayers();
+    officeLocationsLayer.clearLayers();
 
 
-    interpolOffices.forEach(
+    officeLocations.forEach(
 
         office => {
 
-            interpolOfficesLayer.addLayer(
+            officeLocationsLayer.addLayer(
 
-                createInterpolOfficeMarker(
+                createOfficeMarker(
                     office
                 )
 
@@ -6211,10 +6210,10 @@ function initialiseInterpolOffices() {
 
 
     if (
-        showInterpolOffices
+        showOfficeLocations
     ) {
 
-        interpolOfficesLayer.addTo(
+        officeLocationsLayer.addTo(
             map
         );
 
@@ -6223,7 +6222,7 @@ function initialiseInterpolOffices() {
 }
 
 
-initialiseInterpolOffices();
+initialiseOfficeLocations();
 
 
 
@@ -10277,7 +10276,7 @@ function exportChronologyExcel() {
 
     XLSX.writeFile(
         workbook,
-        "INTERPOL_CT_events_"
+        "CT_ATLAS_events_"
         +
         stamp
         +
@@ -12659,7 +12658,7 @@ function reportGeneratorConfigured() {
 }
 
 
-const REPORT_INTERPOL_REGIONS = [
+const REPORT_REGIONS = [
     ["REGION:AFRICA", "Africa"],
     ["REGION:MENA", "Middle East & North Africa (MENA)"],
     ["REGION:AMERICAS", "Americas"],
@@ -12667,7 +12666,7 @@ const REPORT_INTERPOL_REGIONS = [
     ["REGION:EUROPE", "Europe"]
 ];
 
-const REPORT_INTERPOL_MEMBER_COUNTRIES = [
+const REPORT_MEMBER_COUNTRIES = [
     "Afghanistan",
     "Albania",
     "Algeria",
@@ -12882,7 +12881,7 @@ function populateReportRegions() {
     select.dataset.populated = "1";
 
     const regionsHtml =
-        REPORT_INTERPOL_REGIONS
+        REPORT_REGIONS
         .map(
             ([value, label]) =>
                 `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`
@@ -12890,7 +12889,7 @@ function populateReportRegions() {
         .join("");
 
     const countriesHtml =
-        REPORT_INTERPOL_MEMBER_COUNTRIES
+        REPORT_MEMBER_COUNTRIES
         .map(
             value =>
                 `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`

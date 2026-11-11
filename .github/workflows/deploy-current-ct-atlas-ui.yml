@@ -88,7 +88,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'initialiseInterpolOffices' index.html
+          grep -q 'initialiseOfficeLocations' index.html
           grep -q 'fetch("events-map.json",' index.html
           test -s CT-ATLAS-256.png
           test -s vendor/leaflet-1.9.4/leaflet.js
@@ -111,7 +111,7 @@ jobs:
           fi
           grep -q 'OFFICIAL REGIONS' index.html
           grep -q 'MEMBER COUNTRIES' index.html
-          grep -q 'INTERPOL_CT_events_' index.html
+          grep -q 'CT_ATLAS_events_' index.html
           test -s pdf-export.js
           grep -q 'window.CTAtlasPdf' pdf-export.js
           grep -q 'DOWNLOAD PDF' index.html
