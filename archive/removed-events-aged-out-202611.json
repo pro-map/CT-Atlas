@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-11T18:07:26.689843+00:00",
+  "removed_at": "2026-11-12T18:39:14.967647+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1297,6 +1297,225 @@
       "country": "Nigeria",
       "ai_relevance_score": 60,
       "ai_relevance_reason": "Concrete operational seizure of assets linked to terrorist activity.",
+      "related_articles": []
+    },
+    {
+      "id": "4561159e20c03948",
+      "incident_id": "inc-111d76b757c0af7e",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOZVpESTRzUDdaaERiVS1MdU53Ul9mTGtXLXkxTVR2MW9rcmJpeE5nbDdGdmxHa21zVURLdldsN1RPM1dkRVJ6N2tOWnVncWMtUWhIMWxYWXJ6SURWdTZ0bVp4cnc1NnFQckx2bS05S25ZbE9xVkhkSDIyTkN4YUc4UkRIeXdvNElFb19odzVvTi1fUUxvbkdiTlNxc0twbVBUbkt1eG4zbXNWYkdlSjRpbllVWTE3ZkxxLXkxeE5EYWYzV24wb0dUSDRR?oc=5",
+      "title": "Terror suspect arrested and accused of multiple attacks",
+      "summary": "A terror suspect has been arrested and accused of involvement in multiple attacks.",
+      "original_title": "Terror suspect arrested, accused of dozens of attacks",
+      "original_language": "en",
+      "source": "news8000.com",
+      "published": "2026-05-16T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "United States",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Reports the operational arrest of a terror suspect.",
+      "related_articles": []
+    },
+    {
+      "id": "d6ebd83e0b9fd07e",
+      "incident_id": "inc-d78fec8673c2690f",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOTGNqNzREeWluUFYxSGNWbUxpQVBkOEdzRUFnb0lhR2xWYUJRMDVOY01wWDFVUEd2cXVNOW8tN0QtNFpXTlFLbzN4N0xKOFdiWjRkOHNhWm9Ua3JjOWpFRXY1cTRmVlJlbHFHMVNTaE9MUE5jbHd3LTZnODlDT01nWXpCRDAyTDY4cEtWaktta0pYaHc3Zm85ZWs5WWxUUQ?oc=5",
+      "title": "Islamic State leader/second-in-command killed in joint US-Nigerian operation",
+      "summary": "US and Nigerian authorities reported that a senior Islamic State leader/second-in-command, along with numerous fighters, was killed in a joint military operation.",
+      "original_title": "Trump says Islamic State group leader was killed in a joint US-Nigerian mission",
+      "original_language": "en",
+      "source": "AP News",
+      "published": "2026-05-16T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 92,
+      "ai_relevance_reason": "Reports a high-profile joint counter-terrorism operation eliminating a senior Islamic State leader.",
+      "related_articles": [
+        {
+          "title": "Trump says Islamic State group leader was killed in a joint US-Nigerian mission",
+          "original_title": "Trump says Islamic State group leader was killed in a joint US-Nigerian mission",
+          "original_language": "en",
+          "summary": "Trump says Islamic State group leader was killed in a joint US-Nigerian mission France 24",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "France 24",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPR2FTUF9JV0ZDVHNyVFdwT182SDR6b25aU083TGlfWWtJUldza1R0WDhMajByYTNWb2NVa0p2bTcwOHNObGJiYU9CbGFtN2NUc29IaGxVMTNON0ttVU9vNkdPZnVDZ2F6bUlIbWJNRmpWcVVSZWNkREJtdnQzZS03WVRIWldBZktiQXIyQ20zWlJoMlJqRTJVQUEyOUl0RDRqMV9LZ2k4UVdFMU0?oc=5"
+        },
+        {
+          "title": "Nigeria confirms Islamic State second in command killed in joint US operation",
+          "original_title": "Nigeria confirms Islamic State second in command killed in joint US operation",
+          "original_language": "en",
+          "summary": "Nigeria confirms Islamic State second in command killed in joint US operation RFI",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "RFI",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPeUZzVjQ4UEFaLW43eFl5endad0Q2cnJGczhEUExBSXJiMTE1RllkWlFtU0QtUHE1Q01hZnB0ZEs4T1dnVGJCWlh0clo2eUFNZTUyUWFPUGVacTJNMGEtZTNBOFpoQ2c2aThPTENkdUZjTGNqbnFURFRrcTU0czBPUm9uWTZHakIxc09EYjNzSGdTejdwVVBhUVBnVVlTU3kyeVpHSnNsSVJ6X0xqZFZBbDFJajF4WDAyRktRM3lOVnZ2UUgxeVNES2ZkMDhlU28?oc=5"
+        },
+        {
+          "title": "Trump: We assassinated the deputy global leader of ISIS in Nigeria",
+          "original_title": "טראמפ: התנקשנו בסגן מנהיג דאעש העולמי בניגריה",
+          "original_language": "he",
+          "summary": "US President Trump announced that the deputy global leader of ISIS was killed in a strike in Nigeria.",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "הארץ",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPRWEydmtrZTJaWTFPLXphbVhhVDVRNlNKYmRzZHVtT1djdlNrUEJkMUhpbk9iYnQzbEhQelozSW50YnQwUWt3XzN0bnJtWEF4MWZaQUFtUGtVenB2WFBDNnpxU0VDdWlwYm5SR21NcksxYWVyM2g5MjlRSG1UX1BKZmxPUDUyOFh2ampmRkVYNEx4Wm04ODRFQVRRWUdpRU05NV94MW53?oc=5"
+        },
+        {
+          "title": "17 Nigerian trainee cops killed in jihadist attack on military school",
+          "original_title": "17 Nigerian trainee cops killed in jihadist attack on military school",
+          "original_language": "en",
+          "summary": "Seventeen Nigerian trainee police officers were killed in a jihadist attack targeting a military school.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "India Today",
+          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQVGk3UXNfZDRfamNaeXJKa2xYcmRTa0NZRldwdjltMDljQTN2VDdFSlVWVDRzYi1JeTJiWm9mZVN6SmhJajdRNTdKZVk4cnQzZlFKT0tOMmoyUENkdlN4c2ZqM0hJdzh1QmtCa3hpd0lCMXJqNFlzM1NLSnFvZ1BxZWYtVzRtSVlZYUdQallFb1dTQmxFSGRid01nN2dGTk5kdVl5bGpaMS1VRWYwU1F4RFdfRHFxUGZvY011eC1ZUdIBxAFBVV95cUxOWXNsdUpFZ1M3VnZDMnYzdWRQdnpaM2hDajFuVHltT0NjdDZwWVBuTGpXX2JEZk9udFVnZEE2MnRibEhYYmNoYzJHTTBrZmNDa0lVR0pBWFhVU0c5enNyT21FakZhcVJmUnUxZkdxcmpaVTFIcnZlN2djdVhwMGQxb2NmWjBWZFRyR3hQanhTbjFEdUhJbGRYZ1NhVGswalRBS3ZiRTdaYXFZX1BqZDhsN0dpTV9maklqcWhwdWMtcUs2OGc0?oc=5"
+        },
+        {
+          "title": "United States confirms death of high-ranking Islamic State leader in Nigeria",
+          "original_title": "Estados Unidos confirma muerte de alto líder del Estado Islámico en Nigeria",
+          "original_language": "es",
+          "summary": "The US government confirmed the killing of a high-ranking Islamic State leader during operations in Nigeria.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "France 24",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPY3JWN0VkcVQyYmlxeU1UTlBCdkJCamFiSmZFZHd4emdVZzZaYmRuV1l2cGFrSl9fOWVxU2llN3FRRDk4MHR4UWJGR3hkY3N0b3YxSHNVRWV5eUxXdm45dnN4Vk5UT3BPNTE4dUxfWW9zbXJObWxnSmwwaGwwTUlsdnd4c3FBckZuVGtnaWZyZVJpc1dPY3hKcDNZRXY2R3lkWVNXUUdHU3hpSXFwcjRGTkN6eS1QUi1zOUVUTmQzMmhSOWJSQnBj?oc=5"
+        },
+        {
+          "title": "Terrorist attack in Nigeria kills 17 police officers",
+          "original_title": "Nijerya'da terör saldırısı: 17 polis hayatını kaybetti - Son Dakika Haberler",
+          "original_language": "tr",
+          "summary": "A terrorist attack in northeastern Nigeria left 17 police officers dead.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "Sabah",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQVGQ5UUU4MVJPOG4xejVRSmFlUHdVa09ob21IN1NkMDlOdGk2bFcxQUpaOEdTbXlUNnBVQ3BNWnRsRnN0M1I2S09Nc2k1eFQ0ZVd5eFpUTWtLSWVNcFliQjdaTEJBYXNlNlU1UkhrVTN0bHpucHNsdnU4dUVTd3dSUlhCOFVVeEllem5FMEhjcVlBQjR4TXc?oc=5"
+        },
+        {
+          "title": "Terrorist attack in Nigeria: 17 police officers lose their lives",
+          "original_title": "Nijerya’da terör saldırısı: 17 polis hayatını kaybetti",
+          "original_language": "tr",
+          "summary": "Seventeen police officers were killed in a terrorist attack in Nigeria.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "Manşet Haber",
+          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPX3hZclY0Y3JONDRyZzZLLUJxVGY2Tl9udWlmWHJad2I0R0NOc0ZubVUzZWhRY0NjbFFqY3YtR25tVDQ3Ql9sZDhmNFAzSlFXQjM2eGVQUFdRVFBfbFJQc2JPLUxwLTR1bVdQWjRUVDh6c2FoLUJwNENYU2RFS0hPYnhUcDRmNnc?oc=5"
+        },
+        {
+          "title": "Several ISIS Trainers from Iraq Among 175 Terrorists Killed in Joint Nigeria-US Airstrikes",
+          "original_title": "Several ISIS Trainers from Iraq Among 175 Terrorists Killed in Joint Nigeria-US Airstrikes",
+          "original_language": "en",
+          "summary": "Reports indicate that several Iraqi ISIS trainers were among 175 terrorists killed during joint Nigeria-US airstrikes.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQUThQUnRCUlhyNWRUSFFyS1NLS0loSWZxWVNpQ1pxUnp5a09QbGkwZ3QxemowanJhVzU2N00yU3M5aUJuNVRUWTUyY1hQVzdCWG8tRmZvQVZySGk0WmhKTTlla2xINkc1V1JwVnpuaTRXdENCWVgzM1NfZ044RmJKdEpFUjc4ZVd1MGFEaVpFOXBWTzM4dl81RlY4TlViY0FabVVkdHRKY2xuZlZKaHJQYllGWGxOMnFYMXA5V2xZRVNlZWZsMGJjbDlmMTJCUnA5?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "ab7e1731df39ce9c",
+      "incident_id": "inc-f167e4c6dabc980a",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPTWVXUkdXd3BxSjZiUm5GYXM3NUcyN3lTUlpiTHJTNHl1ajZmQkVtZ01Vc2FYbUgwb1hLZFBFUnZxaFk2NFJBZWZaMVoyMi0tbE9JWWg1dC1YLVFwTnNPbGpxRUZ0OEIwbk9YRExyNUFmVXFnSVBrMjlPaU1UOWtuYkttU3duaFFHUlhiTEVNQktJWk50WTdQdg?oc=5",
+      "title": "Israel states Hamas armed wing chief killed",
+      "summary": "Israeli officials announced the targeted killing of the head of Hamas's armed wing.",
+      "original_title": "Israel says Hamas armed wing chief killed",
+      "original_language": "en",
+      "source": "DW.com",
+      "published": "2026-05-16T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Hamas",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Israel",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Reports the targeted counter-terrorism operation killing a top militant commander.",
+      "related_articles": [
+        {
+          "title": "Hamas sources reportedly confirm Hamas chief Izz al-Din al-Haddad was killed in Israeli strike | LIVE BLOG",
+          "original_title": "Hamas sources reportedly confirm Hamas chief Izz al-Din al-Haddad was killed in Israeli strike | LIVE BLOG",
+          "original_language": "en",
+          "summary": "Hamas sources reportedly confirm Hamas chief Izz al-Din al-Haddad was killed in Israeli strike | LIVE BLOG i24NEWS",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "i24NEWS",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxObWVibHlvZXM0WUZMbUZSMHZ5dzd2S1pIRjRObHNrVExSV0JvRUpKVVc3QjhkdzNvNzBqNHJrZ2lUVEt4UUhwSE9KOGFTSnFMbGVLVG1KY0xTYXhrMml2OGVvUVplRFV3TU1JWEVuNmJINk9oWkgtTmRwQzVnT003QlZSc1BMSXBDNXduQ29hYW16RTlseGt0YkZDTHVvNm8zMmt0ZFlGV2NLWkVBN3g3dU51TTdrYWJkQllsRGFKT0ZWU1ZkVmhWQnJhbmZtdmM4cVYwTzFvQ0xTMkMwdmZubzQtZTV1ZVg0R2c?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "c335cd86c999ec2c",
+      "incident_id": "inc-8d668d6d78358d45",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxORmNwWXVfYUpvSVhyQTFwbDNRTGRJWGZWZE1uQXRSd0Q4R3dyUDJvVzVoc3JNWmZDbUpSX3UwZTBDZVB0cWlLWUhYQ253V1F0dE1HaXNqOUJkS1JyckxNdHViQzU0US1PMkNKSlkxZDFpRFJTclVBRmw2SnUwb3BvSGpYb2ZCRGVWNEljaVRtelRpM1I0UUI4X3VWLWM0MDlPU2dxdEplcHZfTWM?oc=5",
+      "title": "ISIS member wanted via Red Notice captured in Eskisehir",
+      "summary": "Turkish security forces arrested an ISIS member sought via an Interpol Red Notice during operations in Eskisehir.",
+      "original_title": "Kırmızı bültenle aranan DEAŞ üyesi Eskişehir'de yakalandı",
+      "original_language": "tr",
+      "source": "TRT Haber",
+      "published": "2026-05-16T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ARREST",
+      "country": "Turkey",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete arrest of a wanted ISIS member by law enforcement.",
+      "related_articles": []
+    },
+    {
+      "id": "15ce525aef1000ac",
+      "incident_id": "inc-4f215a21bf2e2f7b",
+      "url": "https://news.google.com/rss/articles/CBMi5gNBVV95cUxNaEozTzRvdE1jb1ZFOWZGSENXX2pncGNDcV8tOUpHUW9hTDdrZWtPbF9xSnlpa09qWFBTcGwyU3ExTmQ3cFp2MTlQdjRkRzJmUURZNUJSOGFiMkY2c2dlWDJwOG50NVhsUXg1Wm1ZbkM2Y2Q2dUVoSS1pWFlXN0VnYWN1NVNmMUtXd29HRzRneHJZZVFETUZxQi1NMFA3ZmJ6MlNHTnRmRlJ1SFAzd0o0NEp5dUcxYm9sUUdoOV9LbkIya25FWURTZmRDbWY2bGtnQnRNTlEyT3VzVnQ2XzlhVVhKSGthOVpLQk5xNUE0djJmWWZoTDQxRUJ3RHFRV05PNkZ0OEU2SUlYV1hxbUNHaENYejh1d0hpUW1uVkw4NElMbmNuODBUODRXQVNpNE5YeGlVS0t5OUxsOEJrVmlXWEJIbkZuUW94dDBKZ25jTkFpUlhIUl83Q3lDSG14eG1lN3hQeG0wSUhmbHZYUzVHQnlIemdVYV9xd2M1YjB5WGVqTktpbGxrVFZvUURRWG5NZTZwd2hrSmY2WUE5ZUdUemNKcm1haE1HdkhYc2RzZWtrcDFNbUlUVlhXZjZjTExlX25RVGNGMVJHaGJxRmlmTUZpWVZJX3NZS0lDWkpQM2hxdFVQNXc?oc=5",
+      "title": "Trump announces the elimination of the second-in-command of ISIS",
+      "summary": "Donald Trump announced the killing of the second-in-command of ISIS, reported by Independent Arabia.",
+      "original_title": "ترمب: القضاء على الرجل الثاني في تنظيم \"داعش\"",
+      "original_language": "ar",
+      "source": "اندبندنت عربية",
+      "published": "2026-05-16T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism operation against a named terrorist leader.",
+      "related_articles": [
+        {
+          "title": "Joint operation eliminates ISIS No. 2, Al-Minouki",
+          "original_title": "Abuja et Washington annoncent l’élimination d’Al-Minouki, N°2 de l'État islamique, lors d’une opération conjointe",
+          "original_language": "fr",
+          "summary": "A joint military operation resulted in the killing of a senior ISIS figure identified as Al-Minouki.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "actuniger.com",
+          "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxQdnhaYVJxOU1vTmpmOUU0bUNRZUV1RUw5WHcyd2dGVEhPcEk0OWVYN1pHd0RQU1h5ekVEWW80eDNWUHVIU1NpSy04VTJCUVZIdVk0dVdKNjgtZS1qQlpqN2tFZ0llZDJSaW9TdWw2bGk4WlpvcUV0VFRKQnNTRHc3MkJWTDh6b21JN2dqMGhodkRxMnU1UHlkaXZBUnBiWlZMTHJfajRlMnV6MUFwVER5ZlNjOWhMay14RTdXb2VpaUdDZWMyRFV1a0E2aW5xRURydFRWeUp4TjR1eFBzWXFiM3ROLXJZclRIcV9WU1Q1NmRPMUk?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "1c9c2173072025d0",
+      "incident_id": "inc-3b352f2036a6038f",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOYUI2eVRKVkQzMDNMVUV0VEZkSmRER0ZWbkk1NHYxUEJsd0pLRWxrUkFWSmxDTkFhSkowTlp3ZmZBWXNZNlcwSl8yMEM1OXZ0cUc5dWtLZk1uRFJHRXdjRzZEcVNyaW1HTTk1LU9wbVo3RjhtVFFKMDY0Q0IzRTFQNG9Kb3M1WGxmR3hvRVBSaHhWZWR6bUpRSHc1Z09jT1NRWnFOcFRkSy1CdENhbHBJaEFVTENfWFVueUZLZDBDYVBTMzA?oc=5",
+      "title": "Military confirms identity of ISWAP commander Al-Minuki",
+      "summary": "The Nigerian military has confirmed the identity of ISWAP commander Al-Minuki following a recent operation.",
+      "original_title": "Presidency, Military Clarify Identity Of Killed ISWAP Commander Al-Minuki",
+      "original_language": "en",
+      "source": "Channels Television",
+      "published": "2026-05-16T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Operational follow-up confirming the status of a terrorist commander killed in action.",
       "related_articles": []
     }
   ]
