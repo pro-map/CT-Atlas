@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-12T18:39:14.967647+00:00",
+  "removed_at": "2026-11-13T18:07:48.563431+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1516,6 +1516,117 @@
       "country": "Nigeria",
       "ai_relevance_score": 60,
       "ai_relevance_reason": "Operational follow-up confirming the status of a terrorist commander killed in action.",
+      "related_articles": []
+    },
+    {
+      "id": "0faca5d737e63ca7",
+      "incident_id": "inc-115902a8866d06bb",
+      "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNUXdENHVCc1dST0JlM1htWTFXTFlneVBLeHVocXhuYVRyZTNCZUFOWmVyYWJrcDhaZjdJUlBJeU9PZ2pWcF9uWnFRanYxMGNFNGlZU3JDTnVJMXZZeDluV0hQZTdJWHJzQUlzSktWS2NCTExDSDk5OUZNUzVLLVdpRjZnSXZybXhPZUpvVE4zbldRdkk5bkZuZVIwYTJJOTd2bHk4eGREbmlYeFJ5SmdNVXV6MTB6MzZIQ1NBZVV5cEJNNXRTZ1k1X2JvN29Wa3drQW5tcEItMXlfNUU?oc=5",
+      "title": "Terrorists Attack Military Training School in Yobe, Kill Army, Police Officers",
+      "summary": "Suspected terrorists attacked a military training school in Yobe State, killing army and police officers.",
+      "original_title": "Terrorists attack military training school in Yobe, kill army, police officers- Official",
+      "original_language": "en",
+      "source": "Premium Times Nigeria",
+      "published": "2026-05-17T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "region": "Yobe State",
+      "ai_relevance_score": 86,
+      "ai_relevance_reason": "Reports a concrete terrorist attack on a military facility with fatalities.",
+      "related_articles": []
+    },
+    {
+      "id": "ddf585a8b50e4d30",
+      "incident_id": "inc-8f2d04db9a483b03",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNVV9qdlY0N1h2eE9mYVA3MzZWcFF6OTY1SmlzbGktbC03RzlKNGdLSTZrZ0RmMTJqSkVZbmdIOFRWeXY3dGV4Sndxa3VaTFFkcEZON00tbTd2SV9oTy11NVpaOGM2WUZsLUhMZUV0ZzZHM3IzX2pUamw1MUJqeG52RzhmUDdnZGlSU3NkTmR4NzZLZw?oc=5",
+      "title": "Drone attack reported at UAE nuclear power plant",
+      "summary": "Authorities report a fire following a drone attack at a nuclear power plant in the United Arab Emirates.",
+      "original_title": "Brand ausgebrochen – Drohnenangriff auf Atomkraftwerk in Emiraten",
+      "original_language": "de",
+      "source": "Heute",
+      "published": "2026-05-17T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Radiological/Nuclear"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "United Arab Emirates",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete, dated attack on critical nuclear infrastructure.",
+      "related_articles": [
+        {
+          "title": "Drone attack at UAE nuclear power plant",
+          "original_title": "Drohnenangriff - Emirate: Mullahs schießen Atomkraftwerk in Brand",
+          "original_language": "de",
+          "summary": "Media outlets report a drone attack causing a fire at a nuclear power plant in the United Arab Emirates.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "Kronen Zeitung",
+          "url": "https://news.google.com/rss/articles/CBMiQkFVX3lxTE41bHJnSUFnUmx0Qko2R0RGWG4yT2dOdm04UDZreXRxdWRtUThra3pkVlNFMEJfTk5LUm9zLXFQSEQtZw?oc=5"
+        },
+        {
+          "title": "Drone impacts nuclear plant in Abu Dhabi",
+          "original_title": "Emiratos Árabes Unidos: Dron impactó central nuclear en Abu Dabi",
+          "original_language": "es",
+          "summary": "Reporting confirms a drone impact at a nuclear facility in Abu Dhabi.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "Enlace Judío",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPRnJGdXNXeHdkY1lSYWV5eDB0T1pnQlJTMklmZGo3MHRJNWhpRXVCUzh4LWpkcHg5RGRVakp2SFVxbGFPMmFPNlRYTVVkbjJmX0VabGlaWUl1OWdGcFN2TWF5bnBBaW1kbGxmWkJSQ2huaHlVb0w5anVUbThMQUh3eWxsTFp0b2l1Ym1rUTgtbXJYQ1U0ckozaS1qMmd5WG5MUzRKam5R0gGrAUFVX3lxTE1sR3UtRHNqcnYyOW16Si1ublVGLUtXT0RhUHN4OC1tMFhpR1VrUXZGUGhHZWl6X1A5N09xbDdIRmg0N1NKTmc5OENkcF95aDdlSEdwNm5lajZyS0ROOS11RUVVR1pTYnpoMG51NWN2QVFOVDJzSHd0U2FGS25YUEwyMlU1TkhQNXZid1hvN1JzeHBqdXVydTlJd29TTER0UVNSUUtmaWlfMjZqdw?oc=5"
+        },
+        {
+          "title": "UAE reports drone attack on nuclear plant",
+          "original_title": "Emiratos Árabes Unidos reporta un ataque con drones contra una central nuclear",
+          "original_language": "es",
+          "summary": "The UAE government reports a drone attack targeting a nuclear power plant.",
+          "published": "2026-05-17T07:00:00+00:00",
+          "source": "La Vanguardia",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOWDltVUpYdHdjMnlCV1JYc0Y3TXZqd1c3dkJKUk95LUZMR1FLQWZ2eHJmVzR1eDBMbUFhbmt1cW1QMHhNMGM1WlQyS3pHZG9WMlotQ0lFa0dLWUg0bEZBRGFya2hyRkl6Q1VCOTlWRHdNRC10clZXNHFGdFVpaXl3VTFWeG9zWlRBYWRIb3R4cHZQUUhnUVhrUjZIamhjQjRWYkRTSkJzaGZWVXUwdGpSZl9XTlI2V3FERkRrR3JPb1N5dEF50gHKAUFVX3lxTFBWU1cxTTBEbFNJdXlEUzdkM0U2OWhrMTJZb3Jxb2hLWjV6NkVNdV9hQ1o4OGRBMlpzSGZzNWxZN3hFZ1psbUdDczRXOEhpVXBmYVlZOGw3anQ5RnVZUFBQOW05UzJHU0dlZzR2NXFtdGx6YnVXVUpBZjE2T0R3SElIUFdFMXEtajlmNEJLemNIa2gzbmRHTU9jb2YzT19xTjZrQ0hCdjV4NVBsb0hZTHQ1NE9NTFI5V2J2amx4aVpDbWxhTmFmeXNySWc?oc=5"
+        },
+        {
+          "title": "Drone attacks UAE nuclear plant",
+          "original_title": "Dron ataca la planta nuclear de los Emiratos Árabes Unidos",
+          "original_language": "es",
+          "summary": "Report of a drone attack on a nuclear power plant in the United Arab Emirates.",
+          "published": "2026-05-18T07:00:00+00:00",
+          "source": "RegeneraciónMX",
+          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPWTd3anBpdlFoblBlZGxMOHBHeVUzenNLVjJQRVhmbU1tRzFFbjRUSWd3UF9sSFIxUkhHT05fTF9yNkJ1emgtRHB1TUVlX0dLM0JMMDB0REZoVm5ZaTd1RldYS0RGN0pXRjlyZFJ2YVlKN1RwM0thSF9xVnlwdGI1S0U0c19OQUVETHdj?oc=5"
+        },
+        {
+          "title": "Drone attack near UAE nuclear plant",
+          "original_title": "Ataque con drones cerca de planta nuclear emiratí eleva tensión regional",
+          "original_language": "es",
+          "summary": "News coverage of a drone attack near a nuclear power plant in the UAE, increasing regional tensions.",
+          "published": "2026-05-18T07:00:00+00:00",
+          "source": "Diario Ahora",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPOFZHeURrbE92ZktVVU5PTzlmYU5VOEdpbHZOcnRsa2VkbFJIZERoN0lnUEdkLXctX0d2UlFzaUpKUVVaX3hBUTVhRmVEaXdLb2IzR2luWkxfRzVRb0pPOUpoNmlMbFZWamFWd3FSR0I1dGRoV2pvMmo3VkVoNFY1X043XzFYcVBaWHVVRGJNbHdxbW5tU3NGNEk3RFZOS0xh?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "536708f324ee70b0",
+      "incident_id": "inc-3b352f2036a6038f",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1Wdmg5VEx2Z1NJdDhhek9QcU1kWjRDR0NCVEZJelk2T2xOeXZGYUVna2p5QUlTQUFqSlhvVU1JSjgzczV3SUpocklTSjc0U3JKNGN0V0tDSV9PYWFfOXRmelVXSE42OUg0WVg1NEUtSFI3SmVWejRmUTY5YnRkVVU?oc=5",
+      "title": "Background on the death of Abu Bilal Al-Minuki",
+      "summary": "Analytical overview of the identity and previous reports regarding the death of the terrorist figure Al-Minuki.",
+      "original_title": "Abu Bilal Al-Minuki: The Terrorist Who Died Twice",
+      "original_language": "en",
+      "source": "HumAngle",
+      "published": "2026-05-17T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Follow-up analysis on a specific operational neutralization event.",
       "related_articles": []
     }
   ]
