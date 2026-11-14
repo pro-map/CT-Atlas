@@ -1,0 +1,850 @@
+{
+  "format": "ct-atlas-events-store/1",
+  "partition": "month",
+  "authority": "events.json",
+  "events_sha256": "111b35e4115a1d0fef0512d2084d4d6d497ac7d92241566671319c68483181ab",
+  "top_level_keys": [
+    "project",
+    "database_type",
+    "retention_days",
+    "default_map_period",
+    "daily_lookback_days",
+    "language",
+    "source_languages",
+    "collection_configuration",
+    "collection_status",
+    "collector",
+    "relevance_filter",
+    "trend_summary",
+    "ai_article_selection",
+    "deduplication",
+    "search_query_count",
+    "general_search_query_count",
+    "official_source_query_count",
+    "targeted_source_query_count",
+    "multilingual_query_count",
+    "multilingual_languages",
+    "targeted_sources",
+    "multilingual_source_sites",
+    "incremental_collection_stats",
+    "last_planned_query_count",
+    "specialist_coverage",
+    "country_focused_sources",
+    "regional_coverage",
+    "acled_collection",
+    "acled_mode",
+    "official_sources",
+    "last_updated",
+    "number_of_events",
+    "events",
+    "geolocation"
+  ],
+  "months": {
+    "2026-11": {
+      "events": 1798,
+      "bytes": 10393212,
+      "sha256": "d0c78bbecb2811a8d17affaf96900b2846b93a6c1aa5a240e28cf9bb1c297185"
+    },
+    "2026-10": {
+      "events": 3615,
+      "bytes": 23659667,
+      "sha256": "5bf5facd6a1044ef8e3c8e2bc00b45128edd2b8dd8eecbb5475966be59677b93"
+    },
+    "2026-09": {
+      "events": 1499,
+      "bytes": 8531645,
+      "sha256": "aaa37d415731422fbf1defe52ac8242ba54da24d8a57599a7ae165fe9cdb305e"
+    },
+    "2026-08": {
+      "events": 336,
+      "bytes": 1535357,
+      "sha256": "17aa6e71c49fb91cc22f3576eeeb638618dfe2796537a9d64a1cc43b9384559b"
+    },
+    "2026-07": {
+      "events": 250,
+      "bytes": 1054224,
+      "sha256": "55f3d447e2fff5cdfbe456aadf188fc6343cc0bb0336873ca3d8410dceecc033"
+    },
+    "2026-06": {
+      "events": 161,
+      "bytes": 623884,
+      "sha256": "9aa5d0bc492f2fece2e8b231b3035c1785e0b7ad03db86f5f3459343c3355fe8"
+    },
+    "2026-05": {
+      "events": 61,
+      "bytes": 243339,
+      "sha256": "dce2b1725844d5494e23b9d147e5b301d4e2fc179ae068af474cfa1ef2485d2c"
+    }
+  },
+  "metadata": {
+    "project": "CT ATLAS Intelligence Map",
+    "database_type": "Rolling CT situational awareness",
+    "retention_days": 180,
+    "default_map_period": 7,
+    "daily_lookback_days": 3,
+    "language": "English display; multilingual source collection",
+    "source_languages": [
+      "ar",
+      "bn",
+      "de",
+      "en",
+      "es",
+      "fa",
+      "fr",
+      "ha",
+      "he",
+      "hi",
+      "id",
+      "it",
+      "ps",
+      "pt",
+      "ru",
+      "so",
+      "sw",
+      "tr",
+      "ur",
+      "zh",
+      "zh-Hant"
+    ],
+    "collection_configuration": {
+      "version": "shared-collection-v2-20261013",
+      "collection_languages": 20,
+      "translated_languages": 19,
+      "language_variants": 21,
+      "translated_language_variants": 20,
+      "language_codes": [
+        "ar",
+        "bn",
+        "de",
+        "en",
+        "es",
+        "fa",
+        "fr",
+        "ha",
+        "he",
+        "hi",
+        "id",
+        "it",
+        "ps",
+        "pt",
+        "ru",
+        "so",
+        "sw",
+        "tr",
+        "ur",
+        "zh",
+        "zh-Hant"
+      ],
+      "specialist_categories": [
+        "Radiological/Nuclear",
+        "Chemicals and Explosives",
+        "Biological Terrorism"
+      ],
+      "specialist_queries_by_code": {
+        "Radiological/Nuclear": {
+          "ar": 3,
+          "bn": 3,
+          "de": 3,
+          "en": 98,
+          "es": 3,
+          "fa": 3,
+          "fr": 3,
+          "ha": 3,
+          "he": 3,
+          "hi": 3,
+          "id": 3,
+          "it": 3,
+          "ps": 3,
+          "pt": 3,
+          "ru": 3,
+          "so": 3,
+          "sw": 3,
+          "tr": 3,
+          "ur": 3,
+          "zh": 6,
+          "zh-Hant": 6
+        },
+        "Chemicals and Explosives": {
+          "ar": 2,
+          "bn": 2,
+          "de": 2,
+          "en": 16,
+          "es": 2,
+          "fa": 2,
+          "fr": 2,
+          "ha": 2,
+          "he": 2,
+          "hi": 2,
+          "id": 2,
+          "it": 2,
+          "ps": 2,
+          "pt": 2,
+          "ru": 2,
+          "so": 2,
+          "sw": 2,
+          "tr": 2,
+          "ur": 2,
+          "zh": 3,
+          "zh-Hant": 3
+        },
+        "Biological Terrorism": {
+          "ar": 5,
+          "bn": 4,
+          "de": 4,
+          "en": 20,
+          "es": 4,
+          "fa": 4,
+          "fr": 5,
+          "ha": 4,
+          "he": 4,
+          "hi": 4,
+          "id": 4,
+          "it": 4,
+          "ps": 4,
+          "pt": 4,
+          "ru": 4,
+          "so": 4,
+          "sw": 4,
+          "tr": 4,
+          "ur": 4,
+          "zh": 6,
+          "zh-Hant": 6
+        }
+      },
+      "vocabulary_sources": {
+        "Radiological/Nuclear": [
+          "radnuc.py",
+          "radnuc-keywords.json",
+          "radnuc_vocabulary.py"
+        ],
+        "Chemicals and Explosives": [
+          "threat-category-keywords.json"
+        ],
+        "Biological Terrorism": [
+          "threat-category-keywords.json",
+          "bio-monitoring-keywords.json"
+        ]
+      },
+      "coverage_note": "Configured queries, not completed retrieval or exhaustive coverage. Some added daily editions search specialist topics only; one Chinese language uses two writing systems."
+    },
+    "collection_status": {
+      "schema_version": 2,
+      "status": "partial",
+      "run_started_at": "2026-11-14T15:50:36.024630+00:00",
+      "last_attempt_at": "2026-11-14T15:50:36.024630+00:00",
+      "published_at": "2026-11-14T16:39:44.855692+00:00",
+      "recent": {
+        "candidates": 3298,
+        "reviewed": 3298,
+        "cached": 1904,
+        "new_reviews": 1394,
+        "official_auto_accepted": 0,
+        "retained": 255,
+        "rejected": 3043,
+        "pending": 0,
+        "status": "complete",
+        "calls": 41,
+        "primary_calls": 30,
+        "overflow_calls": 11,
+        "reasons": [],
+        "window_start": "2026-11-11T15:50:36.024630+00:00",
+        "window_end": "2026-11-14T15:50:36.024630+00:00"
+      },
+      "backlog": {
+        "candidates": 661,
+        "reviewed": 661,
+        "cached": 595,
+        "new_reviews": 66,
+        "official_auto_accepted": 0,
+        "retained": 2,
+        "rejected": 659,
+        "pending": 0,
+        "status": "complete",
+        "calls": 2,
+        "primary_calls": 0,
+        "overflow_calls": 2,
+        "reasons": []
+      },
+      "maintenance": {
+        "candidates": 0,
+        "reviewed": 0,
+        "cached": 0,
+        "new_reviews": 0,
+        "official_auto_accepted": 0,
+        "retained": 0,
+        "rejected": 0,
+        "pending": 0,
+        "status": "complete",
+        "calls": 0,
+        "primary_calls": 0,
+        "overflow_calls": 0,
+        "reasons": []
+      },
+      "source": {
+        "google": {
+          "retry_waves": 0,
+          "successful": 1220,
+          "empty_feeds": 517,
+          "deduplicated_urls": 288
+        },
+        "gdelt": {},
+        "errors": 0,
+        "status": "complete"
+      },
+      "reasons": [
+        "category_pending",
+        "geolocation_review_required"
+      ],
+      "queue_filter": {
+        "expired": 3980,
+        "retired": 284,
+        "cancelled_history": 197,
+        "duplicates": 0,
+        "from_queue": {
+          "expired": 0,
+          "retired": 0,
+          "cancelled_history": 0,
+          "duplicates": 0
+        }
+      },
+      "budgets": {
+        "primary": {
+          "per_run": 30,
+          "per_day": 60,
+          "used_this_run": 30,
+          "used_today": 30
+        },
+        "overflow": {
+          "model": "gemini-3.1-flash-lite",
+          "per_run": 55,
+          "per_day": 110,
+          "used_this_run": 13,
+          "used_today": 13
+        },
+        "historical_calls_per_run": 20,
+        "historical_calls_used": 2,
+        "maintenance_calls_per_run": 2
+      },
+      "geolocation": {
+        "status": "complete",
+        "pending": 0,
+        "located": 7451,
+        "unlocated": 269,
+        "completed_unlocated": 269,
+        "outcome": "success",
+        "processed_this_run": 75,
+        "review_required": 170
+      },
+      "categories": [
+        {
+          "category": "Radiological/Nuclear",
+          "last_attempt_at": "2026-11-14T15:55:08.358623+00:00",
+          "status": "partial",
+          "reviewed": 135,
+          "pending": 416,
+          "candidates": 551,
+          "recent_pending": 13,
+          "backlog_pending": 403,
+          "undated_pending": 0,
+          "source_discovery": {
+            "planned_queries": 50,
+            "attempted_queries": 50,
+            "searched_queries": 50,
+            "failed_queries": 0,
+            "pending_queries": 0,
+            "complete": true,
+            "stop_code": ""
+          },
+          "stop_code": "budget_reached"
+        }
+      ],
+      "finalized_at": "2026-11-14T16:43:51.090835+00:00",
+      "collect_outcome": "success",
+      "geolocate_outcome": "success",
+      "temporary_failures": {
+        "gemini-3.5-flash-lite:503": 4,
+        "gemini-3.1-flash-lite:503": 2
+      },
+      "health": {
+        "state": "healthy",
+        "reasons": [],
+        "events_published_last_24h": 91,
+        "events_published_median_14d": 130.0,
+        "new_reviews": 1394,
+        "recent_pending": 0,
+        "review_share": 1.0,
+        "thresholds": {
+          "starved_events_ratio": 0.25,
+          "degraded_events_ratio": 0.5,
+          "starved_review_share": 0.1,
+          "degraded_review_share": 0.5,
+          "starved_min_waiting": 100,
+          "degraded_min_waiting": 600
+        }
+      }
+    },
+    "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
+    "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
+    "trend_summary": {
+      "overview": "As of 14 Nov, 17:39 Paris: Recent high-impact security developments include a major militant ambush in western Niger resulting in 38 civilian deaths, an intercepted terror plot in Paris orchestrated by a Spanish neo-Nazi group targeting public gatherings, and a counter-terrorism operation in Kirkuk province, Iraq, where security forces neutralized three militants and arrested another.",
+      "developments": [
+        {
+          "event_id": "4c1d439008c253dc",
+          "severity": "CRITICAL",
+          "category": "Attacks",
+          "headline": "38 civilians killed in western Niger ambush",
+          "detail": "An ambush by militants in western Niger resulted in the deaths of 38 civilians.",
+          "location": "Niger, Western Niger"
+        },
+        {
+          "event_id": "892188b183c323eb",
+          "severity": "CRITICAL",
+          "category": "Counter Terrorism Action",
+          "headline": "Spanish neo-Nazi terrorist plot targeting Paris thwarted",
+          "detail": "Security authorities disrupted a terror plot in Paris orchestrated by a Spanish neo-Nazi group intending to carry out indiscriminate shootings.",
+          "location": "France, Paris"
+        },
+        {
+          "event_id": "39c0d04d29a65189",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
+          "headline": "Iraqi forces kill 3, arrest 1 in Kirkuk",
+          "detail": "Iraqi security forces killed three militants and arrested a fourth in a proactive counter-terrorism operation in Kirkuk province.",
+          "location": "Iraq, Kirkuk Governorate"
+        },
+        {
+          "event_id": "1175f76a77c74d3b",
+          "severity": "HIGH",
+          "category": "Weapons",
+          "headline": "Lebanese Army raids weapons warehouse in Southern Suburbs",
+          "detail": "The Lebanese Army raided a weapons warehouse in the Southern Suburbs of Beirut and seized a large quantity of war munitions.",
+          "location": "Lebanon, Beirut"
+        },
+        {
+          "event_id": "801145992c53ecd6",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
+          "headline": "Iraqi Airstrike Targets ISIS Hideout in Wadi Zghaytun, Kirkuk",
+          "detail": "Iraqi aircraft target an ISIS terrorist hideout located in Wadi Zghaytun in Kirkuk.",
+          "location": "Iraq, Kirkuk"
+        },
+        {
+          "event_id": "e3ebfbbb3163c719",
+          "severity": "HIGH",
+          "category": "Attacks",
+          "headline": "Russian colonel killed in car explosion in St. Petersburg",
+          "detail": "An explosion in a vehicle killed a Russian colonel in St. Petersburg.",
+          "location": "Russia, Saint Petersburg"
+        }
+      ],
+      "status": "ok",
+      "model": "gemini-3.5-flash-lite",
+      "window_hours": 24,
+      "generated_at": "2026-11-14T16:39:42.047477+00:00",
+      "candidate_events": 80,
+      "top_hash": "014241e52c5545af7a37966c3ebebde32fa4c6b82feaad978398a0972b22e063",
+      "top_event_count": 10,
+      "reused": false
+    },
+    "ai_article_selection": {
+      "enabled": true,
+      "model": "gemini-3.5-flash-lite",
+      "threshold": 60,
+      "version": "gemini-ct-selection-v7-standalone-threat-topics"
+    },
+    "deduplication": "Multi-signal event clustering V4",
+    "search_query_count": 1220,
+    "general_search_query_count": 184,
+    "official_source_query_count": 5,
+    "targeted_source_query_count": 55,
+    "multilingual_query_count": 976,
+    "multilingual_languages": [
+      "French",
+      "Arabic",
+      "German",
+      "Spanish",
+      "Spanish / Latin America",
+      "Portuguese / Brazil",
+      "Italian",
+      "Turkish",
+      "Russian",
+      "Urdu",
+      "Persian",
+      "Hebrew",
+      "French / Africa",
+      "English / Africa",
+      "English / East Africa",
+      "Dari / Afghanistan",
+      "Pashto / Afghanistan",
+      "English / Afghanistan",
+      "Arabic / Syria",
+      "English / Syria",
+      "Chinese (Simplified)",
+      "Chinese (Traditional)",
+      "Hindi",
+      "Bengali",
+      "Indonesian",
+      "Portuguese / Mozambique",
+      "Somali",
+      "Hausa",
+      "Swahili"
+    ],
+    "targeted_sources": [
+      "ACLED",
+      "Reuters",
+      "Associated Press",
+      "BBC News",
+      "CNN",
+      "France 24 English",
+      "Deutsche Welle English",
+      "Al Jazeera English",
+      "i24NEWS",
+      "RT",
+      "RFI English",
+      "Voice of America",
+      "Radio Free Europe / Radio Liberty",
+      "Sky News",
+      "Euronews English",
+      "The Guardian",
+      "IMB / ICC Commercial Crime Services",
+      "ReCAAP ISC",
+      "UKMTO",
+      "IMO",
+      "EUNAVFOR Atalanta",
+      "Combined Maritime Forces",
+      "The Maritime Executive",
+      "gCaptain",
+      "SAFETY4SEA",
+      "Splash 247",
+      "TradeWinds",
+      "Seatrade Maritime",
+      "Dryad Global / Verihelm",
+      "MarineLink",
+      "Shabelle Media Network",
+      "Hiiraan Online",
+      "Garowe Online",
+      "Goobjoog News",
+      "SONNA (Somali National News Agency)",
+      "OPCW",
+      "IAEA public reporting",
+      "FBI CBRN reporting",
+      "DOJ CBRN reporting",
+      "Europol CBRN reporting",
+      "UK Government CBRN reporting",
+      "CBRNe World",
+      "Nuclear Threat Initiative",
+      "Arms Control Association",
+      "James Martin CNS",
+      "Johns Hopkins Center for Health Security"
+    ],
+    "multilingual_source_sites": {
+      "French": [
+        "lemonde.fr",
+        "france24.com/fr"
+      ],
+      "Arabic": [
+        "aljazeera.net",
+        "alarabiya.net",
+        "skynewsarabia.com",
+        "asharq.com",
+        "aawsat.com",
+        "alquds.co.uk",
+        "alaraby.co.uk",
+        "france24.com/ar",
+        "bbc.com/arabic",
+        "aa.com.tr/ar",
+        "independentarabia.com",
+        "alhurra.com",
+        "alsumaria.tv",
+        "shafaq.com/ar",
+        "ina.iq",
+        "rudawarabia.net",
+        "enabbaladi.net",
+        "syria.tv",
+        "sana.sy",
+        "almasdaronline.com",
+        "sabanew.net",
+        "alwasat.ly",
+        "alraimedia.com",
+        "hespress.com",
+        "mosaiquefm.net/ar",
+        "akhbaralaane.net"
+      ],
+      "German": [
+        "tagesschau.de",
+        "spiegel.de"
+      ],
+      "Spanish": [
+        "elpais.com",
+        "elmundo.es"
+      ],
+      "Spanish / Latin America": [
+        "infobae.com",
+        "eltiempo.com",
+        "milenio.com",
+        "eluniversal.com.mx",
+        "semana.com"
+      ],
+      "Portuguese / Brazil": [
+        "g1.globo.com",
+        "folha.uol.com.br"
+      ],
+      "Italian": [
+        "ansa.it",
+        "repubblica.it"
+      ],
+      "Turkish": [
+        "aa.com.tr/tr",
+        "trthaber.com"
+      ],
+      "Russian": [
+        "interfax.ru",
+        "kommersant.ru"
+      ],
+      "Urdu": [
+        "jang.com.pk",
+        "express.pk"
+      ],
+      "Persian": [
+        "iranintl.com",
+        "bbc.com/persian"
+      ],
+      "Hebrew": [
+        "ynet.co.il",
+        "haaretz.co.il"
+      ],
+      "French / Africa": [
+        "studiotamani.org",
+        "studiokalangou.org",
+        "studioyafa.bf",
+        "maliweb.net",
+        "malijet.com",
+        "aib.media",
+        "lefaso.net",
+        "burkina24.com",
+        "actuniger.com",
+        "anp.ne",
+        "tchadinfos.com",
+        "alwihdainfo.com",
+        "crtv.cm",
+        "actucameroun.com",
+        "radiookapi.net",
+        "actualite.cd",
+        "rfi.fr/fr",
+        "jeuneafrique.com",
+        "sahel-intelligence.com"
+      ],
+      "English / Africa": [
+        "humanglemedia.com",
+        "dailytrust.com",
+        "premiumtimesng.com",
+        "channelstv.com",
+        "punchng.com",
+        "vanguardngr.com",
+        "thecable.ng",
+        "leadership.ng",
+        "zagazola.org",
+        "shabellemedia.com",
+        "hiiraan.com",
+        "garoweonline.com/en",
+        "goobjoog.com",
+        "sonna.so/en",
+        "nation.africa",
+        "standardmedia.co.ke",
+        "the-star.co.ke",
+        "theeastafrican.co.ke",
+        "monitor.co.ug",
+        "clubofmozambique.com"
+      ],
+      "English / East Africa": [
+        "shabellemedia.com",
+        "hiiraan.com",
+        "garoweonline.com/en",
+        "goobjoog.com",
+        "sonna.so/en"
+      ],
+      "Dari / Afghanistan": [
+        "tolonews.com",
+        "pajhwok.com",
+        "amu.tv",
+        "8am.media",
+        "etilaatroz.com",
+        "khaama.com",
+        "ariananews.af",
+        "afintl.com",
+        "swn.af"
+      ],
+      "Pashto / Afghanistan": [
+        "tolonews.com",
+        "pajhwok.com",
+        "ariananews.af",
+        "afintl.com",
+        "swn.af"
+      ],
+      "English / Afghanistan": [
+        "tolonews.com",
+        "pajhwok.com",
+        "amu.tv",
+        "8am.media",
+        "kabulnow.com",
+        "khaama.com",
+        "ariananews.af"
+      ],
+      "Arabic / Syria": [
+        "enabbaladi.net",
+        "syria.tv",
+        "sana.sy",
+        "npasyria.com",
+        "deirezzor24.net",
+        "daraa24.org",
+        "syriahr.com",
+        "zamanalwsl.net",
+        "rozana.fm",
+        "syriadirect.org",
+        "sy-24.com"
+      ],
+      "English / Syria": [
+        "syrianobserver.com",
+        "syriadirect.org",
+        "npasyria.com",
+        "syriahr.com"
+      ],
+      "Chinese (Simplified)": [],
+      "Chinese (Traditional)": [],
+      "Hindi": [],
+      "Bengali": [],
+      "Indonesian": [],
+      "Portuguese / Mozambique": [],
+      "Somali": [],
+      "Hausa": [],
+      "Swahili": []
+    },
+    "incremental_collection_stats": {
+      "corroboration_hold_same_minute_burst": 58,
+      "corroboration_hold_listed_outlet": 17,
+      "already_reviewed_articles": 1559,
+      "duplicate_input_articles": 3776
+    },
+    "last_planned_query_count": 1220,
+    "specialist_coverage": {
+      "maritime_sources": [
+        "IMB / ICC Commercial Crime Services",
+        "ReCAAP ISC",
+        "UKMTO",
+        "IMO",
+        "EUNAVFOR Atalanta",
+        "Combined Maritime Forces",
+        "The Maritime Executive",
+        "gCaptain",
+        "SAFETY4SEA",
+        "Splash 247",
+        "TradeWinds",
+        "Seatrade Maritime",
+        "Dryad Global / Verihelm",
+        "MarineLink"
+      ],
+      "cbrn_sources": [
+        "OPCW",
+        "IAEA public reporting",
+        "FBI CBRN reporting",
+        "DOJ CBRN reporting",
+        "Europol CBRN reporting",
+        "UK Government CBRN reporting",
+        "CBRNe World",
+        "Nuclear Threat Initiative",
+        "Arms Control Association",
+        "James Martin CNS",
+        "Johns Hopkins Center for Health Security"
+      ],
+      "acquisition": "Public Google News results; no direct incident-database API.",
+      "category_hints": "Provisional; Gemini decides relevance and final categories."
+    },
+    "country_focused_sources": {
+      "Afghanistan": {
+        "tolonews.com": "TOLOnews",
+        "pajhwok.com": "Pajhwok Afghan News",
+        "amu.tv": "Amu TV",
+        "8am.media": "Hasht-e Subh / 8AM",
+        "kabulnow.com": "KabulNow",
+        "etilaatroz.com": "Etilaat Roz",
+        "khaama.com": "Khaama Press",
+        "ariananews.af": "Ariana News",
+        "afintl.com": "Afghanistan International",
+        "swn.af": "Salam Watandar"
+      },
+      "Syria": {
+        "enabbaladi.net": "Enab Baladi",
+        "syria.tv": "Syria TV",
+        "sana.sy": "SANA",
+        "npasyria.com": "North Press Agency",
+        "deirezzor24.net": "Deir Ezzor 24",
+        "daraa24.org": "Daraa 24",
+        "syriahr.com": "Syrian Observatory for Human Rights",
+        "zamanalwsl.net": "Zaman al-Wasl",
+        "rozana.fm": "Rozana",
+        "syrianobserver.com": "The Syrian Observer",
+        "syriadirect.org": "Syria Direct",
+        "sy-24.com": "SY24"
+      },
+      "note": "Local and country-focused reporting, including exile-based media; publishers may have multiple language queries."
+    },
+    "regional_coverage": {
+      "arabic_target_sites": 26,
+      "africa_french_target_sites": 19,
+      "africa_english_target_sites": 20,
+      "note": "Discovery targets through Google News; indexing and yield vary by publisher."
+    },
+    "acled_collection": {
+      "status": "api_removed"
+    },
+    "acled_mode": "Public ACLED reporting via Google News only; no event-data API",
+    "official_sources": [
+      "U.S. Department of Justice",
+      "U.S. Department of the Treasury / OFAC",
+      "Counter Terrorism Policing UK",
+      "Europol",
+      "UK Government / Counter-Terrorism"
+    ],
+    "last_updated": "2026-11-14T16:39:44.855692+00:00",
+    "number_of_events": 7720,
+    "geolocation": {
+      "method": "Gemini AI-first semantic geolocation",
+      "version": "gemini-ai-first-v5.3-source-faithful",
+      "primary_model": "gemini-3.5-flash-lite",
+      "rescue_model": "gemini-3.8-flash",
+      "rescue_models": [
+        "gemini-3.8-flash"
+      ],
+      "rescue_enabled": false,
+      "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
+      "rescue_unlocated_final": 21,
+      "ai_for_every_event": true,
+      "cached_events": 7645,
+      "ai_processed_this_run": 75,
+      "ai_pending_at_start": 75,
+      "city": 2799,
+      "region": 2488,
+      "country_capital": 2164,
+      "unlocated": 269,
+      "mapped_total": 7451,
+      "high_confidence": 6772,
+      "medium_confidence": 721,
+      "low_confidence": 227,
+      "methods": {
+        "ai_country_capital": 2163,
+        "ai_region_coordinates": 2485,
+        "ai_city_geonames": 2647,
+        "unresolved_city_no_capital_fallback": 136,
+        "ai_unlocated": 93,
+        "source_name_geonames_correction": 27,
+        "ai_city_coordinates": 119,
+        "reviewed_unsupported_point_withdrawn": 18,
+        "ai_unlocated_final": 21,
+        "source_verified_region": 3,
+        "source_verified_city": 6,
+        "source_verified_country": 1,
+        "source_verified_unlocated": 1
+      }
+    }
+  }
+}
