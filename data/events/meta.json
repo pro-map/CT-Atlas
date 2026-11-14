@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "111b35e4115a1d0fef0512d2084d4d6d497ac7d92241566671319c68483181ab",
+  "events_sha256": "f50bfdfa37deb07453272f64d1c5bbcad6fbefc5571800a6fce37aff7f27ff58",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 1798,
-      "bytes": 10393212,
-      "sha256": "d0c78bbecb2811a8d17affaf96900b2846b93a6c1aa5a240e28cf9bb1c297185"
+      "events": 1831,
+      "bytes": 10694783,
+      "sha256": "e41842e9d07fa364ec878bf96dc2a1876ce5c91a6fc215b2bcf01e9c8a44a9bc"
     },
     "2026-10": {
       "events": 3615,
@@ -230,39 +230,39 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-14T15:50:36.024630+00:00",
-      "last_attempt_at": "2026-11-14T15:50:36.024630+00:00",
-      "published_at": "2026-11-14T16:39:44.855692+00:00",
+      "run_started_at": "2026-11-14T21:27:52.275812+00:00",
+      "last_attempt_at": "2026-11-14T21:27:52.275812+00:00",
+      "published_at": "2026-11-14T22:01:51.629527+00:00",
       "recent": {
-        "candidates": 3298,
-        "reviewed": 3298,
-        "cached": 1904,
-        "new_reviews": 1394,
+        "candidates": 3209,
+        "reviewed": 3209,
+        "cached": 2523,
+        "new_reviews": 686,
         "official_auto_accepted": 0,
-        "retained": 255,
-        "rejected": 3043,
+        "retained": 204,
+        "rejected": 3005,
         "pending": 0,
         "status": "complete",
-        "calls": 41,
-        "primary_calls": 30,
-        "overflow_calls": 11,
+        "calls": 20,
+        "primary_calls": 18,
+        "overflow_calls": 2,
         "reasons": [],
-        "window_start": "2026-11-11T15:50:36.024630+00:00",
-        "window_end": "2026-11-14T15:50:36.024630+00:00"
+        "window_start": "2026-11-11T21:27:52.275812+00:00",
+        "window_end": "2026-11-14T21:27:52.275812+00:00"
       },
       "backlog": {
-        "candidates": 661,
-        "reviewed": 661,
-        "cached": 595,
-        "new_reviews": 66,
+        "candidates": 678,
+        "reviewed": 678,
+        "cached": 665,
+        "new_reviews": 13,
         "official_auto_accepted": 0,
-        "retained": 2,
-        "rejected": 659,
+        "retained": 0,
+        "rejected": 678,
         "pending": 0,
         "status": "complete",
-        "calls": 2,
-        "primary_calls": 0,
-        "overflow_calls": 2,
+        "calls": 1,
+        "primary_calls": 1,
+        "overflow_calls": 0,
         "reasons": []
       },
       "maintenance": {
@@ -284,7 +284,7 @@
         "google": {
           "retry_waves": 0,
           "successful": 1220,
-          "empty_feeds": 517,
+          "empty_feeds": 530,
           "deduplicated_urls": 288
         },
         "gdelt": {},
@@ -296,9 +296,9 @@
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 3980,
-        "retired": 284,
-        "cancelled_history": 197,
+        "expired": 3952,
+        "retired": 275,
+        "cancelled_history": 199,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -311,29 +311,29 @@
         "primary": {
           "per_run": 30,
           "per_day": 60,
-          "used_this_run": 30,
-          "used_today": 30
+          "used_this_run": 19,
+          "used_today": 49
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
-          "used_this_run": 13,
-          "used_today": 13
+          "used_this_run": 2,
+          "used_today": 15
         },
         "historical_calls_per_run": 20,
-        "historical_calls_used": 2,
+        "historical_calls_used": 1,
         "maintenance_calls_per_run": 2
       },
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 7451,
-        "unlocated": 269,
-        "completed_unlocated": 269,
+        "located": 7483,
+        "unlocated": 270,
+        "completed_unlocated": 270,
         "outcome": "success",
-        "processed_this_run": 75,
-        "review_required": 170
+        "processed_this_run": 36,
+        "review_required": 171
       },
       "categories": [
         {
@@ -358,19 +358,18 @@
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-14T16:43:51.090835+00:00",
+      "finalized_at": "2026-11-14T22:02:50.297704+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 4,
-        "gemini-3.1-flash-lite:503": 2
+        "gemini-3.5-flash-lite:503": 2
       },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 91,
-        "events_published_median_14d": 130.0,
-        "new_reviews": 1394,
+        "events_published_last_24h": 81,
+        "events_published_median_14d": 135.0,
+        "new_reviews": 686,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -386,63 +385,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 14 Nov, 17:39 Paris: Recent high-impact security developments include a major militant ambush in western Niger resulting in 38 civilian deaths, an intercepted terror plot in Paris orchestrated by a Spanish neo-Nazi group targeting public gatherings, and a counter-terrorism operation in Kirkuk province, Iraq, where security forces neutralized three militants and arrested another.",
+      "overview": "As of 14 Nov, 23:01 Paris: Recent counter-terrorism and security operations include significant regional developments such as a major anti-militant operation resulting in 74 deaths in Pakistan, a coordinated ADF massacre leaving 35 civilians dead in the Democratic Republic of the Congo, and a successful counter-terrorism raid resulting in the elimination of eight militants and two soldiers in Kolpur, Balochistan.",
       "developments": [
         {
-          "event_id": "4c1d439008c253dc",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "38 civilians killed in western Niger ambush",
-          "detail": "An ambush by militants in western Niger resulted in the deaths of 38 civilians.",
-          "location": "Niger, Western Niger"
-        },
-        {
-          "event_id": "892188b183c323eb",
+          "event_id": "9a22599a85b79523",
           "severity": "CRITICAL",
           "category": "Counter Terrorism Action",
-          "headline": "Spanish neo-Nazi terrorist plot targeting Paris thwarted",
-          "detail": "Security authorities disrupted a terror plot in Paris orchestrated by a Spanish neo-Nazi group intending to carry out indiscriminate shootings.",
-          "location": "France, Paris"
+          "headline": "Pakistan military reports killing 74 militants in raids",
+          "detail": "The Pakistani military announced that its counter-terrorism raids across the country successfully eliminated 74 militants.",
+          "location": "Pakistan"
         },
         {
-          "event_id": "39c0d04d29a65189",
-          "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "Iraqi forces kill 3, arrest 1 in Kirkuk",
-          "detail": "Iraqi security forces killed three militants and arrested a fourth in a proactive counter-terrorism operation in Kirkuk province.",
-          "location": "Iraq, Kirkuk Governorate"
-        },
-        {
-          "event_id": "1175f76a77c74d3b",
-          "severity": "HIGH",
-          "category": "Weapons",
-          "headline": "Lebanese Army raids weapons warehouse in Southern Suburbs",
-          "detail": "The Lebanese Army raided a weapons warehouse in the Southern Suburbs of Beirut and seized a large quantity of war munitions.",
-          "location": "Lebanon, Beirut"
-        },
-        {
-          "event_id": "801145992c53ecd6",
-          "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "Iraqi Airstrike Targets ISIS Hideout in Wadi Zghaytun, Kirkuk",
-          "detail": "Iraqi aircraft target an ISIS terrorist hideout located in Wadi Zghaytun in Kirkuk.",
-          "location": "Iraq, Kirkuk"
-        },
-        {
-          "event_id": "e3ebfbbb3163c719",
-          "severity": "HIGH",
+          "event_id": "7a87952c178a5fc0",
+          "severity": "CRITICAL",
           "category": "Attacks",
-          "headline": "Russian colonel killed in car explosion in St. Petersburg",
-          "detail": "An explosion in a vehicle killed a Russian colonel in St. Petersburg.",
-          "location": "Russia, Saint Petersburg"
+          "headline": "ADF massacre in Ituri leaves 35 civilians dead",
+          "detail": "A new massacre attributed to the Allied Democratic Forces in Ituri resulted in the deaths of 35 civilians.",
+          "location": "Democratic Republic of the Congo, Ituri"
+        },
+        {
+          "event_id": "3f0e03ea872a5be7",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
+          "headline": "8 terrorists killed in Kolpur operation; Major and Havildar martyred in Balochistan",
+          "detail": "Security forces killed eight militants during an operation in Kolpur, Balochistan, while two soldiers lost their lives.",
+          "location": "Pakistan"
+        },
+        {
+          "event_id": "c7801ac7f72f327b",
+          "severity": "HIGH",
+          "category": "Arrests",
+          "headline": "Terrorist suspect arrested for mall plot in Russia",
+          "detail": "Authorities arrested a suspect accused of plotting a terrorist attack on a shopping mall in Stavropol.",
+          "location": "Russia, Stavropol"
+        },
+        {
+          "event_id": "fd69b30f50da03b1",
+          "severity": "HIGH",
+          "category": "Chemicals and Explosives",
+          "headline": "Ireland seizes explosive device near multinational leaders dinner venue",
+          "detail": "An explosive device was seized by authorities in Ireland near a venue hosting a multinational leaders dinner.",
+          "location": "Ireland, Dublin"
+        },
+        {
+          "event_id": "da616bed99b245c7",
+          "severity": "SIGNIFICANT",
+          "category": "Arrests",
+          "headline": "Four alleged members of Los Ciclones detained with arsenal in Matamoros",
+          "detail": "Authorities in Matamoros detained four suspected members of the Los Ciclones criminal group and seized an extensive weapons arsenal.",
+          "location": "Mexico, Heroica Matamoros"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-14T16:39:42.047477+00:00",
+      "generated_at": "2026-11-14T22:01:43.093022+00:00",
       "candidate_events": 80,
-      "top_hash": "014241e52c5545af7a37966c3ebebde32fa4c6b82feaad978398a0972b22e063",
+      "top_hash": "d092198360564274ab93dc694b5d2941e2973d04e435e2894a12ee81706a649b",
       "top_event_count": 10,
       "reused": false
     },
@@ -720,10 +719,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 58,
+      "corroboration_hold_same_minute_burst": 67,
       "corroboration_hold_listed_outlet": 17,
-      "already_reviewed_articles": 1559,
-      "duplicate_input_articles": 3776
+      "already_reviewed_articles": 1646,
+      "duplicate_input_articles": 3749
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -805,8 +804,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-14T16:39:44.855692+00:00",
-    "number_of_events": 7720,
+    "last_updated": "2026-11-14T22:01:51.629527+00:00",
+    "number_of_events": 7753,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -819,22 +818,22 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 7645,
-      "ai_processed_this_run": 75,
-      "ai_pending_at_start": 75,
-      "city": 2799,
-      "region": 2488,
-      "country_capital": 2164,
-      "unlocated": 269,
-      "mapped_total": 7451,
-      "high_confidence": 6772,
-      "medium_confidence": 721,
-      "low_confidence": 227,
+      "cached_events": 7717,
+      "ai_processed_this_run": 36,
+      "ai_pending_at_start": 36,
+      "city": 2815,
+      "region": 2499,
+      "country_capital": 2169,
+      "unlocated": 270,
+      "mapped_total": 7483,
+      "high_confidence": 6800,
+      "medium_confidence": 725,
+      "low_confidence": 228,
       "methods": {
-        "ai_country_capital": 2163,
-        "ai_region_coordinates": 2485,
-        "ai_city_geonames": 2647,
-        "unresolved_city_no_capital_fallback": 136,
+        "ai_city_geonames": 2663,
+        "ai_region_coordinates": 2496,
+        "ai_country_capital": 2168,
+        "unresolved_city_no_capital_fallback": 137,
         "ai_unlocated": 93,
         "source_name_geonames_correction": 27,
         "ai_city_coordinates": 119,
