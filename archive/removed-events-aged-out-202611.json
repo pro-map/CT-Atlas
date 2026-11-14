@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-13T18:07:48.563431+00:00",
+  "removed_at": "2026-11-14T16:38:54.555790+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1627,6 +1627,204 @@
       "country": "Nigeria",
       "ai_relevance_score": 60,
       "ai_relevance_reason": "Follow-up analysis on a specific operational neutralization event.",
+      "related_articles": []
+    },
+    {
+      "id": "ea5b2e7720062948",
+      "incident_id": "inc-7956087608525efa",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQUGgyaEc0UGx2di1UYjNCTGVBb1JYY1BDZUh2ajBSaURTOU52LUY1MTRJeWZLcEZZc2k4WVJwblFfdFRWREpvTDd6dHlqeEdhWWI4MW5QMjZpQ0RFVzZNMUNmMi1UY2FhQXFPaW5NN1FfZExCd2VrQjNkcUthbmFsTGhWdkhoNkxKSHhhUHNJQVZrVEdNcktNcllwLUhLYWluS2hoNjk2anFrSnBRdkdBRjRIRWc3bkpDeUJfQ3JLRnN2RWFRdHc?oc=5",
+      "title": "New US and Nigerian Airstrikes Against Islamic State Group",
+      "summary": "United States and Nigerian forces carried out new airstrikes targeting the Islamic State group.",
+      "original_title": "Nouvelles frappes des États-Unis et du Nigeria contre le groupe État islamique",
+      "original_language": "fr",
+      "source": "rfi.fr",
+      "published": "2026-05-18T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 82,
+      "ai_relevance_reason": "Reports joint military airstrikes targeting Islamic State forces.",
+      "related_articles": []
+    },
+    {
+      "id": "b4fe69d6930dc7ca",
+      "incident_id": "inc-8acb3879aba345be",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNcTYyNHQyNDl4U2U1UEN6RE1sM3phMUZyREFvQ25ralNNc1daX0RnUnBOYkRUSDV0cW5PNDFhbTkxR0wweXdlNWJDNy1nTjhnR0xrRVZ6VzBpLTBxN1kwc3ROaGpUOG5PMklxbjRTcTFvM2gtSzFrT0Y4X0VXemJqZjB2LXNvVUwtMkI4V0pWaVhzSGdXN3REeA?oc=5",
+      "title": "Senegal: Major explosive seizure at the Mali border",
+      "summary": "Senegalese security forces intercepted a major shipment of explosives at the border with Mali.",
+      "original_title": "Sénégal : saisie majeure d’explosifs à la frontière avec le Mali",
+      "original_language": "fr",
+      "source": "APAnews - Agence de Presse Africaine",
+      "published": "2026-05-18T07:00:00+00:00",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "WEAPONS",
+      "country": "Senegal",
+      "region": "Mali Border",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete seizure of explosives at a border zone vulnerable to militant activity.",
+      "related_articles": []
+    },
+    {
+      "id": "2d9b9d7bec23a994",
+      "incident_id": "inc-4118c8cbcd3694bc",
+      "url": "https://news.google.com/rss/articles/CBMinwNBVV95cUxNTGczSDNIZmFWWG5zUmhDQmk3VnEtYldPd3F6dkdKeE9JUkgtcUNhaVVFZlVkc1BHWVk2a1Fib0VvM3praXVMZFJCMW11clBlWmdLdnpiN2ZSdnNqcHVXVG1TM20zNDFUWnZBLVZXNkRqRXc4MUNMeEJHcGZMei1YQm5xREhUbHV3cUtlclhmRTg4LXF4NmxjZ25FYUdJdFF2dDQ2X2Q3dEstMHBLOHBMWU4xRWtpYW1hQWxzLXluSFp4N3JUa0VFamFHOHJPQmpCYzE3TVhHTDZPMXVDM0w2U202ZGI0ek5uRjNsajZWRWtJRUhxMFduWFBSR0ZhZDNmY3hNVVR5M2wzakUzYWVwOUJwOXNZOGEwdFo0RWIwZWpLR2tyZmtNS0F4ZkxnU0FYbl83dzl6RFBuTVllVEFMX0dpOThibzJtU3RsazBnZnBEbUc2ZXlOcThuZWNZNnNpeE03dmhUOEVYTXRFMDZHaVNBaW5MdVBCVTBsbExaRko0Wm1KVjdYN3BuSTQ2ekR0STU3elVJTlAyaTVtVkV3?oc=5",
+      "title": "Security forces seize tunnels and explosives in Anbar Desert",
+      "summary": "Iraqi forces discovered and seized militant tunnels and explosive caches in the Anbar Desert.",
+      "original_title": "ضبط أنفاق ومتفجرات ومخدرات في صحراء الأنبار (صور)",
+      "original_language": "ar",
+      "source": "شفق نيوز",
+      "published": "2026-05-18T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Iraq",
+      "region": "Anbar Desert",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Reports a security operation resulting in the discovery of militant infrastructure and explosives.",
+      "related_articles": []
+    },
+    {
+      "id": "f4eb6dc4df0592e2",
+      "incident_id": "inc-416e789aaea789c3",
+      "url": "https://news.google.com/rss/articles/CBMi_gNBVV95cUxNMUNtME1lSkdOQVRtZUttUHBHY0s5RjZUTk5ZR2huUW1XTU10OWFkUGVycVZiTVo1aTB0V090dUxLbWhpZ1BQaHoxa2ZBR2xVUUwtR2VvUUt5b0tscUJSdEE3Qkt2TlhJRXo3ZEF6WHNJdGZGWHZPbWo3WFpCMU1qOWlCSF9DcGpXb2tHYkFERnRrVWxMYmJKYjcwV2xWdFR4emRacFB0bGZSMHBwMmZuWUFLWkdNR0o2WmdvekdYaWFUbUF3dm5xblRqODVDWEh0RzE0d2x3ZnRQVkFFRUYwd20zLUJFVFN2Ylh4dTNaUEVwMzRIZjZXUFdvVjNiWmJxNTRkQWFEMzVMc1ZkOGp2SW1SY1ZRZkRvdThBM2NpeFhIOHZSMk04d0Y1aVA1RTBhelpkUnl3eE5FUkpVbEpfYmVxNm9oLXhmeDNtVEVFWEs3MUdBNnBtQ2NxcEZaNGRxeW9MbkVpNHJuMll5ZVRqUE1JRHdvX3FZVzZ1NTY2dVMzZkNsSThQYjYyT2ZWU0lfU2o3OTItX2QwYTVBT3pxTF9abkRNN3hfQTlZc0sweVhmeVFzRHlHcHhXby1CcnZoMXNGN2ZaS1ZCRUxxQnd4ZHJycG93QU00TTRiVnRPbTJrSDE5M3R1cHlQWnNndHhLY21JVkRweFliUk1DMFE?oc=5",
+      "title": "Popular Mobilization Forces raid in Anbar",
+      "summary": "The Popular Mobilization Forces conducted a raid in the Shamiya Desert in Anbar, seizing improvised explosive devices.",
+      "original_title": "الحشد الشعبي يقتحم صحراء الشامية بالأنبار ويستولي على عبوات ناسفة",
+      "original_language": "ar",
+      "source": "المعلومة",
+      "published": "2026-05-18T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Iraq",
+      "region": "Anbar",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a combat-style raid resulting in the seizure of terrorist explosives.",
+      "related_articles": []
+    },
+    {
+      "id": "6cd2457e61e0c751",
+      "incident_id": "inc-85d85a3d978c2ed1",
+      "url": "https://news.google.com/rss/articles/CBMi_wJBVV95cUxNRkszdDJjTG9haWRGNDBZUUNyVV9kVmZXRnpWcllxNmFTWE82ZHNHZ0JPN2c4QjZDN1hwRFpkR21MUHhaRXNRVTNMRTZUTjBHUVgxWEtyNmZWeXJjQzF4WHVGekViY3BUX3o4b0N6bEFIcHRNNVBEVU1DQUZ3LWFYWkZHTndRS1Jac0hWcW1wd1hSZ3FJWHlSaWpVRXA2S0ZvNl90Snc5SlpVcDM4cXUxUFc2TGNidEQyYUpjQ3hHT3NBR2JLaFhSM2Fmdm9Da1pWRzFudjZGS1NFTXJsMDk1bE8xNnhkMFhZVl83dGdWeHRFV2UyaEpHWC1nZGU5OHU1Mk1ZVm43aFBySXBqTG5RclBzUHhXcHVfUWctVFd2ZWxlZkV0aFZVYVNIdy10UlZqWjVSQWlXUkpIcURqTFRocWRVbWRobWVxejYySTdXTVR2bXVGSWVZaE9XRjJxenNwbnJvendUYWxYQTJfZU4zMERWam45QWVZRG4teE1fRQ?oc=5",
+      "title": "Reported attack in Damascus",
+      "summary": "A report of a blast outside an armaments facility in Damascus.",
+      "original_title": "سوريا.. تفجير إرهابي أمام إدارة التسليح في دمشق",
+      "original_language": "ar",
+      "source": "İlke Haber Ajansı",
+      "published": "2026-05-18T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Syria",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Follow-up reporting on the Damascus explosion.",
+      "related_articles": [
+        {
+          "title": "Car bomb attack in Damascus",
+          "original_title": "سيارة مفخخة في العاصمة السورية تسفر عن مقتل شخص وإصابة 23 آخرين: ما يجب معرفته",
+          "original_language": "ar",
+          "summary": "A car bomb explosion in Damascus resulted in one death and 23 injuries.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "Al-Monitor",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOVTREMklUcDl4N3RJVXlJNmliMjVUVC1CcGh1dXlGMXE2TEwtWEctcEtZZUdsR3o0OV9Qb0ppdEl4anVZRms2TW1URkk5WXVGaXA3Tl9DTHVUVU8yQk5yU2s5cnF5YUQtSHhDdlhGWGNJajJsMlRVRlBaakZJUks1OFFHOXZ4QXQ1RGVQYlQtTHdEd1Y2bkdFeVNvWGlBTnJpVEdwd1dyM3FRVkZsVVhkV2o1WkNQNzhGdi1tcGZtSVkydFNGZHc?oc=5"
+        },
+        {
+          "title": "Soldier killed in car bomb attack in Damascus",
+          "original_title": "مقتل جندي سوري بسيارة ملغومة أمام وزارة الدفاع",
+          "original_language": "ar",
+          "summary": "A Syrian soldier was killed by a car bomb outside the Ministry of Defense in Damascus.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "اندبندنت عربية",
+          "url": "https://news.google.com/rss/articles/CBMirwRBVV95cUxOZXUwZHpjdTVPeGFWMExqcU00R1JrcXRzdGdDaUFCSmZYbV9wSmhGdlR3Y2stZVRXSFRYS1p3czBxSFRhOFQ5U2NjYjJSWDBUVWxBUWx4b0tYYXVPUVotNEhhVjhZbnNaWVdSekxMVllIUUZKNjhxcEFlSTNSZklMRjVTX045TjNrNGVNeGtmZDJPZV9FYjBmV0syX0ctRlNDMkduaTBQeDVlMWxjVWZPUzRtVW03WGktaTFtWmMxNUt2Q2FvMVNIdm93Wmt5ajJTdm1wajhDOXNRN2tPb0dWUWRZV0tscjgtWjRDeDYxVmZ6U0FzVXpKOFExZEk1U25EeW9UTm9icW5EbTVzcmtqY1pNd0Vwc09WUTdGc25tekJ3UlhybkFnNGlKTGxWRC1fQ19fTUR6YThxUk9Xc240ZXNnQU16RnJKVnBnMkNvN2lsakV2SXE4dWpLY2hzMzhodmJKODdqVndCWHBEVW0wQVBQOXBHX2k3OGVpYTJjRTVoc1lMcEpWOU11MVBxZnVIaXRsOW1oNmxJX0t1aU93UFh3RFk0S242VUdWYi1FSS1oQWpPQkpHN1RXWGtZT3ZoVGxIOXB3YU9KdHJHQUVVNExXSWtxUWk3ckN3bS1vTWRFdmoxRVdxVGo5dDBuakhLX2YyU2ZQZ3BzNVFUM25PRnZLYjBydmxhdTVVLWNWXy1peW5lYWtIQ1lGSTE4cm85bDkxaGhFMllnaW5XaVJN?oc=5"
+        },
+        {
+          "title": "Casualties reported in Damascus car bomb",
+          "original_title": "مقتل جندي وإصابة آخرين بانفجار سيارة مفخخة في دمشق",
+          "original_language": "ar",
+          "summary": "A soldier was killed and several others injured following a car bomb blast in Damascus.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "الجزيرة نت",
+          "url": "https://news.google.com/rss/articles/CBMiywJBVV95cUxOVDJRa0lUeDNXTHBYUHBUQzVLTEVWM1NFV01QYW1wd1RJdWMwWk5oREdNYWFvLW5FRTkxV05PRkY0V2duelJCZVVfV0JYSmlxOGhnaFNsUThjV25Kc240X1hyaXhZNERWdlU0ZkdJcHlrenhoUnRMenpoYU5Ub2dWS0tWczVqZFBCS3NMZDZLY2VGWVVwZHNZeGlWQ216OG9rVzVERXdQbWloaFRuV0p2OXBMbDdBWThEVnI5cFZaNTM3XzRUT0J2ajlQYkk4RnZXZjdDNzBFMngzZmtndGVSOEJYZU91X2N0a0M1Y3cya0kxOVhhMkZHNGttTXdrNkRHbnhyZGNzc3F2dnVwRkxBbkZRM2VXa0s1Q2cxSUlMOW1fU1pYenUtV1RrYlVEbkdhLXJiM3l6eUNIeWdGcnRhZmpVMzlCakotM0xV0gHQAkFVX3lxTE5qaTl2TklxOHgwNlRQeDJ2dC14dGJURFAtXzNXUkdJdEJXSkVXTzZpOTI3dVFhUDNrNFRCR3dQR0tTcjVXWnM3WVg2NkRsRFI4dkZPeTJJa0J3VllVRThab2ZGUmJBRk42UUlTVHcyS204akp0Y3BMTlV4cWdVajViaG9IRVVhdy02YWlCNUNxWXFINk42UnUxWkVxVEIzVTZyX3pmTFF0TUZhdXJ6MG80TXdrWmNVMGRSVjVRMmdSSlJzYmZ2c3l0UU1FUER3NF9yWnJybUpRdWV1N2ROTWFJN0ROUThoQjFYUzRPTHRLUEpTUXNwVktiUGxobUlTb1VSZ1ZfRXowNVVBa0xUYW5ENVRfdnRZUHlsTllkenB6YWZTbkpYRXY1UWhrcE1NV0p4WHU3aXhiaGtLSC1KUFk5bHBXUDM1VzB5WC15dGtXbg?oc=5"
+        },
+        {
+          "title": "Casualties from Damascus car bomb",
+          "original_title": "قتيل و12 مصابا جراء انفجار سيارة مفخخة بدمشق",
+          "original_language": "ar",
+          "summary": "One person was killed and 12 injured in a car bomb explosion in Damascus.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "العين الإخبارية",
+          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1sMWcxZ09mYWMxQlNhT0piLXQ2Zl84RFR1SkozQ2t6V0JJMFBFUEdtS1dBa0kyQ05tVzNMM1JqblNDZno2SUdKUVJWd1MtQQ?oc=5"
+        },
+        {
+          "title": "Casualties from Bab Sharqi car bomb",
+          "original_title": "مقتل جندي وإصابة 12 آخرين في انفجار سيارة مفخخة بـ \"باب شرقي\" في دمشق",
+          "original_language": "ar",
+          "summary": "A soldier was killed and 12 people injured in a car bombing in the Bab Sharqi area of Damascus.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "إيلاف",
+          "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBYTTJ1Wm1BQW5kOHcxbmZWRzhqNDNDeGdHM3M3ZHliTjNjdWxCRHdTcG93dnFRQXpHd2FQNVFkekVXYzRVemVSX0l3aWRwZUE1cDd0VmVqZ1JsM1U?oc=5"
+        },
+        {
+          "title": "Casualties from Damascus car bomb",
+          "original_title": "مقتل جندي بالجيش السوري وإصابة 12 شخصاً بتفجير سيارة في دمشق",
+          "original_language": "ar",
+          "summary": "A Syrian army soldier was killed and 12 others wounded in a car bombing in Damascus.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "العربي الجديد",
+          "url": "https://news.google.com/rss/articles/CBMi2wNBVV95cUxOdlJaTEJyQjdwZU9Qa3Eyb0JIU3o5SHBXek83OGtJVjdHSEhvdHJ4NGRueV9OMTA5dDdzLTVCX0ZEYTBzZG9nQi1yNEZtYzA5RjVhUHF0ckN2UWZrSEI3MVAtbTQ2MzZtYnphN1BFNExxcHJrZGFMX0gta1JSMW5qX0FNdjZNVVU4Z09XMzBsVlBuZXBUd2poUE9nSDI1cGNpU1c3SWFkVXRqOExDZUU3T1ZCT2ljMmJIbFRrS09hSkRMV1JJenZZbWxpVjZOcG84SzRQSm13VlVwcDU0UkExQXZDWVItbURRTmlyRUFqZi1LOWVjSVpfbndyMWF3TXVfc2wzWjd0a1dXejgxU2ZTZGhicGdpcW1FX09vc2ZLam92b1BGRzh6Z1B1bTI5dEh3aHlaWlpBal9HaE40YWhYZUdDWFhkeXZjYUM0OTJ0M1M3eTBnWW9Edm9wRHZ6RWs4ZWQ1a083SVEzNG81YV9oQjY4R05uX3l6YVpmaFUtOEhqYlRIWWI0THR2T2V4Uk1YemF3LUFaWmczZVdLbnRTbS1uekJKVmczSWdKcEZpVXZadW9MdUFuSGZaQXpkOEw5UE5heGtBZ3laTzI4em5PWGxjdTNadjRhM1VV0gHgA0FVX3lxTE9FaW1CZDFCd2hKTmlmXzBsaEVrNVlfdjVUVkN2THYyY3ZJX2plMmJkMGRSbUx5azFlamN3VEFmMUQ1eHpIaUF0V1c5WGEzbTFNWG5CdjNtRDZYVFpMVEFfclRQVUxmY1hlcm5PdlFhQXViY2lXdFhJQjlUZzBNTmhpRmthRUI2cmYyMnRfaVR5XzJhNkp3TFdDMk12VXZMbnNlMnZsMFVvclkwazR6N1hjMlZzRnNPby0zbFZtQXRBNDJhU1h6TEdTdTlzRXowSHJldU8tY3dUMFlYLVN6NVZLbEZrMGtrNHpkWldSTkFzaFpEdUpCckNuMnh4WGgyaXZOYmpoWEc2aERvZFYxcWtXUlZqbWNodmVjaDQxYUtFVGNtcUVaTlNDZGN1Ykl4cFFfNkF6VjM1NURNa3ZkTGFfN3FiV2E4UWFHb0htWTRjei11NVhGVmlvTFRtb1g0cGw0aWIzTU5lRm5TRXhfVlEwWGFWb0tySjk0czVqMUN6Y1FxbExiRDdOYUR3Yi1GLTJqbGsyalRCNWt3WWxiTDBSMVlPbWY4QjF3U3FyUW4xekQydXJkTC1HNTF0a0l1Uk1VLU41dmkyeldHZmpmc0NTckw3amVUNm41d21sZjR3Yw?oc=5"
+        },
+        {
+          "title": "Car bombing in Damascus",
+          "original_title": "叙利亚首都发生汽车炸弹袭击，造成1人死亡，23人受伤：你需要了解什么",
+          "original_language": "zh",
+          "summary": "A car bomb explosion in the Syrian capital of Damascus resulted in one death and 23 injuries.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "Al-Monitor",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE01Mk9YXzc1UUw3azZDOE9iRm5XWE1ZenRSazFtMGpzclBXY2ljal9kWkVDdTR4TllFVE15WFBYRnNCd09mUkRKM1h6YmtwQWlpYUVJaDBsQ1dhYUpwcEM4OGdfUGJLdw?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "e1338ba0faedf5b8",
+      "incident_id": "inc-12c3234d4e599515",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNUTRWTWt3Wlg4QmQyc0d3anl4RkxmUmtmWEtCTWZmNXhRWklNdV9lcG1qenhtWXpXeERDVG1UeFh6MHZ2Mld1MU85Xy1CTXZaSENqVGtpbHNoVEtrdjRCMGxhbk4xWV84Ul9UZkZDNHdxWDNUdjJzUmVsMl9sOEpBT3lvdm1NcnR3ZlVmZ3FwSWZOQVVDRDNROU1LbklWQ3Iwd08wdE5VcDBXUWUwSk1rQlZqaHFSdlA5SmxHcFZpZ280RTFlYmc?oc=5",
+      "title": "Puntland arrests suspected pirates in Bari region",
+      "summary": "Security forces in Puntland arrested several suspected pirates during operations in the Bari region.",
+      "original_title": "Puntland arrests suspected pirates in security operations in Bari region",
+      "original_language": "en",
+      "source": "Hiiraan Online",
+      "published": "2026-05-18T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Somalia",
+      "region": "Bari",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Operational arrest of suspected maritime pirates.",
       "related_articles": []
     }
   ]
