@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-14T16:38:54.555790+00:00",
+  "removed_at": "2026-11-15T17:10:28.635090+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1825,6 +1825,262 @@
       "region": "Bari",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Operational arrest of suspected maritime pirates.",
+      "related_articles": []
+    },
+    {
+      "id": "522bb5a5ae0f7103",
+      "incident_id": "inc-d4863bbe70b2eac2",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE92UnduVFV0S1g1VXhmWmFqMC0wM0t1Q0Z3bWM2dGlyb2tFTmRaaFQ2NUh4Ym4wd0l6YnFUUWlhQk4xa212OFdSM3djcWVHZHUxMkVJR0lKUW9aTXhrMVFNZlA1OGlUOHVkV05lT2VB?oc=5",
+      "title": "Police arrest terror suspect for throwing explosive at Rachel's Tomb",
+      "summary": "Police arrested a terror suspect accused of throwing an explosive device at Rachel's Tomb.",
+      "original_title": "Police arrest terror suspect for throwing explosive at Rachel's Tomb",
+      "original_language": "en",
+      "source": "The Jerusalem Post",
+      "published": "2026-05-19T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Attacks",
+        "Weapons",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Israel",
+      "ai_relevance_score": 83,
+      "ai_relevance_reason": "Reports a concrete arrest of a suspect involved in an explosive attack.",
+      "related_articles": []
+    },
+    {
+      "id": "fa12405610a03bd3",
+      "incident_id": "inc-2378f6e2ad387e56",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQbVJBRTl4bmZlZTZPWEptakFmRUlIUEJRYjBFQkNZUGU1dFJHTTlHM2FVS0NreUs1ZnZVYllSZTR0NFFiY3VldUVucE5oNjhxU2YySjVWXzEwUm9MQnBCZ2JFb2hVNmNXZUgxV0IyY3NRX1Zlc1hIMm91WXdSTmRpUkdrY19qazA1dGE4Mk5ndWVvV1F0OGZQLVdjVWhsYXR0VkhycU5vSlFvblNXcG9UUdIBuAFBVV95cUxPd1pXMjRrcEdCcDNHTWNTQ0tFdkpLa21aa21oc29FMGRQZlRWOGpxcmdDUWI4dXdESTJQMWxxRzBVekhhZXZ3ZC1iOFhUSmtCQmx6SXdJV2tlWU14VWZhNDNER19IdDVGbk1lUlUydEZ6RjZ2RTVuR3NjWHBFV2ZDalk2OW9yamZrQmF2d1cwS0o0NmtiWHJ0dTJUNFVpZFFsZWFwdnBpaUlfTC1GdlduZ0xST0J5VVR2?oc=5",
+      "title": "Major blow to FETÖ digital network: Access blocked to 1,352 more accounts",
+      "summary": "Turkish authorities have blocked access to an additional 1,352 social media/digital accounts linked to the FETÖ network.",
+      "original_title": "FETÖ'nün dijital ağına büyük darbe: Bin 352 hesaba daha erişim engeli",
+      "original_language": "tr",
+      "source": "Haber 7",
+      "published": "2026-05-19T07:00:00+00:00",
+      "category": "Online / Cyber / AI",
+      "categories": [
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "FETÖ",
+      "primary_event_type": "ONLINE_CYBER_AI",
+      "country": "Turkey",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete counter-terrorism cyber operation blocking digital accounts linked to an extremist network.",
+      "related_articles": []
+    },
+    {
+      "id": "24dc12fcfd134b44",
+      "incident_id": "inc-d62aac3943943543",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPUG94SGdMRW13ejN5T0dfSno5dzl4SHlORm5seW9KNy1iaE5IZ1NSQnJ5WjhoWXFOdWVfTTRCNkdzY1BDZ0V0Njd0RVFKYnBsR3RKaTNVU2pGcXdjd2xBMHhyMmozZ3NGa0k0OGk4TjI1VnVWODRmNm9mSllPSXVVYW9OWDRzb25RbjktWWNyNkViaTVUSm5vUFgyeTRRem5HOWl1RkRhYw?oc=5",
+      "title": "KNRTU-KAI student detained for terrorism propaganda and drugs",
+      "summary": "Law enforcement in Kazan detained a university student for spreading terrorism propaganda and drug-related offenses.",
+      "original_title": "Студент КНИТУ-КАИ задержан за пропаганду терроризма и наркотики",
+      "original_language": "ru",
+      "source": "zur-kazan.ru",
+      "published": "2026-05-19T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Russia",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Operational detention of an individual for terrorist propaganda offences.",
+      "related_articles": [
+        {
+          "title": "\"המתמחה\" סוחפת ומהנה, אבל כמה טוויסטים אפשר להכיל? - ביקורת טלוויזיה",
+          "original_title": "\"המתמחה\" סוחפת ומהנה, אבל כמה טוויסטים אפשר להכיל? - ביקורת טלוויזיה",
+          "original_language": "he",
+          "summary": "\"המתמחה\" סוחפת ומהנה, אבל כמה טוויסטים אפשר להכיל? - ביקורת טלוויזיה הארץ",
+          "published": "2026-05-20T07:00:00+00:00",
+          "source": "הארץ",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOQTRNekxHRml2VUtfNUdmc2s3TFhERmIzYVFCeTJUT0pNYUpmdjBmR09QNXgzU0lHb20xdFVPVkxEWTZSN2U0akpIQVZvWVllclp3QVg3VC1rd1lLMzN4Tk1YeFhIcEdSLUk4MlBfT05yU2JPNGpTZWI5ZnRyNXRQazNMWWNyYjQzQkFnZ1RwQTktb3NJZWtXWll3YkdpOEdTYXhZU1lveVR6RWNJcDdfS3JrbnhNb2UzRDNVYTYwX0xreDIxTXZQSA?oc=5"
+        },
+        {
+          "title": "FSB detains Kazan college student for participation in a neo-Nazi organization",
+          "original_title": "Срочно: студента казанского колледжа поймали сотрудники ФСБ за участие в неонацистской организации",
+          "original_language": "ru",
+          "summary": "Federal Security Service (FSB) officers detained a college student in Kazan for involvement in an extremist neo-Nazi organization.",
+          "published": "2026-05-19T07:00:00+00:00",
+          "source": "KazanFirst",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPeTFBN0d1LWJkcldWTE9jd3Joc0EtTzFpb3BlMFZUbjRjc2IxbXRfZ19NNW16dkU5ZnVXb3kwTkJqTHJHMVlhbW5JS3JzcXpjWWxBZWpZcFZnc0huOWN2WXZ4cVRWVE5pWC1jRjlCWjJ5NjlVMHFxV04ycElpaHdhdGVDWFZsal8wcFFFdEFGZWZWVHNiSG4wa3Z3SmJma25EdVdBWlNHZTBYbC1KWVN2TXpFSVA2SDdOOUx0SlNCeWRKcElIcHJsYdIB0AFBVV95cUxQSXg5SDUtazkzenhjQjlDOGNsb3kyLTlRb2JhQU1QRWktT0dOVWpFcDAtMzFFSDNXR3hDN1VHVktvelc3SXcxOURrbXRDcDUxMy1BeVpESUVldkVqZDVKMWN1NGtQTndmak1NdmJrc2FUQ3lGVV9HRUUwMUJoazRtOEFNbFp3ZkZ3OXJ1ckp6RmdfemUybnlxQkJUZkkwWllldEhQUVRsNklDS21wVXUwRUpxS3RaZFI4WFVlT2M5THloa3Z3VmNHMWt5NTFqdWVK?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "deb7e781a51d5e5b",
+      "incident_id": "inc-cc7dda5afa79896f",
+      "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxPNEpjbHBwNm9QdWJ4Yk1WMFRIczUxTS1IRGdYSWhqNktONUJZclR4V2sxOVE3emF4T3F4VUxoVUZQMEZ4cGVGNVc2NzF3eFNKUHRzMFZPNVNDQTE3Ri11WFVZNHFXa0JLWFZZVk1wMDVNLTh4MzNpMWhpOElMZlhEd0xqWUlDMUdNbFVSREVyeXFMWWdveWlUeXQ2UzVaeEV0VVg3cWt1WER4VGpKcldfT1A5VHZLVDBrTXNyX0tVOFlzMVlIcmZIaXRUQWsyRlRwbGZ0Y3ctUXlRZ0RjTUZSbnplcXItQWhrczZvWGxJMGtvZHF2UDZUcFFNMFVZcDBuRmhhbHRLX0czQXpGR0dXYXMyeVJKNjBmeW0zaDBFVG5LWTdMbHVyRm1rV1h1VDVBUXo4cnJ6Q0dzYnMzcUl2MVQxTUs?oc=5",
+      "title": "Three individuals detained in Georgia's Pankisi Gorge on suspicion of terrorism",
+      "summary": "Georgian authorities detained three people in the Pankisi Gorge on terrorism-related suspicions.",
+      "original_title": "В Панкисском ущелье в Грузии по подозрению в терроризме задержаны три человека",
+      "original_language": "ru",
+      "source": "JAMnews",
+      "published": "2026-05-19T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Georgia",
+      "region": "Pankisi Gorge",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete counter-terrorism detentions by security authorities.",
+      "related_articles": []
+    },
+    {
+      "id": "f74d65c1063b668b",
+      "incident_id": "inc-c7b75945e498f12e",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQLUpCR1p1dWt6TnVXWlRZS3Ixb0EzOWNaZEI3S21fZHNvZXVuUWlvMldWRmNJYmdsUFhJZXYyZHpXQnZlNklRN09iU056VV9PLThMek5nM0hwYnlsVEphNmpwVUh6eEpkWnhxWFNnb01yU2VtSGtPNUtFZnlTa1lHTnE1QUR5X1prWEZtc0Y1Y2xnWWV3ZVpwQ21LYzF2UUkxajYzeWlDZw?oc=5",
+      "title": "Joint Security Raid Clears Suspected Hideouts in Edo Forest",
+      "summary": "Joint security forces conducted an operation clearing suspected militant or criminal hideouts within a forest in Edo State.",
+      "original_title": "Joint Security Raid Clears Suspected Hideouts in Edo Forest",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-19T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Edo State",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Reports a security sweep clearing suspected militant hideouts.",
+      "related_articles": []
+    },
+    {
+      "id": "7dd57cde42b727b9",
+      "incident_id": "inc-4f4c8d553b45215a",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNQjViZ1RWQkpFekkweHlHSkNHSDRLZ3pFYlZhMXFTMDlLTW03ZjRoSHo3cTNjYjZoMDA3VDBodlF3SndPSDBKeHAtdjJ4NVQ5eW41MEtEVkZWRnJMSldKZFRqa3EtcmkxUkd1SE8yLTU2YTRsRm5uVGJqb0k1U1VtR1NVaG5FUDJvSms1RXJwUnQ5WTdTU3FCZ0xLaXkwd0dBQWNpS3lpZlRXY1IzMkxtcTdqV05aRjdkbFJKQXVEWkpldlXSAcMBQVVfeXFMTUI1YmdUVkJKRXpJMHh5R0pDR0g0S2d6RWJWYTFxUzA5S01tN2Y0aEh6N3EzY2I2aDAwN1QwaHZRd0p3T0gwSnhwLXYyeDVUOXluNTBLRFZGVkZyTEpXSmRUamtxLXJpMVJHdUhPMi01NmE0bEZublRiam9JNVNVbUdTVWhuRVAyb0prNUVycFJ0OVk3U1NxQmdMS2l5MHdHQUFjaUt5aWZUV2NSMzJMbXE3aldOWkY3ZGxSSkF1RFpKZXZV?oc=5",
+      "title": "CJNG armed attack against Aquila indigenous community",
+      "summary": "An armed attack by the CJNG cartel was reported against an indigenous community in Aquila, Michoacán.",
+      "original_title": "Reportan ataque armado del CJNG contra comunidad indígena de Aquila, Michoacán",
+      "original_language": "es",
+      "source": "LatinUS",
+      "published": "2026-05-19T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "CJNG",
+      "primary_event_type": "ATTACK",
+      "country": "Mexico",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Report of a current armed attack by a criminal/militant group against a community.",
+      "related_articles": [
+        {
+          "title": "Comunidad de Ostula denuncia nuevo ataque armado del CJNG en Michoacán",
+          "original_title": "Comunidad de Ostula denuncia nuevo ataque armado del CJNG en Michoacán",
+          "original_language": "es",
+          "summary": "Comunidad de Ostula denuncia nuevo ataque armado del CJNG en Michoacán Desinformémonos",
+          "published": "2026-05-20T07:00:00+00:00",
+          "source": "Desinformémonos",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNMFNvemxjSHhCNzNiVHBhVFE5V0xlZ3R2bWp4cUZLNEhjdUN3NHg2cllyTEhId2xrX1FHczBoODMxQTl3Q0ljZFFzUVhTTk1OSnhrckY5aE9MSnpxSDBfYnBPX2I2NmVneERic1N5V2otLTM5SnlrRHI2N0pWME5UbHVkblFZRklCQWRQbVZTTldYVWV5VF9wM0h6RTJ3Z2dF?oc=5"
+        },
+        {
+          "title": "Guardia comunal de Ostula repliega ataque del CJNG, piden intervención federal en Michoacán",
+          "original_title": "Guardia comunal de Ostula repliega ataque del CJNG, piden intervención federal en Michoacán",
+          "original_language": "es",
+          "summary": "Guardia comunal de Ostula repliega ataque del CJNG, piden intervención federal en Michoacán El Sol de México",
+          "published": "2026-05-20T07:00:00+00:00",
+          "source": "El Sol de México",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNbV90czR6dllLbktEWWZtUWlBY29QUFBodVlVc241MmJRVkg4WTBwbjFUOHowVTdhOWJQbDlUclp0S2VHR3ZUdW9tb1NQN1diXzk3R1ROcmJldi1fbVRwZmpUeWxZeTlTXzAyS2N0dXpSTEcyeFowc0sxWl94MjlEM0kxb3l4M285ejB4NmxISWo0OTh6RVVqR3dzbWdVR05aSDl1b0tiMXQ3cU9ZcllTUEZqZlAxcDBlU1R5bFh1Z2ttTXUzUWdhWVNRR185Z21ycnc4endR?oc=5"
+        },
+        {
+          "title": "Community guards repel CJNG attack in Ostula",
+          "original_title": "Guardia Comunal de Ostula repele ataque del ‘CJNG’; acusa CNI \"omisión\" oficial ante agresión",
+          "original_language": "es",
+          "summary": "Community guards in Ostula, Michoacán, repelled an armed attack by the CJNG cartel.",
+          "published": "2026-05-20T07:00:00+00:00",
+          "source": "La Jornada",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPUjc2bjFva1NKYzA2cmNRLUQzVHpiVzZ1MnM2QVhxbXlORUFRWVN6SjRITVhLdXVrakpEcFloeTRsTUNxYkR1Ml9vTy16eFFseVZNREtLWmhQamVvUmw0RnZvN3lQaE5GU0lrQTZBak9ySXRYcEwzbXNYSkUtaFU0aU5hUUYweUluUmozcG01U1BNNjE4TFRiOHI3dnVySzlDcy1IZW1oOW9tc3c1aWpaclJrOFY1WW1TVW9WbFE0ZDlMTU9lMlpnalUxOTdkU1BLYWxfaDJnOFZ6MkRrVkE?oc=5"
+        },
+        {
+          "title": "CJNG drone attack wounds six soldiers in Michoacán",
+          "original_title": "Ataque con drones de presuntos integrantes del CJNG deja seis soldados heridos en Michoacán",
+          "original_language": "es",
+          "summary": "Six soldiers were wounded in Michoacán following a drone-based attack attributed to the CJNG.",
+          "published": "2026-05-20T07:00:00+00:00",
+          "source": "LatinUS",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOSEpodWVWSVdjYVdiX1l0aXZkMW11ekxZZGJxRXRqZXpJZ3BjWTRnU2hoYnA2WHJKQkQ0dHJrUlduclc5YzgtOVFMMnJnYUNiMGxxYW5QTWZtTFNZWGZYMHB1RnYtT2t4R1VmRkZ0UEh0aExjaVZNZEhPb2laMHoyTnNYU21ZSFROYWJUVHNaUmMtaFFyZXdyZ0hQdWJmTjk3RU9vdlZMYnB0alBnWUo5VzJMbWlwQUFDN3dkMW13Tl9ZUFQxblc5V09WSUo1dmE0aTIydjhn0gHWAUFVX3lxTE5ISmh1ZVZJV2NhV2JfWXRpdmQxbXV6TFlkYnFFdGpleklncGNZNGdTaGhicDZYckpCRDR0cmtSV25yVzljOC05UUwycmdhQ2IwbHFhblBNZm1MU1lYZlgwcHVGdi1Pa3hHVWZGRnRQSHRoTGNpVk1kSE9vaVowejJOc1hTbVlIVE5hYlRUc1pSYy1oUXJld3JnSFB1YmZOOTdFT292VkxicHRqUGdZSjlXMkxtaXBBQUM3d2QxbXdOX1lQVDFuVzlXT1ZJSjV2YTRpMjJ2OGc?oc=5"
+        },
+        {
+          "title": "CJNG attack in Zamora",
+          "original_title": "Ataque del CJNG a Guardia Civil, deja 7 lesionados, ente ellos, seis oficiales y un joven",
+          "original_language": "es",
+          "summary": "Seven individuals, including six police officers, were injured in a CJNG-linked attack against the Guardia Civil in Zamora.",
+          "published": "2026-05-22T07:00:00+00:00",
+          "source": "La Silla Rota",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQREpTb2ZMS2VlbVpMamtKU2xqNUUzVTFVLWZEU3U1QmxTTm84R0xjNlJMMEV4a3JEUGFRWnUwSmpudkNvcDJ5UVFQXy1ieldqMHMzcHQtOW5mQWdidUpud2IzcEcwdEZSbHlNR3pxalBiUUJ6SUQybnNQd1lsLUpJQ19iNVgwTzBvRkp5UlZkQ0ttZWcwdEFKVkJKdGlmLTI4SnJaVG9GaG1XM1hBYXBnanZwQmhjYTJSd29yTGVQaGhMeDNRaEVDUi1aaFNGdzA?oc=5"
+        },
+        {
+          "title": "CJNG attack in Michoacán",
+          "original_title": "Violento ataque armado del CJNG en Michoacán deja un civil y policías lesionados",
+          "original_language": "es",
+          "summary": "Armed attack by CJNG in Michoacán left police and civilians injured.",
+          "published": "2026-05-22T07:00:00+00:00",
+          "source": "Diario de Yucatán",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPSFBQcmEyNHZDNXp4OUZWTWNreHVNREtYRE1vYndJdDUxRjI1NDUxMkp2akxRX3hseWFOV1ZMbkRoMTYtUlEzR0p6UUI1OXRaNlhpYnR1V3VWWElmNDBfbE5IZ0J1QVc2M2pJTC1IZ3JCS1FJWXo0RDZaUGlxTzNsQjJ5VlA0RVJCS0dKVlZINUNGZUFfeEI1Sm1TUjZONW1Edkk3RDBTT1pwSFd3QXFwdmx6dWFhT3B3a0p0eHhfR05PNGlMSHhwR2l3?oc=5"
+        },
+        {
+          "title": "CJNG ambush of police in Zamora",
+          "original_title": "CJNG embosca a policías en Zamora; ataque deja siete heridos en Michoacán",
+          "original_language": "es",
+          "summary": "CJNG militants ambushed police in Zamora, Michoacán, resulting in seven injuries.",
+          "published": "2026-05-22T07:00:00+00:00",
+          "source": "Serpientes y Escaleras",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQTWpYOWNCNEFNVkFES3VQTjN6SWNBajNzMGhGay1XRGlEajRheEVzVjRPWWJaRTI2S01UX0pBUXczZWxzMHVQZ3I1T2F5VGF5NkdSU1FCQmxpdVZDUEc3MXY2M1dEcGlvMFcxaVZiSmk5M293LW96bUJ3ekZvdTE0MHJPVk1LSDZ5XzdZc0dWaUhrVVBIOG14Y0FjbFBKaXkwMm9kRXAwU2lFQlpWMDZUV1RYd3M?oc=5"
+        },
+        {
+          "title": "CJNG-linked attack in Zamora",
+          "original_title": "Ataque vinculado al CJNG contra Guardia Civil en Zamora, Michoacán deja 6 policías heridos",
+          "original_language": "es",
+          "summary": "Six police officers were injured in an attack linked to the CJNG in Zamora, Michoacán.",
+          "published": "2026-05-22T07:00:00+00:00",
+          "source": "PostaMx",
+          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOMEI4SUxVNHlvUzgzVVZHUEo0cWNVNEx3aVZFc01BU2UwenZTQjFSbS1OXzJ5Y2JQeHJXWlNhNFNXTjY0QzRUc3NLOWJkMVoyZDhJeXpMTEFGMGtXMkZUMkc2SHVyRHgyS1hFcGgyRThkWkcySU1QLWhNcktYRmxXeVZsLTFyMmVOVUFpQ0NoSUU5THlTOWdzT3IzV1dVb2ZoaVUxLTFINndJamZlSWJyRmNIZUR6anNEWVB3WDk0SFF2QThnMnpfNXNRZ9IB0AFBVV95cUxOeWdJWnFMbVE5MlF6RDdGSW9IVXRlLUpZandLTFk5TVk0Wk5nNkJuLTJha3p6UWNyZHJpQVZzYzRXcWVLVmRwM1Z2ZWZ6S01JVGNUdlJTaXJGNVRYcVRTRWFTTEF3bVpoU21TOTJBN0dfZHhPeUxrT05LaWhqQU5vUW4ySVNfNElnWUZGMnBoMVROcWpCTWk4ZXBSdFIxb3BwbHZVeHdEODhvbmhuMUdEcm43UG92eEYxTmZCcnBaMWtadnNFUG1ENkFoT2Z6VVY1?oc=5"
+        },
+        {
+          "title": "CJNG attack against Guardia Civil in Zamora",
+          "original_title": "Ataque del CJNG contra Guardia Civil en Zamora deja 6 policías heridos",
+          "original_language": "es",
+          "summary": "Six police officers were injured in an armed attack by the CJNG against the Guardia Civil in Zamora, Michoacán.",
+          "published": "2026-05-25T07:00:00+00:00",
+          "source": "El Universal",
+          "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNeDZOcTMyal9sRmJpaXYxNkJjeEdncy1XTnlXMGN0V2YySlc2X2g2Ry1JcDIyNnoxNHJuQnVKU3FEZDBld0cwdzhSRTdHU0dSdFFqTnBBTG5JRWVLS3ozVmNXdTgyZXVISmxweVl3UThSaHpDVy1uRXZ4UWRCbWJMODAzcUl3Skh2M0MzeUIxcHNwR0daX1E4NEYxNEo3MlBObG5KcjVRdklNVTdwOHNaVlhpLXpHcVJTYXpyOS1FQ1AtS0t4NUo3Ull1cGRHNmkzWkgyWFJ3cnRvOTMtb2h2MzFvMnBsSkJ4M1BVVGp5bC16SDg?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "09fa81d5186367fc",
+      "incident_id": "inc-9599ea7780ba0c7f",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQU0FYLVFTRWtrVUVFakJqWFRHTHRKMGdNMHdITFNCLXVLVUxYZHFscTJ2eWthNFhzRTJqQmRrZVBYUkwycG9Fd1pRNVh3UFRYMDA5QzR4QUs3bVFTMDRFbnV1RENobWlkRGRmYmZtX2V2VmFsOXFHRFIxUHBwMm5MdTdCbFdMZ1FNNWRCNVFlcE1IX2tyd0loWDlZbERCLWVBbkZOVVo1bEw0TWF2Vlhtdw?oc=5",
+      "title": "Police investigating footage of teacher's abduction/beheading",
+      "summary": "Nigerian police are reviewing a video showing the abduction and alleged beheading of a teacher in Oyo State.",
+      "original_title": "We Are Reviewing Alleged Video Of Abducted Oyo Teacher’s Beheading — Police",
+      "original_language": "en",
+      "source": "Channels Television",
+      "published": "2026-05-19T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "country": "Nigeria",
+      "region": "Oyo State",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Active investigation into a violent criminal/militant incident.",
       "related_articles": []
     }
   ]

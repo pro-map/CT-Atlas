@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "dd5ee0bf798de3c0dd6807e56d0933a72f8ba397976742a83ce12eafe8a0964f",
+  "events_sha256": "e844b76daa559f92dea53ceebfcaa5fffbb40b244b705415accc222e9fdc0b80",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 1831,
-      "bytes": 10694783,
-      "sha256": "e41842e9d07fa364ec878bf96dc2a1876ce5c91a6fc215b2bcf01e9c8a44a9bc"
+      "events": 1894,
+      "bytes": 11096025,
+      "sha256": "7bad8c41a0e896ad604de1bc656ad419ff7fd26034739151e74bc71dda0034b6"
     },
     "2026-10": {
       "events": 3615,
@@ -71,9 +71,9 @@
       "sha256": "9aa5d0bc492f2fece2e8b231b3035c1785e0b7ad03db86f5f3459343c3355fe8"
     },
     "2026-05": {
-      "events": 61,
-      "bytes": 243339,
-      "sha256": "dce2b1725844d5494e23b9d147e5b301d4e2fc179ae068af474cfa1ef2485d2c"
+      "events": 54,
+      "bytes": 212781,
+      "sha256": "0c77e1df25c556928116a2a8bd260a80e7ba3af58c77b8ed996d67ae7f4925af"
     }
   },
   "metadata": {
@@ -230,39 +230,39 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-14T21:27:52.275812+00:00",
-      "last_attempt_at": "2026-11-14T21:27:52.275812+00:00",
-      "published_at": "2026-11-14T22:01:51.629527+00:00",
+      "run_started_at": "2026-11-15T16:23:51.877548+00:00",
+      "last_attempt_at": "2026-11-15T16:23:51.877548+00:00",
+      "published_at": "2026-11-15T17:11:00.954649+00:00",
       "recent": {
-        "candidates": 3209,
-        "reviewed": 3209,
-        "cached": 2523,
-        "new_reviews": 686,
+        "candidates": 3034,
+        "reviewed": 3034,
+        "cached": 1741,
+        "new_reviews": 1293,
         "official_auto_accepted": 0,
-        "retained": 204,
-        "rejected": 3005,
+        "retained": 255,
+        "rejected": 2779,
         "pending": 0,
         "status": "complete",
-        "calls": 20,
-        "primary_calls": 18,
-        "overflow_calls": 2,
+        "calls": 52,
+        "primary_calls": 30,
+        "overflow_calls": 22,
         "reasons": [],
-        "window_start": "2026-11-11T21:27:52.275812+00:00",
-        "window_end": "2026-11-14T21:27:52.275812+00:00"
+        "window_start": "2026-11-12T16:23:51.877548+00:00",
+        "window_end": "2026-11-15T16:23:51.877548+00:00"
       },
       "backlog": {
-        "candidates": 678,
-        "reviewed": 678,
-        "cached": 665,
-        "new_reviews": 13,
+        "candidates": 676,
+        "reviewed": 676,
+        "cached": 645,
+        "new_reviews": 31,
         "official_auto_accepted": 0,
         "retained": 0,
-        "rejected": 678,
+        "rejected": 676,
         "pending": 0,
         "status": "complete",
         "calls": 1,
-        "primary_calls": 1,
-        "overflow_calls": 0,
+        "primary_calls": 0,
+        "overflow_calls": 1,
         "reasons": []
       },
       "maintenance": {
@@ -284,7 +284,7 @@
         "google": {
           "retry_waves": 0,
           "successful": 1220,
-          "empty_feeds": 530,
+          "empty_feeds": 532,
           "deduplicated_urls": 288
         },
         "gdelt": {},
@@ -296,9 +296,9 @@
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 3952,
-        "retired": 275,
-        "cancelled_history": 199,
+        "expired": 4002,
+        "retired": 267,
+        "cancelled_history": 192,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -311,15 +311,15 @@
         "primary": {
           "per_run": 30,
           "per_day": 60,
-          "used_this_run": 19,
-          "used_today": 49
+          "used_this_run": 30,
+          "used_today": 30
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
-          "used_this_run": 2,
-          "used_today": 15
+          "used_this_run": 23,
+          "used_today": 23
         },
         "historical_calls_per_run": 20,
         "historical_calls_used": 1,
@@ -328,12 +328,12 @@
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 7483,
-        "unlocated": 270,
-        "completed_unlocated": 270,
+        "located": 7530,
+        "unlocated": 279,
+        "completed_unlocated": 279,
         "outcome": "success",
-        "processed_this_run": 36,
-        "review_required": 171
+        "processed_this_run": 63,
+        "review_required": 177
       },
       "categories": [
         {
@@ -358,18 +358,20 @@
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-14T22:04:52.877379+00:00",
+      "finalized_at": "2026-11-15T17:13:11.773339+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 2
+        "gemini-3.5-flash-lite:503": 19
       },
       "health": {
-        "state": "healthy",
-        "reasons": [],
-        "events_published_last_24h": 81,
-        "events_published_median_14d": 135.0,
-        "new_reviews": 686,
+        "state": "degraded",
+        "reasons": [
+          "few_events_published"
+        ],
+        "events_published_last_24h": 65,
+        "events_published_median_14d": 135.5,
+        "new_reviews": 1293,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -385,63 +387,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 14 Nov, 23:01 Paris: Recent counter-terrorism and security operations include significant regional developments such as a major anti-militant operation resulting in 74 deaths in Pakistan, a coordinated ADF massacre leaving 35 civilians dead in the Democratic Republic of the Congo, and a successful counter-terrorism raid resulting in the elimination of eight militants and two soldiers in Kolpur, Balochistan.",
+      "overview": "As of 15 Nov, 18:10 Paris: Recent counter-terrorism developments include major security actions and high-profile arrests across multiple global regions. Key incidents include a disrupted Hamas-linked terror plot in Vienna, a foiled attack on Jewish sites with an arrest in Mumbai, and significant counter-terrorism raids resulting in numerous militant casualties in Pakistan.",
       "developments": [
         {
-          "event_id": "9a22599a85b79523",
+          "event_id": "75732899c2e20b8a",
           "severity": "CRITICAL",
+          "category": "Arrests",
+          "headline": "Hamas-linked plot disrupted in Vienna",
+          "detail": "A suspected Hamas member has been arrested in Vienna for hiding weapons and planning an attack against Jewish targets.",
+          "location": "Austria, Vienna"
+        },
+        {
+          "event_id": "d4196bdaa0c098f3",
+          "severity": "CRITICAL",
+          "category": "Arrests",
+          "headline": "Suspected Terror Plot Against Chabad House in Mumbai: 20-Year-Old Arrested After Gathering Intelligence",
+          "detail": "Police in Mumbai arrested a 20-year-old man who collected information on Jewish sites in a suspected terror plot.",
+          "location": "India, Mumbai"
+        },
+        {
+          "event_id": "9a22599a85b79523",
+          "severity": "HIGH",
           "category": "Counter Terrorism Action",
           "headline": "Pakistan military reports killing 74 militants in raids",
-          "detail": "The Pakistani military announced that its counter-terrorism raids across the country successfully eliminated 74 militants.",
+          "detail": "The Pakistani military announced that its forces successfully killed 74 militants during recent counter-terrorism raids.",
           "location": "Pakistan"
         },
         {
-          "event_id": "7a87952c178a5fc0",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "ADF massacre in Ituri leaves 35 civilians dead",
-          "detail": "A new massacre attributed to the Allied Democratic Forces in Ituri resulted in the deaths of 35 civilians.",
-          "location": "Democratic Republic of the Congo, Ituri"
-        },
-        {
-          "event_id": "3f0e03ea872a5be7",
-          "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "8 terrorists killed in Kolpur operation; Major and Havildar martyred in Balochistan",
-          "detail": "Security forces killed eight militants during an operation in Kolpur, Balochistan, while two soldiers lost their lives.",
-          "location": "Pakistan"
-        },
-        {
-          "event_id": "c7801ac7f72f327b",
+          "event_id": "81234ae828f1e104",
           "severity": "HIGH",
           "category": "Arrests",
-          "headline": "Terrorist suspect arrested for mall plot in Russia",
-          "detail": "Authorities arrested a suspect accused of plotting a terrorist attack on a shopping mall in Stavropol.",
-          "location": "Russia, Stavropol"
+          "headline": "Spanish neo-Nazi arrested for plotting attack in Paris",
+          "detail": "A Spanish neo-Nazi was arrested for allegedly plotting to carry out an attack in Paris.",
+          "location": "France, Paris"
         },
         {
-          "event_id": "fd69b30f50da03b1",
+          "event_id": "64fd880928539d31",
           "severity": "HIGH",
-          "category": "Chemicals and Explosives",
-          "headline": "Ireland seizes explosive device near multinational leaders dinner venue",
-          "detail": "An explosive device was seized by authorities in Ireland near a venue hosting a multinational leaders dinner.",
-          "location": "Ireland, Dublin"
+          "category": "Attacks",
+          "headline": "ADF attacks kill at least 22 people in Congo's Ituri province",
+          "detail": "Attacks attributed to the ADF have killed at least 22 people in the eastern region of Democratic Republic of Congo's Ituri province.",
+          "location": "Democratic Republic of the Congo, Ituri province"
         },
         {
-          "event_id": "da616bed99b245c7",
+          "event_id": "e25d7185e7c8d1d4",
           "severity": "SIGNIFICANT",
           "category": "Arrests",
-          "headline": "Four alleged members of Los Ciclones detained with arsenal in Matamoros",
-          "detail": "Authorities in Matamoros detained four suspected members of the Los Ciclones criminal group and seized an extensive weapons arsenal.",
-          "location": "Mexico, Heroica Matamoros"
+          "headline": "FARC Dissident Leader 'Primo Gay' Arrested in Antioquia",
+          "detail": "Colombian authorities successfully arrested alias 'Primo Gay', one of the most wanted dissident leaders in Antioquia.",
+          "location": "Colombia, Antioquia"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-14T22:01:43.093022+00:00",
+      "generated_at": "2026-11-15T17:10:58.102305+00:00",
       "candidate_events": 80,
-      "top_hash": "d092198360564274ab93dc694b5d2941e2973d04e435e2894a12ee81706a649b",
+      "top_hash": "0c8a30a379396b75954b576b9fe04bbbf055c900610882d4042f70461bc1e500",
       "top_event_count": 10,
       "reused": false
     },
@@ -719,10 +721,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 67,
-      "corroboration_hold_listed_outlet": 17,
-      "already_reviewed_articles": 1646,
-      "duplicate_input_articles": 3749
+      "corroboration_hold_same_minute_burst": 65,
+      "corroboration_hold_listed_outlet": 7,
+      "already_reviewed_articles": 1448,
+      "duplicate_input_articles": 3632
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -804,8 +806,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-14T22:01:51.629527+00:00",
-    "number_of_events": 7753,
+    "last_updated": "2026-11-15T17:11:00.954649+00:00",
+    "number_of_events": 7809,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -818,24 +820,24 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 7717,
-      "ai_processed_this_run": 36,
-      "ai_pending_at_start": 36,
-      "city": 2815,
-      "region": 2499,
-      "country_capital": 2169,
-      "unlocated": 270,
-      "mapped_total": 7483,
-      "high_confidence": 6800,
-      "medium_confidence": 725,
-      "low_confidence": 228,
+      "cached_events": 7746,
+      "ai_processed_this_run": 63,
+      "ai_pending_at_start": 63,
+      "city": 2834,
+      "region": 2511,
+      "country_capital": 2185,
+      "unlocated": 279,
+      "mapped_total": 7530,
+      "high_confidence": 6844,
+      "medium_confidence": 731,
+      "low_confidence": 234,
       "methods": {
-        "ai_city_geonames": 2663,
-        "ai_region_coordinates": 2496,
-        "ai_country_capital": 2168,
-        "unresolved_city_no_capital_fallback": 137,
-        "ai_unlocated": 93,
-        "source_name_geonames_correction": 27,
+        "ai_country_capital": 2184,
+        "ai_region_coordinates": 2508,
+        "unresolved_city_no_capital_fallback": 143,
+        "ai_unlocated": 96,
+        "ai_city_geonames": 2683,
+        "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
         "ai_unlocated_final": 21,
