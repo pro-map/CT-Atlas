@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "e844b76daa559f92dea53ceebfcaa5fffbb40b244b705415accc222e9fdc0b80",
+  "events_sha256": "68730d4d1c075133c88686059643376976ca306e37953002996959c598206c0c",
   "top_level_keys": [
     "project",
     "database_type",
@@ -338,12 +338,12 @@
       "categories": [
         {
           "category": "Radiological/Nuclear",
-          "last_attempt_at": "2026-11-14T21:37:51.346967+00:00",
+          "last_attempt_at": "2026-11-15T16:29:45.323439+00:00",
           "status": "partial",
-          "reviewed": 154,
-          "pending": 352,
-          "candidates": 506,
-          "recent_pending": 0,
+          "reviewed": 115,
+          "pending": 397,
+          "candidates": 512,
+          "recent_pending": 45,
           "backlog_pending": 352,
           "undated_pending": 0,
           "source_discovery": {
@@ -358,7 +358,7 @@
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-15T17:13:11.773339+00:00",
+      "finalized_at": "2026-11-15T17:15:21.406265+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
