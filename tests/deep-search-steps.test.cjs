@@ -274,14 +274,14 @@ test('the gate keeps a stepped search alive, counts its relays and refuses anyon
 
 test('the page runs the steps with the Worker module, and the site and mirror serve every module it imports',()=>{
   const client=fs.readFileSync('deep-search.js','utf8');
-  assert.match(client,/const DEEP_SEARCH_MODULE="\.\/cloudflare-worker\/deep-search\.js\?v=\d{8}";/);
+  assert.match(client,/const DEEP_SEARCH_MODULE="\.\/cloudflare-worker\/deep-search\.js\?v=\d{8}[a-z]?";/);
   const run=client.slice(client.indexOf('async function run(){'),client.indexOf('async function copyReport('));
   assert.match(run,/step\(\{\.\.\.base,step:"plan"\},sessionToken\)/);
   assert.match(run,/body:JSON\.stringify\(\{user_id:username,step:"fetch",permit_id:permitId,url:String\(url\)\}\)/);
   assert.match(run,/core\.retrieveNews\(plan,searchWindow,priorityLanguages,relay\)/);
   assert.match(run,/core\.assembleDeepSearch\(\{\.\.\.core\.pageDatabaseEvidence\(db,plan,searchWindow,scope\),plan,priorityLanguages,retrieval,corpus\}\)/);
   assert.match(run,/step\(\{\.\.\.base,step:"report",permit_id:permitId,log_id:logId,/);
-  assert.match(fs.readFileSync('usage-auth-fix.js','utf8'),/script\.src="deep-search\.js\?v=20261116";/);
+  assert.match(fs.readFileSync('usage-auth-fix.js','utf8'),/script\.src="deep-search\.js\?v=20261116b";/);
   assert.match(fs.readFileSync('index.html','utf8'),/events: \(\) => loadDatabaseQueryModule\(\)\.then\(loadDatabaseEvents\)/);
 
   // Every module the page imports, through deep-search.js and the others, is staged and watched.

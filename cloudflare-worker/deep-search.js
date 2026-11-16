@@ -41,7 +41,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v19-browser-steps";
+export const DEEP_SEARCH_VERSION = "deep-search-v20-bing-when-google-refuses";
 // Archive rows (corpus_kind) that are not incident reports.
 const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review", "radnuc_background"]);
 
@@ -340,6 +340,10 @@ const GDELT_LANGUAGE_CAP = DEEP_SEARCH_LANGUAGE_CODES.length;
 // Reserve GDELT date chunks and ACLED before allocating optional Bing rescues.
 // Virtual GDELT language attribution never adds provider requests.
 const MAX_SEARCH_SUBREQUESTS = 40;
+// Google News queries sent at once; the first batch also tells whether Google refuses the
+// search (see retrieveNews). Bing replaces Google three languages at a time.
+const GOOGLE_BATCH_SIZE = 6;
+const BING_REPLACEMENT_BATCH_SIZE = 3;
 
 function detectCountryLanguages(question) {
   const text = String(question || "");
@@ -1257,11 +1261,19 @@ export async function retrieveNews(plan, window, priorityLanguages = [], fetcher
   const anchors = computeLanguageAnchors(plan);
   const sortedQueries = [...plan.queries].sort((a, b) =>
     Number(priorityLanguages.includes(b.language)) - Number(priorityLanguages.includes(a.language)));
-  const googleWaves = await runInBatches(
-    sortedQueries.map((item, index) => ({ item, index })),
-    6, 200,
-    ({ item, index }) => fetchNewsWave(item, index, window, LANGUAGE_LOCALES[item.language], false, fetcher)
-  );
+  // Google News refuses Cloudflare's addresses at times: on 2026-11-16 it answered 5xx to all
+  // 44 queries the Worker relayed, about 8 s each, while answering the analyst's own browser
+  // (which cannot read it directly: no CORS). The first batch tells. When none of it comes
+  // back as RSS, the other Google queries, the Google rescues and ACLED (a Google query) are
+  // not sent, and Bing News searches every language instead.
+  const googleItems = sortedQueries.map((item, index) => ({ item, index }));
+  const googleWave = ({ item, index }) => fetchNewsWave(item, index, window, LANGUAGE_LOCALES[item.language], false, fetcher);
+  const googleWaves = await runInBatches(googleItems.slice(0, GOOGLE_BATCH_SIZE), GOOGLE_BATCH_SIZE, 200, googleWave);
+  const googleRefused = googleWaves.length > 0 && googleWaves.every(wave => !wave.ok);
+  if (!googleRefused && googleItems.length > GOOGLE_BATCH_SIZE) {
+    await sleep(200);
+    googleWaves.push(...await runInBatches(googleItems.slice(GOOGLE_BATCH_SIZE), GOOGLE_BATCH_SIZE, 200, googleWave));
+  }
   for (const wave of googleWaves) wave.rows = filterByAnchor(wave.rows, anchors);
 
   const totals = Object.fromEntries(DEEP_SEARCH_LANGUAGE_CODES.map(code => [code, new Set()]));
@@ -1272,7 +1284,7 @@ export async function retrieveNews(plan, window, priorityLanguages = [], fetcher
   // Country-relevant languages get one extra native-language query through the
   // stable en-US Google edition if the local edition returned fewer than 3 items.
   const priorityRescueItems = [];
-  for (const language of priorityLanguages.slice(0, PRIORITY_LANGUAGE_CAP)) {
+  for (const language of googleRefused ? [] : priorityLanguages.slice(0, PRIORITY_LANGUAGE_CAP)) {
     if ((totals[language]?.size || 0) >= 3) continue;
     const candidate = plan.queries.find(item => item.language === language && item.variant === "primary")
       || plan.queries.find(item => item.language === language);
@@ -1300,23 +1312,26 @@ export async function retrieveNews(plan, window, priorityLanguages = [], fetcher
   // limit (if any) is undocumented -- better to be a cautious citizen.
   const reservedGdeltCalls = broadGdeltQuery(plan)
     ? gdeltChunkRanges(window.startDt, window.endDt).length : 0;
-  const reservedAcledCalls = plan.queries.some(item => item.language === "en") ? 1 : 0;
-  const bingBudget = Math.max(0, Math.min(PRIORITY_LANGUAGE_CAP,
+  const reservedAcledCalls = !googleRefused && plan.queries.some(item => item.language === "en") ? 1 : 0;
+  // With Google refused, Bing takes every language, priority ones first, in small batches.
+  const bingLanguages = googleRefused
+    ? [...new Set([...priorityLanguages, ...DEEP_SEARCH_LANGUAGE_CODES])].filter(code => DEEP_SEARCH_LANGUAGE_CODES.includes(code))
+    : priorityLanguages.slice(0, PRIORITY_LANGUAGE_CAP);
+  const bingBudget = Math.max(0, Math.min(googleRefused ? DEEP_SEARCH_LANGUAGE_CODES.length : PRIORITY_LANGUAGE_CAP,
     MAX_SEARCH_SUBREQUESTS - googleAll.length - reservedGdeltCalls - reservedAcledCalls));
   const bingRescueItems = [];
-  for (const language of priorityLanguages.slice(0, PRIORITY_LANGUAGE_CAP)) {
+  for (const language of bingLanguages) {
     if ((afterGoogle[language]?.size || 0) >= 3) continue;
     const candidate = plan.queries.find(item => item.language === language && item.variant === "primary")
       || plan.queries.find(item => item.language === language);
     if (candidate && bingRescueItems.length < bingBudget) bingRescueItems.push(candidate);
   }
-  const bingWaves = [];
-  for (let i = 0; i < bingRescueItems.length; i++) {
-    const wave = await fetchBingWave(bingRescueItems[i].query, bingRescueItems[i].language, fetcher);
-    wave.rows = filterByAnchor(wave.rows, anchors);
-    bingWaves.push(wave);
-    if (i < bingRescueItems.length - 1) await sleep(BING_RESCUE_SPACING_MS);
-  }
+  const bingWaves = await runInBatches(bingRescueItems, googleRefused ? BING_REPLACEMENT_BATCH_SIZE : 1,
+    BING_RESCUE_SPACING_MS, async item => {
+      const wave = await fetchBingWave(item.query, item.language, fetcher);
+      wave.rows = filterByAnchor(wave.rows, anchors);
+      return wave;
+    });
 
   // GDELT rescues priority languages first, then other sparse languages --
   // via fetchGdeltChunked, which issues 1 query for short periods or up to
@@ -1345,7 +1360,7 @@ export async function retrieveNews(plan, window, priorityLanguages = [], fetcher
     || "";
   let acledWaves = [];
   let acledRequests = 0;
-  if (acledQueryText) {
+  if (acledQueryText && !googleRefused) {
     acledRequests = 1;
     const acledWave = await fetchAcledWave(acledQueryText, window, fetcher);
     acledWave.rows = filterByAnchor(acledWave.rows, anchors);
@@ -1363,7 +1378,8 @@ export async function retrieveNews(plan, window, priorityLanguages = [], fetcher
       gdelt_requests: gdeltRequests,
       acled_requests: acledRequests,
       search_requests: googleAll.length + bingWaves.length + gdeltRequests + acledRequests,
-      max_search_requests: MAX_SEARCH_SUBREQUESTS
+      max_search_requests: MAX_SEARCH_SUBREQUESTS,
+      google_news_refused: googleRefused
     }
   };
 }
@@ -1779,7 +1795,8 @@ export function assembleDeepSearch({ databaseVersion, databaseRows, mapEvents, p
       ct_atlas_corpus_available: corpus.available,
       ct_atlas_corpus_articles: corpus.rows.length,
       ct_atlas_database_events: databaseRows.length,
-      search_subrequests: retrieval.subrequest_budget?.search_requests || retrieval.waves.length
+      search_subrequests: retrieval.subrequest_budget?.search_requests || retrieval.waves.length,
+      google_news_refused: retrieval.subrequest_budget?.google_news_refused === true
     }
   };
 }
@@ -1861,7 +1878,8 @@ export function acceptDeepSearchAssembly(raw) {
     })),
     retrieval: {
       ...Object.fromEntries(DEEP_SEARCH_RETRIEVAL_COUNTS.map(field => [field, cleanCount(retrieval[field])])),
-      ct_atlas_corpus_available: retrieval.ct_atlas_corpus_available === true
+      ct_atlas_corpus_available: retrieval.ct_atlas_corpus_available === true,
+      google_news_refused: retrieval.google_news_refused === true
     }
   };
 }
