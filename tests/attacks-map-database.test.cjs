@@ -1,7 +1,8 @@
 // The attacks-only map and the Database panel: the map loads events-map.json
 // (falling back to events-lite.json filtered with the same rule), keeps the
 // header and Key Developments working from recent_events, and the Database
-// panel reaches every category through the Worker's /database-events route.
+// panel lists every category: the page runs the Worker's database-query.js on
+// events-lite.json and asks /database-events only for RadNuc background articles.
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -250,7 +251,9 @@ test('one set of Database filters drives the list, both exports, the Report Gene
     assert.ok(markup>html.indexOf('id="databasePanel"')&&markup<html.indexOf('id="reportGeneratorPanel"'),`${id} must live in the Database panel`);
   }
   assert.match(html,/<option value="1">Last 24 hours<\/option>/);
-  assert.match(extract('queryDatabase'),/REPORT_GENERATOR_API_BASE \+ "\/database-events"[\s\S]*\{ \.\.\.filters, user_id: reportGeneratorUserId\(\), min_database_version: mapDatabaseVersion \}/);
+  assert.match(extract('queryDatabase'),/const promise = fetchDatabaseAnswer\(filters\)/);
+  assert.match(extract('fetchDatabaseAnswer'),/loadDatabaseBackground\(module, filters, new Date\(\)\)[\s\S]*return module\.databaseAnswer\(db, filters, new Date\(\), background\);/);
+  assert.match(extract('loadDatabaseBackground'),/REPORT_GENERATOR_API_BASE \+ "\/database-events"[\s\S]*\{ \.\.\.filters, user_id: reportGeneratorUserId\(\), background_only: true \}/);
   assert.match(extract('chronologyBaseEvents'),/return databaseResultsCurrent\(\) \? databaseResults : \[\];/);
   assert.match(extract('exportChronologyExcel'),/selectedDatabaseEvents\(\)/);
   assert.match(html,/exportDatabaseMapJpeg\(\s*selectedDatabaseEvents\(\),/);
@@ -269,11 +272,82 @@ test('the page never queries the database on load, only on the first use of the 
   assert.match(extract('onDatabaseFiltersChanged'),/if \(!databaseActivated && !chronologyOpen\) return;/);
 });
 
-test('a Database answer cut off after the 200 is an error, never an empty result',()=>{
-  // The list is streamed: workerd can end a cut body as if it were whole.
-  const query=extract('queryDatabase');
-  assert.match(query,/await response\.json\(\)\.catch\(\(\) => null\)/);
-  assert.match(query,/if \(!payload\) throw new Error\("The database answer was cut off\. Please retry\."\);/);
+// ---- The Database list built in the browser ------------------------------
+// On the Workers Free plan (10 ms of CPU a request) the Worker cannot parse the
+// database: Cloudflare cut /database-events after a few requests ("Failed to fetch").
+function pageLoaderContext(overrides={}){
+  const c=vm.createContext({Date,Number,String,Array,JSON,Promise,URL,location:{href:'https://ct-atlas.test/index.html?workspace=map'},
+    console:{warn(){}},mapDatabaseVersion:'2026-11-15T22:23:01Z',REPORT_GENERATOR_API_BASE:'https://worker',
+    reportGeneratorUserId:()=>'analyst',databaseQueryModulePromise:null,databaseEventsSource:null,databaseEventsPromise:null,
+    ...overrides});
+  vm.runInContext(extract('databaseRadnucBackgroundScope')+extract('databaseEventsCover')+extract('loadDatabaseEvents')+
+    'async '+extract('loadDatabaseBackground')+'async '+extract('fetchDatabaseAnswer'),c);
+  return c;
+}
+
+test('the page imports the Worker list code, and the site and the mirror both serve it',()=>{
+  const specifier=html.match(/const DATABASE_QUERY_MODULE = "\.\/([^"?]+)\?v=\d{8}";/);
+  assert.ok(specifier,'the module is imported under a cache version');
+  assert.equal(specifier[1],'cloudflare-worker/database-query.js');
+  assert.match(extract('loadDatabaseQueryModule'),/import\(DATABASE_QUERY_MODULE\)/);
+  const module=fs.readFileSync('cloudflare-worker/database-query.js','utf8');
+  assert.match(module,/^import \{[\s\S]*?\} from "\.\/shared\.js";/m,'its one import resolves next to it');
+  assert.match(module,/export \{[^}]*\bdatabaseAnswer\b[^}]*\bfetchEventsDatabase\b[^}]*\bparseDatabaseFilters\b/);
+  const mirror=fs.readFileSync('tools/deploy_mirror.sh','utf8');
+  assert.match(mirror,/cp cloudflare-worker\/database-query\.js cloudflare-worker\/shared\.js "\$STAGING\/cloudflare-worker\/"/);
+  const ui=fs.readFileSync('.github/workflows/deploy-current-ct-atlas-ui.yml','utf8');
+  for(const file of ['cloudflare-worker/database-query.js','cloudflare-worker/shared.js']){
+    assert.ok(ui.includes(`- "${file}"`),`a change to ${file} must redeploy the site`);
+  }
+});
+
+test('the events database is loaded once and again only for a newer map snapshot',async()=>{
+  const calls=[];
+  const module={fetchEventsDatabase:async(env,options)=>{
+    calls.push({env:plain(env),options:plain(options)});
+    return {ok:true,db:{last_updated:options.minVersion,events:[{id:'e'}]}};
+  }};
+  const c=pageLoaderContext();
+  const [first,shared]=await Promise.all([c.loadDatabaseEvents(module),c.loadDatabaseEvents(module)]);
+  assert.equal(first,shared,'simultaneous queries share one download');
+  assert.equal(calls.length,1);
+  assert.deepEqual(calls[0],{env:{EVENTS_LITE_URL:'https://ct-atlas.test/events-lite.json',EVENTS_URL:'https://ct-atlas.test/events.json'},
+    options:{minVersion:'2026-11-15T22:23:01Z'}});
+  await c.loadDatabaseEvents(module);
+  assert.equal(calls.length,1,'a covered version is reused');
+  c.mapDatabaseVersion='2026-11-16T10:00:00Z';
+  await c.loadDatabaseEvents(module);
+  assert.equal(calls.length,2,'a newer map snapshot loads the database again');
+  assert.equal(calls[1].options.minVersion,'2026-11-16T10:00:00Z');
+  const failing=pageLoaderContext();
+  await assert.rejects(failing.loadDatabaseEvents({fetchEventsDatabase:async()=>({ok:false,db:null})}),/could not be loaded/);
+  assert.equal(failing.databaseEventsSource,null);
+});
+
+test('only RadNuc-scope lists ask the Worker, for background articles alone, and an archive failure keeps the list',async()=>{
+  const worker=workerContext([]);
+  const api={parseDatabaseFilters:worker.parseDatabaseFilters,fetchRadnucBackground:worker.fetchRadnucBackground};
+  const requests=[];
+  const archive={available:true,included:true,total:1,truncated:false,added_today_count:0,today_date:'2026-11-16',items:[{key:'bg-0',title:'Policy'}]};
+  const c=pageLoaderContext({fetch:async(url,init)=>{requests.push({url,body:JSON.parse(init.body)});return {ok:true,json:async()=>({background_articles:archive})};}});
+  const scope={region:'GLOBAL',topic:'ALL',actor_group:'ALL',period_days:1};
+  assert.deepEqual(plain(await c.loadDatabaseBackground(api,scope,new Date())),archive);
+  assert.deepEqual(requests.map(r=>[r.url,r.body.background_only,r.body.user_id]),[['https://worker/database-events',true,'analyst']]);
+  const outside=plain(await c.loadDatabaseBackground(api,{...scope,topic:'Arrests'},new Date()));
+  assert.equal(requests.length,1,'a category outside RadNuc makes no request');
+  assert.equal(outside.included,false);
+  c.fetch=async()=>{throw new TypeError('Failed to fetch');};
+  const down=plain(await c.loadDatabaseBackground(api,scope,new Date()));
+  assert.deepEqual([down.included,down.available,down.reason],[true,false,'unavailable'],'listed as incomplete, not as an error');
+});
+
+test('a failed database download reads as a connection problem, never "Failed to fetch"',async()=>{
+  const c=pageLoaderContext();
+  c.databaseQueryModulePromise=Promise.resolve({fetchEventsDatabase:async()=>{throw new TypeError('Failed to fetch');},
+    parseDatabaseFilters:()=>({}),fetchRadnucBackground:async()=>({items:[]})});
+  vm.runInContext(extract('loadDatabaseQueryModule'),c);
+  await assert.rejects(c.fetchDatabaseAnswer({region:'GLOBAL',topic:'Arrests',actor_group:'ALL',period_days:1}),
+    error=>error.message==='The events database could not be loaded. Check the connection, then retry.');
 });
 
 test('database rows only link to the map when they are attacks themselves, by the unique key',()=>{
@@ -344,7 +418,7 @@ test('a list that no longer matches the filters is never shown or exported',()=>
   assert.match(vm.runInContext('databaseExportBlockedText()',c),/does not match the current filters/);
   vm.runInContext('databaseQueryPromise = {};',c);
   assert.match(vm.runInContext('databaseExportBlockedText()',c),/still loading/);
-  assert.match(extract('queryDatabase'),/const seq = \+\+databaseQuerySeq;[\s\S]*?chronologySelectedKeys\.clear\(\);[\s\S]*?const promise = fetch/);
+  assert.match(extract('queryDatabase'),/const seq = \+\+databaseQuerySeq;[\s\S]*?chronologySelectedKeys\.clear\(\);[\s\S]*?const promise = fetchDatabaseAnswer/);
 });
 
 test('list clicks only zoom to events the map shows; the rest open their card',()=>{
@@ -525,6 +599,54 @@ test('/database-events refuses a session that belongs to another user',async()=>
   assert.equal(result.status,401);
 });
 
+test('a background-only request never reads the events database and still needs the session',async()=>{
+  const c=workerContext([{id:'a',title:'x',published:new Date().toISOString()}]);
+  let reads=0;
+  c.fetchEventsDatabase=async()=>{reads++;throw new Error('the events database must not be read');};
+  const archive={prepare:sql=>({bind:()=>({
+    first:async()=>({total:1,added_today_count:1}),
+    all:async()=>({success:true,results:[{title:'Nuclear regulator update',url:'https://example.test/u',published:new Date().toISOString(),collected_at:new Date().toISOString()}]})
+  })})};
+  const request=body=>({json:async()=>body,headers:{get:()=>'token'}});
+  const result=plain(await c.handleDatabaseEvents(request({user_id:'analyst',topic:'ALL',period_days:1,background_only:true}),{BACKGROUND_DB:archive}));
+  assert.equal(reads,0);
+  assert.equal(result.status,200);
+  assert.deepEqual(Object.keys(result.body).sort(),['background_articles','version']);
+  assert.equal(result.body.background_articles.available,true);
+  assert.equal(result.body.background_articles.items[0].title,'Nuclear regulator update');
+  const refused=workerContext([], 'someone-else');
+  refused.fetchEventsDatabase=c.fetchEventsDatabase;
+  assert.equal(plain(await refused.handleDatabaseEvents(request({user_id:'analyst',background_only:true}),{})).status,401);
+  assert.equal(reads,0);
+});
+
+test('the page builds exactly the list the Worker route sends for the same database',async()=>{
+  const day=86400000,now=Date.now();
+  const events=[
+    {id:'a1',title:'Attack in Mogadishu',category:'Attacks',categories:['Attacks'],is_attack:true,primary_event_type:'ATTACK',
+      country:'Somalia',actor_group:'Al-Shabaab',published:new Date(now-2*3600000).toISOString(),url:'https://example.test/a1',latitude:2,longitude:45},
+    {id:'r1',title:'Arrest in Paris',category:'Arrests',categories:['Arrests'],primary_event_type:'ARREST',
+      country:'France',published:new Date(now-3*day).toISOString(),url:'javascript:alert(1)'},
+    {id:'n1',title:'Seized source',category:'CBRN',categories:['CBRN'],cbrn_subgroups:['RADNUC'],actor_scope:'NON_STATE',
+      primary_event_type:'CBRN',country:'Georgia',published:new Date(now-20*day).toISOString()},
+    {id:'old',title:'Too old',category:'Attacks',published:new Date(now-200*day).toISOString()},
+  ];
+  const c=workerContext(events);
+  const request=body=>({json:async()=>body,headers:{get:()=>'token'}});
+  for(const body of [
+    {user_id:'analyst',region:'GLOBAL',topic:'ALL',actor_group:'ALL',period_days:1},
+    {user_id:'analyst',region:'GLOBAL',topic:'ALL',actor_group:'ALL',period_days:30},
+    {user_id:'analyst',region:'GLOBAL',topic:'Attacks',actor_group:'Al-Shabaab',period_days:7},
+    {user_id:'analyst',region:'GLOBAL',topic:'RADNUC',actor_group:'ALL',period_days:90},
+  ]){
+    const routed=plain(await c.handleDatabaseEvents(request(body),{}));
+    assert.equal(routed.status,200);
+    const background=await c.fetchRadnucBackground({},c.parseDatabaseFilters(body),new Date());
+    const built=plain(c.databaseAnswer({last_updated:'2026-09-30T10:00:00Z',events},body,new Date(),background));
+    assert.deepEqual(built,routed.body,JSON.stringify(body));
+  }
+});
+
 // ---- "Show on map": attacks by default, every category or one on demand ----
 function mapScopeHarness(){
   const day=86400000, now=Date.now();
@@ -702,7 +824,7 @@ test('Database results cannot be reused after the map publishes a newer snapshot
   c.databaseSourceVersion=c.mapDatabaseVersion;
   c.databaseResultsLoadedAt=Date.now()-61000;
   assert.equal(c.databaseCacheReusable('same'),false,'unchanged filters do not cache the list forever');
-  assert.match(extract('queryDatabase'),/min_database_version: mapDatabaseVersion/);
+  assert.match(extract('loadDatabaseEvents'),/const required = mapDatabaseVersion;[\s\S]*\{ minVersion: required \}/);
 });
 
 test('CBRN contextual Database rows link to their actual map markers',()=>{
@@ -796,10 +918,10 @@ function unifiedQueryHarness(){
 test('a late mixed response cannot populate the list after the filters change',async()=>{
   const c=unifiedQueryHarness();
   let finish;
-  c.fetch=()=>new Promise(resolve=>{finish=resolve;});
+  c.fetchDatabaseAnswer=()=>new Promise(resolve=>{finish=resolve;});
   const pending=c.queryDatabase();
   c.currentFilters={...c.currentFilters,topic:'Arrests'};
-  finish({ok:true,json:async()=>({events:[{key:'db-0',title:'Incident'},{key:'bg-0',title:'Nuclear policy',archive_only:true}],total:2})});
+  finish({events:[{key:'db-0',title:'Incident'},{key:'bg-0',title:'Nuclear policy',archive_only:true}],total:2});
   await pending;
   assert.equal(c.databaseResults.length,0);
 });
@@ -808,13 +930,27 @@ test('the normal match counter includes context and reports incomplete archive a
   const c=unifiedQueryHarness();
   let status;
   c.setDatabaseStatus=text=>{status=text;};
-  c.fetch=async()=>({ok:true,json:async()=>({events:[{key:'db-0'},{key:'bg-0',archive_only:true}],total:2,incomplete:false})});
+  c.fetchDatabaseAnswer=async()=>({events:[{key:'db-0'},{key:'bg-0',archive_only:true}],total:2,incomplete:false});
   await c.queryDatabase();
   assert.equal(c.databaseResults.length,2);
   assert.equal(status,'2 records match');
-  c.fetch=async()=>({ok:true,json:async()=>({events:[{key:'db-0'}],total:1,incomplete:true})});
+  c.fetchDatabaseAnswer=async()=>({events:[{key:'db-0'}],total:1,incomplete:true});
   await c.queryDatabase(true);
   assert.match(status,/results incomplete/);
+});
+
+test('a failed list shows its error and the next filters can retry',async()=>{
+  const c=unifiedQueryHarness();
+  let status,state;
+  c.setDatabaseStatus=(text,kind)=>{status=text;state=kind;};
+  c.fetchDatabaseAnswer=async()=>{throw new Error('The events database could not be loaded. Check the connection, then retry.');};
+  await assert.rejects(c.queryDatabase());
+  assert.equal(state,'error');
+  assert.match(status,/Check the connection/);
+  assert.equal(c.databaseQueryPromise,null);
+  c.fetchDatabaseAnswer=async()=>({events:[{key:'db-0'}],total:1});
+  await c.queryDatabase(true);
+  assert.equal(status,'1 record matches');
 });
 
 test('mixed-list refresh requires prior authenticated panel use, an idle query and no export selection',()=>{
@@ -947,11 +1083,11 @@ test('a stale Worker answer excludes court rows from the list, match counter and
   const c=unifiedQueryHarness();
   let status;
   c.setDatabaseStatus=text=>{status=text;};
-  c.fetch=async()=>({ok:true,json:async()=>({events:[
+  c.fetchDatabaseAnswer=async()=>({events:[
     {key:'db-court',title:'Verdict',primary_event_type:'JUDICIAL',categories:['Weapons']},
     {key:'db-arrest',title:'Arrest',primary_event_type:'ARREST',categories:['Legal / Judicial']},
     {key:'bg-rad',title:'Nuclear regulation',categories:['Radiological/Nuclear'],archive_only:true},
-  ],total:3})});
+  ],total:3});
   await c.queryDatabase();
   assert.deepEqual(plain(c.databaseResults.map(e=>e._mapKey)),['db-arrest','bg-rad']);
   assert.deepEqual(plain(c.databaseResults[0].categories),['Arrests']);

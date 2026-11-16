@@ -117,8 +117,13 @@ class MirrorTriggerTests(unittest.TestCase):
         block = re.search(r'cp index\.html[\s\S]*?"\$STAGING"/', script)[0]
         staged = re.findall(r"[\w-]+\.(?:html|json|js|css|svg|txt)\b", block)
         staged += re.findall(r'(?m)^cp ([\w.-]+\.png) "\$STAGING/', script)
+        # The Worker files the Database panel imports, staged at their own paths.
+        worker_block = re.search(r'(?m)^cp (cloudflare-worker/[^"]+) "\$STAGING/cloudflare-worker/"$', script)
+        self.assertIsNotNone(worker_block, "The mirror must stage the Database panel's Worker modules")
+        staged += worker_block[1].split()
         self.assertIn("privacy.html", staged)
         self.assertIn("CT-ATLAS.png", staged)
+        self.assertIn("cloudflare-worker/database-query.js", staged)
         unwatched = [name for name in staged
                      if not any(fnmatch.fnmatchcase(name, pattern) for pattern in ui_paths + mirror_paths)]
         self.assertEqual(unwatched, [], "A push changing these files would reach neither Pages nor the mirror")

@@ -1,8 +1,15 @@
-// The Database panel's event list and exports: the Worker filters the whole
-// events database (every category, not just the attacks the map shows) with
-// exactly the place / category / group / period rules the Report Generator
-// uses, so an exported list and a report on the same filters cover the same
-// events -- and the browser never downloads the full database to do it.
+// The Database panel's event list and exports: the whole events database
+// (every category, not just the attacks the map shows) filtered with exactly the
+// place / category / group / period rules the Report Generator uses, so an
+// exported list and a report on the same filters cover the same events.
+//
+// The page builds the list itself (databaseAnswer, imported by index.html) from
+// the published events-lite.json, and asks the Worker only for the RadNuc
+// background articles (background_only), a D1 query. The Worker runs on
+// Cloudflare's Free plan, 10 ms of CPU a request: one parse of the database costs
+// it 300-600 ms, so from November 2026 Cloudflare cut the list after a few
+// requests and the page showed "Failed to fetch". The full route stays for pages
+// opened before that change.
 import {
   cleanText,
   jsonResponse,
@@ -21,7 +28,7 @@ import {
   databaseFiltersLabel
 } from "./shared.js";
 
-const DATABASE_QUERY_VERSION = "database-query-v5-unified-background";
+const DATABASE_QUERY_VERSION = "database-query-v6-browser-list";
 // 8,000 was reached in November 2026 and cut the oldest rows from global lists and
 // their exports. The database grows 125 events a day and levels off near 22,000 at
 // 180 days' retention, so this holds all of it plus every background row below; the
@@ -233,20 +240,11 @@ function* databaseEventsJson(summary, entries, backgroundArticles) {
   yield `]${afterItems}}`;
 }
 
-async function handleDatabaseEvents(request, env) {
-  let body;
-  try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
-
-  const authError = await authenticate(request, body, env);
-  if (authError) return authError;
-
-  const eventsDatabase = await fetchEventsDatabase(env, { minVersion: cleanText(body.min_database_version, 100) });
-  if (!eventsDatabase.ok) return jsonResponse({ error: "Unable to read the events database." }, 503, env);
-  const db = eventsDatabase.db;
+// One list for one set of filters: its summary and its entries in list order. An
+// entry is a background row, or an event with its index and the date that places it
+// (its row is built when it is sent).
+function selectDatabaseEntries(db, filters, now, backgroundArticles) {
   const all = Array.isArray(db) ? db : (Array.isArray(db?.events) ? db.events : []);
-
-  const filters = parseDatabaseFilters(body);
-  const now = new Date();
 
   // Group options are counted over the other filters (place, category,
   // period), so the dropdown always lists the groups present in that scope.
@@ -264,8 +262,6 @@ async function handleDatabaseEvents(request, env) {
     .filter(event => matchesGroup(event, filters.actorGroup))
     .map(event => ({ event, time: parseEventDate(event)?.getTime() || 0 }))
     .sort((a, b) => b.time - a.time);
-  const backgroundArticles = await fetchRadnucBackground(env, filters, now);
-  // Rows are built as they are sent: an entry keeps its record and the date that places it.
   const operationalEntries = matched.map((item, index) => ({ event: item.event, index, published: eventRowPublished(item.event) }));
   const entries = [...operationalEntries, ...backgroundArticles.items]
     .sort((a, b) => (Date.parse(b.published || b.collected_at) || 0) - (Date.parse(a.published || a.collected_at) || 0));
@@ -282,10 +278,51 @@ async function handleDatabaseEvents(request, env) {
     truncated: total > MAX_DATABASE_RESULTS,
     groups
   };
-  return jsonStreamResponse(databaseEventsJson(summary, entries.slice(0, MAX_DATABASE_RESULTS), backgroundArticles), 200, env);
+  return { summary, entries: entries.slice(0, MAX_DATABASE_RESULTS) };
 }
 
-export { handleDatabaseEvents, databaseEventRow, backgroundArticleRow, fetchRadnucBackground, parisDayBounds,
+// The page's list: the object the Worker's streamed answer parses into, built in the
+// browser from the events database the page loaded and the background articles the
+// Worker sent (background_only). Every row is a fresh object, as after JSON.parse.
+function databaseAnswer(db, body, now, backgroundArticles) {
+  const filters = parseDatabaseFilters(body);
+  const { summary, entries } = selectDatabaseEntries(db, filters, now, backgroundArticles);
+  return {
+    ...summary,
+    events: entries.map(entry => entry.event ? databaseEventRow(entry.event, entry.index) : { ...entry }),
+    background_articles: { ...backgroundArticles, items: backgroundArticles.items.map(row => ({ ...row })) }
+  };
+}
+
+async function handleDatabaseEvents(request, env) {
+  let body;
+  try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
+
+  const authError = await authenticate(request, body, env);
+  if (authError) return authError;
+
+  const filters = parseDatabaseFilters(body);
+  const now = new Date();
+
+  // The page lists the events itself and asks only for the archive: never read the
+  // events database here (see the top of this file).
+  if (body.background_only === true) {
+    const backgroundArticles = await fetchRadnucBackground(env, filters, now);
+    return jsonResponse({ version: DATABASE_QUERY_VERSION, background_articles: backgroundArticles }, 200, env);
+  }
+
+  const eventsDatabase = await fetchEventsDatabase(env, { minVersion: cleanText(body.min_database_version, 100) });
+  if (!eventsDatabase.ok) return jsonResponse({ error: "Unable to read the events database." }, 503, env);
+
+  const backgroundArticles = await fetchRadnucBackground(env, filters, now);
+  const { summary, entries } = selectDatabaseEntries(eventsDatabase.db, filters, now, backgroundArticles);
+  return jsonStreamResponse(databaseEventsJson(summary, entries, backgroundArticles), 200, env);
+}
+
+// The page imports this file too (index.html, loadDatabaseQueryModule): it needs the
+// loader and the filter parser from shared.js beside its own functions.
+export { handleDatabaseEvents, databaseAnswer, databaseEventRow, backgroundArticleRow, fetchRadnucBackground,
+  parisDayBounds, fetchEventsDatabase, parseDatabaseFilters,
   DATABASE_QUERY_VERSION, MAX_DATABASE_RESULTS, MAX_BACKGROUND_RESULTS };
 
 
