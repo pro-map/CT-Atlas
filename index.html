@@ -13473,6 +13473,97 @@ function refreshVisibleDatabaseBackground() {
     }
 }
 
+// The Database list is built here, in the browser, with the Worker's own code
+// (cloudflare-worker/database-query.js) on the published events-lite.json. The
+// Worker runs on Cloudflare's Free plan, 10 ms of CPU a request, and one parse of
+// the database costs it 300-600 ms: from November 2026 Cloudflare cut its list
+// after a few requests and the panel only said "Failed to fetch". The Worker now
+// sends only the RadNuc background articles, a small archive query.
+// Bump the version when database-query.js changes, so no cached copy is used.
+const DATABASE_QUERY_MODULE = "./cloudflare-worker/database-query.js?v=20261116";
+let databaseQueryModulePromise = null;
+let databaseEventsSource = null;
+let databaseEventsPromise = null;
+
+function loadDatabaseQueryModule() {
+    if (!databaseQueryModulePromise) {
+        databaseQueryModulePromise = import(DATABASE_QUERY_MODULE).catch(error => {
+            databaseQueryModulePromise = null;
+            throw error;
+        });
+    }
+    return databaseQueryModulePromise;
+}
+
+function databaseEventsCover(version, required) {
+    const requiredTime = Date.parse(required);
+    return !Number.isFinite(requiredTime) || Date.parse(version) >= requiredTime;
+}
+
+// Loaded once, and again only when the map has published a newer snapshot. The
+// loader is the Worker's: events-lite.json, a fresh copy if the cached one is older
+// than the map, and events.json if the lite file is missing or unusable.
+function loadDatabaseEvents(module) {
+    const required = mapDatabaseVersion;
+    if (databaseEventsSource && databaseEventsCover(databaseEventsSource.version, required)) {
+        return Promise.resolve(databaseEventsSource.db);
+    }
+    if (databaseEventsPromise && databaseEventsPromise.required === required) return databaseEventsPromise;
+    const promise = module.fetchEventsDatabase({
+        EVENTS_LITE_URL: new URL("events-lite.json", location.href).href,
+        EVENTS_URL: new URL("events.json", location.href).href
+    }, { minVersion: required })
+    .then(result => {
+        if (!result.ok) throw new Error("The events database could not be loaded.");
+        databaseEventsSource = {
+            version: String(result.db?.last_updated || result.db?.updated_at || ""),
+            db: result.db
+        };
+        return result.db;
+    })
+    .finally(() => {
+        if (databaseEventsPromise === promise) databaseEventsPromise = null;
+    });
+    promise.required = required;
+    databaseEventsPromise = promise;
+    return promise;
+}
+
+// Outside the RadNuc background scope the module answers by itself, without a
+// request. If the archive does not answer, the events are still listed and the
+// count says the background is unavailable.
+async function loadDatabaseBackground(module, filters, now) {
+    const parsed = module.parseDatabaseFilters(filters);
+    if (databaseRadnucBackgroundScope(filters)) {
+        try {
+            const response = await fetch(REPORT_GENERATOR_API_BASE + "/database-events", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...filters, user_id: reportGeneratorUserId(), background_only: true })
+            });
+            const payload = await response.json().catch(() => null);
+            if (response.ok && Array.isArray(payload?.background_articles?.items)) return payload.background_articles;
+        } catch (_) { /* Listed as unavailable below. */ }
+    }
+    return module.fetchRadnucBackground({}, parsed, now);
+}
+
+async function fetchDatabaseAnswer(filters) {
+    let module, db, background;
+    try {
+        module = await loadDatabaseQueryModule();
+        [db, background] = await Promise.all([
+            loadDatabaseEvents(module),
+            loadDatabaseBackground(module, filters, new Date())
+        ]);
+    } catch (error) {
+        // A network failure only says "Failed to fetch".
+        console.warn("Database list:", error);
+        throw new Error("The events database could not be loaded. Check the connection, then retry.");
+    }
+    return module.databaseAnswer(db, filters, new Date(), background);
+}
+
 function queryDatabase(force = false) {
     const filters = databaseFilters();
     const key = JSON.stringify(filters);
@@ -13498,21 +13589,7 @@ function queryDatabase(force = false) {
     databaseLastError = "";
     setDatabaseStatus("Querying the database…", "working");
 
-    const promise = fetch(REPORT_GENERATOR_API_BASE + "/database-events", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...filters, user_id: reportGeneratorUserId(), min_database_version: mapDatabaseVersion })
-    })
-    .then(async response => {
-        const payload = await response.json().catch(() => null);
-        if (!response.ok) {
-            throw new Error(payload?.error || ("Database query failed (HTTP " + response.status + ")."));
-        }
-        // The Worker streams this answer: a failure after the first batch
-        // ends a 200 early, and a cut body must not read as an empty list.
-        if (!payload) throw new Error("The database answer was cut off. Please retry.");
-        return payload;
-    })
+    const promise = fetchDatabaseAnswer(filters)
     .then(payload => {
         if (seq !== databaseQuerySeq || key !== JSON.stringify(databaseFilters())) return databaseResults;
 
