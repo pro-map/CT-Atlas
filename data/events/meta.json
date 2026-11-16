@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "4b3d2ba80d4590eacbb6c94865b8cd72a14f4dc232d8092912aa0fdd4c986eae",
+  "events_sha256": "897b9db77936086deb9047320a07c4abf58b67b085b5b84f3d031a9ff2583c36",
   "top_level_keys": [
     "project",
     "database_type",
@@ -342,27 +342,27 @@
       "categories": [
         {
           "category": "Radiological/Nuclear",
-          "last_attempt_at": "2026-11-15T21:56:35.527539+00:00",
+          "last_attempt_at": "2026-11-16T19:44:53.717624+00:00",
           "status": "partial",
-          "reviewed": 128,
-          "pending": 328,
-          "candidates": 456,
-          "recent_pending": 0,
-          "backlog_pending": 328,
+          "reviewed": 126,
+          "pending": 261,
+          "candidates": 387,
+          "recent_pending": 32,
+          "backlog_pending": 229,
           "undated_pending": 0,
           "source_discovery": {
             "planned_queries": 50,
             "attempted_queries": 50,
-            "searched_queries": 50,
-            "failed_queries": 0,
-            "pending_queries": 0,
-            "complete": true,
-            "stop_code": ""
+            "searched_queries": 45,
+            "failed_queries": 5,
+            "pending_queries": 5,
+            "complete": false,
+            "stop_code": "source_errors"
           },
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-16T21:42:06.615961+00:00",
+      "finalized_at": "2026-11-16T21:44:35.832606+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
