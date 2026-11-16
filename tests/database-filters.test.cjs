@@ -255,8 +255,11 @@ test('Deep Search consults the database before external search and numbers evide
   const handler=source.slice(source.indexOf('export async function handleDeepSearch('));
   assert.ok(handler.indexOf('readDatabaseEvidence(env, plan, window, filters)')>=0,'the handler reads the database');
   assert.ok(handler.indexOf('readDatabaseEvidence(env, plan, window, filters)')<handler.indexOf('await retrieveNews('),'database first');
-  assert.match(handler,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
-  assert.match(handler,/\.\.\.databaseRows\.map\(evidenceItem\),\s*\.\.\.buildEvidence\(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows\.length\)/);
+  // The page and the old one-request path assemble the evidence with the same function.
+  const assembly=source.slice(source.indexOf('export function assembleDeepSearch('));
+  assert.match(assembly,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
+  assert.match(assembly,/\.\.\.databaseRows\.map\(evidenceItem\),\s*\.\.\.buildEvidence\(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows\.length\)/);
+  assert.match(handler,/acceptDeepSearchAssembly\(\s*assembleDeepSearch\(\{ databaseVersion, databaseRows, mapEvents, plan, priorityLanguages, retrieval, corpus \}\)\)/);
   assert.equal((source.match(/fetchEventsDatabase\(env\)/g)||[]).length,1,'still a single events fetch');
   assert.match(source,/search_engine "ct_atlas_database" are verified events/);
 });

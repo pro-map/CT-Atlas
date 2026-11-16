@@ -249,7 +249,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v18-no-judicial"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v19-browser-steps"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -380,7 +380,7 @@ test('Atlas AI answers from general knowledge when no reporting is retrieved, an
   assert.ok(!/found no usable open-source reporting for this question and period\.",/.test(worker),'no dead end any more');
   assert.match(worker,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
   assert.match(worker,/\.\.\.\(retrievalNote \? \{ retrieval_note: retrievalNote \} : \{\}\)/);
-  assert.match(worker,/if \(!likelyTransientFetchIssue\) \{\s*await gateCall\(env, "\/cache-put"/,'a provider failure is never cached');
+  assert.match(worker,/if \(!report\.likely_transient_fetch_issue\) \{\s*await gateCall\(env, "\/cache-put"/,'a provider failure is never cached');
   assert.match(worker,/general_knowledge_percent:/);
   const client=fs.readFileSync('deep-search.js','utf8');
   assert.ok(client.includes(`safe.replace(/\\[GK\\]/g,'<span class="deep-citation deep-gk"`),'[GK] is shown as its own badge');

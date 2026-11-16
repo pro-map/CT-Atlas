@@ -259,7 +259,7 @@ test('one set of Database filters drives the list, both exports, the Report Gene
   assert.match(html,/exportDatabaseMapJpeg\(\s*selectedDatabaseEvents\(\),/);
   assert.match(extract('generateCustomReport'),/actor_group:\s*actorGroup/);
   assert.match(html,/window\.CTAtlasDatabase = \{\s*filters: databaseFilters,/);
-  assert.match(fs.readFileSync('deep-search.js','utf8'),/\.\.\.databaseScope\(\)\.filters,user_id:username,question/);
+  assert.match(fs.readFileSync('deep-search.js','utf8'),/const scope=databaseScope\(\)\.filters;\s*const base=\{\.\.\.scope,user_id:username,question\};/);
 });
 
 test('the region list is filled once so opening the Report Generator never resets the analyst choice',()=>{

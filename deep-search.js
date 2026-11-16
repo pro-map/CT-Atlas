@@ -359,6 +359,43 @@ function render(rawPayload){
   document.getElementById("deepSearchEvidence").innerHTML=evidenceHtml(payload);
 }
 
+// Custom Intelligence runs in steps (cloudflare-worker/deep-search.js, "the steps"): the
+// Worker runs on Cloudflare's Free plan, 10 ms of CPU a request, and was cut off running a
+// whole search. It plans, relays each search provider's answer and writes the assessment;
+// this page parses the searches, reads its copy of the CT Atlas database and assembles the
+// evidence with the Worker's own functions. Bump the version when that file changes.
+const DEEP_SEARCH_MODULE="./cloudflare-worker/deep-search.js?v=20261116";
+let coreModulePromise=null;
+function loadCore(){
+  if(!coreModulePromise)coreModulePromise=import(DEEP_SEARCH_MODULE).catch(error=>{
+    coreModulePromise=null;
+    console.warn("Custom Intelligence:",error);
+    throw new Error("Custom Intelligence could not load. Check the connection, then retry.");
+  });
+  return coreModulePromise;
+}
+// The events database the DATABASE panel loads; without it the search goes on without
+// CT Atlas events, as the Worker did when it could not read the database.
+async function loadDatabase(){
+  const api=window.CTAtlasDatabase;
+  if(!api||typeof api.events!=="function")return null;
+  try{return await api.events();}catch(_){return null;}
+}
+async function step(body,sessionToken){
+  const response=await fetch(API_BASE+"/deep-search",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Session-Token":sessionToken},
+    body:JSON.stringify(body)
+  });
+  const payload=await response.json().catch(()=>({}));
+  if(!response.ok){
+    const periodNote=payload.detected_period?.label?` Period searched: ${payload.detected_period.label}.`:"";
+    const retry=Number(payload.retry_after_seconds||0);
+    throw new Error((payload.error||"The assessment failed.")+periodNote+(retry?` Retry in approximately ${Math.ceil(retry/60)} minute(s).`:""));
+  }
+  return {response,payload};
+}
+
 async function run(){
   if(document.getElementById("deepSearchRun")?.disabled)return;
   if(!backendReady){setStatus("The Custom Intelligence backend is not available.","warning");return;}
@@ -375,24 +412,40 @@ async function run(){
 
   const finishSound=window.CTAtlasSound?.begin();
   const finishWait = window.CTAtlasUI?.begin(document.getElementById("deepSearchStatus"));
-  try{
-    const response=await fetch(API_BASE+"/deep-search",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","X-Session-Token":sessionToken},
-      body:JSON.stringify({...databaseScope().filters,user_id:username,question})
-    });
-    const payload=await response.json().catch(()=>({}));
+  const show=payload=>{
     const periodNote=payload.detected_period?.label?` Period searched: ${payload.detected_period.label}.`:"";
-    if(!response.ok){
-      const retry=Number(payload.retry_after_seconds||0);
-      throw new Error((payload.error||"The assessment failed.")+periodNote+(retry?` Retry in approximately ${Math.ceil(retry/60)} minute(s).`:""));
-    }
     render(payload);finishSound?.(payload.no_current_reporting?"error":"success");
     if(payload.no_current_reporting){
       setStatus(payload.likely_transient_fetch_issue
         ?"Assessment written from general knowledge only [GK]: the search providers were unavailable for every query. Retry in a few minutes for current reporting."
         :"Assessment written from general knowledge only [GK]: no current reporting was found in the database or the multilingual search.","warning");
     }else setStatus(`Assessment complete · ${Number(payload.retrieval?.articles_retrieved||0)} articles · ${Number(payload.retrieval?.unique_event_clusters||0)} unique event clusters · ${Number(payload.retrieval?.potential_atlas_gaps||0)} potential CT Atlas gaps.${periodNote}`,"success");
+  };
+  try{
+    const scope=databaseScope().filters;
+    const base={...scope,user_id:username,question};
+    // 1. The Worker plans (or answers from its cache).
+    setStatus("Reading the period from your question and planning the multilingual searches…","working");
+    const planned=await step({...base,step:"plan"},sessionToken);
+    if(planned.payload.step!=="plan"){show(planned.payload);return;}
+    const {permit_id:permitId,log_id:logId,plan,detected_period:period,priority_languages:priorityLanguages,corpus}=planned.payload;
+    const searchWindow={mode:period.mode,label:period.label,startDt:new Date(period.start),endDt:new Date(period.end)};
+    // 2. This page searches, through the Worker's relay, and reads its own copy of the database.
+    setStatus(`Period: ${period.label}. Taking the matching CT Atlas database events first, then retrieving fresh multilingual reporting…`,"working");
+    const core=await loadCore();
+    const relay=(url,init)=>fetch(API_BASE+"/deep-search",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","X-Session-Token":sessionToken},
+      body:JSON.stringify({user_id:username,step:"fetch",permit_id:permitId,url:String(url)}),
+      signal:init?.signal
+    });
+    const [db,retrieval]=await Promise.all([loadDatabase(),core.retrieveNews(plan,searchWindow,priorityLanguages,relay)]);
+    const assembly=core.assembleDeepSearch({...core.pageDatabaseEvidence(db,plan,searchWindow,scope),plan,priorityLanguages,retrieval,corpus});
+    // 3. The Worker writes the assessment.
+    setStatus("Writing the assessment from "+assembly.evidence.length+" sources…","working");
+    const written=await step({...base,step:"report",permit_id:permitId,log_id:logId,
+      interpreted_request:plan.interpreted_request,detected_period:period,assembly},sessionToken);
+    show(written.payload);
   }catch(error){finishSound?.("error");setStatus(error?.message||"The assessment failed.","error");}
   finally{
     finishWait?.();

@@ -50,6 +50,16 @@ function withAdminDisplayName(row){
   return displayName?{...row,display_name:displayName}:row;
 }
 // Social Intelligence is retired, but its saved reports still age out: see purgeExpired.
+// Report and Deep Search permits (/acquire). A permit is stale after three idle minutes, or
+// ten in all: a Deep Search run from the page touches it at every relayed search
+// (/permit-use), and relays at most DEEP_SEARCH_MAX_RELAYS (deep-search.js relays no more).
+const PERMIT_IDLE_MS = 3 * 60 * 1000;
+const PERMIT_MAX_MS = 10 * 60 * 1000;
+const DEEP_SEARCH_MAX_RELAYS = 48;
+function permitStale(permit, now) {
+  if (!permit?.started_at) return true;
+  return now - (permit.last_seen || permit.started_at) > PERMIT_IDLE_MS || now - permit.started_at > PERMIT_MAX_MS;
+}
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 // Stored totals keep the counters of retired tools. They are history, not current activity,
 // so the admin statistics leave them out; nothing removes them from storage.
@@ -1482,6 +1492,30 @@ export class ReportGate {
       });
     }
 
+    // A Deep Search runs in steps from the page (deep-search.js): each relayed search and the
+    // report step check that its permit is still open and belongs to that analyst, and keep it
+    // alive. Relays are counted, so a permit can never drive an open-ended stream of fetches.
+    if (url.pathname === "/permit-use") {
+      const permitId = String(body.permitId || "");
+      const username = normalizeUsername(body.username);
+      const active = (await this.state.storage.get("active")) || {};
+      const permit = active[permitId];
+      if (!permit || normalizeUsername(permit.user_id) !== username || permit.kind !== "deep_search"
+          || permit.counted === true || permitStale(permit, now)) {
+        return Response.json({ error: "This Deep Search has expired. Run it again." }, { status: 409 });
+      }
+      if (body.relay === true) {
+        if ((permit.relays || 0) >= DEEP_SEARCH_MAX_RELAYS) {
+          return Response.json({ error: "This Deep Search has used all its searches." }, { status: 429 });
+        }
+        permit.relays = (permit.relays || 0) + 1;
+      }
+      permit.last_seen = now;
+      active[permitId] = permit;
+      await this.state.storage.put("active", active);
+      return Response.json({ ok: true, relays: permit.relays || 0 });
+    }
+
     if (url.pathname === "/release") {
       const active = (await this.state.storage.get("active")) || {};
 
@@ -1791,9 +1825,10 @@ export class ReportGate {
 
     const active = (await this.state.storage.get("active")) || {};
 
-    // Remove stale generation permits after three minutes.
+    // Remove stale generation permits: three idle minutes (a stepped Deep Search stays alive
+    // while the page relays its searches), ten at most.
     for (const [id, item] of Object.entries(active)) {
-      if (!item?.started_at || now - item.started_at > 180000) {
+      if (permitStale(item, now)) {
         delete active[id];
       }
     }
@@ -1872,6 +1907,7 @@ export class ReportGate {
     const permitId = crypto.randomUUID();
     active[permitId] = {
       user_id: username,
+      kind: requestKind,
       started_at: now,
       counted: false
     };

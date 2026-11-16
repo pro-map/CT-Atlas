@@ -111,7 +111,7 @@ test('the page builds the selection with the Worker module and sends it with the
   assert.match(body,/const selection = await buildReportSelection\(\{ region, topic, actorGroup, periodDays, compare \}\);/);
   assert.match(body,/compare,\s*selection,/);
   const mirror=fs.readFileSync('tools/deploy_mirror.sh','utf8');
-  assert.match(mirror,/cp cloudflare-worker\/database-query\.js cloudflare-worker\/report-selection\.js cloudflare-worker\/shared\.js "\$STAGING\/cloudflare-worker\/"/);
+  assert.match(mirror,/cp cloudflare-worker\/database-query\.js cloudflare-worker\/report-selection\.js [^\n]*cloudflare-worker\/shared\.js "\$STAGING\/cloudflare-worker\/"/);
   const ui=fs.readFileSync('.github/workflows/deploy-current-ct-atlas-ui.yml','utf8');
   assert.ok(ui.includes('- "cloudflare-worker/report-selection.js"'),'a change to the module must redeploy the site');
 });
