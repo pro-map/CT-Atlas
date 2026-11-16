@@ -40,10 +40,12 @@ cp index.html main.html crypto.html privacy.html robots.txt ct-atlas-runtime.jso
 # that block things, so it must not depend on a third-party script host.
 cp -R vendor "$STAGING/vendor"
 
-# The Database panel builds its list in the browser with the report Worker's own
-# filter code, imported from these two files at the same paths as on the site.
+# The Database panel, the Report Generator and Custom Intelligence run their
+# selection and search in the browser with the report Worker's own code, imported
+# from these files (deep-search.js and the modules it imports) at the same paths
+# as on the site.
 mkdir -p "$STAGING/cloudflare-worker"
-cp cloudflare-worker/database-query.js cloudflare-worker/shared.js "$STAGING/cloudflare-worker/"
+cp cloudflare-worker/database-query.js cloudflare-worker/report-selection.js cloudflare-worker/deep-search.js cloudflare-worker/background-corpus.js cloudflare-worker/report-illustration.js cloudflare-worker/source-preview.js cloudflare-worker/shared.js "$STAGING/cloudflare-worker/"
 
 # Preserve the complete fallback, using byte chunks when compaction alone cannot
 # meet the 25 MiB asset cap. The Worker streams it at the same /events.json URL
@@ -71,7 +73,9 @@ cp CT-ATLAS.png "$STAGING/CT-ATLAS.png"
 cp CT-ATLAS-256.png "$STAGING/CT-ATLAS-256.png"
 
 for required in tab-health.js tab-health.css \
-    cloudflare-worker/database-query.js cloudflare-worker/shared.js \
+    cloudflare-worker/database-query.js cloudflare-worker/report-selection.js cloudflare-worker/deep-search.js \
+    cloudflare-worker/background-corpus.js cloudflare-worker/report-illustration.js cloudflare-worker/source-preview.js \
+    cloudflare-worker/shared.js \
     vendor/leaflet-1.9.4/leaflet.js vendor/leaflet.markercluster-1.5.3/leaflet.markercluster.js \
     vendor/leaflet.heat-0.2.0/leaflet-heat.js; do
   if [ ! -s "$STAGING/$required" ]; then

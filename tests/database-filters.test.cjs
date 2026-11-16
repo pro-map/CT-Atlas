@@ -255,16 +255,21 @@ test('Deep Search consults the database before external search and numbers evide
   const handler=source.slice(source.indexOf('export async function handleDeepSearch('));
   assert.ok(handler.indexOf('readDatabaseEvidence(env, plan, window, filters)')>=0,'the handler reads the database');
   assert.ok(handler.indexOf('readDatabaseEvidence(env, plan, window, filters)')<handler.indexOf('await retrieveNews('),'database first');
-  assert.match(handler,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
-  assert.match(handler,/\.\.\.databaseRows\.map\(evidenceItem\),\s*\.\.\.buildEvidence\(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows\.length\)/);
+  // The page and the old one-request path assemble the evidence with the same function.
+  const assembly=source.slice(source.indexOf('export function assembleDeepSearch('));
+  assert.match(assembly,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
+  assert.match(assembly,/\.\.\.databaseRows\.map\(evidenceItem\),\s*\.\.\.buildEvidence\(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows\.length\)/);
+  assert.match(handler,/acceptDeepSearchAssembly\(\s*assembleDeepSearch\(\{ databaseVersion, databaseRows, mapEvents, plan, priorityLanguages, retrieval, corpus \}\)\)/);
   assert.equal((source.match(/fetchEventsDatabase\(env\)/g)||[]).length,1,'still a single events fetch');
   assert.match(source,/search_engine "ct_atlas_database" are verified events/);
 });
 
 test('the report route filters by group and keys its cache on it',()=>{
+  // The selection is built in the browser and by the Worker with report-selection.js.
+  const selection=fs.readFileSync('cloudflare-worker/report-selection.js','utf8');
+  assert.match(selection,/matchesRegion\(e, region\)\s*&& matchesTopic\(e, topic\) && matchesGroup\(e, actorGroup\)/);
   const route=fs.readFileSync('cloudflare-worker/index.js','utf8');
-  assert.match(route,/matchesRegion\(e, region\) && matchesTopic\(e, topic\) && matchesGroup\(e, actorGroup\)/);
-  assert.match(route,/JSON\.stringify\(\{ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION \}\)/);
+  assert.match(route,/JSON\.stringify\(\{ region, topic, actorGroup, periodDays, compare, databaseVersion: input\.databaseVersion, selection: selectionHash, version: REPORT_GENERATOR_VERSION \}\)/);
   assert.ok(vm.runInContext('ALLOWED_PERIODS.has(1)',shared));
 });
 

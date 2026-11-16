@@ -4014,7 +4014,7 @@ html, body {
 <script src="pdf-export.js?v=20261106" defer></script>
 <script src="report-illustration.js?v=20261002" defer></script>
 <script src="usage-admin.js?v=retired-ip-20261106" defer></script>
-<script src="usage-auth-fix.js?v=20261006" defer></script>
+<script src="usage-auth-fix.js?v=20261116" defer></script>
 <script src="tab-access.js?v=retired-ip-20261106" defer></script>
 
 <style>
@@ -12974,6 +12974,8 @@ async function generateCustomReport() {
     const finishWait = window.CTAtlasUI?.begin(status);
     try {
 
+        const selection = await buildReportSelection({ region, topic, actorGroup, periodDays, compare });
+
         const response =
             await fetch(
                 REPORT_GENERATOR_API_URL,
@@ -12994,6 +12996,7 @@ async function generateCustomReport() {
                                 period_days:
                                     periodDays,
                                 compare,
+                                selection,
                                 user_id:
                                     reportGeneratorUserId()
                             }
@@ -13369,7 +13372,9 @@ function databaseFiltersText(options) {
 
 window.CTAtlasDatabase = {
     filters: databaseFilters,
-    label: databaseFiltersText
+    label: databaseFiltersText,
+    // Custom Intelligence (deep-search.js) reads the same parsed database.
+    events: () => loadDatabaseQueryModule().then(loadDatabaseEvents)
 };
 
 function updateReportScopeSummary() {
@@ -13546,6 +13551,30 @@ async function loadDatabaseBackground(module, filters, now) {
         } catch (_) { /* Listed as unavailable below. */ }
     }
     return module.fetchRadnucBackground({}, parsed, now);
+}
+
+// The Report Generator's events, chosen here with the Worker's own rules
+// (cloudflare-worker/report-selection.js) from the database the Database panel
+// loads, and sent with the request: the Worker cannot parse the database within
+// the Free plan's 10 ms of CPU. It only cleans what it receives.
+const REPORT_SELECTION_MODULE = "./cloudflare-worker/report-selection.js?v=20261116";
+let reportSelectionModulePromise = null;
+
+async function buildReportSelection(params) {
+    if (!reportSelectionModulePromise) {
+        reportSelectionModulePromise = import(REPORT_SELECTION_MODULE).catch(error => {
+            reportSelectionModulePromise = null;
+            throw error;
+        });
+    }
+    try {
+        const [selectionModule, queryModule] = await Promise.all([reportSelectionModulePromise, loadDatabaseQueryModule()]);
+        const db = await loadDatabaseEvents(queryModule);
+        return selectionModule.reportSelection(db, params, new Date());
+    } catch (error) {
+        console.warn("Report selection:", error);
+        throw new Error("The events database could not be loaded. Check the connection, then retry.");
+    }
 }
 
 async function fetchDatabaseAnswer(filters) {

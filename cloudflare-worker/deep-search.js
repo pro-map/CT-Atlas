@@ -1,6 +1,7 @@
 import {
   GEMINI_URL,
   jsonResponse,
+  corsHeaders,
   cleanText,
   normalizeUsername,
   isAllowedUser,
@@ -40,7 +41,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v18-no-judicial";
+export const DEEP_SEARCH_VERSION = "deep-search-v19-browser-steps";
 // Archive rows (corpus_kind) that are not incident reports.
 const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review", "radnuc_background"]);
 
@@ -186,10 +187,10 @@ function acledNewsUrl(query, window) {
   }).toString();
 }
 
-async function fetchAcledWave(query, window) {
+async function fetchAcledWave(query, window, fetcher = fetch) {
   const item = { language: "en", query, variant: "acled", engine: "acled" };
   try {
-    const response = await fetch(acledNewsUrl(query, window), {
+    const response = await fetcher(acledNewsUrl(query, window), {
       headers: { "User-Agent": "Mozilla/5.0 CT-Atlas-Deep-Search/5.0" },
       cf: { cacheTtl: 300, cacheEverything: true },
       signal: AbortSignal.timeout(15000)
@@ -270,10 +271,10 @@ function parseBingRss(xml, language, query) {
   return rows;
 }
 
-async function fetchBingWave(query, language) {
+async function fetchBingWave(query, language, fetcher = fetch) {
   const item = { language, query, variant: "bing-rescue", engine: "bing" };
   try {
-    const response = await fetch(bingNewsUrl(query, language), {
+    const response = await fetcher(bingNewsUrl(query, language), {
       headers: { "User-Agent": "Mozilla/5.0 CT-Atlas-Deep-Search/5.0" },
       cf: { cacheTtl: 300, cacheEverything: true },
       signal: AbortSignal.timeout(15000)
@@ -1050,9 +1051,9 @@ async function runInBatches(items, batchSize, delayMs, worker) {
   return results;
 }
 
-async function fetchNewsWave(item, index, window, locale, fallbackLocale = false) {
+async function fetchNewsWave(item, index, window, locale, fallbackLocale = false, fetcher = fetch) {
   try {
-    const response = await fetch(googleNewsUrl(item.query, locale, window), {
+    const response = await fetcher(googleNewsUrl(item.query, locale, window), {
       headers: { "User-Agent": "Mozilla/5.0 CT-Atlas-Deep-Search/5.0" },
       cf: { cacheTtl: 300, cacheEverything: true },
       signal: AbortSignal.timeout(15000)
@@ -1173,9 +1174,9 @@ function parseGdeltArticles(payload, query) {
 // explicitly). `range` is always an explicit {startDt, endDt} date slice --
 // see fetchGdeltChunked below, which is the only caller that ever issues more
 // than one of these per Deep Search, always spaced GDELT_CHUNK_SPACING_MS apart.
-async function fetchGdeltGlobalWave(query, range) {
+async function fetchGdeltGlobalWave(query, range, fetcher = fetch) {
   try {
-    const response = await fetch(gdeltUrl(query, range), {
+    const response = await fetcher(gdeltUrl(query, range), {
       headers: { "User-Agent": "Mozilla/5.0 CT-Atlas-Deep-Search/5.5" },
       cf: { cacheTtl: 300, cacheEverything: true },
       signal: AbortSignal.timeout(15000)
@@ -1196,12 +1197,12 @@ async function fetchGdeltGlobalWave(query, range) {
 // merges them into one combined wave -- ok if AT LEAST one chunk succeeded
 // (partial coverage is still real evidence), status/error from the last
 // chunk attempted.
-async function fetchGdeltChunked(query, startDt, endDt) {
+async function fetchGdeltChunked(query, startDt, endDt, fetcher = fetch) {
   const ranges = gdeltChunkRanges(startDt, endDt);
   const rows = [];
   let anyOk = false, lastStatus = 0, lastError;
   for (let i = 0; i < ranges.length; i++) {
-    const wave = await fetchGdeltGlobalWave(query, ranges[i]);
+    const wave = await fetchGdeltGlobalWave(query, ranges[i], fetcher);
     if (wave.ok) anyOk = true;
     lastStatus = wave.status;
     lastError = wave.error;
@@ -1235,7 +1236,9 @@ function splitGdeltRowsByLanguage(globalWave, query, languages) {
   }));
 }
 
-async function retrieveNews(plan, window, priorityLanguages = []) {
+// `fetcher` reaches the search providers: the Worker's own fetch, or in the page the
+// Worker's relay (step "fetch"), so that the page runs the searches and parses them.
+export async function retrieveNews(plan, window, priorityLanguages = [], fetcher = fetch) {
   // Bound search well below Cloudflare's 50-subrequest-per-invocation ceiling.
   // A full handleDeepSearch call also makes ~9 NON-search subrequests
   // (session-get, acquire, cache-get, plan Gemini call, events.json fetch,
@@ -1257,7 +1260,7 @@ async function retrieveNews(plan, window, priorityLanguages = []) {
   const googleWaves = await runInBatches(
     sortedQueries.map((item, index) => ({ item, index })),
     6, 200,
-    ({ item, index }) => fetchNewsWave(item, index, window, LANGUAGE_LOCALES[item.language], false)
+    ({ item, index }) => fetchNewsWave(item, index, window, LANGUAGE_LOCALES[item.language], false, fetcher)
   );
   for (const wave of googleWaves) wave.rows = filterByAnchor(wave.rows, anchors);
 
@@ -1278,7 +1281,7 @@ async function retrieveNews(plan, window, priorityLanguages = []) {
   const priorityRescueWaves = await Promise.all(
     priorityRescueItems.map((item, index) =>
       fetchNewsWave(item, googleWaves.length + index, window,
-        item.language === "en" ? ENGLISH_SEARCH_FALLBACK_LOCALE : SEARCH_FALLBACK_LOCALE, true)
+        item.language === "en" ? ENGLISH_SEARCH_FALLBACK_LOCALE : SEARCH_FALLBACK_LOCALE, true, fetcher)
     )
   );
   for (const wave of priorityRescueWaves) wave.rows = filterByAnchor(wave.rows, anchors);
@@ -1309,7 +1312,7 @@ async function retrieveNews(plan, window, priorityLanguages = []) {
   }
   const bingWaves = [];
   for (let i = 0; i < bingRescueItems.length; i++) {
-    const wave = await fetchBingWave(bingRescueItems[i].query, bingRescueItems[i].language);
+    const wave = await fetchBingWave(bingRescueItems[i].query, bingRescueItems[i].language, fetcher);
     wave.rows = filterByAnchor(wave.rows, anchors);
     bingWaves.push(wave);
     if (i < bingRescueItems.length - 1) await sleep(BING_RESCUE_SPACING_MS);
@@ -1329,7 +1332,7 @@ async function retrieveNews(plan, window, priorityLanguages = []) {
   let gdeltWaves = [];
   let gdeltRequests = 0;
   if (gdeltQuery) {
-    const globalWave = await fetchGdeltChunked(gdeltQuery, window.startDt, window.endDt);
+    const globalWave = await fetchGdeltChunked(gdeltQuery, window.startDt, window.endDt, fetcher);
     gdeltRequests = globalWave.chunks || 1;
     globalWave.rows = filterByAnchor(globalWave.rows, anchors);
     gdeltWaves = splitGdeltRowsByLanguage(globalWave, gdeltQuery, gdeltAttributionLanguages);
@@ -1344,7 +1347,7 @@ async function retrieveNews(plan, window, priorityLanguages = []) {
   let acledRequests = 0;
   if (acledQueryText) {
     acledRequests = 1;
-    const acledWave = await fetchAcledWave(acledQueryText, window);
+    const acledWave = await fetchAcledWave(acledQueryText, window, fetcher);
     acledWave.rows = filterByAnchor(acledWave.rows, anchors);
     acledWaves = [acledWave];
   }
@@ -1453,22 +1456,33 @@ function databaseEvidenceRows(db, plan, window, filters) {
   });
 }
 
-// All a search takes from the database. The parsed copy lives in this frame only: a local of
-// the handler stays reachable through the news search and the model calls that follow.
+// The database's part of a search: the evidence events inside the analyst's scope and the
+// question's period, and every map event the external results are compared with. The page
+// runs it on the database it loads (db null when it could not).
+export function databaseEvidence(db, plan, window, filters) {
+  const source = db || { events: [] };
+  return {
+    databaseVersion: db ? cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100) : "unavailable",
+    databaseRows: databaseEvidenceRows(source, plan, window, filters),
+    mapEvents: candidateMapEvents(source, window)
+  };
+}
+
+// The page's call: the Database panel's raw filters, parsed as the Worker parses them.
+export function pageDatabaseEvidence(db, plan, window, rawFilters) {
+  return databaseEvidence(db, plan, window, parseDatabaseFilters({ ...rawFilters, period_days: null }));
+}
+
+// All a search takes from the database, for a page opened before the search moved to the
+// browser. The parsed copy lives in this frame only: a local of the handler stays reachable
+// through the news search and the model calls that follow.
 async function readDatabaseEvidence(env, plan, window, filters) {
-  let db = { events: [] }, databaseVersion = "unavailable";
+  let db = null;
   try {
     const eventsDatabase = await fetchEventsDatabase(env);
-    if (eventsDatabase.ok) {
-      db = eventsDatabase.db;
-      databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
-    }
+    if (eventsDatabase.ok) db = eventsDatabase.db;
   } catch (_) {}
-  return {
-    databaseVersion,
-    databaseRows: databaseEvidenceRows(db, plan, window, filters),
-    mapEvents: candidateMapEvents(db, window)
-  };
+  return databaseEvidence(db, plan, window, filters);
 }
 
 // An external article that the Atlas comparison matched to one of the
@@ -1697,6 +1711,274 @@ function languageDiagnostics(plan, retrieval, priorityLanguages = []) {
   return Object.values(byLanguage);
 }
 
+// ---------------------------------------------------------------- the steps
+//
+// The page imports this file (deep-search.js, loadDeepSearchCore) and runs retrieveNews,
+// databaseEvidence and assembleDeepSearch itself; they are exported for it.
+//
+// The Worker runs on Cloudflare's Free plan: 10 ms of CPU a request. A whole search in one
+// request (the planner, 40 searches parsed, the database read, every result compared with
+// the map, the evidence ranked and the model) costs hundreds of milliseconds, and Cloudflare
+// cut most of them: on 3 November 2026, 5 of 7 searches never ended. So the page runs the
+// search in three kinds of requests, each light here:
+//   "plan"   the gate, the cache, the planner and the archive (D1) search;
+//   "fetch"  one search provider's answer, relayed unread (allow-listed addresses only);
+//   "report" the cleaned evidence pack to the model, then the cache and the allowance.
+// The page parses the searches, reads its own copy of the database and compares and ranks
+// the results with this file's functions (assembleDeepSearch). A request without a step is a
+// page opened before that change: the whole search, as before.
+
+// Everything between the searches and the model: the external results compared with the
+// map, the evidence pack (database events first) and the retrieval summary.
+export function assembleDeepSearch({ databaseVersion, databaseRows, mapEvents, plan, priorityLanguages, retrieval, corpus }) {
+  const unique = deduplicateRows([...retrieval.rows, ...corpus.rows]);
+  // No reporting at all can mean two very different things: genuinely no
+  // open-source coverage, or every search request rejected by a provider
+  // (Google News/GDELT rate-limiting Cloudflare's shared egress IPs, a known
+  // transient condition -- see the v5.12/v5.19 incidents). Either way the
+  // assessment is still written, from general knowledge [GK] only, and says
+  // which of the two it is: never read as "no coverage exists".
+  const noCurrentReporting = !unique.length && !databaseRows.length;
+  const likelyTransientFetchIssue = noCurrentReporting && isLikelyTransientFetchIssue(retrieval.waves);
+  const compared = compareWithAtlas(unique, mapEvents);
+  const externalRows = foldIntoDatabaseEvidence(databaseRows, compared);
+  const evidence = [
+    ...databaseRows.map(evidenceItem),
+    ...buildEvidence(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows.length)
+  ].map((item, index) => ({ ...item, id: `S${String(index + 1).padStart(2, "0")}` }));
+  const fromEngine = engine => retrieval.rows.filter(row => row.search_engine === engine).length;
+  return {
+    database_version: databaseVersion,
+    database_evidence_count: databaseRows.length,
+    languages_searched: languageDiagnostics(plan, retrieval, priorityLanguages),
+    priority_languages: priorityLanguages,
+    no_current_reporting: noCurrentReporting,
+    likely_transient_fetch_issue: likelyTransientFetchIssue,
+    evidence,
+    search_queries: retrieval.waves.map(w => ({
+      language: w.query.language, query: w.query.query,
+      variant: w.query.variant,
+      engine: w.query.engine || (w.query.variant === "gdelt-rescue" ? "gdelt" : "google_news"),
+      fallback_locale: Boolean(w.query.fallback_locale),
+      error: w.error || "",
+      ok: w.ok, status: w.status, result_count: w.rows.length
+    })),
+    retrieval: {
+      queries_planned: plan.queries.length,
+      queries_attempted: retrieval.waves.length,
+      queries_successful: retrieval.waves.filter(item => item.ok).length,
+      articles_retrieved: retrieval.rows.length,
+      unique_event_clusters: unique.filter(row => row.corpus_kind !== "radnuc_background").length,
+      evidence_events_used_for_analysis: evidence.length,
+      matched_to_atlas: evidence.filter(item => item.atlas_status === "already_in_atlas").length,
+      potential_atlas_gaps: evidence.filter(item => item.atlas_status === "potential_gap").length,
+      google_news_articles: fromEngine("google_news"),
+      gdelt_articles: fromEngine("gdelt"),
+      acled_articles: fromEngine("acled"),
+      bing_articles: fromEngine("bing"),
+      ct_atlas_corpus_available: corpus.available,
+      ct_atlas_corpus_articles: corpus.rows.length,
+      ct_atlas_database_events: databaseRows.length,
+      search_subrequests: retrieval.subrequest_budget?.search_requests || retrieval.waves.length
+    }
+  };
+}
+
+function cleanCount(value, max = 1e6) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? Math.min(Math.floor(number), max) : 0;
+}
+
+const DEEP_SEARCH_RETRIEVAL_COUNTS = ["queries_planned", "queries_attempted", "queries_successful", "articles_retrieved",
+  "unique_event_clusters", "evidence_events_used_for_analysis", "matched_to_atlas", "potential_atlas_gaps",
+  "google_news_articles", "gdelt_articles", "acled_articles", "bing_articles", "ct_atlas_corpus_articles",
+  "ct_atlas_database_events", "search_subrequests"];
+// A search reports at most 28 planned queries, 5 rescues each from Google and Bing, ACLED and
+// one GDELT line per language (GDELT_LANGUAGE_CAP): 53. The cap leaves room above that.
+const DEEP_SEARCH_MAX_REPORTED_QUERIES = 80;
+const DEEP_SEARCH_LANGUAGE_COUNTS = ["query_count", "article_count", "successful_queries", "google_news_articles",
+  "gdelt_articles", "acled_articles", "bing_articles"];
+
+function cleanEvidenceItem(item, index) {
+  const value = item && typeof item === "object" ? item : {};
+  const event = value.database_event && typeof value.database_event === "object" ? value.database_event : null;
+  return {
+    id: `S${String(index + 1).padStart(2, "0")}`,
+    title: cleanText(value.title, 420), summary: cleanText(value.summary, 650),
+    source: cleanText(value.source, 140), url: cleanText(value.url, 1200),
+    published: cleanText(value.published, 40), language: cleanText(value.language, 12),
+    ...(value.language_script ? { language_script: cleanText(value.language_script, 20) } : {}),
+    query_variant: cleanText(value.query_variant, 40) || "primary",
+    search_query: cleanText(value.search_query, 280),
+    search_engine: cleanText(value.search_engine, 40) || "google_news",
+    fallback_locale: value.fallback_locale === true,
+    source_count: Math.max(1, cleanCount(value.source_count, 1000)),
+    additional_sources: (Array.isArray(value.additional_sources) ? value.additional_sources : []).slice(0, 4).map(source => ({
+      source: cleanText(source?.source, 140), url: cleanText(source?.url, 1200),
+      language: cleanText(source?.language, 12), published: cleanText(source?.published, 40),
+      search_engine: cleanText(source?.search_engine, 40) || "google_news"
+    })),
+    atlas_status: cleanText(value.atlas_status, 30), atlas_match_id: cleanText(value.atlas_match_id, 120),
+    atlas_match_title: cleanText(value.atlas_match_title, 500), atlas_match_score: cleanCount(value.atlas_match_score, 100),
+    ...(value.corpus_kind ? { corpus_kind: cleanText(value.corpus_kind, 40) } : {}),
+    ...(event ? { database_event: {
+      id: cleanText(event.id, 120), country: cleanText(event.country, 100), actor_group: cleanText(event.actor_group, 100),
+      primary_event_type: cleanText(event.primary_event_type, 40), source_count: Math.max(1, cleanCount(event.source_count, 1000))
+    } } : {})
+  };
+}
+
+// The Worker's cleaning of an assembly, the page's or its own: every text capped, every count
+// a bounded number, the evidence renumbered S01.. and the language names its own. An honest
+// assembly comes out as it went in. What the page could still alter only reaches that
+// analyst's own report: the step cache key names the analyst.
+export function acceptDeepSearchAssembly(raw) {
+  if (!raw || typeof raw !== "object" || !Array.isArray(raw.evidence)) return null;
+  const evidence = raw.evidence.slice(0, DEEP_SEARCH_MAX_EVIDENCE).map(cleanEvidenceItem);
+  const retrieval = raw.retrieval && typeof raw.retrieval === "object" ? raw.retrieval : {};
+  const languages = Array.isArray(raw.languages_searched) ? raw.languages_searched : [];
+  return {
+    database_version: cleanText(raw.database_version, 100) || "unavailable",
+    database_evidence_count: Math.min(cleanCount(raw.database_evidence_count), evidence.length),
+    languages_searched: languages.slice(0, DEEP_SEARCH_LANGUAGE_CODES.length)
+      .filter(row => DEEP_SEARCH_LANGUAGE_CODES.includes(row?.code))
+      .map(row => ({
+        code: row.code,
+        name: LANGUAGE_LOCALES[row.code]?.label || row.code,
+        ...Object.fromEntries(DEEP_SEARCH_LANGUAGE_COUNTS.map(field => [field, cleanCount(row[field])])),
+        priority: row.priority === true
+      })),
+    priority_languages: (Array.isArray(raw.priority_languages) ? raw.priority_languages : [])
+      .filter(code => DEEP_SEARCH_LANGUAGE_CODES.includes(code)).slice(0, PRIORITY_LANGUAGE_CAP + 2),
+    no_current_reporting: raw.no_current_reporting === true,
+    likely_transient_fetch_issue: raw.likely_transient_fetch_issue === true,
+    evidence,
+    search_queries: (Array.isArray(raw.search_queries) ? raw.search_queries : []).slice(0, DEEP_SEARCH_MAX_REPORTED_QUERIES).map(row => ({
+      language: cleanText(row?.language, 12), query: cleanText(row?.query, 280),
+      variant: cleanText(row?.variant, 40), engine: cleanText(row?.engine, 20),
+      fallback_locale: row?.fallback_locale === true, error: cleanText(row?.error, 180),
+      ok: row?.ok === true, status: cleanCount(row?.status, 999), result_count: cleanCount(row?.result_count, 10000)
+    })),
+    retrieval: {
+      ...Object.fromEntries(DEEP_SEARCH_RETRIEVAL_COUNTS.map(field => [field, cleanCount(retrieval[field])])),
+      ct_atlas_corpus_available: retrieval.ct_atlas_corpus_available === true
+    }
+  };
+}
+
+const DEEP_SEARCH_PERIOD_MODES = new Set(["global", "relative", "absolute"]);
+
+function cleanDetectedPeriod(value) {
+  const period = value && typeof value === "object" ? value : {};
+  const iso = text => {
+    const time = Date.parse(String(text || ""));
+    return Number.isFinite(time) ? new Date(time).toISOString() : "";
+  };
+  return {
+    mode: DEEP_SEARCH_PERIOD_MODES.has(period.mode) ? period.mode : "relative",
+    start: iso(period.start), end: iso(period.end),
+    label: cleanText(period.label, 200)
+  };
+}
+
+// The model's assessment of a cleaned assembly, and the report the page shows.
+async function writeDeepSearchReport(env, { question, scope, interpretedRequest, detectedPeriod, assembly }) {
+  const retrievalNote = !assembly.no_current_reporting ? "" : assembly.likely_transient_fetch_issue
+    ? "No current reporting could be retrieved: the search providers failed or were rate-limited for every query. Say so at the top of KEY JUDGEMENTS, answer from general knowledge [GK] only, and set every confidence level to low for anything recent."
+    : "No current reporting was found for this question and period in the CT Atlas database or the multilingual search. Say so at the top of KEY JUDGEMENTS and answer from general knowledge [GK] only.";
+  const dataset = {
+    analyst_question: question,
+    interpreted_request: interpretedRequest,
+    period: detectedPeriod.label,
+    database_scope: scope,
+    database_evidence_count: assembly.database_evidence_count,
+    database_version: assembly.database_version,
+    language_search_coverage: assembly.languages_searched,
+    priority_languages: assembly.priority_languages,
+    ...(retrievalNote ? { retrieval_note: retrievalNote } : {}),
+    evidence: assembly.evidence
+  };
+
+  const generatedRaw = await callGeminiJson(
+    env, REPORT_INSTRUCTION,
+    "Write the intelligence assessment answering the analyst question from this evidence dataset and your own analytical knowledge (marked [GK]):\n\n" + JSON.stringify(dataset),
+    REPORT_SCHEMA, 9000
+  );
+  const generated = unwrapGeneratedReport(generatedRaw);
+  if (!generated.analysis) throw new Error("Atlas AI generated an empty assessment.");
+
+  return {
+    title: generated.title || "CT Atlas Deep Search",
+    analysis: generated.analysis,
+    question,
+    interpreted_request: interpretedRequest,
+    detected_period: detectedPeriod,
+    database_scope: scope,
+    generated_at: new Date().toISOString(),
+    database_version: assembly.database_version,
+    model: DEEP_SEARCH_MODEL,
+    version: DEEP_SEARCH_VERSION,
+    languages_searched: assembly.languages_searched,
+    priority_languages: assembly.priority_languages,
+    search_queries: assembly.search_queries,
+    retrieval: assembly.retrieval,
+    grounding: {
+      ...citationMetrics(generated.analysis, assembly.evidence),
+      note: "Citation coverage is the share of paragraphs citing a retrieved source [Sxx]; general knowledge is the share resting on the model's own knowledge [GK]. Neither is a statistical probability of hallucination."
+    },
+    evidence: assembly.evidence,
+    no_current_reporting: assembly.no_current_reporting,
+    likely_transient_fetch_issue: assembly.likely_transient_fetch_issue,
+    // The page fetches the report's picture from these (/report-illustration),
+    // in a request of its own: this one is close to the subrequest ceiling.
+    // Archive commentary and off-scope reporting never illustrate a report.
+    illustration_candidates: illustrationCandidates(
+      assembly.evidence.filter(item => !NOT_ILLUSTRATIONS.has(item.corpus_kind)), generated.analysis)
+  };
+}
+
+// The addresses the relay fetches: exactly those retrieveNews builds (googleNewsUrl and
+// acledNewsUrl, bingNewsUrl, gdeltUrl). Anything else is refused, so the relay is never an
+// open proxy; each search may relay a bounded number of requests.
+const DEEP_SEARCH_RELAY_TARGETS = Object.freeze([
+  ["news.google.com", "/rss/search"],
+  ["www.bing.com", "/news/search"],
+  ["api.gdeltproject.org", "/api/v2/doc/doc"]
+]);
+const DEEP_SEARCH_MAX_RELAYS = MAX_SEARCH_SUBREQUESTS + 8;
+
+function relayTarget(value) {
+  let url;
+  try { url = new URL(String(value || "")); } catch (_) { return null; }
+  if (url.protocol !== "https:" || url.username || url.password || url.port || url.hash || url.href.length > 2000) return null;
+  return DEEP_SEARCH_RELAY_TARGETS.some(([host, path]) => url.hostname === host && url.pathname === path) ? url : null;
+}
+
+async function relaySearch(body, env, username) {
+  const target = relayTarget(body.url);
+  if (!target) return jsonResponse({ error: "This address is not a Deep Search source." }, 400, env);
+  const use = await gateCall(env, "/permit-use", { permitId: cleanText(body.permit_id, 200), username, relay: true });
+  if (!use.ok) {
+    const refusal = await use.json().catch(() => ({}));
+    return jsonResponse({ error: refusal?.error || "This Deep Search has expired. Run it again." }, use.status || 409, env);
+  }
+  let upstream;
+  try {
+    upstream = await fetch(target.href, {
+      headers: { "User-Agent": "Mozilla/5.0 CT-Atlas-Deep-Search/6.0" },
+      cf: { cacheTtl: 300, cacheEverything: true },
+      signal: AbortSignal.timeout(15000)
+    });
+  } catch (error) {
+    return jsonResponse({ error: cleanText(error?.message, 180) || "The search provider did not answer." }, 502, env);
+  }
+  // The answer as it came, never read here: relaying costs no CPU, and the page parses it.
+  const headers = new Headers(corsHeaders(env));
+  headers.set("Content-Type", upstream.headers.get("Content-Type") || "text/plain; charset=utf-8");
+  headers.set("Cache-Control", "no-store");
+  return new Response(upstream.body, { status: upstream.status, headers });
+}
+
 async function authenticateDeepSearch(request, body, env) {
   const username = normalizeUsername(body.user_id || body.username);
   const token = cleanText(request.headers.get("X-Session-Token"), 160);
@@ -1708,12 +1990,159 @@ async function authenticateDeepSearch(request, body, env) {
   return { username };
 }
 
+// The search's allowance at the gate, and its line in the admin search history.
+async function acquireDeepSearch(env, ctx, { username, question, filters, scope }) {
+  const permitResponse = await gateCall(env, "/acquire", {
+    username, kind: "deep_search",
+    details: { question, region: filters.region, topic: filters.topic, actor_group: filters.actorGroup, scope }
+  });
+  const permit = await permitResponse.json().catch(() => ({}));
+  if (!permitResponse.ok || !permit?.permit_id) {
+    return { error: jsonResponse({
+      error: permit?.error || "Deep Search capacity temporarily unavailable.",
+      retry_after_seconds: permit?.retry_after_seconds || 20
+    }, permitResponse.status || 429, env) };
+  }
+  return { permitId: permit.permit_id, ...outcomeRecorder(env, ctx, username, permit.log_id) };
+}
+
+function outcomeRecorder(env, ctx, username, rawLogId) {
+  const logId = cleanText(rawLogId, 200);
+  const logOutcome = (outcome, extra = {}) => logId ? { id: logId, outcome, ...extra } : undefined;
+  const recordOutcome = outcome => {
+    if (logId) ctx?.waitUntil?.(gateCall(env, "/usage-log-update", { username, log_update: logOutcome(outcome) }).catch(() => {}));
+  };
+  return { logId, logOutcome, recordOutcome };
+}
+
+async function serveCachedDeepSearch(env, ctx, { cacheKey, permitId, username, logOutcome }) {
+  const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
+  const cached = await cachedResponse.json().catch(() => ({}));
+  if (!cached?.hit || !cached?.report) return null;
+  const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
+  if (!commitResponse.ok) throw new Error("Unable to finalize Deep Search allowance.");
+  ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
+    username,
+    metrics: { cached_reports: 1 },
+    log_update: logOutcome("cached", { title: cached.report.title, period: cached.report.detected_period?.label })
+  }).catch(error => console.error("Deep Search usage record failed", error)));
+  return jsonResponse({ ...cached.report, cached: true }, 200, env);
+}
+
+async function finishDeepSearch(env, ctx, { report, cacheKey, permitId, username, logOutcome }) {
+  // Not cached when the providers failed: a retry minutes later should
+  // search again, not get the general-knowledge-only answer back.
+  if (!report.likely_transient_fetch_issue) {
+    await gateCall(env, "/cache-put", { cacheKey, report, expires_at: Date.now() + DEEP_SEARCH_CACHE_TTL_MS });
+  }
+  const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
+  if (!commitResponse.ok) {
+    const commitError = await commitResponse.json().catch(() => ({}));
+    throw new Error(commitError?.error || "Unable to finalize Deep Search allowance.");
+  }
+  ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
+    username,
+    metrics: { reports_generated: 1 },
+    log_update: logOutcome("generated", { title: report.title, period: report.detected_period?.label })
+  }).catch(error => console.error("Deep Search usage record failed", error)));
+  return jsonResponse({ ...report, cached: false }, 200, env);
+}
+
+function deepSearchFailure(error, env) {
+  console.error("Deep Search failure", error);
+  const status = Number(error?.code) === 429 ? 429 : 503;
+  return jsonResponse({
+    error: cleanText(error?.message || "Deep Search failed.", 400),
+    ...(status === 429 ? { retry_after_seconds: 300 } : {})
+  }, status, env);
+}
+
+// The planner's work and what the page needs to search: the plan, its window as dates, the
+// priority languages and the archive's matching articles. The permit stays open for the
+// relays and the report; the gate frees it after three idle minutes if the page goes away.
+async function planDeepSearch(env, ctx, request) {
+  const { username, question, filters, scope, stepCacheKey } = request;
+  const acquired = await acquireDeepSearch(env, ctx, request);
+  if (acquired.error) return acquired.error;
+  const { permitId, logId, logOutcome, recordOutcome } = acquired;
+  let keepPermit = false;
+  try {
+    const cachedReport = await serveCachedDeepSearch(env, ctx, { cacheKey: stepCacheKey, permitId, username, logOutcome });
+    if (cachedReport) return cachedReport;
+
+    const planRaw = await callGeminiJson(
+      env, PLAN_INSTRUCTION,
+      `Analyst question: ${question}\nToday's date: ${isoDateOnly(new Date())}.` +
+        (hasActiveDatabaseFilters(filters) ? `\nAnalyst's database scope (place · category · group): ${scope}.` : ""),
+      PLAN_SCHEMA, 6000
+    );
+    const plan = sanitizePlan(planRaw, question);
+    if (!plan.queries.length) {
+      recordOutcome("failed");
+      return jsonResponse({ error: "Deep Search could not create a usable multilingual search plan." }, 422, env);
+    }
+    const window = resolveSearchWindow(plan);
+    const corpus = await searchCorpusForDeepSearch(env, {
+      plan, start: window.startDt, end: window.endDt,
+      searchQuery: plan.queries.find(item => item.language === "en" && item.variant === "primary")?.query || question
+    });
+    keepPermit = true;
+    return jsonResponse({
+      step: "plan",
+      permit_id: permitId,
+      log_id: logId,
+      plan,
+      detected_period: { mode: window.mode, start: window.startDt.toISOString(), end: window.endDt.toISOString(), label: window.label },
+      priority_languages: resolvePriorityLanguages(question, plan.priority_languages || []),
+      corpus: { available: corpus.available === true, rows: Array.isArray(corpus.rows) ? corpus.rows : [] }
+    }, 200, env);
+  } catch (error) {
+    recordOutcome("failed");
+    return deepSearchFailure(error, env);
+  } finally {
+    if (!keepPermit) ctx?.waitUntil?.(gateCall(env, "/release", { permitId, username }));
+  }
+}
+
+// The model's step: the page's assembly, cleaned, and the search's permit, still open.
+async function reportDeepSearch(env, ctx, request, body) {
+  const { username, question, scope, stepCacheKey } = request;
+  const permitId = cleanText(body.permit_id, 200);
+  const { logOutcome, recordOutcome } = outcomeRecorder(env, ctx, username, body.log_id);
+  const use = await gateCall(env, "/permit-use", { permitId, username, relay: false });
+  if (!use.ok) {
+    const refusal = await use.json().catch(() => ({}));
+    return jsonResponse({ error: refusal?.error || "This Deep Search has expired. Run it again." }, use.status || 409, env);
+  }
+  try {
+    const assembly = acceptDeepSearchAssembly(body.assembly);
+    if (!assembly) {
+      recordOutcome("failed");
+      return jsonResponse({ error: "The search results could not be read. Run the search again." }, 400, env);
+    }
+    const report = await writeDeepSearchReport(env, {
+      question, scope,
+      interpretedRequest: cleanText(body.interpreted_request, 700) || question,
+      detectedPeriod: cleanDetectedPeriod(body.detected_period),
+      assembly
+    });
+    return await finishDeepSearch(env, ctx, { report, cacheKey: stepCacheKey, permitId, username, logOutcome });
+  } catch (error) {
+    recordOutcome("failed");
+    return deepSearchFailure(error, env);
+  } finally {
+    ctx?.waitUntil?.(gateCall(env, "/release", { permitId, username }));
+  }
+}
+
 export async function handleDeepSearch(request, env, ctx) {
   let body;
   try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
 
   const auth = await authenticateDeepSearch(request, body, env);
   if (auth.error) return auth.error;
+  const username = auth.username;
+  if (body.step === "fetch") return relaySearch(body, env, username);
 
   const question = cleanText(body.question, 1200);
   if (question.length < 8) return jsonResponse({ error: "Enter a more specific Deep Search question." }, 400, env);
@@ -1723,51 +2152,33 @@ export async function handleDeepSearch(request, env, ctx) {
   // The cache key therefore only needs the question text: the resolved window
   // is a deterministic function of it, and the short cache TTL below means a
   // "relative" window (e.g. "last 30 days") never drifts meaningfully stale.
-  const username = auth.username;
   // The Database panel's place / category / group scope the CT Atlas events
   // used as primary evidence; the period still comes from the question, so
   // external search can reach further back than the database's 180 days.
   const filters = parseDatabaseFilters({ ...body, period_days: null });
   const scope = databaseFiltersLabel(filters);
-  const cacheKey = await sha256(JSON.stringify({
-    // Raw filter values, not the display label (which folds REGION:X and X).
+  // Raw filter values, not the display label (which folds REGION:X and X).
+  const keyFields = {
     question: question.toLowerCase(),
     region: filters.region, topic: filters.topic, actor_group: filters.actorGroup,
     version: DEEP_SEARCH_VERSION
-  }));
-
-  const permitResponse = await gateCall(env, "/acquire", {
-    username, kind: "deep_search",
-    details: { question, region: filters.region, topic: filters.topic, actor_group: filters.actorGroup, scope }
-  });
-  const permit = await permitResponse.json().catch(() => ({}));
-  if (!permitResponse.ok || !permit?.permit_id) {
-    return jsonResponse({
-      error: permit?.error || "Deep Search capacity temporarily unavailable.",
-      retry_after_seconds: permit?.retry_after_seconds || 20
-    }, permitResponse.status || 429, env);
-  }
-  const permitId = permit.permit_id;
-  // Outcome of this question in the admin search history (best effort).
-  const logId = cleanText(permit.log_id, 200);
-  const logOutcome = (outcome, extra = {}) => logId ? { id: logId, outcome, ...extra } : undefined;
-  const recordOutcome = outcome => {
-    if (logId) ctx?.waitUntil?.(gateCall(env, "/usage-log-update", { username, log_update: logOutcome(outcome) }).catch(() => {}));
   };
+  if (body.step === "plan" || body.step === "report") {
+    // The page assembles the evidence, so a stepped report is only ever served back to its analyst.
+    const stepCacheKey = "deep:" + await sha256(JSON.stringify({ ...keyFields, username }));
+    const stepRequest = { username, question, filters, scope, stepCacheKey };
+    return body.step === "plan" ? planDeepSearch(env, ctx, stepRequest) : reportDeepSearch(env, ctx, stepRequest, body);
+  }
+
+  // A page opened before the steps: the whole search in this one request.
+  const cacheKey = await sha256(JSON.stringify(keyFields));
+  const acquired = await acquireDeepSearch(env, ctx, { username, question, filters, scope });
+  if (acquired.error) return acquired.error;
+  const { permitId, logOutcome, recordOutcome } = acquired;
 
   try {
-    const cachedResponse = await gateCall(env, "/cache-get", { cacheKey: "deep:" + cacheKey });
-    const cached = await cachedResponse.json().catch(() => ({}));
-    if (cached?.hit && cached?.report) {
-      const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
-      if (!commitResponse.ok) throw new Error("Unable to finalize Deep Search allowance.");
-      ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
-        username,
-        metrics: { cached_reports: 1 },
-        log_update: logOutcome("cached", { title: cached.report.title, period: cached.report.detected_period?.label })
-      }).catch(error => console.error("Deep Search usage record failed", error)));
-      return jsonResponse({ ...cached.report, cached: true }, 200, env);
-    }
+    const cachedReport = await serveCachedDeepSearch(env, ctx, { cacheKey: "deep:" + cacheKey, permitId, username, logOutcome });
+    if (cachedReport) return cachedReport;
 
     const planRaw = await callGeminiJson(
       env, PLAN_INSTRUCTION,
@@ -1804,135 +2215,16 @@ export async function handleDeepSearch(request, env, ctx) {
       plan, start: window.startDt, end: window.endDt,
       searchQuery: plan.queries.find(item => item.language === "en" && item.variant === "primary")?.query || question
     });
-    const unique = deduplicateRows([...retrieval.rows, ...corpus.rows]);
-    const languagesSearched = languageDiagnostics(plan, retrieval, priorityLanguages);
+    const assembly = acceptDeepSearchAssembly(
+      assembleDeepSearch({ databaseVersion, databaseRows, mapEvents, plan, priorityLanguages, retrieval, corpus }));
 
-    // No reporting at all can mean two very different things: genuinely no
-    // open-source coverage, or every search request rejected by a provider
-    // (Google News/GDELT rate-limiting Cloudflare's shared egress IPs, a known
-    // transient condition -- see the v5.12/v5.19 incidents). Either way the
-    // assessment is still written, from general knowledge [GK] only, and says
-    // which of the two it is: never read as "no coverage exists".
-    const noCurrentReporting = !unique.length && !databaseRows.length;
-    const likelyTransientFetchIssue = noCurrentReporting && isLikelyTransientFetchIssue(retrieval.waves);
-    const retrievalNote = !noCurrentReporting ? "" : likelyTransientFetchIssue
-      ? "No current reporting could be retrieved: the search providers failed or were rate-limited for every query. Say so at the top of KEY JUDGEMENTS, answer from general knowledge [GK] only, and set every confidence level to low for anything recent."
-      : "No current reporting was found for this question and period in the CT Atlas database or the multilingual search. Say so at the top of KEY JUDGEMENTS and answer from general knowledge [GK] only.";
-
-    const compared = compareWithAtlas(unique, mapEvents);
-    const externalRows = foldIntoDatabaseEvidence(databaseRows, compared);
-    const evidence = [
-      ...databaseRows.map(evidenceItem),
-      ...buildEvidence(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows.length)
-    ].map((item, index) => ({ ...item, id: `S${String(index + 1).padStart(2, "0")}` }));
-    const dataset = {
-      analyst_question: question,
-      interpreted_request: plan.interpreted_request,
-      period: detectedPeriod.label,
-      database_scope: scope,
-      database_evidence_count: databaseRows.length,
-      database_version: databaseVersion,
-      language_search_coverage: languagesSearched,
-      priority_languages: priorityLanguages,
-      ...(retrievalNote ? { retrieval_note: retrievalNote } : {}),
-      evidence
-    };
-
-    const generatedRaw = await callGeminiJson(
-      env, REPORT_INSTRUCTION,
-      "Write the intelligence assessment answering the analyst question from this evidence dataset and your own analytical knowledge (marked [GK]):\n\n" + JSON.stringify(dataset),
-      REPORT_SCHEMA, 9000
-    );
-    const generated = unwrapGeneratedReport(generatedRaw);
-    if (!generated.analysis) throw new Error("Atlas AI generated an empty assessment.");
-
-    const metrics = citationMetrics(generated.analysis, evidence);
-    const gaps = evidence.filter(item => item.atlas_status === "potential_gap").length;
-    const inAtlas = evidence.filter(item => item.atlas_status === "already_in_atlas").length;
-    const successfulQueries = retrieval.waves.filter(item => item.ok).length;
-
-    const report = {
-      title: generated.title || "CT Atlas Deep Search",
-      analysis: generated.analysis,
-      question,
-      interpreted_request: plan.interpreted_request,
-      detected_period: detectedPeriod,
-      database_scope: scope,
-      generated_at: new Date().toISOString(),
-      database_version: databaseVersion,
-      model: DEEP_SEARCH_MODEL,
-      version: DEEP_SEARCH_VERSION,
-      languages_searched: languagesSearched,
-      priority_languages: priorityLanguages,
-      search_queries: retrieval.waves.map(w => ({
-        language: w.query.language, query: w.query.query,
-        variant: w.query.variant,
-        engine: w.query.engine || (w.query.variant === "gdelt-rescue" ? "gdelt" : "google_news"),
-        fallback_locale: Boolean(w.query.fallback_locale),
-        error: w.error || "",
-        ok: w.ok, status: w.status, result_count: w.rows.length
-      })),
-      retrieval: {
-        queries_planned: plan.queries.length,
-        queries_attempted: retrieval.waves.length,
-        queries_successful: successfulQueries,
-        articles_retrieved: retrieval.rows.length,
-        unique_event_clusters: unique.filter(row => row.corpus_kind !== "radnuc_background").length,
-        evidence_events_used_for_analysis: evidence.length,
-        matched_to_atlas: inAtlas,
-        potential_atlas_gaps: gaps,
-        google_news_articles: retrieval.rows.filter(row => row.search_engine === "google_news").length,
-        gdelt_articles: retrieval.rows.filter(row => row.search_engine === "gdelt").length,
-        acled_articles: retrieval.rows.filter(row => row.search_engine === "acled").length,
-        bing_articles: retrieval.rows.filter(row => row.search_engine === "bing").length,
-        ct_atlas_corpus_available: corpus.available,
-        ct_atlas_corpus_articles: corpus.rows.length,
-        ct_atlas_database_events: databaseRows.length,
-        search_subrequests: retrieval.subrequest_budget?.search_requests || retrieval.waves.length
-      },
-      grounding: {
-        ...metrics,
-        note: "Citation coverage is the share of paragraphs citing a retrieved source [Sxx]; general knowledge is the share resting on the model's own knowledge [GK]. Neither is a statistical probability of hallucination."
-      },
-      evidence,
-      no_current_reporting: noCurrentReporting,
-      likely_transient_fetch_issue: likelyTransientFetchIssue,
-      // The page fetches the report's picture from these (/report-illustration),
-      // in a request of its own: this one is close to the subrequest ceiling.
-      // Archive commentary and off-scope reporting never illustrate a report.
-      illustration_candidates: illustrationCandidates(
-        evidence.filter(item => !NOT_ILLUSTRATIONS.has(item.corpus_kind)), generated.analysis)
-    };
-
-    // Not cached when the providers failed: a retry minutes later should
-    // search again, not get the general-knowledge-only answer back.
-    if (!likelyTransientFetchIssue) {
-      await gateCall(env, "/cache-put", {
-        cacheKey: "deep:" + cacheKey, report,
-        expires_at: Date.now() + DEEP_SEARCH_CACHE_TTL_MS
-      });
-    }
-
-    const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
-    if (!commitResponse.ok) {
-      const commitError = await commitResponse.json().catch(() => ({}));
-      throw new Error(commitError?.error || "Unable to finalize Deep Search allowance.");
-    }
-
-    ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
-      username,
-      metrics: { reports_generated: 1 },
-      log_update: logOutcome("generated", { title: report.title, period: detectedPeriod.label })
-    }).catch(error => console.error("Deep Search usage record failed", error)));
-    return jsonResponse({ ...report, cached: false }, 200, env);
+    const report = await writeDeepSearchReport(env, {
+      question, scope, interpretedRequest: plan.interpreted_request, detectedPeriod, assembly
+    });
+    return await finishDeepSearch(env, ctx, { report, cacheKey: "deep:" + cacheKey, permitId, username, logOutcome });
   } catch (error) {
-    console.error("Deep Search failure", error);
     recordOutcome("failed");
-    const status = Number(error?.code) === 429 ? 429 : 503;
-    return jsonResponse({
-      error: cleanText(error?.message || "Deep Search failed.", 400),
-      ...(status === 429 ? { retry_after_seconds: 300 } : {})
-    }, status, env);
+    return deepSearchFailure(error, env);
   } finally {
     ctx.waitUntil(gateCall(env, "/release", { permitId, username }));
   }

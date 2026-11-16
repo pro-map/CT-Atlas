@@ -1,8 +1,6 @@
 import {
 ALLOWED_PERIODS,
 REPORT_GENERATOR_VERSION,
-MAX_EVENTS_CURRENT,
-MAX_EVENTS_PREVIOUS,
 CACHE_TTL_MS,
 SESSION_TTL_MS,
 passwordHashForUser,
@@ -15,16 +13,11 @@ isAllowedUser,
 sha256,
 gateCall,
 fetchEventsDatabase,
-matchesRegion,
-matchesTopic,
-matchesGroup,
-parseEventDate,
-priority,
-stats,
-compactEvent,
 citationMetrics,
-callGemini
+callGemini,
+COVERAGE_NOTE
 } from "./shared.js";
+import { reportSelection, acceptReportSelection } from "./report-selection.js";
 import { handleDeepSearch, DEEP_SEARCH_VERSION } from "./deep-search.js";
 import { handleFeedback, FEEDBACK_VERSION } from "./feedback.js";
 import { handleCrypto, CRYPTO_VERSION } from "./crypto.js";
@@ -42,50 +35,33 @@ import { handleReportIllustration, illustrationCandidates, REPORT_ILLUSTRATION_V
 import { fetchBackgroundContext, corpusStats } from "./background-corpus.js";
 import { handleDatabaseEvents } from "./database-query.js";
 
-// All a report takes from the database: its cached answer or, failing that, the selection. The
-// parsed copy lives in this frame only: a report goes on to wait for the archive and the model,
-// up to four at a time, and a local of fetch() stays reachable across those awaits.
-async function readReportInput(env, { region, topic, actorGroup, periodDays, compare }) {
+// All a report takes from the database: its cached answer or, failing that, the selection
+// (report-selection.js). The page sends the selection it built from the events database it
+// loaded: on the Workers Free plan (10 ms of CPU a request) parsing the database here costs
+// 300-600 ms. A page opened before that change sends none, and the Worker builds it; that
+// parsed copy lives in this frame only, because a report goes on to wait for the archive and
+// the model, up to four at a time, and a local of fetch() stays reachable across those awaits.
+// Every event handed to Gemini carries a sequential source_id (S01, S02...), in the [Sxx]
+// convention Deep Search uses, so the model cites a specific record and the response carries
+// back a clickable sources list and a citation-coverage metric.
+async function selectionFromDatabase(env, params, now) {
 const eventsDatabase = await fetchEventsDatabase(env);
-if (!eventsDatabase.ok) return null;
-const db = eventsDatabase.db;
-const allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
-const databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
-const cacheKey = await sha256(JSON.stringify({ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));
+return eventsDatabase.ok ? reportSelection(eventsDatabase.db, params, now) : null;
+}
+
+async function readReportInput(env, { region, topic, actorGroup, periodDays, compare }, sentSelection) {
+const now = new Date();
+const selection = sentSelection || await selectionFromDatabase(env, { region, topic, actorGroup, periodDays, compare }, now);
+if (!selection) return null;
+const input = acceptReportSelection(selection, { periodDays, compare, coverageNote: COVERAGE_NOTE }, now);
+if (!input) return null;
+// The selection is part of the key: a report written from an altered one is never served to anyone else.
+const selectionHash = await sha256(JSON.stringify([input.currentSourced, input.previousSourced, input.currentStats, input.previousStats, input.storyEvents.map(event => event.original_title)]));
+const cacheKey = await sha256(JSON.stringify({ region, topic, actorGroup, periodDays, compare, databaseVersion: input.databaseVersion, selection: selectionHash, version: REPORT_GENERATOR_VERSION }));
 const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
 const cached = await cachedResponse.json();
 if (cached?.hit && cached?.report) return { cachedReport: cached.report };
-const now = new Date();
-const currentStart = new Date(now.getTime() - periodDays * 86400000);
-const previousStart = new Date(currentStart.getTime() - periodDays * 86400000);
-// Held reports await a second outlet: the map, the counts and reports all leave them out.
-const matching = allEvents.filter(e => e.held_for_corroboration !== true && matchesRegion(e, region) && matchesTopic(e, topic) && matchesGroup(e, actorGroup));
-const current = [], previous = [];
-for (const event of matching) {
-const dt = parseEventDate(event);
-if (!dt) continue;
-if (dt >= currentStart && dt <= now) current.push(event);
-else if (compare && dt >= previousStart && dt < currentStart) previous.push(event);
-}
-current.sort((a,b)=>priority(b)-priority(a)); previous.sort((a,b)=>priority(b)-priority(a));
-// Assign a sequential source_id (S01, S02...) to every event handed to
-// Gemini, in the same [Sxx] convention Deep Search already uses, so the
-// model can cite a specific record instead of writing unsupported prose --
-// and so the response can carry back a real, clickable sources list plus a
-// citation-coverage metric instead of a plain block of text.
-let sourceSeq = 0;
-const withSourceId = event => ({ ...compactEvent(event), source_id: `S${String(++sourceSeq).padStart(2, "0")}` });
-const currentSourced = current.slice(0, MAX_EVENTS_CURRENT).map(withSourceId);
-const previousSourced = compare ? previous.slice(0, MAX_EVENTS_PREVIOUS).map(withSourceId) : [];
-return {
-databaseVersion, cacheKey, now, currentStart, previousStart, currentSourced, previousSourced,
-currentStats: stats(current),
-previousStats: stats(previous),
-// The events' original-language headlines travel along for story matching
-// only (an archive row repeating one in its own language is not sent again);
-// the Gemini dataset keeps the compact records.
-storyEvents: currentSourced.map((event, index) => ({ ...event, original_title: cleanText(current[index]?.original_title, 280) }))
-};
+return { ...input, cacheKey };
 }
 
 export default {
@@ -298,8 +274,13 @@ const logOutcome = (outcome, title = "") => logId ? { id: logId, outcome, ...(ti
 const recordOutcome = outcome => { if (logId) ctx.waitUntil(gateCall(env, "/usage-log-update", { username, log_update: logOutcome(outcome) }).catch(() => {})); };
 try {
 // After the gate, so that a refused request, or a fifth report at once, never parses the database.
-const input = await readReportInput(env, { region, topic, actorGroup, periodDays, compare });
-if (!input) { recordOutcome("failed"); return jsonResponse({ error: "Unable to read current events database." }, 503, env); }
+const sentSelection = body.selection && typeof body.selection === "object" ? body.selection : null;
+const input = await readReportInput(env, { region, topic, actorGroup, periodDays, compare }, sentSelection);
+if (!input) {
+recordOutcome("failed");
+if (sentSelection) return jsonResponse({ error: "The report selection could not be read. Reload the page and retry." }, 400, env);
+return jsonResponse({ error: "Unable to read current events database." }, 503, env);
+}
 if (input.cachedReport) {
 const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
 if (!commitResponse.ok) {

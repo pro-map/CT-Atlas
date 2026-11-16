@@ -1441,6 +1441,7 @@ export {
   databaseFiltersLabel,
   matchesRegion,
   compactEvent,
+  COVERAGE_NOTE,
   citationMetrics,
   stats,
   priority,

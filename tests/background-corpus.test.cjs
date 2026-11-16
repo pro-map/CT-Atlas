@@ -195,8 +195,10 @@ test('an archive row repeating an event in its own language is not sent next to 
     original_title:'В Саратовской области обнаружен 18-летний террорист',date:'2026-09-20T08:00:00Z'}];
   const rows=[{url:'https://ru/1',kind:'related_article',title:'В Саратовской области обнаружен 18-летний террорист',published:'2026-09-20T09:00:00Z',parent_incident_id:'inc-r'}];
   assert.deepEqual(plain(corpus.toContextItems(rows,promptEvents)),[]);
+  const selection=fs.readFileSync('cloudflare-worker/report-selection.js','utf8');
+  assert.match(selection,/story_titles: currentEvents\.map\(event => cleanText\(event\.original_title, 280\)\)/);
+  assert.match(selection,/storyEvents: currentSourced\.map\(\(event, index\) => \(\{ \.\.\.event, original_title: cleanText\(titles\[index\], 280\) \}\)\)/);
   const route=fs.readFileSync('cloudflare-worker/index.js','utf8');
-  assert.match(route,/original_title: cleanText\(current\[index\]\?\.original_title, 280\)/);
   assert.match(route,/fetchBackgroundContext\(env, \{ events: storyEvents,/);
 });
 
@@ -247,7 +249,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v18-no-judicial"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v19-browser-steps"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -378,7 +380,7 @@ test('Atlas AI answers from general knowledge when no reporting is retrieved, an
   assert.ok(!/found no usable open-source reporting for this question and period\.",/.test(worker),'no dead end any more');
   assert.match(worker,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
   assert.match(worker,/\.\.\.\(retrievalNote \? \{ retrieval_note: retrievalNote \} : \{\}\)/);
-  assert.match(worker,/if \(!likelyTransientFetchIssue\) \{\s*await gateCall\(env, "\/cache-put"/,'a provider failure is never cached');
+  assert.match(worker,/if \(!report\.likely_transient_fetch_issue\) \{\s*await gateCall\(env, "\/cache-put"/,'a provider failure is never cached');
   assert.match(worker,/general_knowledge_percent:/);
   const client=fs.readFileSync('deep-search.js','utf8');
   assert.ok(client.includes(`safe.replace(/\\[GK\\]/g,'<span class="deep-citation deep-gk"`),'[GK] is shown as its own badge');

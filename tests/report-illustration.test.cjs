@@ -294,11 +294,11 @@ test("both report tools return illustration candidates instead of fetching pictu
   const deep=fs.readFileSync("cloudflare-worker/deep-search.js","utf8");
   assert.ok(index.includes('url.pathname === "/report-illustration" && request.method === "POST"'));
   assert.ok(index.includes("illustration_candidates: illustrationCandidates(eventSources, analysisText)"));
-  assert.ok(/illustration_candidates: illustrationCandidates\(\s*evidence\.filter\(item => !NOT_ILLUSTRATIONS\.has\(item\.corpus_kind\)\), generated\.analysis\)/.test(deep),
+  assert.ok(/illustration_candidates: illustrationCandidates\(\s*assembly\.evidence\.filter\(item => !NOT_ILLUSTRATIONS\.has\(item\.corpus_kind\)\), generated\.analysis\)/.test(deep),
     "archive commentary and off-scope rows never illustrate a Deep Search report");
   for(const source of [index,deep])assert.ok(!source.includes("createSourcePreviews"),"no picture search inside the report request");
-  const reportAt=deep.indexOf("const report = {");
-  assert.ok(deep.indexOf("const generated = unwrapGeneratedReport")<reportAt,"candidates come from the generated analysis");
+  const writer=deep.slice(deep.indexOf("async function writeDeepSearchReport("));
+  assert.ok(writer.indexOf("const generated = unwrapGeneratedReport")<writer.indexOf("illustration_candidates: illustrationCandidates("),"candidates come from the generated analysis");
 });
 
 test("the pages show the picture above the report text and put it in the PDF",()=>{

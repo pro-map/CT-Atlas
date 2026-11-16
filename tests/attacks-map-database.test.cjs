@@ -259,7 +259,7 @@ test('one set of Database filters drives the list, both exports, the Report Gene
   assert.match(html,/exportDatabaseMapJpeg\(\s*selectedDatabaseEvents\(\),/);
   assert.match(extract('generateCustomReport'),/actor_group:\s*actorGroup/);
   assert.match(html,/window\.CTAtlasDatabase = \{\s*filters: databaseFilters,/);
-  assert.match(fs.readFileSync('deep-search.js','utf8'),/\.\.\.databaseScope\(\)\.filters,user_id:username,question/);
+  assert.match(fs.readFileSync('deep-search.js','utf8'),/const scope=databaseScope\(\)\.filters;\s*const base=\{\.\.\.scope,user_id:username,question\};/);
 });
 
 test('the region list is filled once so opening the Report Generator never resets the analyst choice',()=>{
@@ -294,7 +294,7 @@ test('the page imports the Worker list code, and the site and the mirror both se
   assert.match(module,/^import \{[\s\S]*?\} from "\.\/shared\.js";/m,'its one import resolves next to it');
   assert.match(module,/export \{[^}]*\bdatabaseAnswer\b[^}]*\bfetchEventsDatabase\b[^}]*\bparseDatabaseFilters\b/);
   const mirror=fs.readFileSync('tools/deploy_mirror.sh','utf8');
-  assert.match(mirror,/cp cloudflare-worker\/database-query\.js cloudflare-worker\/shared\.js "\$STAGING\/cloudflare-worker\/"/);
+  assert.match(mirror,/cp cloudflare-worker\/database-query\.js [^\n]*cloudflare-worker\/shared\.js "\$STAGING\/cloudflare-worker\/"/);
   const ui=fs.readFileSync('.github/workflows/deploy-current-ct-atlas-ui.yml','utf8');
   for(const file of ['cloudflare-worker/database-query.js','cloudflare-worker/shared.js']){
     assert.ok(ui.includes(`- "${file}"`),`a change to ${file} must redeploy the site`);
