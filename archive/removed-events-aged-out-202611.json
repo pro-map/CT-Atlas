@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-15T17:10:28.635090+00:00",
+  "removed_at": "2026-11-16T21:35:34.184096+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -2082,6 +2082,58 @@
       "ai_relevance_score": 60,
       "ai_relevance_reason": "Active investigation into a violent criminal/militant incident.",
       "related_articles": []
+    },
+    {
+      "id": "2d249fc97e59b897",
+      "incident_id": "inc-b4b92b9d23841c1e",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUnpjS0pKY1BwTHFtRU9DWFNMMXdaT1JzbmxxaHNsb2pEMWdVOGtNbldORmVWYkJLcDM5dzZnS0EtNjljNmQtUXVJWlNZa2lmeWtWNklxblFzcm14U193ZkJDdXA2WDNoREZ6aS1CV3RneXNiaWZWYlplNDg3SC1RdTVrWVhwNkE?oc=5",
+      "title": "Indonesia provides update on crew held by Somali pirates",
+      "summary": "The Indonesian government provided an update regarding the status of crew members who were previously kidnapped by pirates off the coast of Somalia.",
+      "original_title": "Indonesia provides update on crew held by Somali pirates",
+      "original_language": "en",
+      "source": "safety4sea",
+      "published": "2026-05-20T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "country": "Somalia",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Follow-up information regarding an active kidnapping/piracy case.",
+      "related_articles": []
+    },
+    {
+      "id": "544981905d10bea4",
+      "incident_id": "inc-0a20ce21c561bdf9",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdkFzR1oycHFOS0ZsU2ExYXBmRjlBNExNZDJ0ZWpJeWYzWkJnUGViV1RWbXVmZkhMcE5XRDVULWhzcEFPVkt4b3dBZF9JUTRoWG4wd2tpMlBUaF9aazZQT1JPTDdXM1dUaGxjT243cEMtRHlPX3VxWFNNYS1GT0lkSWRuSEh1UHJsdlJ2cVVuS0lhX1hYZENjNE5HeHNuT1hMbEJiVTlXdW03d1JlNnNWX1NwWG9HazRtbFU3ZE52R3o?oc=5",
+      "title": "Ten suspected collaborators of ADF/M23 arrested in Beni",
+      "summary": "Authorities arrested approximately ten individuals suspected of collaborating with the ADF and AFC/M23 groups in Beni, DRC.",
+      "original_title": "Beni : interpellation d’une dizaine de présumés collaborateurs des ADF et de l’AFC/M23",
+      "original_language": "fr",
+      "source": "Actualite.cd",
+      "published": "2026-05-20T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "ADF",
+      "primary_event_type": "ARREST",
+      "country": "Democratic Republic of the Congo",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "New arrest event of persons suspected of supporting militant groups.",
+      "related_articles": [
+        {
+          "title": "Arrests of ADF collaborators in Beni",
+          "original_title": "Beni : interpellation d’une dizaine de présumés collaborateurs des ADF et de l’AFC/M23",
+          "original_language": "fr",
+          "summary": "Security forces in Beni, DRC, arrested about ten individuals suspected of collaborating with the ADF.",
+          "published": "2026-05-20T07:00:00+00:00",
+          "source": "Actualite.cd",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNS0FpelFzZjViemlKbGZIbVprVFl1WmdHRHI0cUNmV2VzakdPdXFRSV9Ec2hSVXBRV3JPQmQwaE5QaGdkb1F6XzM4SzhkNTkwbE5obG5QRmRhMGJtejVNeGNyOEs2dzNhR1JlU3ZkTEV1VHhONkZGVWVHTldwNXpOczBNdzdVamlhWXNMVE9ULXZVR0JVSUw1UHJTS2FhYUNCUVNMRTQtRHhMRXlTb1gzSE1RTQ?oc=5"
+        }
+      ]
     }
   ]
 }
