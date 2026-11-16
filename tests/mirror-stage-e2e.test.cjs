@@ -348,12 +348,22 @@ before(async () => {
   const oracle = path.join(tmp, "oracle");
   plantTree(tree);
   const database = writeDatabase(path.join(tree, "events.json"), Date.now());
+  // The manifest names the revision it was built from: a repository of its own, with one
+  // empty commit. Not this repository's: since the expand of 2026-11-14 its HEAD holds the
+  // data/events store, so the deploy's materialize would check this synthetic events.json
+  // against the real month files (docs/STORAGE_MIGRATION.md). Here HEAD has no store and
+  // events.json is the database, as in the legacy layout.
+  const repository = path.join(tmp, "repository");
+  const gitEnv = Object.fromEntries(Object.entries(CHILD_ENV).filter(([name]) => !/^GIT_/.test(name)));
+  execFileSync("git", ["init", "-q", repository], { env: gitEnv });
+  execFileSync("git", ["-C", repository, "-c", "user.name=Mirror rehearsal", "-c", "user.email=rehearsal@example.invalid",
+    "commit", "-q", "--allow-empty", "-m", "Mirror rehearsal"], { env: gitEnv });
   const deployEnv = {
-    ...CHILD_ENV,
+    ...gitEnv,
     ...(REAL_CAP ? {} : { CT_ATLAS_MIRROR_REHEARSAL_CAP: String(CAP) }),
-    // The manifest names the revision it was built from, and refuses a database much
-    // smaller than the live site's unless the shrink is intended: a synthetic one is.
-    GIT_DIR: execFileSync("git", ["rev-parse", "--absolute-git-dir"], { cwd: ROOT, encoding: "utf8" }).trim(),
+    GIT_DIR: path.join(repository, ".git"),
+    // The manifest refuses a database much smaller than the live site's unless the
+    // shrink is intended: a synthetic one is.
     ALLOW_SHRINK: "1",
   };
   // The expected derived bytes come from the same builders, run apart from the deploy.
