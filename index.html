@@ -2823,8 +2823,9 @@ html, body {
 
 /* ============================================================
    V11.7 — HEADER CASUALTY METRICS
-   Most recently completed Paris calendar day (yesterday, 00:00-24:00
-   Paris), split into victims killed/wounded and terrorists
+   Most recent Paris calendar day the collection has finished (00:00-24:00
+   Paris; yesterday, or the day before until yesterday is finished, see
+   headerCasualtyDay()), split into victims killed/wounded and terrorists
    killed/captured. See isCurrentCasualtyEvent(),
    extractStrict24hCasualtyBreakdown() and
    extractStrict24hCapturedCount() in the JS below.
@@ -4333,7 +4334,7 @@ html, body {
 
         <div id="dataStateBadge" data-state="neutral" hidden></div>
 
-        <div id="headerCasualties24" title="Casualties for the most recently completed Paris calendar day (yesterday, 00:00-24:00 Paris time -- used because today's collector update mostly finishes covering yesterday, not today), by publication date. FULL DAY means a healthy collection started after that day ended. INCOMPLETE means the last collection started before it ended or left much of it unreviewed, and NO DATA that none ran on it: a dash then means not known, not zero. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest.">
+        <div id="headerCasualties24" title="Casualties for the most recent Paris calendar day the collection has finished (00:00-24:00 Paris time), by publication date: yesterday once a healthy collection has started after it ended, and the day before until then. FULL DAY means a healthy collection started after that day ended. INCOMPLETE means the last collection started before it ended or left much of it unreviewed, and NO DATA that none ran on it: a dash then means not known, not zero. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest.">
             <div id="headerCasualtiesWindow">YESTERDAY (PARIS)</div>
             <div class="header-casualty-group">
                 <span class="header-casualty-group-label">VICTIMS</span>
@@ -10294,13 +10295,15 @@ function casualtyRecencyText(
 
 
 function isCurrentCasualtyEvent(
-    event
+    event,
+    targetParisDay = parisYesterdayDateString()
 ) {
 
     /*
-       Stable window definition: the most recently COMPLETED Paris
-       CALENDAR DAY -- yesterday, 00:00 to 24:00 Paris time -- not today,
-       and not a rolling "last 24 hours" window.
+       Stable window definition: a COMPLETED Paris CALENDAR DAY, 00:00 to
+       24:00 Paris time -- yesterday unless the caller names another day
+       (the header passes headerCasualtyDay()) -- not today, and not a
+       rolling "last 24 hours" window.
        Two reasons, both from direct user feedback:
        1) A rolling window silently shifts on every refresh (each one
           reads a new `Date.now()`), so the header count seemed to change
@@ -10314,8 +10317,6 @@ function isCurrentCasualtyEvent(
        parisCasualtyWindowLabel() displays this exact date next to the
        numbers so the scope is explicit.
     */
-    const targetParisDay =
-        parisYesterdayDateString();
 
     /*
        1) Prefer the real occurrence date whenever the event has one.
@@ -10521,8 +10522,13 @@ const CASUALTY_TERRORIST_SINGULARS =
 
 // A singular noun counts only after "one": in "Frente 4 member arrested" the
 // figure belongs to the name of the unit. That "one" is the second capture group.
+// A qualifier may stand before the noun: "Two suspected terrorists arrested",
+// "over 30 suspected bandits killed" (4 records of 7,457 on 16 Nov, all right).
+const CASUALTY_QUALIFIER =
+    "(?:(?:alleged|suspected|presumed)\\s+)?";
+
 function casualtySubjectPattern(plurals, singulars) {
-    return "(?:" + CASUALTY_NUMBER + "\\s+(?:(?:" + plurals + ")\\s+)?|(one|1)\\s+(?:" + singulars + ")\\s+)";
+    return "(?:" + CASUALTY_NUMBER + "\\s+" + CASUALTY_QUALIFIER + "(?:(?:" + plurals + ")\\s+)?|(one|1)\\s+" + CASUALTY_QUALIFIER + "(?:" + singulars + ")\\s+)";
 }
 
 const CASUALTY_SUBJECT =
@@ -10550,14 +10556,17 @@ const CASUALTY_PATTERNS = {
         new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_SUBJECT + "(?:(?:were|was)\\s+)?(?:killed|dead|died)\\b", "gi"),
         new RegExp("\\b(?:killed|dead|fatalities|deaths)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b(?:\\s+" + CASUALTY_NAMED_SIDE + ")?", "gi"),
         /\bdeath\s+toll(?:\s+(?:has\s+)?(?:risen|rose|rises|climbed|stands|reached|reaches|at))?\s*(?:to|at|:)?\s*(\d{1,5})\b/gi,
-        new RegExp("\\b" + CASUALTY_NUMBER + "\\s+(?:fatalities|deaths)\\b", "gi"),
+        // "resulted in one death and 26 injuries": a summary's own way to give a toll.
+        new RegExp("\\b(?:" + CASUALTY_NUMBER + "\\s+(?:fatalities|deaths)|(one|1)\\s+(?:fatality|death))\\b", "gi"),
         // "Army kills 2 terrorists": without the side word this form stays unread,
         // because "killing 30" alone says nothing about who died.
         new RegExp("\\bkill(?:s|ing)?\\s+" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NAMED_SIDE, "gi")
     ],
     wounded: [
         new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_SUBJECT + "(?:(?:were|was)\\s+)?(?:wounded|injured|hurt)\\b", "gi"),
-        new RegExp("\\b(?:wounded|injured|hurt)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi")
+        new RegExp("\\b(?:wounded|injured|hurt)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi"),
+        // The wounded side of "N deaths": 13 Nov read 0 wounded beside "2 deaths and 16 injuries".
+        new RegExp("\\b(?:" + CASUALTY_NUMBER + "\\s+injuries|(one|1)\\s+injury)\\b", "gi")
     ],
     captured: [
         new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_CAPTURED_SUBJECT + "(?:(?:were|was)\\s+)?(?:arrested|detained|captured|apprehended)\\b", "gi"),
@@ -10709,12 +10718,14 @@ function casualtyPhraseSide(phrase) {
 */
 function extractStrict24hCasualtyBreakdown(
     event,
-    kind
+    kind,
+    targetParisDay
 ) {
 
     if (
         !isCurrentCasualtyEvent(
-            event
+            event,
+            targetParisDay
         )
     ) {
         return {
@@ -10901,12 +10912,14 @@ function extractStrict24hDeathCount(
    terrorist/victim phrase-side classification is needed.
 */
 function extractStrict24hCapturedCount(
-    event
+    event,
+    targetParisDay
 ) {
 
     if (
         !isCurrentCasualtyEvent(
-            event
+            event,
+            targetParisDay
         )
     ) {
         return 0;
@@ -11018,12 +11031,65 @@ function headerCasualtyDayState(
 
 
 /*
+   The day the header counts: yesterday once a healthy run has finished it, and
+   until then the day before, when a run has finished that one. GitHub starts the
+   10:17 slot 3-10 hours late, so yesterday stayed INCOMPLETE from midnight to the
+   late afternoon, and three of the four counters read "—" all that time (on
+   16 Nov, all day: no run had started by 19:00).
+*/
+function headerCasualtyDay(
+    facts
+) {
+
+    const yesterday =
+        parisYesterdayDateString();
+
+    const state =
+        headerCasualtyDayState(
+            facts,
+            yesterday
+        );
+
+    if (
+        state === "incomplete"
+    ) {
+
+        const dayBefore =
+            shiftCalendarDateString(
+                yesterday,
+                -1
+            );
+
+        if (
+            headerCasualtyDayState(
+                facts,
+                dayBefore
+            ) === "finished"
+        ) {
+            return {
+                day: dayBefore,
+                state: "finished"
+            };
+        }
+
+    }
+
+    return {
+        day: yesterday,
+        state
+    };
+}
+
+
+/*
    Renders the exact date of the Paris day the header numbers cover (e.g.
-   "SEP 8, 2026 · FULL DAY (PARIS)"), which is YESTERDAY -- see the comment
-   on isCurrentCasualtyEvent() for why -- and how far the collection got.
+   "SEP 8, 2026 · FULL DAY (PARIS)"), YESTERDAY unless headerCasualtyDay()
+   chose the day before -- see the comment on isCurrentCasualtyEvent() for
+   why -- and how far the collection got.
 */
 function parisCasualtyWindowLabel(
-    dayState
+    dayState,
+    day = parisYesterdayDateString()
 ) {
 
     const dateLabel =
@@ -11037,7 +11103,7 @@ function parisCasualtyWindowLabel(
             }
         ).format(
             shiftCalendarDateStringToDate(
-                parisYesterdayDateString()
+                day
             )
         );
 
@@ -11082,9 +11148,21 @@ function updateHeaderCasualties24() {
     // reports, which are not on the attacks-only map: recentContextEvents
     // carries the last few days of those categories.
     // A follow-up restates its attack's toll: the attack's own record counts it.
+    const {
+        day,
+        state: dayState
+    } =
+        headerCasualtyDay(
+            mapDataFacts
+        );
+
     const relevantEvents =
         [...allEvents, ...recentContextEvents].filter(
-            isCurrentCasualtyEvent
+            event =>
+                isCurrentCasualtyEvent(
+                    event,
+                    day
+                )
         ).filter(
             event =>
                 event.attack_update !== true
@@ -11130,7 +11208,8 @@ function updateHeaderCasualties24() {
                 const deathBreakdown =
                     extractStrict24hCasualtyBreakdown(
                         event,
-                        "death"
+                        "death",
+                        day
                     );
 
                 deathTotals.terrorist += deathBreakdown.terrorist;
@@ -11150,7 +11229,8 @@ function updateHeaderCasualties24() {
                 victimWounded +=
                     extractStrict24hCasualtyBreakdown(
                         event,
-                        "wounded"
+                        "wounded",
+                        day
                     ).victim;
 
             }
@@ -11163,19 +11243,14 @@ function updateHeaderCasualties24() {
 
                 terroristCaptured +=
                     extractStrict24hCapturedCount(
-                        event
+                        event,
+                        day
                     );
 
             }
 
         }
     );
-
-    const dayState =
-        headerCasualtyDayState(
-            mapDataFacts,
-            parisYesterdayDateString()
-        );
 
     // Figures already read stand as a floor; a zero would claim a quiet day.
     const setCasualtyNode = (
@@ -11233,7 +11308,8 @@ function updateHeaderCasualties24() {
     ) {
         windowNode.textContent =
             parisCasualtyWindowLabel(
-                dayState
+                dayState,
+                day
             );
     }
 }

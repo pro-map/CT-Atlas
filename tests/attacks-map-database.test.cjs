@@ -124,7 +124,7 @@ test('the start-up chain uses the map loader and gives every event a unique key'
   assert.match(html,/loadMapDatabase\(\)\s*\.then\(/);
   assert.equal((html.match(/fetch\("events-map\.json",/g)||[]).length,1);
   assert.match(html,/usedKeys\.has\(base\)\s*\?\s*base \+ "#" \+ index/);
-  assert.match(html,/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.filter\(\s*isCurrentCasualtyEvent/);
+  assert.match(html,/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.filter\(\s*event\s*=>\s*isCurrentCasualtyEvent\(\s*event,\s*day\s*\)/);
 });
 
 test('with no category or group checkboxes on the page, no map event is filtered out',()=>{
@@ -723,7 +723,7 @@ test('a follow-up in recent_events is never drawn or counted, in any scope, and 
   assert.ok(candidates.includes('plain-arrest'));
   assert.ok(!candidates.includes('update')&&!candidates.includes('plot-update'));
   // The header's casualty counts still see them.
-  assert.match(html,/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.filter\(\s*isCurrentCasualtyEvent/);
+  assert.match(html,/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.filter\(\s*event\s*=>\s*isCurrentCasualtyEvent\(\s*event,\s*day\s*\)/);
 });
 
 test('the "Show on map" selector defaults to all events and the map file covers 180 days of other categories',()=>{

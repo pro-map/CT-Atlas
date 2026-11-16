@@ -3,6 +3,8 @@
 // "Navy Marines kill 34 terrorists" counted as 34 victims. These rules were read
 // by hand against 90 days of live records. Do not widen them by more: the wider
 // reader, a capitalised-name guard and a CT_OPERATION guard each added new errors.
+// The only additions since (16 Nov) were read the same way, every changed record by
+// hand: "N injuries", "one death", "one injury" and alleged/suspected/presumed.
 const {test}=require("node:test");
 const assert=require("node:assert/strict");
 const fs=require("node:fs");
@@ -108,6 +110,29 @@ test("no lookbehind in the page: Safari before 16.4 throws on it and the whole s
   assert.deepEqual(deaths({title:"1 soldier killed and 1 terrorist killed"}),{terrorist:1,victim:1});
 });
 
+test("a summary's 'one death and N injuries' is read, as 'N deaths' already was (13 Nov read 0 wounded)",()=>{
+  const balochistan={title:"Car bomb attack on Balochistan security checkpoint",
+    summary:"A car bomb attack on a security checkpoint in Balochistan resulted in 2 deaths and 16 injuries."};
+  assert.deepEqual(deaths(balochistan),{terrorist:0,victim:2});
+  assert.equal(wounded(balochistan),16);
+  const berlin={title:"Terrorist vehicle-ramming attack in Berlin",
+    summary:"A terrorist vehicle-ramming attack in Berlin resulted in one death and 26 injuries; the suspect is a supporter of ISIS."};
+  assert.deepEqual(deaths(berlin),{terrorist:0,victim:1});
+  assert.equal(wounded(berlin),26);
+  assert.deepEqual(deaths({title:"Bomb attack kills one in Pandeglang, Banten",summary:"A bomb explosion resulted in one fatality in Pandeglang, Banten, Indonesia."}),{terrorist:0,victim:1});
+  assert.equal(wounded({title:"Unidentified gunmen attack vehicle in Rif Dimashq",summary:"Unidentified gunmen opened fire on a vehicle, resulting in one injury."}),1);
+  assert.equal(wounded({title:"Settlers shot at a town near Hebron",summary:"Settlers fired at a town, causing no injuries."}),0);
+  assert.equal(wounded({title:"Blast near the depot, not 2 injuries as first reported"}),0);
+});
+
+test("a qualifier before the noun keeps the figure: 'Two suspected terrorists arrested'",()=>{
+  assert.equal(captured({title:"Two suspected terrorists arrested near Jerusalem",summary:"Two suspected terrorists were arrested near Jerusalem over a plot to attack Israelis."}),2);
+  assert.equal(captured({title:"Four Suspected Terrorists Arrested In Yobe"}),4);
+  assert.equal(captured({title:"One alleged member arrested in Cauca"}),1);
+  assert.deepEqual(deaths({title:"Police repel terrorist attack in Zamfara, over 30 suspected bandits killed"}),{terrorist:30,victim:0});
+  assert.equal(captured({title:"Frente 4 suspected member arrested in Segovia"}),0,"a singular noun still needs 'one'");
+});
+
 test("death toll and total statements still take precedence",()=>{
   assert.deepEqual(deaths({title:"Death toll rises to 25 after Kano bombing, 3 attackers killed"}),{terrorist:0,victim:25});
   assert.deepEqual(deaths({title:"Fatalities: 9 in Kabul"}),{terrorist:0,victim:9});
@@ -132,8 +157,8 @@ test("attack_update rows are skipped: a follow-up restates its attack's toll",()
   const event={title:"At least 11 people were killed in a suicide bombing",categories:["Attacks"]};
   const h=vm.createContext({...c,document:{getElementById:node},allEvents:[event],
     recentContextEvents:[{...event,attack_update:true},{title:"Over 30 arrested",categories:["Arrests"],attack_update:true}],
-    eventCategories:row=>row.categories,mapDataFacts:null,parisYesterdayDateString:()=>"2026-11-05",
-    headerCasualtyDayState:()=>"finished",parisCasualtyWindowLabel:()=>"NOV 5, 2026 · FULL DAY (PARIS)"});
+    eventCategories:row=>row.categories,mapDataFacts:null,
+    headerCasualtyDay:()=>({day:"2026-11-05",state:"finished"}),parisCasualtyWindowLabel:()=>"NOV 5, 2026 · FULL DAY (PARIS)"});
   vm.runInContext(html.slice(html.indexOf("const TERRORIST_SIDE_CASUALTY_WORDS"),html.indexOf("function casualtyNumber("))+
     ["casualtyTextForEvent","explicitStructuredCasualtyValue","casualtyPhraseSide","casualtyNumber","casualtyStatements",
       "extractStrict24hCasualtyBreakdown","extractStrict24hCapturedCount","updateHeaderCasualties24"].map(extract).join("\n")+
