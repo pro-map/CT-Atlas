@@ -10974,6 +10974,36 @@ function extractStrict24hCapturedCount(
 
 
 /*
+   The run's health as the casualty counts see it. The header counts unlocated
+   attacks too (build_events_map.py keeps them), so a run degraded only because
+   some records still wait for a location has collected the day all the same:
+   on 16 Nov, 36 records waiting out of 7,988 would have kept 15 and 14 Nov
+   INCOMPLETE until the next healthy run.
+*/
+function casualtyCollectionHealth(
+    status
+) {
+
+    const health =
+        collectionHealth(
+            status
+        );
+
+    const reasons =
+        status?.health?.reasons;
+
+    return health === "behind"
+        && Array.isArray(reasons)
+        && reasons.length > 0
+        && reasons.every(reason => reason === "geolocation_incomplete")
+        ?
+        "ok"
+        :
+        health;
+}
+
+
+/*
    Whether the collection finished the day the header covers. On 5 Nov the
    header read FULL DAY with 0 killed, from 7 records against about 140 on a
    normal day, while the brief beside it reported deaths. A day is finished
@@ -11018,7 +11048,7 @@ function headerCasualtyDayState(
     }
 
     const health =
-        collectionHealth(
+        casualtyCollectionHealth(
             status
         );
 

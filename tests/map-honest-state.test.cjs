@@ -191,7 +191,7 @@ function headerContext(now){
   const c=vm.createContext({document:{getElementById:()=>null},Date:Clock,Intl,Map,Number,Array,Set,Math});
   vm.runInContext(statusBlock+html.slice(html.indexOf("const PARIS_DAY_FORMAT"),html.indexOf("function parisCalendarDateString("))+
     html.slice(html.indexOf("let parisYesterdayMinute"),html.indexOf("function parisYesterdayDateString("))+
-    ["parisCalendarDateString","shiftCalendarDateString","parisYesterdayDateString","headerCasualtyDayState","headerCasualtyDay","parisCasualtyWindowLabel","shiftCalendarDateStringToDate"].map(extract).join("\n"),c);
+    ["parisCalendarDateString","shiftCalendarDateString","parisYesterdayDateString","casualtyCollectionHealth","headerCasualtyDayState","headerCasualtyDay","parisCasualtyWindowLabel","shiftCalendarDateStringToDate"].map(extract).join("\n"),c);
   return c;
 }
 const dayState=(status,nowIso)=>{
@@ -226,6 +226,27 @@ test("until a run has finished yesterday, the header counts the day before, whic
   assert.deepEqual({...headerContext(Date.parse("2026-11-16T18:20:00Z")).headerCasualtyDay(facts({...lastNight,status:"failed"}))},{day:"2026-11-15",state:"incomplete"});
   // Nor when no run has started since then: yesterday reads NO DATA.
   assert.deepEqual({...headerContext(Date.parse("2026-11-18T09:00:00Z")).headerCasualtyDay(facts(lastNight))},{day:"2026-11-17",state:"missing"});
+});
+
+test("a run degraded only by records waiting for a location still finishes the day",()=>{
+  // 16 Nov 20:38 Paris: every article reviewed, 36 of 7,988 records waiting for a
+  // location. The header counts unlocated attacks too, so 15 Nov is complete.
+  const tonight={...goodRun,run_started_at:"2026-11-16T19:38:26Z",last_attempt_at:"2026-11-16T19:38:26Z",published_at:"2026-11-16T21:36:30Z",
+    health:{...health("degraded"),reasons:["geolocation_incomplete"],recent_pending:0,review_share:1}};
+  const choice=nowIso=>({...headerContext(Date.parse(nowIso)).headerCasualtyDay(facts(tonight))});
+  assert.deepEqual(choice("2026-11-16T22:00:00Z"),{day:"2026-11-15",state:"finished"});
+  // The next morning, before the 10:17 slot has run, the day before is still 15 Nov.
+  assert.deepEqual(choice("2026-11-17T09:00:00Z"),{day:"2026-11-15",state:"finished"});
+  const c=headerContext(Date.parse("2026-11-16T22:00:00Z"));
+  assert.equal(c.casualtyCollectionHealth(tonight),"ok");
+  // Any other reason beside it, an empty list or a failed run still counts against the day.
+  for(const reasons of [["geolocation_incomplete","few_events_published"],["source_failed"],[]]){
+    const run={...tonight,health:{...tonight.health,reasons}};
+    assert.equal(c.headerCasualtyDayState(facts(run),"2026-11-15"),"incomplete",reasons.join("+")||"no reasons");
+  }
+  assert.equal(c.headerCasualtyDayState(facts({...tonight,status:"failed"}),"2026-11-15"),"incomplete");
+  // The status badge keeps its own reading: it still says UPDATE BEHIND.
+  assert.equal(c.collectionHealth(tonight),"behind");
 });
 
 test("an unfinished day never says FULL DAY",()=>{
