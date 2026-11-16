@@ -410,3 +410,37 @@ test('Deep Search PDF export uses the shared dependency-free downloader',()=>{
  assert.match(js,/await pdf\.download\(/);
  assert.doesNotMatch(js,/cdnjs|html2canvas|jspdf/i);
 });
+// Google News refused every query relayed from Cloudflare on 2026-11-16 (5xx, about 8 s each).
+test('when Google refuses the first batch, the other Google queries, its rescues and ACLED are skipped and Bing searches every language',async()=>{
+ const calls=[];
+ const bingRss=q=>`<rss><channel><item><title>${q} Afghanistan heroin seizure</title><link>https://www.bing.com/news/apiclick.aspx?url=${encodeURIComponent('https://news.test/'+encodeURIComponent(q))}</link><News:Source>Wire</News:Source></item></channel></rss>`;
+ const h=harness(async url=>{
+  const u=new URL(url);calls.push(u);
+  if(u.hostname==='news.google.com')return new Response('<html>Sorry</html>',{status:503});
+  if(u.hostname==='www.bing.com')return new Response(bingRss(u.searchParams.get('q')));
+  return new Response('{}');
+ });
+ const result=await h.retrieveNews(plan(h),windowFor(30),['fa','ps','ur']);
+ const google=calls.filter(u=>u.hostname==='news.google.com');
+ assert.equal(google.length,6,'only the first batch reaches Google');
+ assert.ok(!google.some(u=>(u.searchParams.get('q')||'').includes('site:acleddata.com')),'ACLED is a Google query: not sent');
+ const bing=result.waves.filter(w=>w.query.engine==='bing');
+ assert.deepEqual(Array.from(bing,w=>w.query.language).sort(),[...h.DEEP_SEARCH_LANGUAGE_CODES].sort(),'Bing covers every language');
+ assert.deepEqual(Array.from(bing.slice(0,3),w=>w.query.language),['fa','ps','ur'],'priority languages first');
+ assert.ok(bing.every(w=>w.ok&&w.rows.length===1));
+ assert.equal(result.subrequest_budget.google_news_refused,true);
+ assert.ok(result.subrequest_budget.search_requests<=40,'still within the search budget');
+ assert.equal(result.subrequest_budget.acled_requests,0);
+});
+test('one Google answer in the first batch keeps every Google query and the usual Bing rescue',async()=>{
+ const calls=[];let google=0;
+ const h=harness(async url=>{
+  const u=new URL(url);calls.push(u);
+  if(u.hostname==='news.google.com')return ++google===1?new Response('<rss><channel></channel></rss>'):new Response('busy',{status:503});
+  return new Response(u.hostname==='www.bing.com'?'<rss><channel></channel></rss>':'{}');
+ });
+ const result=await h.retrieveNews(plan(h),windowFor(30),['fa','ps','ur']);
+ assert.equal(result.subrequest_budget.google_news_refused,false);
+ assert.ok(calls.filter(u=>u.hostname==='news.google.com').length>=28,'every planned Google query is sent');
+ assert.equal(result.waves.filter(w=>w.query.engine==='bing').length,3,'Bing only rescues the sparse priority languages');
+});

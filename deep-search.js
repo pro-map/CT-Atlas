@@ -364,7 +364,7 @@ function render(rawPayload){
 // whole search. It plans, relays each search provider's answer and writes the assessment;
 // this page parses the searches, reads its copy of the CT Atlas database and assembles the
 // evidence with the Worker's own functions. Bump the version when that file changes.
-const DEEP_SEARCH_MODULE="./cloudflare-worker/deep-search.js?v=20261116";
+const DEEP_SEARCH_MODULE="./cloudflare-worker/deep-search.js?v=20261116b";
 let coreModulePromise=null;
 function loadCore(){
   if(!coreModulePromise)coreModulePromise=import(DEEP_SEARCH_MODULE).catch(error=>{
@@ -419,7 +419,8 @@ async function run(){
       setStatus(payload.likely_transient_fetch_issue
         ?"Assessment written from general knowledge only [GK]: the search providers were unavailable for every query. Retry in a few minutes for current reporting."
         :"Assessment written from general knowledge only [GK]: no current reporting was found in the database or the multilingual search.","warning");
-    }else setStatus(`Assessment complete · ${Number(payload.retrieval?.articles_retrieved||0)} articles · ${Number(payload.retrieval?.unique_event_clusters||0)} unique event clusters · ${Number(payload.retrieval?.potential_atlas_gaps||0)} potential CT Atlas gaps.${periodNote}`,"success");
+    }else setStatus(`Assessment complete · ${Number(payload.retrieval?.articles_retrieved||0)} articles · ${Number(payload.retrieval?.unique_event_clusters||0)} unique event clusters · ${Number(payload.retrieval?.potential_atlas_gaps||0)} potential CT Atlas gaps.${periodNote}`
+      +(payload.retrieval?.google_news_refused?" Google News refused the searches from the CT Atlas server, so Bing News searched every language instead.":""),"success");
   };
   try{
     const scope=databaseScope().filters;
