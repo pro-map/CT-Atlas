@@ -276,7 +276,7 @@ test("the gate has no code that deletes Dark Web or IP limiter records or a name
 });
 
 test("reports and Deep Search leave out what the map holds for corroboration",()=>{
-  assert.match(read("cloudflare-worker/index.js"),/allEvents\.filter\(e => e\.held_for_corroboration !== true/);
+  assert.match(read("cloudflare-worker/report-selection.js"),/allEvents\.filter\(e => e\.held_for_corroboration !== true/);
   assert.equal((read("cloudflare-worker/deep-search.js").match(/held_for_corroboration === true/g)||[]).length,2);
 });
 

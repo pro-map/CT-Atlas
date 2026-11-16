@@ -262,9 +262,11 @@ test('Deep Search consults the database before external search and numbers evide
 });
 
 test('the report route filters by group and keys its cache on it',()=>{
+  // The selection is built in the browser and by the Worker with report-selection.js.
+  const selection=fs.readFileSync('cloudflare-worker/report-selection.js','utf8');
+  assert.match(selection,/matchesRegion\(e, region\)\s*&& matchesTopic\(e, topic\) && matchesGroup\(e, actorGroup\)/);
   const route=fs.readFileSync('cloudflare-worker/index.js','utf8');
-  assert.match(route,/matchesRegion\(e, region\) && matchesTopic\(e, topic\) && matchesGroup\(e, actorGroup\)/);
-  assert.match(route,/JSON\.stringify\(\{ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION \}\)/);
+  assert.match(route,/JSON\.stringify\(\{ region, topic, actorGroup, periodDays, compare, databaseVersion: input\.databaseVersion, selection: selectionHash, version: REPORT_GENERATOR_VERSION \}\)/);
   assert.ok(vm.runInContext('ALLOWED_PERIODS.has(1)',shared));
 });
 

@@ -330,7 +330,7 @@ const REPORT_ENV={AUTH_USERS_JSON:JSON.stringify({analyst:'a'.repeat(64)}),ALLOW
  EVENTS_URL:'https://x.test/events.json',EVENTS_LITE_URL:'https://x.test/events-lite.json'};
 
 // The real route, up to the gate's answers and the two files.
-async function reportRoute(gateAnswers,file){
+async function reportRoute(gateAnswers,file,extra={}){
  const {default:route}=await import(pathToFileURL(path.resolve('cloudflare-worker/index.js')).href);
  const gate=[],reads=[],pending=[];
  const stub={fetch:async(url,init)=>{
@@ -345,7 +345,7 @@ async function reportRoute(gateAnswers,file){
  globalThis.fetch=async url=>{reads.push(String(url));return file?{ok:true,status:200,body:bodyOf(file)}:{ok:false,status:503};};
  try{
   const response=await route.fetch(new Request('https://x.test/report',{method:'POST',headers:{'X-Session-Token':'s'},
-   body:JSON.stringify({user_id:'analyst',region:'GLOBAL',topic:'ALL',period_days:180})}),env,{waitUntil:promise=>pending.push(promise)});
+   body:JSON.stringify({user_id:'analyst',region:'GLOBAL',topic:'ALL',period_days:180,...extra})}),env,{waitUntil:promise=>pending.push(promise)});
   await Promise.all(pending);
   return {response,gate,reads};
  }finally{globalThis.fetch=realFetch;}
@@ -368,19 +368,35 @@ test('a database that cannot be read answers 503, records the failure and gives 
  assert.equal(gate.find(call=>call.name==='/usage-log-update').payload.log_update.outcome,'failed');
 });
 
-test('a cached report is served after the gate, on the key of the database version',async()=>{
- const {sha256,REPORT_GENERATOR_VERSION}=await import(pathToFileURL(path.resolve('cloudflare-worker/shared.js')).href);
+test('a cached report is served after the gate, on the key of the database version and the selection',async()=>{
+ const {sha256,REPORT_GENERATOR_VERSION,COVERAGE_NOTE}=await import(pathToFileURL(path.resolve('cloudflare-worker/shared.js')).href);
+ const {reportSelection,acceptReportSelection}=await import(pathToFileURL(path.resolve('cloudflare-worker/report-selection.js')).href);
  const {response,gate}=await reportRoute({'/session-get':SESSION,'/acquire':{permit_id:'permit'},
   '/cache-get':{hit:true,report:{title:'Cached'}}},liteBytes);
  assert.equal(response.status,200);
  assert.deepEqual(await response.json(),{title:'Cached',cached:true});
  assert.deepEqual(gate.map(call=>call.name),['/session-get','/acquire','/cache-get','/commit-report','/usage-increment','/release']);
- const databaseVersion=JSON.parse(liteBytes.toString('utf8')).last_updated;
- const key=await sha256(JSON.stringify({region:'GLOBAL',topic:'ALL',actorGroup:'ALL',periodDays:180,compare:true,databaseVersion,version:REPORT_GENERATOR_VERSION}));
+ const db=JSON.parse(liteBytes.toString('utf8'));
+ const params={region:'GLOBAL',topic:'ALL',actorGroup:'ALL',periodDays:180,compare:true};
+ const input=acceptReportSelection(reportSelection(db,params),{...params,coverageNote:COVERAGE_NOTE});
+ const selection=await sha256(JSON.stringify([input.currentSourced,input.previousSourced,input.currentStats,input.previousStats,input.storyEvents.map(event=>event.original_title)]));
+ const key=await sha256(JSON.stringify({...params,databaseVersion:db.last_updated,selection,version:REPORT_GENERATOR_VERSION}));
  assert.equal(gate.find(call=>call.name==='/cache-get').payload.cacheKey,key);
- // The selection costs up to a second of CPU at plateau size, and a cached report needs none of it.
- const route=fs.readFileSync('cloudflare-worker/index.js','utf8');
- assert.ok(route.indexOf('"/cache-get"')<route.indexOf('const matching ='),'the cache is asked before the selection');
+});
+
+test('a report sent with its selection never reads the events database',async()=>{
+ const {reportSelection}=await import(pathToFileURL(path.resolve('cloudflare-worker/report-selection.js')).href);
+ const db=JSON.parse(liteBytes.toString('utf8'));
+ const selection=reportSelection(db,{region:'GLOBAL',topic:'ALL',actorGroup:'ALL',periodDays:180,compare:true});
+ const cached=await reportRoute({'/session-get':SESSION,'/acquire':{permit_id:'permit'},
+  '/cache-get':{hit:true,report:{title:'Cached'}}},liteBytes,{selection});
+ assert.equal(cached.response.status,200);
+ assert.deepEqual(cached.reads,[],'the Worker must not download the database');
+ const unreadable=await reportRoute({'/session-get':SESSION,'/acquire':{permit_id:'permit',log_id:'log'}},liteBytes,{selection:{current_events:'not a list'}});
+ assert.equal(unreadable.response.status,400);
+ assert.match((await unreadable.response.json()).error,/selection could not be read/);
+ assert.deepEqual(unreadable.reads,[]);
+ assert.ok(unreadable.gate.some(call=>call.name==='/release'),'the permit is given back');
 });
 
 // The real Worker on the real lite file, up to the model. Every record JSON.parse hands out is

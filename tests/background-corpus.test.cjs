@@ -195,8 +195,10 @@ test('an archive row repeating an event in its own language is not sent next to 
     original_title:'В Саратовской области обнаружен 18-летний террорист',date:'2026-09-20T08:00:00Z'}];
   const rows=[{url:'https://ru/1',kind:'related_article',title:'В Саратовской области обнаружен 18-летний террорист',published:'2026-09-20T09:00:00Z',parent_incident_id:'inc-r'}];
   assert.deepEqual(plain(corpus.toContextItems(rows,promptEvents)),[]);
+  const selection=fs.readFileSync('cloudflare-worker/report-selection.js','utf8');
+  assert.match(selection,/story_titles: currentEvents\.map\(event => cleanText\(event\.original_title, 280\)\)/);
+  assert.match(selection,/storyEvents: currentSourced\.map\(\(event, index\) => \(\{ \.\.\.event, original_title: cleanText\(titles\[index\], 280\) \}\)\)/);
   const route=fs.readFileSync('cloudflare-worker/index.js','utf8');
-  assert.match(route,/original_title: cleanText\(current\[index\]\?\.original_title, 280\)/);
   assert.match(route,/fetchBackgroundContext\(env, \{ events: storyEvents,/);
 });
 
