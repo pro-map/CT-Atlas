@@ -269,7 +269,7 @@ function renderHeader(events,state){
     headerCasualtyDay:()=>({day:"2026-11-05",state}),parisCasualtyWindowLabel:value=>value,
     extractStrict24hCasualtyBreakdown:(event,kind)=>kind==="death"?{terrorist:0,victim:event.killed||0}:{terrorist:0,victim:0},
     extractStrict24hCapturedCount:()=>0});
-  vm.runInContext(extract("updateHeaderCasualties24"),c);
+  vm.runInContext(["reviewedCasualtyFigure","headerCasualtyFigures","updateHeaderCasualties24"].map(extract).join("\n"),c);
   c.updateHeaderCasualties24();
   return id=>node(id).textContent;
 }

@@ -3593,6 +3593,20 @@ def _collect_all_once(days):
 # GEMINI AI EVENT SELECTION ENGINE
 # ============================================================
 
+# The casualty figures of the incident a record reports, asked for in the same
+# review call (never an extra request). The header's daily counter reads them
+# from the record's "casualties" object and reads the title and summary only
+# for a figure the review did not give. Required, because an optional field is
+# mostly left out (known_incidents.schema_with_ref).
+CASUALTY_FIELDS = (
+    "victims_killed",
+    "victims_wounded",
+    "perpetrators_killed",
+    "perpetrators_captured",
+)
+# Larger figures are misreadings, not tolls (the header applies the same cap).
+CASUALTY_FIGURE_MAX = 100000
+
 AI_SELECTION_SCHEMA = {
     "type": "object",
     "properties": {
@@ -3680,6 +3694,8 @@ AI_SELECTION_SCHEMA = {
                         "type": "string",
                         "enum": ["INITIAL", "FOLLOW_UP", "ARREST_UPDATE", "INVESTIGATION_UPDATE", "OTHER_UPDATE"]
                     },
+                    # CASUALTY_FIELDS: null when the text does not say.
+                    **{name: {"type": ["integer", "null"]} for name in CASUALTY_FIELDS},
                     "reason": {
                         "type": "string"
                     },
@@ -3700,6 +3716,7 @@ AI_SELECTION_SCHEMA = {
                     "is_attack",
                     "incident_anchor",
                     "update_type",
+                    *CASUALTY_FIELDS,
                     "reason",
                 ],
             },
@@ -3989,6 +4006,42 @@ INCIDENT / CASE MODEL (mandatory):
 These fields are used to count DISTINCT incidents in country analysis. Never
 turn multiple articles or follow-up developments about one case into multiple
 attacks.
+
+CASUALTY FIGURES (victims_killed, victims_wounded, perpetrators_killed,
+perpetrators_captured): how many people the incident this record reports
+killed, wounded or put in custody, as its title, summary and related headlines
+state it. They feed a daily counter: give a figure only when the text supports
+it, and null when the text does not say.
+- People named or described count even without a written number: "killed a
+  Chinese national and a police inspector" is 2, "Somali MP killed" is 1, "a
+  soldier was wounded" is 1, "injuries to a woman and a child" is 2, "troops
+  neutralize terrorist" is 1.
+- victims_killed / victims_wounded: everyone the perpetrators killed or
+  wounded -- civilians, officials, soldiers, police and other security forces.
+- perpetrators_killed: terrorists, militants, insurgents, bandits, attackers or
+  armed suspects killed, whether by security forces, by rivals or by their own
+  explosives (a suicide bomber who died counts). "Neutralized" or "eliminated"
+  means killed unless the text says the person was captured.
+- perpetrators_captured: suspects, militants or members of the group arrested,
+  detained, captured or apprehended in this development. Surrenders, people
+  only questioned and releases do not count.
+- "At least 12", "more than 30" and "over 30" give 12 and 30; a range gives its
+  lower bound. "Several", "dozens", "many" or "scores" give null.
+- The same toll restated in the title, summary and related headlines is one
+  figure, never a sum: take the latest or largest total stated for this
+  incident.
+- A toll that does not say whose dead they are ("12 killed") is victims, unless
+  the text says it includes the attackers: "12 killed including 3 attackers"
+  is 9 victims_killed and 3 perpetrators_killed.
+- Count only what happened in the development this record reports: a record
+  about arrests after an attack gives perpetrators_captured, not the attack's
+  earlier toll; a trial, funeral or anniversary gives null. Executions carried
+  out after a sentence are not perpetrators_killed.
+- Leave out cumulative or historical totals (since 2020, this year, over a
+  months-long campaign) and casualties of other incidents given as background.
+- 0 only when the text says no one was killed, wounded or arrested; otherwise
+  null. A record that reports no incident (off-topic, analysis) has null in
+  all four.
 
 Keep the reason concise and specific.
 """
@@ -4583,6 +4636,42 @@ def extract_interaction_text(
     return output
 
 
+# Nullable integers are documented for the Interactions API, but this collector
+# sent none before the casualty fields. If Gemini refuses them, the rest of the
+# run asks without the casualty fields rather than stopping the collection; the
+# header then reads every figure from the text, as before.
+CASUALTY_SCHEMA_REFUSED = False
+
+
+def without_casualty_fields(schema):
+    results = schema["properties"]["results"]
+    items = results["items"]
+    trimmed = {
+        **items,
+        "properties": {name: value for name, value in items["properties"].items() if name not in CASUALTY_FIELDS},
+        "required": [name for name in items["required"] if name not in CASUALTY_FIELDS],
+    }
+    return {**schema, "properties": {**schema["properties"], "results": {**results, "items": trimmed}}}
+
+
+def selection_schema(known_rows):
+    schema = AI_SELECTION_SCHEMA_KNOWN if known_rows else AI_SELECTION_SCHEMA
+    return without_casualty_fields(schema) if CASUALTY_SCHEMA_REFUSED else schema
+
+
+def casualty_schema_refused(response):
+    """True once, on a 400 that names the schema while it still asks for the casualty fields."""
+    global CASUALTY_SCHEMA_REFUSED
+    if (CASUALTY_SCHEMA_REFUSED or response.status_code != 400
+            or "schema" not in str(getattr(response, "text", "") or "").lower()):
+        return False
+    CASUALTY_SCHEMA_REFUSED = True
+    print("   Gemini refused the casualty fields of the selection schema: "
+          f"{' '.join(str(response.text).split())[:400]}")
+    print("   Asking without them for the rest of this run.")
+    return True
+
+
 def call_ai_selection_batch(
     batch
 ):
@@ -4633,7 +4722,7 @@ def call_ai_selection_batch(
                 "application/json",
 
             "schema":
-                AI_SELECTION_SCHEMA_KNOWN if known_rows else AI_SELECTION_SCHEMA,
+                selection_schema(known_rows),
         },
 
         "generation_config": {
@@ -4717,6 +4806,10 @@ def call_ai_selection_batch(
                     delay
                 )
 
+                continue
+
+            if casualty_schema_refused(response):
+                body["response_format"]["schema"] = selection_schema(known_rows)
                 continue
 
             if response.status_code >= 400:
@@ -4905,6 +4998,23 @@ def correct_primary_category(event):
     event["categories"] = categories[1:] + categories[:1]
     event["category"] = event["categories"][0]
     return True
+
+
+def casualty_figures(result):
+    """The review's casualty figures as a record keeps them: only the figures it
+    gave ({} when it gave none), or None for a decision made before it was asked
+    for them. A value that is not a whole number in range is left out, so the
+    header reads that figure from the text instead."""
+    if not any(name in result for name in CASUALTY_FIELDS):
+        return None
+    figures = {}
+    for name in CASUALTY_FIELDS:
+        value = result.get(name)
+        if isinstance(value, float) and value.is_integer():
+            value = int(value)
+        if type(value) is int and 0 <= value <= CASUALTY_FIGURE_MAX:
+            figures[name] = value
+    return figures
 
 
 def apply_ai_selection(
@@ -5115,6 +5225,12 @@ def apply_ai_selection(
     if not event.get("incident_reuse"):
         event["incident_anchor"] = incident_anchor
     event["update_type"] = update_type
+    # The figures belong to the text this decision writes into title and summary.
+    figures = casualty_figures(result)
+    if figures is None:
+        event.pop("casualties", None)
+    else:
+        event["casualties"] = figures
 
     # Never replace an id incident consolidation already settled on.
     fresh_incident_id = not event.get("incident_id")
@@ -7985,6 +8101,13 @@ def merge_event(
                 ] = new.get(
                     field
                 )
+
+        # The figures describe the headline's text: without its own, the
+        # header reads the new title and summary.
+        if "casualties" in new:
+            existing["casualties"] = new["casualties"]
+        else:
+            existing.pop("casualties", None)
 
     dates = [
         value

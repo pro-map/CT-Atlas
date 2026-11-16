@@ -5,6 +5,8 @@
 // reader, a capitalised-name guard and a CT_OPERATION guard each added new errors.
 // The only additions since (16 Nov) were read the same way, every changed record by
 // hand: "N injuries", "one death", "one injury" and alleged/suspected/presumed.
+// Casualties written without a number ("killed a police inspector") come from the
+// collection's review instead: see the last tests and casualty_figures_test.py.
 const {test}=require("node:test");
 const assert=require("node:assert/strict");
 const fs=require("node:fs");
@@ -23,10 +25,11 @@ function extract(name){
   return html.slice(start,i+1);
 }
 
+const READERS=["casualtyTextForEvent","explicitStructuredCasualtyValue","casualtyPhraseSide","casualtyNumber","casualtyStatements",
+  "extractStrict24hCasualtyBreakdown","extractStrict24hCapturedCount","reviewedCasualtyFigure","headerCasualtyFigures"];
+const PATTERNS=html.slice(html.indexOf("const TERRORIST_SIDE_CASUALTY_WORDS"),html.indexOf("function casualtyNumber("));
 const c=vm.createContext({isCurrentCasualtyEvent:()=>true});
-vm.runInContext(html.slice(html.indexOf("const TERRORIST_SIDE_CASUALTY_WORDS"),html.indexOf("function casualtyNumber("))+
-  ["casualtyTextForEvent","explicitStructuredCasualtyValue","casualtyPhraseSide","casualtyNumber","casualtyStatements",
-    "extractStrict24hCasualtyBreakdown","extractStrict24hCapturedCount"].map(extract).join("\n"),c);
+vm.runInContext(PATTERNS+READERS.map(extract).join("\n"),c);
 
 const deaths=event=>({...c.extractStrict24hCasualtyBreakdown(event,"death")});
 const wounded=event=>c.extractStrict24hCasualtyBreakdown(event,"wounded").victim;
@@ -151,19 +154,70 @@ test("the rejected ideas stay out",()=>{
   assert.doesNotMatch(header,/incident_id/,"grouping by incident changed nothing on any of 46 days");
 });
 
-test("attack_update rows are skipped: a follow-up restates its attack's toll",()=>{
+function header(allEvents,recentContextEvents=[]){
   const nodes=new Map();
   const node=id=>{if(!nodes.has(id))nodes.set(id,{textContent:""});return nodes.get(id);};
-  const event={title:"At least 11 people were killed in a suicide bombing",categories:["Attacks"]};
-  const h=vm.createContext({...c,document:{getElementById:node},allEvents:[event],
-    recentContextEvents:[{...event,attack_update:true},{title:"Over 30 arrested",categories:["Arrests"],attack_update:true}],
+  const h=vm.createContext({document:{getElementById:node},allEvents,recentContextEvents,
     eventCategories:row=>row.categories,mapDataFacts:null,
     headerCasualtyDay:()=>({day:"2026-11-05",state:"finished"}),parisCasualtyWindowLabel:()=>"NOV 5, 2026 · FULL DAY (PARIS)"});
-  vm.runInContext(html.slice(html.indexOf("const TERRORIST_SIDE_CASUALTY_WORDS"),html.indexOf("function casualtyNumber("))+
-    ["casualtyTextForEvent","explicitStructuredCasualtyValue","casualtyPhraseSide","casualtyNumber","casualtyStatements",
-      "extractStrict24hCasualtyBreakdown","extractStrict24hCapturedCount","updateHeaderCasualties24"].map(extract).join("\n")+
+  vm.runInContext(PATTERNS+[...READERS,"updateHeaderCasualties24"].map(extract).join("\n")+
     "function isCurrentCasualtyEvent(){return true;}",h);
   h.updateHeaderCasualties24();
-  assert.equal(node("headerVictimsDeaths24").textContent,"11");
-  assert.equal(node("headerTerroristsCaptured24").textContent,"0");
+  const read=id=>node(id).textContent;
+  return {victimsKilled:read("headerVictimsDeaths24"),victimsWounded:read("headerVictimsWounded24"),
+    terroristsKilled:read("headerTerroristsDeaths24"),terroristsCaptured:read("headerTerroristsCaptured24")};
+}
+
+test("attack_update rows are skipped: a follow-up restates its attack's toll",()=>{
+  const event={title:"At least 11 people were killed in a suicide bombing",categories:["Attacks"]};
+  const counts=header([event],[{...event,attack_update:true,casualties:{victims_killed:11}},
+    {title:"Over 30 arrested",categories:["Arrests"],attack_update:true,casualties:{perpetrators_captured:30}}]);
+  assert.equal(counts.victimsKilled,"11");
+  assert.equal(counts.terroristsCaptured,"0");
+});
+
+// The collection's review now writes casualties on each record (collector.py
+// CASUALTY_FIELDS). The figures below are the ones the new prompt asks for, written by hand
+// on the live records of 14-15 Nov that the readers above leave at 0: no Gemini call was made.
+const figures=(event)=>({...c.headerCasualtyFigures(event,"2026-11-15")});
+
+test("the review's figure wins, one field at a time, and the text readers fill the rest",()=>{
+  assert.deepEqual(figures({title:"Suspected terrorists kill Chinese national and police inspector in Bauchi",
+    casualties:{victims_killed:2}}),{victimsKilled:2,victimsWounded:0,terroristsKilled:0,terroristsCaptured:0});
+  assert.deepEqual(figures({title:"21 militants killed and six security personnel killed in clashes in Balochistan",
+    casualties:{victims_killed:6,victims_wounded:3}}),{victimsKilled:6,victimsWounded:3,terroristsKilled:21,terroristsCaptured:0},
+    "a figure the review left out is read from the text");
+  assert.deepEqual(figures({title:"Security operations in Jalisco result in arrests and neutralizations",
+    summary:"The operations led to the capture of nine key suspects and the death of three alleged criminals.",
+    casualties:{perpetrators_killed:3,perpetrators_captured:9}}),{victimsKilled:0,victimsWounded:0,terroristsKilled:3,terroristsCaptured:9});
+  assert.deepEqual(figures({title:"Blast in market, 3 people dead",casualties:{victims_killed:0}}).victimsKilled,0,
+    "a review's 0 stands");
+});
+
+test("a record reviewed before the fields, or with a figure out of shape, keeps the text readers",()=>{
+  const text={title:"Two dead, 5 wounded in suspected terrorist knife attack in France"};
+  const expected={victimsKilled:2,victimsWounded:5,terroristsKilled:0,terroristsCaptured:0};
+  assert.deepEqual(figures(text),expected);
+  for(const casualties of [{},{victims_killed:null},{victims_killed:"7"},{victims_killed:-1},{victims_killed:2.5},{victims_killed:100001}]){
+    assert.deepEqual(figures({...text,casualties}),expected,JSON.stringify(casualties));
+  }
+  assert.equal(c.reviewedCasualtyFigure({casualties:null},"victims_killed"),null);
+});
+
+test("the header keeps its rules with the review's figures (15 Nov read 3, 0, 0, 2)",()=>{
+  const counts=header([
+    {title:"Suspected terrorists kill Chinese national and police inspector in Bauchi",categories:["Attacks"],casualties:{victims_killed:2}},
+    {title:"Somalia MP killed in drive-by shooting",categories:["Attacks"],casualties:{victims_killed:1}},
+    {title:"Sound bomb explosion injures civilians in Amuda",categories:["Attacks"],casualties:{victims_wounded:2}},
+    {title:"Hamas-linked plot disrupted in Vienna",categories:["Attacks"],casualties:{perpetrators_captured:1}}
+  ],[
+    {title:"Troops neutralize terrorist and recover motorcycles in Wase, Plateau State",categories:["Counter Terrorism Action"],
+      casualties:{perpetrators_killed:1,victims_killed:4}},
+    {title:"Ten presumed members of 'Los Cocos' captured in raids in Guainía",categories:["Arrests","Counter Terrorism Action"],
+      casualties:{perpetrators_captured:10}},
+    {title:"Military operation in Nigeria neutralizes eight terrorists",categories:["Arrests"],casualties:{perpetrators_killed:8}},
+    {title:"Ransom paid in Kaduna",categories:["Terrorist Financing"],casualties:{victims_killed:5,perpetrators_captured:2}}
+  ]);
+  assert.deepEqual(counts,{victimsKilled:"3",victimsWounded:"2",terroristsKilled:"1",terroristsCaptured:"10"},
+    "victims count on attacks only, terrorists killed on attacks and CT actions, captured on CT actions and arrests");
 });

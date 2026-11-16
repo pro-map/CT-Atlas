@@ -2826,7 +2826,7 @@ html, body {
    Most recent Paris calendar day the collection has finished (00:00-24:00
    Paris; yesterday, or the day before until yesterday is finished, see
    headerCasualtyDay()), split into victims killed/wounded and terrorists
-   killed/captured. See isCurrentCasualtyEvent(),
+   killed/captured. See isCurrentCasualtyEvent(), headerCasualtyFigures(),
    extractStrict24hCasualtyBreakdown() and
    extractStrict24hCapturedCount() in the JS below.
    ============================================================ */
@@ -4334,7 +4334,7 @@ html, body {
 
         <div id="dataStateBadge" data-state="neutral" hidden></div>
 
-        <div id="headerCasualties24" title="Casualties for the most recent Paris calendar day the collection has finished (00:00-24:00 Paris time), by publication date: yesterday once a healthy collection has started after it ended, and the day before until then. FULL DAY means a healthy collection started after that day ended. INCOMPLETE means the last collection started before it ended or left much of it unreviewed, and NO DATA that none ran on it: a dash then means not known, not zero. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest.">
+        <div id="headerCasualties24" title="Casualties for the most recent Paris calendar day the collection has finished (00:00-24:00 Paris time), by publication date: yesterday once a healthy collection has started after it ended, and the day before until then. FULL DAY means a healthy collection started after that day ended. INCOMPLETE means the last collection started before it ended or left much of it unreviewed, and NO DATA that none ran on it: a dash then means not known, not zero. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest. Each article counts with the figures the AI review read in it, or, where the review gave none, with the numbers written in its title and summary.">
             <div id="headerCasualtiesWindow">YESTERDAY (PARIS)</div>
             <div class="header-casualty-group">
                 <span class="header-casualty-group-label">VICTIMS</span>
@@ -10974,6 +10974,119 @@ function extractStrict24hCapturedCount(
 
 
 /*
+   The figure the collection's AI review gave for one side of a record's
+   incident (collector.py CASUALTY_FIELDS, kept in the record's "casualties"),
+   or null when it gave none: a record reviewed before the review gave figures,
+   or a text that does not say. Most reports state casualties without a written number
+   ("killed a Chinese national and a police inspector", "Troops neutralize
+   terrorist"), which the strict readers above leave unread on purpose: 15 Nov
+   read 3 victims killed and 0 terrorists killed.
+*/
+function reviewedCasualtyFigure(
+    event,
+    field
+) {
+
+    const value =
+        event.casualties
+        &&
+        event.casualties[
+            field
+        ];
+
+    return Number.isInteger(
+        value
+    )
+        && value >= 0
+        && value <= 100000
+        ?
+        value
+        :
+        null;
+}
+
+
+/*
+   One record's four header figures: each one the review gave, and the strict
+   text readers for the others. A review's 0 stands ("no one was hurt").
+*/
+function headerCasualtyFigures(
+    event,
+    targetParisDay
+) {
+
+    if (
+        !isCurrentCasualtyEvent(
+            event,
+            targetParisDay
+        )
+    ) {
+        return {
+            victimsKilled: 0,
+            victimsWounded: 0,
+            terroristsKilled: 0,
+            terroristsCaptured: 0
+        };
+    }
+
+    const figure = (
+        field,
+        readText
+    ) => {
+
+        const reviewed =
+            reviewedCasualtyFigure(
+                event,
+                field
+            );
+
+        return reviewed === null
+            ?
+            readText()
+            :
+            reviewed;
+    };
+
+    const deaths = () =>
+        extractStrict24hCasualtyBreakdown(
+            event,
+            "death",
+            targetParisDay
+        );
+
+    return {
+        victimsKilled:
+            figure(
+                "victims_killed",
+                () => deaths().victim
+            ),
+        victimsWounded:
+            figure(
+                "victims_wounded",
+                () => extractStrict24hCasualtyBreakdown(
+                    event,
+                    "wounded",
+                    targetParisDay
+                ).victim
+            ),
+        terroristsKilled:
+            figure(
+                "perpetrators_killed",
+                () => deaths().terrorist
+            ),
+        terroristsCaptured:
+            figure(
+                "perpetrators_captured",
+                () => extractStrict24hCapturedCount(
+                    event,
+                    targetParisDay
+                )
+            )
+    };
+}
+
+
+/*
    The run's health as the casualty counts see it. The header counts unlocated
    attacks too (build_events_map.py keeps them), so a run degraded only because
    some records still wait for a location has collected the day all the same:
@@ -11230,24 +11343,33 @@ function updateHeaderCasualties24() {
                 );
 
             if (
+                !isAttack
+                &&
+                !isCounterTerrorismAction
+                &&
+                !isArrest
+            ) {
+                return;
+            }
+
+            const figures =
+                headerCasualtyFigures(
+                    event,
+                    day
+                );
+
+            if (
                 isAttack
                 ||
                 isCounterTerrorismAction
             ) {
 
-                const deathBreakdown =
-                    extractStrict24hCasualtyBreakdown(
-                        event,
-                        "death",
-                        day
-                    );
-
-                deathTotals.terrorist += deathBreakdown.terrorist;
+                deathTotals.terrorist += figures.terroristsKilled;
 
                 if (
                     isAttack
                 ) {
-                    deathTotals.victim += deathBreakdown.victim;
+                    deathTotals.victim += figures.victimsKilled;
                 }
 
             }
@@ -11256,12 +11378,7 @@ function updateHeaderCasualties24() {
                 isAttack
             ) {
 
-                victimWounded +=
-                    extractStrict24hCasualtyBreakdown(
-                        event,
-                        "wounded",
-                        day
-                    ).victim;
+                victimWounded += figures.victimsWounded;
 
             }
 
@@ -11271,11 +11388,7 @@ function updateHeaderCasualties24() {
                 isArrest
             ) {
 
-                terroristCaptured +=
-                    extractStrict24hCapturedCount(
-                        event,
-                        day
-                    );
+                terroristCaptured += figures.terroristsCaptured;
 
             }
 
