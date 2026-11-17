@@ -175,7 +175,7 @@ test("the badge is real text on the page, next to the Published date, and reache
   assert.match(badge.textContent,/^UPDATE STALLED/);
   assert.equal(nodes.get("healthDataState").textContent,badge.textContent);
   assert.ok(html.indexOf('id="lastUpdated"')<html.indexOf('id="dataStateBadge"'));
-  assert.ok(html.indexOf('id="dataStateBadge"')<html.indexOf('id="headerCasualties24"'));
+  assert.ok(html.indexOf('id="dataStateBadge"')<html.indexOf('id="sessionCheckNote"'));
   assert.doesNotMatch(html.slice(html.indexOf("#dataStateBadge {"),html.indexOf("#dataStateBadge[hidden]")),/display: none/);
 });
 
@@ -186,103 +186,10 @@ test("the badge's two lines fit the header, so its text costs the map no height"
   assert.match(css,/@media \(max-width: 1250px\) \{[\s\S]{0,400}#updated \{\n        flex-basis: 160px !important;/);
 });
 
-function headerContext(now){
-  class Clock extends Date { constructor(...args){if(args.length)super(...args);else super(now);} static now(){return now;} }
-  const c=vm.createContext({document:{getElementById:()=>null},Date:Clock,Intl,Map,Number,Array,Set,Math});
-  vm.runInContext(statusBlock+html.slice(html.indexOf("const PARIS_DAY_FORMAT"),html.indexOf("function parisCalendarDateString("))+
-    html.slice(html.indexOf("let parisYesterdayMinute"),html.indexOf("function parisYesterdayDateString("))+
-    ["parisCalendarDateString","shiftCalendarDateString","parisYesterdayDateString","casualtyCollectionHealth","headerCasualtyDayState","headerCasualtyDay","parisCasualtyWindowLabel","shiftCalendarDateStringToDate"].map(extract).join("\n"),c);
-  return c;
-}
-const dayState=(status,nowIso)=>{
-  const c=headerContext(Date.parse(nowIso));
-  return c.headerCasualtyDayState(facts(status),c.parisYesterdayDateString());
-};
-
-test("the header's day is finished only by a healthy run that started after it ended",()=>{
-  const lateRun={...goodRun,run_started_at:"2026-11-06T12:30:00Z",last_attempt_at:"2026-11-06T12:30:00Z",published_at:"2026-11-06T13:00:00Z"};
-  assert.equal(dayState(lateRun,"2026-11-06T14:00:00Z"),"finished");
-  // The run of 23:40 Paris started before 5 Nov ended, whatever time it published.
-  assert.equal(dayState(goodRun,"2026-11-06T09:00:00Z"),"incomplete");
-  assert.equal(dayState({...lateRun,recent:fiveNovember.recent},"2026-11-06T14:00:00Z"),"incomplete","a later run that reviewed nothing");
-  assert.equal(dayState({...lateRun,status:"failed"},"2026-11-06T14:00:00Z"),"incomplete");
-  assert.equal(dayState({...lateRun,health:health("degraded")},"2026-11-06T14:00:00Z"),"incomplete");
-  assert.equal(dayState({...lateRun,health:health("healthy")},"2026-11-06T14:00:00Z"),"finished");
-  assert.equal(dayState(goodRun,"2026-11-08T09:00:00Z"),"missing","no run at all on 7 Nov");
-});
-
-test("until a run has finished yesterday, the header counts the day before, which one has",()=>{
-  // 16 Nov: the last run started on 15 Nov at 22:46 Paris, and GitHub had not
-  // started the 10:17 slot by 19:00, so 15 Nov read INCOMPLETE and "—" all day.
-  const lastNight={...goodRun,run_started_at:"2026-11-15T21:46:38Z",last_attempt_at:"2026-11-15T21:46:38Z",published_at:"2026-11-15T22:23:01Z"};
-  const at=nowIso=>{const c=headerContext(Date.parse(nowIso));return {c,choice:{...c.headerCasualtyDay(facts(lastNight))}};};
-  const morning=at("2026-11-16T18:20:00Z");
-  assert.deepEqual(morning.choice,{day:"2026-11-14",state:"finished"});
-  assert.equal(morning.c.parisCasualtyWindowLabel(morning.choice.state,morning.choice.day),"NOV 14, 2026 · FULL DAY (PARIS)");
-  // A run that started after 15 Nov ended finishes it: yesterday again.
-  const afternoon={...lastNight,run_started_at:"2026-11-16T15:30:00Z",last_attempt_at:"2026-11-16T15:30:00Z",published_at:"2026-11-16T16:10:00Z"};
-  assert.deepEqual({...headerContext(Date.parse("2026-11-16T18:20:00Z")).headerCasualtyDay(facts(afternoon))},{day:"2026-11-15",state:"finished"});
-  // The day before is not taken from an unhealthy run: yesterday stays INCOMPLETE.
-  assert.deepEqual({...headerContext(Date.parse("2026-11-16T18:20:00Z")).headerCasualtyDay(facts({...lastNight,status:"failed"}))},{day:"2026-11-15",state:"incomplete"});
-  // Nor when no run has started since then: yesterday reads NO DATA.
-  assert.deepEqual({...headerContext(Date.parse("2026-11-18T09:00:00Z")).headerCasualtyDay(facts(lastNight))},{day:"2026-11-17",state:"missing"});
-});
-
-test("a run degraded only by records waiting for a location still finishes the day",()=>{
-  // 16 Nov 20:38 Paris: every article reviewed, 36 of 7,988 records waiting for a
-  // location. The header counts unlocated attacks too, so 15 Nov is complete.
-  const tonight={...goodRun,run_started_at:"2026-11-16T19:38:26Z",last_attempt_at:"2026-11-16T19:38:26Z",published_at:"2026-11-16T21:36:30Z",
-    health:{...health("degraded"),reasons:["geolocation_incomplete"],recent_pending:0,review_share:1}};
-  const choice=nowIso=>({...headerContext(Date.parse(nowIso)).headerCasualtyDay(facts(tonight))});
-  assert.deepEqual(choice("2026-11-16T22:00:00Z"),{day:"2026-11-15",state:"finished"});
-  // The next morning, before the 10:17 slot has run, the day before is still 15 Nov.
-  assert.deepEqual(choice("2026-11-17T09:00:00Z"),{day:"2026-11-15",state:"finished"});
-  const c=headerContext(Date.parse("2026-11-16T22:00:00Z"));
-  assert.equal(c.casualtyCollectionHealth(tonight),"ok");
-  // Any other reason beside it, an empty list or a failed run still counts against the day.
-  for(const reasons of [["geolocation_incomplete","few_events_published"],["source_failed"],[]]){
-    const run={...tonight,health:{...tonight.health,reasons}};
-    assert.equal(c.headerCasualtyDayState(facts(run),"2026-11-15"),"incomplete",reasons.join("+")||"no reasons");
-  }
-  assert.equal(c.headerCasualtyDayState(facts({...tonight,status:"failed"}),"2026-11-15"),"incomplete");
-  // The status badge keeps its own reading: it still says UPDATE BEHIND.
-  assert.equal(c.collectionHealth(tonight),"behind");
-});
-
-test("an unfinished day never says FULL DAY",()=>{
-  const c=headerContext(Date.parse("2026-11-06T09:00:00Z"));
-  assert.equal(c.parisCasualtyWindowLabel("finished"),"NOV 5, 2026 · FULL DAY (PARIS)");
-  assert.equal(c.parisCasualtyWindowLabel("incomplete"),"NOV 5, 2026 · INCOMPLETE (PARIS)");
-  assert.equal(c.parisCasualtyWindowLabel("missing"),"NOV 5, 2026 · NO DATA (PARIS)");
-  const markup=html.slice(html.indexOf('id="headerCasualtiesWindow"'),html.indexOf('id="headerVictimsDeaths24"'));
-  assert.doesNotMatch(markup,/FULL DAY/,"not before anything is known");
-  const title=html.slice(html.indexOf('id="headerCasualties24" title="'),html.indexOf('id="headerCasualtiesWindow"'));
-  assert.doesNotMatch(title,/Event date is preferred/,"0 of 6,381 records have an event date");
-  assert.match(title,/by publication date/);
-});
-
-function renderHeader(events,state){
-  const nodes=new Map();
-  const node=id=>{if(!nodes.has(id))nodes.set(id,{textContent:""});return nodes.get(id);};
-  const c=vm.createContext({document:{getElementById:node},allEvents:events,recentContextEvents:[],mapDataFacts:null,
-    isCurrentCasualtyEvent:()=>true,eventCategories:event=>event.categories,
-    headerCasualtyDay:()=>({day:"2026-11-05",state}),parisCasualtyWindowLabel:value=>value,
-    extractStrict24hCasualtyBreakdown:(event,kind)=>kind==="death"?{terrorist:0,victim:event.killed||0}:{terrorist:0,victim:0},
-    extractStrict24hCapturedCount:()=>0});
-  vm.runInContext(extract("updateHeaderCasualties24"),c);
-  c.updateHeaderCasualties24();
-  return id=>node(id).textContent;
-}
-
-test("a day the collection did not finish shows a dash, not 0; figures already read stay as a floor",()=>{
-  const read=renderHeader([{categories:["Attacks"],killed:1}],"incomplete");
-  assert.equal(read("headerVictimsDeaths24"),"1");
-  assert.equal(read("headerVictimsWounded24"),"—");
-  assert.equal(read("headerTerroristsDeaths24"),"—");
-  assert.equal(read("headerTerroristsCaptured24"),"—");
-  assert.equal(read("headerCasualtiesWindow"),"incomplete");
-  const finished=renderHeader([],"finished");
-  assert.equal(finished("headerVictimsDeaths24"),"0","a finished quiet day is a real zero");
+test("the header casualty counter stays removed",()=>{
+  // Removed on 17 Nov at the owner's request: read from article text, it gave
+  // 3 killed for 15 Nov while that day's records described dozens of deaths.
+  assert.doesNotMatch(html,/headerCasualties24|updateHeaderCasualties24|extractStrict24h/);
 });
 
 test("the 24h button says where the data ends, and a period it no longer reaches shows a dash",()=>{

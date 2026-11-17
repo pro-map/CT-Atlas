@@ -9,12 +9,18 @@ function timeButtons(){
     .map(match=>({days:Number(match[2]),active:Boolean(match[1])}));
 }
 
-test("the map offers 24 hours, 7 days (default), 30 days, 3 months and 6 months",()=>{
+test("the map offers 24 hours, 7 days (default), 30 days and 4 months",()=>{
   const buttons=timeButtons();
-  assert.deepEqual(buttons.map(button=>button.days),[1,7,30,90,180],"the map period buttons changed");
+  assert.deepEqual(buttons.map(button=>button.days),[1,7,30,120],"the map period buttons changed");
   const active=buttons.filter(button=>button.active);
   assert.equal(active.length,1,"exactly one period button must be active");
   assert.equal(active[0].days,7);
+  // The Database period list offers the same four, and the Worker accepts them.
+  const select=html.slice(html.indexOf('<select id="reportPeriod">'),html.indexOf("</select>",html.indexOf('<select id="reportPeriod">')));
+  assert.deepEqual([...select.matchAll(/value="(\d+)"/g)].map(match=>Number(match[1])),[1,7,30,120]);
+  const shared=fs.readFileSync("cloudflare-worker/shared.js","utf8");
+  const allowed=shared.match(/const ALLOWED_PERIODS = new Set\(\[([^\]]*)\]\)/)[1].split(",").map(Number);
+  for(const days of [1,7,30,120])assert.ok(allowed.includes(days),days+" days must be accepted by the Worker");
 });
 
 test("the initial selectedDays matches the active button, so the first render and the highlighted button agree",()=>{
