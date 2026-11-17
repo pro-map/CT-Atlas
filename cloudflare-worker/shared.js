@@ -1,5 +1,7 @@
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/interactions";
-const ALLOWED_PERIODS = new Set([1, 7, 30, 90, 180]);
+// 120 is the longest period the page offers since 17 Nov; 90 and 180 stay for pages
+// still open from before.
+const ALLOWED_PERIODS = new Set([1, 7, 30, 90, 120, 180]);
 const MAX_EVENTS_CURRENT = 80;
 const MAX_EVENTS_PREVIOUS = 60;
 const CACHE_TTL_MS = 8 * 60 * 60 * 1000;

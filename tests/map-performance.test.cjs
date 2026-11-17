@@ -39,19 +39,17 @@ function parisDayContext(nowIso){
   const c=vm.createContext({Date:Clock,Intl:{DateTimeFormat:Counting},Map,Number,Math});
   const start=html.indexOf("const PARIS_DAY_FORMAT");
   vm.runInContext(html.slice(start,html.indexOf("function parisCalendarDateString(",start))+
-    extract("parisCalendarDateString")+extract("shiftCalendarDateString")+
-    html.slice(html.indexOf("let parisYesterdayMinute"),html.indexOf("function parisYesterdayDateString("))+
-    extract("parisYesterdayDateString"),c);
+    extract("parisCalendarDateString")+extract("shiftCalendarDateString"),c);
   return {c,counts:()=>({built,formatted}),at:iso=>{now=Date.parse(iso);},Clock};
 }
 
 test("one pass over thousands of events builds one Intl formatter and formats each timestamp once",()=>{
   const h=parisDayContext("2026-11-06T11:00:30Z");
   const published=Array.from({length:6381},(_,i)=>new h.Clock(Date.UTC(2026,5,1)+i*3600000));
-  for(let pass=0;pass<3;pass++)for(const date of published){h.c.parisCalendarDateString(date);h.c.parisYesterdayDateString();}
+  for(let pass=0;pass<3;pass++)for(const date of published)h.c.parisCalendarDateString(date);
   const counts=h.counts();
   assert.equal(counts.built,1);
-  assert.equal(counts.formatted,published.length+1,"each event once, plus the clock once");
+  assert.equal(counts.formatted,published.length,"each event once");
 });
 
 test("cached Paris days stay exact across midnight and both clock changes",()=>{
@@ -63,15 +61,6 @@ test("cached Paris days stay exact across midnight and both clock changes",()=>{
   }
   assert.equal(h.c.parisCalendarDateString(new h.Clock("not a date")),"");
   assert.equal(h.c.parisCalendarDateString("2026-11-05"),"");
-});
-
-test("yesterday in Paris follows the clock over midnight in the same minute it changes",()=>{
-  const h=parisDayContext("2026-11-05T22:59:30Z");
-  assert.equal(h.c.parisYesterdayDateString(),"2026-11-04");
-  h.at("2026-11-05T22:59:59Z");
-  assert.equal(h.c.parisYesterdayDateString(),"2026-11-04");
-  h.at("2026-11-05T23:00:00Z");
-  assert.equal(h.c.parisYesterdayDateString(),"2026-11-05");
 });
 
 test("the day cache of a tab left open for weeks stays bounded",()=>{

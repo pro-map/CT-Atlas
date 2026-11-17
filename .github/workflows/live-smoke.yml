@@ -56,8 +56,7 @@ jobs:
               && grep -q 'pdf-export.js' /tmp/index.html \
               && tr -d '\r' < /tmp/index.html | tr '\n' ' ' | grep -qE 'class="time-button active"[[:space:]]+data-days="7"' \
               && grep -q 'data-days="30"' /tmp/index.html \
-              && grep -q 'data-days="90"' /tmp/index.html \
-              && grep -q 'data-days="180"' /tmp/index.html \
+              && grep -q 'data-days="120"' /tmp/index.html \
               && grep -q 'const MAP_RECENT_EVENT_DAYS = 181;' /tmp/index.html \
               && grep -q 'usage-admin.js?v=retired-ip-20261106' /tmp/main.html \
               && ! grep -q '<th>SOCIAL</th>\|SOCIAL MEDIA SEARCH' /tmp/usage-admin.js \
@@ -94,13 +93,12 @@ jobs:
           const pdfExporter = fs.readFileSync("/tmp/pdf-export.js", "utf8");
           if (!html.includes("pdf-export.js") || !html.includes("DOWNLOAD PDF")) throw new Error("PDF download UI missing");
           if (!/class="time-button active"\s+data-days="7"/.test(html)) throw new Error("MAP default is not 7 days");
-          for (const days of [1, 30, 90, 180]) {
+          for (const days of [1, 30, 120]) {
             if (new RegExp('class="time-button active"\\s+data-days="' + days + '"').test(html)) throw new Error(days + "-day period must not be the MAP default");
           }
           if (!/let selectedDays\s*=\s*7;/.test(html)) throw new Error("MAP initial selectedDays is not 7 days");
           if (!/class="time-button"\s+data-days="30"/.test(html)) throw new Error("MAP 30-day option missing");
-          if (!/class="time-button"\s+data-days="90"/.test(html)) throw new Error("MAP 90-day option missing");
-          if (!/class="time-button"\s+data-days="180"/.test(html)) throw new Error("MAP 180-day option missing");
+          if (!/class="time-button"\s+data-days="120"/.test(html)) throw new Error("MAP 4-month option missing");
           if (!html.includes('<option value="ALL" selected>All events</option>')) throw new Error("MAP default is not all events");
           if (!html.includes('const MAP_RECENT_EVENT_DAYS = 181;')) throw new Error("MAP other categories do not cover 180 days");
           if (!html.includes('fetch("events-map.json",')) throw new Error("MAP does not load its attacks-only file");

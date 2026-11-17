@@ -81,8 +81,8 @@ test("the timeline counts Paris days: a reader in Auckland saw a last bar dated 
   const now=Date.parse("2026-11-05T22:30:00Z");
   class Clock extends Date { constructor(...args){if(args.length)super(...args);else super(now);} }
   const events=[{published:"2026-11-05T22:50:00Z"},{published:"2026-11-05T23:10:00Z"},{published:"2026-11-05T21:00:00Z"},{published:"2026-11-04T23:30:00Z"},{published:""},{}];
-  const c=vm.createContext({Date:Clock,Intl,Map,Math,document:{getElementById:node},allEvents:[],updateHeaderCasualties24(){},
-    visibleEventsForPeriod:()=>[],isCurrentCasualtyEvent:()=>false,extractStrict24hDeathCount:()=>0,eventCategories:()=>[]});
+  const c=vm.createContext({Date:Clock,Intl,Map,Math,document:{getElementById:node},allEvents:[],
+    visibleEventsForPeriod:()=>[],eventCategories:()=>[]});
   const start=html.indexOf("const PARIS_DAY_FORMAT");
   vm.runInContext(html.slice(start,html.indexOf("function parisCalendarDateString(",start))+
     html.slice(html.indexOf("const TIMELINE_DAY_FORMAT"),html.indexOf("function updateCommandCenterPanels("))+
