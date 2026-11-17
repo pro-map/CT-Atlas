@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-16T21:35:34.184096+00:00",
+  "removed_at": "2026-11-17T19:33:50.765352+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -2134,6 +2134,197 @@
           "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNS0FpelFzZjViemlKbGZIbVprVFl1WmdHRHI0cUNmV2VzakdPdXFRSV9Ec2hSVXBRV3JPQmQwaE5QaGdkb1F6XzM4SzhkNTkwbE5obG5QRmRhMGJtejVNeGNyOEs2dzNhR1JlU3ZkTEV1VHhONkZGVWVHTldwNXpOczBNdzdVamlhWXNMVE9ULXZVR0JVSUw1UHJTS2FhYUNCUVNMRTQtRHhMRXlTb1gzSE1RTQ?oc=5"
         }
       ]
+    },
+    {
+      "id": "48fba80e210b738d",
+      "incident_id": "inc-4833e7db1833157b",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFByTVMwU2pEeXdTRTVwV2tqbVdjczhSRzlObGJxa2Jkdjdwczl1OWNkSFdCMDU0OWtEeHc0cVBTU2lzejUyTk9pa3pYWUdRUnPSAUtBVV95cUxQM2JjRVpOUnVxYnMwVnBzM1dHaHJSOF84SW5DM2RSRmVIYzhhdTYwYWJrN1lOMzdfalptQ1VwaE1DMHZUcEhaQThUeVk?oc=5",
+      "title": "FSB claims prevention of terrorist attack on energy facility in Krasnodar Krai",
+      "summary": "The Russian FSB stated that it has thwarted a planned terrorist attack targeting an energy infrastructure facility in Krasnodar Krai.",
+      "original_title": "ФСБ заявила о предотвращении теракта на объекте энергетики в Краснодарском крае",
+      "original_language": "ru",
+      "source": "Интерфакс",
+      "published": "2026-05-21T14:45:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Russia",
+      "region": "Krasnodar Krai",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Reports a concrete security service operation disrupting a terrorist plot.",
+      "related_articles": [
+        {
+          "title": "Russia's FSB thwarts terrorist attack on Kerch railway line",
+          "original_title": "الأمن الفيدرالي الروسي يُحبط هجومًا إرهابيًا على خط سكة حديد بكيرتش",
+          "original_language": "ar",
+          "summary": "The Russian Federal Security Service (FSB) successfully thwarted a planned terrorist attack targeting a railway line in Kerch.",
+          "published": "2026-05-21T14:45:00+00:00",
+          "source": "dostor.org",
+          "url": "https://www.dostor.org/5565850"
+        }
+      ]
+    },
+    {
+      "id": "9d39b20cac5ab304",
+      "incident_id": "inc-9c6169b425814cd5",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBObUhNbmxlRVBDSEpKRXg3RHloVUZVRFlwRnlIaE5hdkNiNm5BWHRlNG5xU3l4SzlhNTQxNlBHTFFPWThYT01wb3ZYRUNHSGxzNjRTV3E1QnA3UQ?oc=5",
+      "title": "Mali jihadist attack sees dozens of vehicles burnt during Bamako blockade",
+      "summary": "JNIM or allied jihadist militants carried out an attack in Mali, burning dozens of vehicles amid an ongoing blockade near Bamako.",
+      "original_title": "Mali jihadist attack sees dozens of vehicles burnt as Bamako blockade continues ahead of Eid",
+      "original_language": "en",
+      "source": "BBC",
+      "published": "2026-05-21T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "JNIM",
+      "primary_event_type": "ATTACK",
+      "country": "Mali",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete militant attack and vehicle destruction in Mali.",
+      "related_articles": [
+        {
+          "title": "JNIM jihadists, jointly with Ukrainian specialists, reportedly preparing an attack against Adjelhoc in Mali",
+          "original_title": "Des djihadistes du JNIM, conjointement avec des spécialistes ukrainiens, préparent une attaque contre Adjelhoc, dans la région malienne de Kidal",
+          "original_language": "fr",
+          "summary": "Reports allege that JNIM jihadists are jointly planning an attack with specialists against Adjelhoc in the Kidal region of Mali.",
+          "published": "2026-05-23T07:00:00+00:00",
+          "source": "Maliweb",
+          "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxQN3JMYVB5YWczWW9fd0F3RXd1N3V0TVN5UFI3QldnTGoyQ0JBVWJNWk5uRkc4YTV4Z1VWTnBKRWtocDFrSHlLcDQwVkRZTV9wWE1UaTctZWFvcFExOU5hWFFUdzZHX3ktNDNlanpQX09VQ0QyZmxfTjJRZVlJa0NYT2tjUGczSmpaWWhucXBRWS1JR1VJUWR3QUk0d2VUUnVLV2NxWWxST1RXaXRkRjBWWmhjUnhGeG9wSEI0VzduMmRhU1ptb1VOVERjYllDSUI1eXdjaHdxZ0dFMkNQcGlNLUhKQUl5Z1VTOER3SUlta1pWdXVOY1BSRUI5WE9IYURNTVVJakNZelE2dEpMeUdXX0E3V1p2aUg0?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "42ce70fe5b353bf2",
+      "incident_id": "inc-d233ef29432bf8f5",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQWG9KbmZ5SjRwbks1cW54ZUpBbm5lS19ZM1RueTRtUWZhVldhQVJzeVRLYWFSRlBlYXlGRHc0SjI5dUt2V2N4QkotWTVhbTVLZm83alNnWnZ6ODhpdXpVSDZYeFczQUNqWlVBY0xWRTJWc0pUNlpyZ2U5c1dnU3ZQcDQyWQ?oc=5",
+      "title": "Man from Levis arrested over terrorism allegations",
+      "summary": "Canadian authorities arrested a man from Levis, Quebec, over alleged terrorism offenses involving online propaganda.",
+      "original_title": "Un homme de Lévis arrêté pour des allégations de terrorisme",
+      "original_language": "fr",
+      "source": "Radio-Canada",
+      "published": "2026-05-21T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ARREST",
+      "country": "Canada",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete arrest by RCMP for online terrorist propaganda.",
+      "related_articles": [
+        {
+          "title": "Un homme de Lévis arrêté pour propagande terroriste sur TikTok",
+          "original_title": "Un homme de Lévis arrêté pour propagande terroriste sur TikTok",
+          "original_language": "fr",
+          "summary": "Un homme de Lévis arrêté pour propagande terroriste sur TikTok latribune.ca",
+          "published": "2026-05-21T07:00:00+00:00",
+          "source": "latribune.ca",
+          "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQRjBadnNYSXctRnVQeHdYRHFYMHZyR0pDa2xZRUludlp4aXFSN3RGQzFaSkVET0xsZnYyaDV3WW9DdERPMUZ2WkxGWnVBMGNQTVAxS0ZPZVhLbklKUWNJNnA5M2pLWVJhRWZfdjA2T3lMM0xQakd3ekxyNzc2THViRk1GakhxU3Rsbk43US00ZS1YMU8yLXc3QmpxblNmQ2E2ZVNaN1k0Z3BJbGF3NWxmRDZvTkJpU1FzM1poUWhBUWlIdGJvTGlUamN2YmE3N3d5eVRQdHh5QUZCdlpydGt6TWFsTQ?oc=5"
+        },
+        {
+          "title": "RCMP arrests a Lévis man for Islamic State propaganda",
+          "original_title": "La GRC arrête un homme de Lévis pour de la propagande du groupe État islamique",
+          "original_language": "fr",
+          "summary": "The Royal Canadian Mounted Police arrested a resident of Lévis for disseminating propaganda on behalf of the Islamic State group.",
+          "published": "2026-05-21T07:00:00+00:00",
+          "source": "Le Devoir",
+          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOaUdmSEkzZ0RvRHk2Nmh5NVlTdDNlclN5VVZiTnJGRkNDV3RBTHdkMmdxaVUtbmNGaTVNckxEWmJHcHBOVlJ3SDF1eDNSbHdxM3p2a19VamJ5aVRuNGZxaHYxZWk1RVZHdEVWUVRHVzRrYmNBdTc5akFzMG9kRWJKUDVZTUpQRk94OEEtUmJBSEdzdkhJdjBIYmR6WmxXc28?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "8ccb2888e645fb7e",
+      "incident_id": "inc-a14952d35fac6358",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBHempXV2lDdURPa2VjZFRLTWc0S0hiY3lJV09XSTdMczVCZENDR2drRXB6WWVjbkM2SUc2MEdBQ2NUcEktRC12blBCb2RxX0HSAUtBVV95cUxNMXN2WEQ3RlZLTGdvaVR0T2lKTnZ3Q2tvS09pbHA1aHBrd0xTeDVCX2xqaGtiTmhlNnpVek5ta3RDcXRvUDcwMHNpWjQ?oc=5",
+      "title": "Terrorism case opened following drone attack on Syzran",
+      "summary": "Russian authorities opened a criminal case under terrorism statutes following a drone attack targeting Syzran.",
+      "original_title": "Возбуждено дело о теракте после атаки БПЛА на Сызрань",
+      "original_language": "ru",
+      "source": "Интерфакс",
+      "published": "2026-05-21T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Weapons"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Russia",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete drone attack and subsequent counter-terrorism legal opening.",
+      "related_articles": []
+    },
+    {
+      "id": "3582d3f33b34e651",
+      "incident_id": "inc-d498767576d80c4d",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOYnlLeTZxYUFCNWZFVXZCN1VsVExPN2hDTkdOaEpoX2V1LTdZcms0a0ZLYjBEV2ZmWXo3cm9RRmVNYzctdHVyZVhXMTJhalFXSkhQUFlEU3FGaUdLdTBaczBnUUdWdl96V3hKNzA2cWtBajVqbGQ3enZOUzJWSnRYdUo0N3VHTGdEX3N1Qy1tVU9pTFFmLXdiV0RKRVJ1RWUtVWhsdnN6bmpMUFNIMGc?oc=5",
+      "title": "Family member of Boko Haram militants surrenders in Bama",
+      "summary": "A female relative of Boko Haram militants surrendered to security forces in Bama, Borno State.",
+      "original_title": "Female Family Member of Boko Haram Terrorists Surrenders in Bama",
+      "original_language": "en",
+      "source": "ZAgazola",
+      "published": "2026-05-21T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "ARREST",
+      "country": "Nigeria",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Report of a concrete surrender/detention event involving a person linked to an extremist group.",
+      "related_articles": []
+    },
+    {
+      "id": "ac41e771f9979303",
+      "incident_id": "inc-51bbc7175b58c009",
+      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE01cEljRWFfU2I3dkM3Zi0wOWJvZy04Wlc1UFB4WGwtMGJFTWFpU1BycWpZN1cxM1FoaHVzeXVyTG1CMjlFS1JuWkpDQ2xaTmcxNzNWXzY2WW1NcVpXOWQycW8yZjlQODNYQ2RrX1Zoa3NRNnhrR3VtYllXQktEQQ?oc=5",
+      "title": "ADF militants kill 17 civilians in eastern DRC",
+      "summary": "ADF terrorists attacked a location in the eastern Democratic Republic of the Congo, killing 17 civilians.",
+      "original_title": "ADF Terrorists Kill 17 Civilians in Eastern DRC",
+      "original_language": "en",
+      "source": "HumAngle",
+      "published": "2026-05-21T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "ADF",
+      "primary_event_type": "ATTACK",
+      "country": "Democratic Republic of the Congo",
+      "region": "Eastern DRC",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete report of a fatal militant attack against civilians.",
+      "related_articles": []
+    },
+    {
+      "id": "f2616e55cf032233",
+      "incident_id": "inc-591c37b51c6c6201",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQQms5anN4a3Zmck8wWkRCQTkxZ1F5RnZMN2EwckdtbVo2Q2dScko0eW55b09aek4wajJ1NkVrTnVUVDd6bFpkaDFJNEZ2ekIxVkxiNnpxSlI2aXhjX1BfNEU2UHBxTlBCNmV0R21sbDNFVHU4UlRPMXMwa0FIc0FIZ2RZSVd0NUg2NHR1ejliUnJmZ3d0dXA5WU1lMmEzRndK?oc=5",
+      "title": "Three Kenyans arrested in Tanzania",
+      "summary": "Three Kenyan nationals were arrested in Tanzania while attempting to travel to join ISIS.",
+      "original_title": "Three Kenyans arrested in Tanzania en route to join ISIS",
+      "original_language": "en",
+      "source": "The Star, Kenya",
+      "published": "2026-05-21T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ARREST",
+      "country": "Tanzania",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete operational arrest for terrorist involvement.",
+      "related_articles": []
     }
   ]
 }

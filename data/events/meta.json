@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "a3c4389f2b82b1ad952199e894ec1db034870430f0637af120306d743453ffee",
+  "events_sha256": "8c678268fa9f5ba993a2ba2c16517322290aac5b556bcf25f1d73e0bcc5c21ea",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,14 +41,14 @@
   ],
   "months": {
     "2026-11": {
-      "events": 2118,
-      "bytes": 12330404,
-      "sha256": "857521669e1276495177effc92fff92ed8e952ccf8f5a25581507ca796d692af"
+      "events": 2228,
+      "bytes": 12936833,
+      "sha256": "2f6f103c91a6df3b9058bafedc94d0d3b3e6871757e56c87d4e07a7b6f01d779"
     },
     "2026-10": {
-      "events": 3615,
-      "bytes": 23659667,
-      "sha256": "5bf5facd6a1044ef8e3c8e2bc00b45128edd2b8dd8eecbb5475966be59677b93"
+      "events": 3616,
+      "bytes": 23662908,
+      "sha256": "86fb1e74c3deb86d5ef4303bf26a0f67c6014e2cef4d7db8273b671bb9248be8"
     },
     "2026-09": {
       "events": 1499,
@@ -66,14 +66,14 @@
       "sha256": "55f3d447e2fff5cdfbe456aadf188fc6343cc0bb0336873ca3d8410dceecc033"
     },
     "2026-06": {
-      "events": 161,
-      "bytes": 623884,
-      "sha256": "9aa5d0bc492f2fece2e8b231b3035c1785e0b7ad03db86f5f3459343c3355fe8"
+      "events": 162,
+      "bytes": 627894,
+      "sha256": "69d7bd675f7ec61f2c6464fd47d2c4d3fb7e17d849795736d1de81ab9e58bbc3"
     },
     "2026-05": {
-      "events": 52,
-      "bytes": 206035,
-      "sha256": "82393702598e64cd246fd89fffffe3d3b8b9eb85a656f35b652f3a1c64afccd1"
+      "events": 45,
+      "bytes": 183677,
+      "sha256": "b162b51de4e2d0c420f0dc610f2131b0c4ded8448596f3e4e5f6ccfd2fd9bf7b"
     }
   },
   "metadata": {
@@ -230,39 +230,39 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-17T00:48:03.797184+00:00",
-      "last_attempt_at": "2026-11-17T00:48:03.797184+00:00",
-      "published_at": "2026-11-17T02:18:41.245994+00:00",
+      "run_started_at": "2026-11-17T18:36:27.556234+00:00",
+      "last_attempt_at": "2026-11-17T18:36:27.556234+00:00",
+      "published_at": "2026-11-17T19:38:32.972235+00:00",
       "recent": {
-        "candidates": 2899,
-        "reviewed": 2899,
-        "cached": 2244,
-        "new_reviews": 655,
+        "candidates": 3711,
+        "reviewed": 3711,
+        "cached": 1766,
+        "new_reviews": 1945,
         "official_auto_accepted": 0,
-        "retained": 118,
-        "rejected": 2781,
+        "retained": 365,
+        "rejected": 3346,
         "pending": 0,
         "status": "complete",
-        "calls": 24,
-        "primary_calls": 17,
-        "overflow_calls": 7,
+        "calls": 75,
+        "primary_calls": 30,
+        "overflow_calls": 45,
         "reasons": [],
-        "window_start": "2026-11-14T00:48:03.797184+00:00",
-        "window_end": "2026-11-17T00:48:03.797184+00:00"
+        "window_start": "2026-11-14T18:36:27.556234+00:00",
+        "window_end": "2026-11-17T18:36:27.556234+00:00"
       },
       "backlog": {
-        "candidates": 657,
-        "reviewed": 657,
-        "cached": 647,
-        "new_reviews": 10,
+        "candidates": 691,
+        "reviewed": 691,
+        "cached": 628,
+        "new_reviews": 63,
         "official_auto_accepted": 0,
-        "retained": 1,
-        "rejected": 656,
+        "retained": 6,
+        "rejected": 685,
         "pending": 0,
         "status": "complete",
         "calls": 2,
-        "primary_calls": 1,
-        "overflow_calls": 1,
+        "primary_calls": 0,
+        "overflow_calls": 2,
         "reasons": []
       },
       "maintenance": {
@@ -283,25 +283,23 @@
       "source": {
         "google": {
           "retry_waves": 0,
-          "successful": 1164,
-          "throttled": 276,
-          "failed": 56,
-          "empty_feeds": 476,
-          "deduplicated_urls": 280
+          "successful": 1220,
+          "throttled": 5,
+          "empty_feeds": 477,
+          "deduplicated_urls": 288
         },
         "gdelt": {},
-        "errors": 56,
-        "status": "partial"
+        "errors": 0,
+        "status": "complete"
       },
       "reasons": [
-        "source_errors",
         "category_pending",
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 3526,
-        "retired": 314,
-        "cancelled_history": 196,
+        "expired": 3913,
+        "retired": 440,
+        "cancelled_history": 193,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -314,15 +312,15 @@
         "primary": {
           "per_run": 30,
           "per_day": 60,
-          "used_this_run": 18,
-          "used_today": 48
+          "used_this_run": 30,
+          "used_today": 30
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
-          "used_this_run": 8,
-          "used_today": 42
+          "used_this_run": 47,
+          "used_today": 47
         },
         "historical_calls_per_run": 20,
         "historical_calls_used": 2,
@@ -331,12 +329,12 @@
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 7740,
-        "unlocated": 291,
-        "completed_unlocated": 291,
+        "located": 7838,
+        "unlocated": 298,
+        "completed_unlocated": 298,
         "outcome": "success",
-        "processed_this_run": 80,
-        "review_required": 187
+        "processed_this_run": 112,
+        "review_required": 193
       },
       "categories": [
         {
@@ -361,18 +359,18 @@
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-17T02:20:48.157048+00:00",
+      "finalized_at": "2026-11-17T19:42:29.737649+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 8
+        "gemini-3.5-flash-lite:503": 26
       },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 152,
-        "events_published_median_14d": 132.0,
-        "new_reviews": 655,
+        "events_published_last_24h": 122,
+        "events_published_median_14d": 136.5,
+        "new_reviews": 1945,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -388,63 +386,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 17 Nov, 03:18 Paris: Recent counter-terrorism developments highlight severe regional threats, marked by a devastating suicide car bomb attack on a Pakistani army post, counter-terrorism operations and weapons seizures targeting Boko Haram in Diffa, Niger, and major arrests of terrorist suspects planning explosive attacks in Poland.",
+      "overview": "As of 17 Nov, 20:36 Paris: Recent counter-terrorism developments include Poland's Internal Security Agency detaining three teenagers in Poland for plotting a terrorist attack, an intelligence alert and investigation in Washington regarding an alleged Iran-linked chemical or radiological explosives plot, and North Macedonia's disclosure of a foiled Iran-linked terrorist network targeting Greece.",
       "developments": [
-        {
-          "event_id": "e123edb6975b1054",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "Suicide car bomb attack on Pakistani army post",
-          "detail": "A suicide car bomb attack on an army outpost in Pakistan resulted in eight deaths, including five soldiers, after an explosives-laden vehicle destroyed the perimeter wall.",
-          "location": "Pakistan"
-        },
         {
           "event_id": "e77e6cc7f6cc5002",
           "severity": "CRITICAL",
           "category": "Arrests",
           "headline": "Poland detains three teenagers suspected of preparing terrorist attack",
-          "detail": "Poland's Internal Security Agency (ABW) detained three teenagers suspected of plotting a terrorist attack, with subsequent searches uncovering explosive devices including a pipe bomb.",
+          "detail": "Poland's Internal Security Agency (ABW) has detained three teenagers suspected of plotting a terrorist attack.",
           "location": "Poland"
         },
         {
-          "event_id": "1fa7dc056391e49c",
-          "severity": "HIGH",
-          "category": "Weapons",
-          "headline": "Diffa: National Guard seizes major arsenal intended to supply Boko Haram in Kablewa",
-          "detail": "The National Guard in Diffa seized a major cache of weapons destined to supply Boko Haram militants operating in Kablewa.",
-          "location": "Niger, Diffa"
+          "event_id": "0936b29aa135f7aa",
+          "severity": "CRITICAL",
+          "category": "Counter Terrorism Action",
+          "headline": "Iran-linked terrorist plot foiled in Greece",
+          "detail": "North Macedonia reported they thwarted an Iran-linked terrorist plot targeted in Greece.",
+          "location": "North Macedonia"
         },
         {
-          "event_id": "00e53370c2d98f33",
+          "event_id": "7215b30974857183",
           "severity": "HIGH",
-          "category": "Arrests",
-          "headline": "Ufa resident arrested for alleged preparation of terrorist attack",
-          "detail": "A 23-year-old resident of Ufa, Russia, was arrested by authorities on charges of preparing a terrorist attack against a railway object.",
-          "location": "Russia, Ufa"
+          "category": "Radiological/Nuclear",
+          "headline": "Investigation into alleged Iran-linked threat in Washington",
+          "detail": "US intelligence agencies are investigating a potential threat allegedly linked to Iran, involving concerns over a radiological or chemical plot in Washington.",
+          "location": "United States, Washington"
         },
         {
-          "event_id": "d896a45ead6fb213",
+          "event_id": "aba3e21e001feb66",
           "severity": "HIGH",
           "category": "Counter Terrorism Action",
-          "headline": "Prosecvency thwarts alleged attack on Hato Corozal Mayor's Office with alias Kamo arrest",
-          "detail": "Colombian authorities thwarted an alleged explosive attack against the Hato Corozal Mayor's Office in Casanare, arresting an explosives expert known as alias Kamo.",
-          "location": "Colombia, Casanare"
+          "headline": "FSB operation against agents planning terror attacks in Rostov",
+          "detail": "The FSB released footage of an operation in the Rostov region that resulted in the neutralisation of agents planning terrorist attacks.",
+          "location": "Russia, Rostov"
         },
         {
-          "event_id": "6efdf7f25c8af2cd",
-          "severity": "HIGH",
+          "event_id": "fa1d93a3a9302f35",
+          "severity": "SIGNIFICANT",
           "category": "Attacks",
-          "headline": "Car bomb injures former advisor in Moscow",
-          "detail": "A car bomb explosion in Moscow injured a former advisor to the exiled former Prime Minister Azarov, leading to subsequent arrests.",
-          "location": "Russia, Moscow"
+          "headline": "Attack attempt against Israelis near Jericho",
+          "detail": "An attack incident occurred against Israelis traveling near Jericho.",
+          "location": "Palestinian Territory, Jericho"
+        },
+        {
+          "event_id": "4917130c54132c95",
+          "severity": "SIGNIFICANT",
+          "category": "Counter Terrorism Action",
+          "headline": "Somali army kills senior Al-Shabaab commander",
+          "detail": "The Somali army killed a senior Al-Shabaab commander accused of extorting money and livestock from local communities in Bakool.",
+          "location": "Somalia, Bakool"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-17T02:18:37.980880+00:00",
+      "generated_at": "2026-11-17T19:36:19.430764+00:00",
       "candidate_events": 80,
-      "top_hash": "2ad96b6e3b7fc2eb2181b6ed89be2bca9d610b9802714e5ce9aee375aa8ee36f",
+      "top_hash": "dd95229a9ef67dec0552616003502e19cd9085b57c1017fe6468dfa8c56f78ce",
       "top_event_count": 10,
       "reused": false
     },
@@ -722,10 +720,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 73,
-      "corroboration_hold_listed_outlet": 26,
-      "already_reviewed_articles": 1544,
-      "duplicate_input_articles": 3616
+      "corroboration_hold_same_minute_burst": 77,
+      "corroboration_hold_listed_outlet": 22,
+      "already_reviewed_articles": 1360,
+      "duplicate_input_articles": 4558
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -807,8 +805,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-17T02:18:41.245994+00:00",
-    "number_of_events": 8031,
+    "last_updated": "2026-11-17T19:38:32.972235+00:00",
+    "number_of_events": 8136,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -821,23 +819,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 7951,
-      "ai_processed_this_run": 80,
-      "ai_pending_at_start": 80,
-      "city": 2912,
-      "region": 2586,
-      "country_capital": 2242,
-      "unlocated": 291,
-      "mapped_total": 7740,
-      "high_confidence": 7030,
-      "medium_confidence": 754,
-      "low_confidence": 247,
+      "cached_events": 8024,
+      "ai_processed_this_run": 112,
+      "ai_pending_at_start": 112,
+      "city": 2945,
+      "region": 2623,
+      "country_capital": 2270,
+      "unlocated": 298,
+      "mapped_total": 7838,
+      "high_confidence": 7115,
+      "medium_confidence": 767,
+      "low_confidence": 254,
       "methods": {
-        "ai_region_coordinates": 2583,
-        "ai_city_geonames": 2761,
-        "ai_country_capital": 2241,
-        "unresolved_city_no_capital_fallback": 153,
-        "ai_unlocated": 98,
+        "ai_city_geonames": 2794,
+        "ai_region_coordinates": 2620,
+        "ai_country_capital": 2269,
+        "unresolved_city_no_capital_fallback": 159,
+        "ai_unlocated": 99,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
