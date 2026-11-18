@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-17T19:33:50.765352+00:00",
+  "removed_at": "2026-11-18T19:11:33.376766+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -2324,6 +2324,193 @@
       "country": "Tanzania",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Concrete operational arrest for terrorist involvement.",
+      "related_articles": []
+    },
+    {
+      "id": "9bec70fed4666fe8",
+      "incident_id": "inc-85f3a8161d6afc98",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPSzNibEhLQ1dxNlpMS25qUmNhWE1pLW1qejhhYVh4REowdVI4Ni1KMEQzNjBKVU5RUVI3SW9SN3JuWXpONDRqaWZyMml6T2paeVdvV085ZFVEdkNRY2RiWjVZVF93MzB6ODNIY1NXdjhtSG40WU5ldUVKYnYxY2tQdDRaTHlMS3NER0RwaWZvNVFmSzVwYVNqa0lHS2pnQU9ucDlLMXpMRlBIUnRodnVwSQ?oc=5",
+      "title": "Tanker Near Somalia Fires Warning Shots to Chase Off Suspicious Approach",
+      "summary": "A commercial tanker operating near Somalia discharged warning shots to deter and repel a suspicious approaching vessel.",
+      "original_title": "Tanker Near Somalia Fires Warning Shots to Chase Off Suspicious Approach",
+      "original_language": "en",
+      "source": "The Maritime Executive",
+      "published": "2026-05-22T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Reports a concrete defensive action against a suspicious approaching vessel off Somalia.",
+      "related_articles": []
+    },
+    {
+      "id": "79f69b7d8b831276",
+      "incident_id": "inc-e6ad40a3589b51f1",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOdjRjNzhNdmdNekFtbUgyNnZqTWdoT3NEVjZ4YnBabmtrVWs0ZkxPOWN3aExENzB1U0VRbC1sS3NUWlM3SXZXZC1CdDNBMzdSZWhvUUpDaGhhMG9xWllSbEp4eVgtb1Ntb2NBaTZoaVhISmJQVmI0cHNaSjFVbTJEbmxTcUpuMDY4SW5pLV9YaUo0dERCU3Ytc3Rvc3RCR0p1aVZWbURQbFZpN1AyT0hoNmJnaXJFTEsxYW9CU3ZpNDRHeHA1YTdYOVhncWJGWU0?oc=5",
+      "title": "Boko Haram Responsible for Child Abductions in the South, Says Nigerian Army",
+      "summary": "The Nigerian army formally stated that Boko Haram is responsible for recent child abductions in the southern region of the country.",
+      "original_title": "Boko Haram responsable de l’enlèvement des enfants dans le sud, déclare l’armée nigériane",
+      "original_language": "fr",
+      "source": "Jeune Afrique",
+      "published": "2026-05-22T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Official attribution of terrorist attacks/abductions to Boko Haram by military authorities.",
+      "related_articles": []
+    },
+    {
+      "id": "9bf2a369ba839d34",
+      "incident_id": "inc-1d35ae077f4ab0d9",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNRG5QSXZGb252dzJobzRjOWR5NFBzQ25sdk13eG1TU0JsNGVlOUoydkJFZ3pFbWtRYS1QUm9SRkVmQ3NPaWN6c3g1R1pRQUlHeVZiYmw1U0o0Mm5nMXg1TmlPLTlUTUtwdkt4VU5SOE0xcUh3UkVlajd3Z1lFcUNUck5Gb3lYbVNUV3B2MlR2cW9YZzdHaHdPLTNGVEpmWEFkcXZ1OExsZFRkaXZmOXpVVkF1Q3Juem9l?oc=5",
+      "title": "Troops Repel Ambush in Adamawa, Lose Soldier in Encounter with Terrorists",
+      "summary": "Nigerian troops repelled a terrorist ambush in Adamawa State, resulting in the death of one soldier during the firefight.",
+      "original_title": "Troops Repel Ambush in Adamawa, Lose Soldier in Encounter with Terrorists",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-22T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Adamawa State",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism operation and clash between troops and terrorists in Nigeria.",
+      "related_articles": []
+    },
+    {
+      "id": "f4a0fb16ecd98e89",
+      "incident_id": "inc-3ebc543661b286cc",
+      "url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxNeEE2QkJQV3ZsdWdrZlBKenVDN2NxQWFoWFNvWEhxUC03UG90U2tTREM0bV9OcHM1RzZvbnhLblRVUm1pbWJxdFdhdlByX3pJc1A4OG5kdUR0Y3EzSlRJbVZwOFZMN0IyRXNCOGdSRFl3eTBGT2locjRkeXRkNjdGalZRTnFRWE5BTEJvaDd5VjBrcHlXTUJZTUota3ZSME1ySngwV012cmtyOWQ0OW81OTM0MGhWeW8zVmNKUzJIeUF1MXNmN1N0eTVPQk9KdDFZRmhGb3BLLUFhYV91OVhmWU96M3cwdGoxdTQ2cVVfRzVMUzdlYjZDY0tadnNZNzBZVzNheA?oc=5",
+      "title": "Somali government states at least 6 Al-Shabaab members killed in planned operation in Lower Shabelle",
+      "summary": "The Somali government announced that at least six Al-Shabaab members were killed during a planned military operation in the Lower Shabelle region.",
+      "original_title": "Dawladda Soomaaliya oo sheegtay in ugu yaraan 6 xubnood oo Al-Shabaab ah lagu diley howlgal qorsheysan oo ka dhacay gobolka Shabeellaha Hoose – Goobjoog",
+      "original_language": "so",
+      "source": "Goobjoog",
+      "published": "2026-05-22T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Somalia",
+      "region": "Lower Shabelle",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a planned counter-terrorism operation resulting in militant casualties.",
+      "related_articles": [
+        {
+          "title": "Somali National Army and International Allies Neutralize Al-Shabaab Terrorist Cells in Lower Shabelle Precision Strike",
+          "original_title": "Somali National Army and International Allies Neutralize Al-Shabaab Terrorist Cells in Targeted Lower Shabelle Precision Strike",
+          "original_language": "en",
+          "summary": "The Somali National Army and international allies conducted a precision strike in Lower Shabelle, neutralizing Al-Shabaab terrorist cells.",
+          "published": "2026-05-23T07:00:00+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQN0d1SEx3dWpsQUJGdktzOEpDMFFMcnlTTGk1al9KdDAxVEZaYzN5Zk9wa2l6c0FXS0lnQ1MyTl9pX29kd2pjeDRhdmx3U0VQeG40SFBCT3NtdHgya0tINk9Na3I1a0N4c2xiOHpLeU1BWnV3cVZ5cmFldU1neWJseHlsa1pLdmdEVENMUGM3OEVtbldNT215Yk1MRktsaG5MMkd3NVA1SWI3R0M2aUVIVUx3a1RMQk5uUXlwZGFQT1JJUDNENHJFME5rTE5GLTdDSEZWRmFfaUt4RlhDb05ncg?oc=5"
+        },
+        {
+          "title": "NISA Operation in Hiiraan Kills Five Al-Shabaab Militants",
+          "original_title": "NISA Operation in Hiiraan Kills Five Al-Shabaab Militants",
+          "original_language": "en",
+          "summary": "An operation conducted by Somalia's NISA in Hiiraan resulted in the deaths of five Al-Shabaab militants.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQcS1kRi05Q3IzSGhDaURsRjhoVnNzX2JTSXlsaVMxZmdHTmxla3dxaVRHUVhnbmxCV3FYZGYwZGlFSUlTclFLTzlKOWhEeEw1RHhKcVdNYWdVVG85X05MM2xUSTNsUU12S0RfRHViMVUzSVF5dExrMF9sLXNPb3lFeUlBNnZXaDdQSGd3VGZn?oc=5"
+        },
+        {
+          "title": "NISA operation in Hiiraan kills five Al-Shabaab militants",
+          "original_title": "NISA Operation in Hiiraan Kills Five Al-Shabaab Militants",
+          "original_language": "en",
+          "summary": "Somalia's National Intelligence and Security Agency (NISA) conducted an operation in the Hiiraan region resulting in the deaths of five Al-Shabaab militants.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNZ2NWRFVxcENldGNGTjhmZWY3b3puU1MtTWszVG1mbTAzRzN4b0hnX3M0U2Z3aXhjd1dtQnlUVnFWODhrWU1Nc3BST3JzZjlpZGJVN25seFpRWnBSajNaT2VKRTZaRE9yYzRHbXRWN1hBVzNaamVLMFdVRE50VjRBSjR1RQ?oc=5"
+        },
+        {
+          "title": "Al-Shabaab militants killed in airstrike in Lower Shabelle",
+          "original_title": "Six Al-Shabaab Militants Killed in Joint Airstrike in Lower Shabelle",
+          "original_language": "en",
+          "summary": "Six Al-Shabaab militants were killed during a joint airstrike conducted in Lower Shabelle, Somalia.",
+          "published": "2026-05-23T07:00:00+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQUnVVRWdiQk1INlFpbHNOeDJHQW1HbTNZU05vVml3NzN0bWw0bzJYMUpzQUV4cjJTOC1OU3FOLWJzZ0NSd2c1WGpGMEZwQ1dnMTR3cl9zZWExd3hkNVMwV3lfTkdHcWFWdmRZaExYX2xVYmdBS2RIYzEwSjczcDg1VlFiUWhURldZMTkxZU0wOFhFak9UeVJEbA?oc=5"
+        },
+        {
+          "title": "Al-Shabaab cells neutralized in Somalia",
+          "original_title": "Somali National Army and International Allies Neutralize Al-Shabaab Terrorist Cells in Targeted Lower Shabelle Precision Strike",
+          "original_language": "en",
+          "summary": "Somali National Army forces and international allies neutralized Al-Shabaab terrorist cells in a targeted precision strike in Lower Shabelle.",
+          "published": "2026-05-23T07:00:00+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQd1FVbVNUMUZSc19hS1VwYUx2eW0ydVZpN1VpUGtramZoZVhGaFhDTEVEb0NjRFRsa1B4NlVFQTBnbWJxMW1uQnBqYTdvczNxQTRyZF9ieHBaVmxTZ011Um0weUFkanJPbzhGckRXVFlXY3RkR3lkNXE0eVNldERFeFVObWdXU2RNTDNTTXR2b3NjZmY3YWpjRzk2dlY5WGNiZFU2cDFUUU05aGVKR1BEU2hHeldrcFdvWTFJVGlLZE14U3hYa2x1TkZYdHR3SURKaWZIYnI3Qk1Ya25jZVVPTFNSdW1Id0xldjNF?oc=5"
+        },
+        {
+          "title": "Al-Shabaab Militant Surrenders to Somali National Army in Lower Shabelle",
+          "original_title": "Al-Shabaab Militant Surrenders to Somali National Army in Lower Shabelle",
+          "original_language": "en",
+          "summary": "Al-Shabaab Militant Surrenders to Somali National Army in Lower Shabelle Somali National News Agency",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRHpBSzhvUGYzSDNUTWdYRzdnU0RMS2NXTThVRkNuTGJka3RlVmg4OFF2YVkwU3Z6eUxZc0R0cUFFeENaX3R2SC10ZEtZeFZrdl9ITWxBWjUtZm1kcTVEVjdWT2ttUFpCZ1JxejVud1VlR21tdnVtMmVuaFhqSlZ5Ry1tQVhhVk9ueDVjem9sd3VQQzgyYXJYdkFVbG8xUmVXYWc?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "730224da12f16297",
+      "incident_id": "inc-17818f7b5f8c9161",
+      "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxONmVwMW5BaDZZbjM0b3dTRDQ3M2FXQnY5RGdpa1pIUjdROGJXbmcxTXhvUEtzSFRCcVItaVREX0lDZ0dOMGRPQ3JYVkdWdVF0M0Zzdl94bTBQbzBqbm5wMFRKV240M09XN2R0SjB0LUEzMVpWWTdBVGp6T0FMWnB5VlhxUHpDSzdsMnBUNGRmSzRsckctcFlqYS02cF94Uk5zcl9TdU9ibTV3OWVTRTkzVE9ZcHE0NERYZmVsaUp4RklXNGlEcFVxc0RGdTVzQkxnbk56RTdDV0k3OEEzRmNQMG5JTG5CQ29oek5DUU81RQ?oc=5",
+      "title": "Five men arrested in Northern Ireland dissident republican investigation",
+      "summary": "Police Service of Northern Ireland (PSNI) officers arrested five men and seized several vehicles as part of an investigation into dissident republican activity.",
+      "original_title": "PSNI issue update as five men arrested and cars seized in dissident republican probe",
+      "original_language": "en",
+      "source": "Belfast Telegraph",
+      "published": "2026-05-22T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "United Kingdom",
+      "region": "Northern Ireland",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism operation involving the arrest of non-state actors linked to dissident republicanism.",
+      "related_articles": []
+    },
+    {
+      "id": "b0bd82d152794867",
+      "incident_id": "inc-d2c03da9b21e9cb3",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNeDIyd1Q2SVRseDQtdGtKY0VWY1hHeWtIbUNUaUhaQy03SHAwUkljMnhNUjBxNGFSQ1I3aG9Ta3hrSHo4MkQ4SWRYOEx3Z1JkVkJiMzN2U0xGc3pKeS1QdnRSVFRndTRsbTdOWUdWbnhmQ0xRbE5tRm9hU2RCR0FsS25kYTFfV1hlUXJUbXVFang0ZFdXTmJ5ZmpWQl9fazQ?oc=5",
+      "title": "ISWAP collaborator arrested in Borno",
+      "summary": "Troops arrested a suspected ISWAP collaborator in Borno State, Nigeria.",
+      "original_title": "Troops arrest suspected ISWAP collaborator in Borno",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-22T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "ARREST",
+      "country": "Nigeria",
+      "region": "Borno State",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete arrest operation against an actor linked to ISWAP.",
       "related_articles": []
     }
   ]
