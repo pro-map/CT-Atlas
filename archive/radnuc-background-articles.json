@@ -3,8 +3,163 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-11-18T18:16:47.580831+00:00",
+ "updated_at": "2026-11-19T18:26:44.201839+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-a6d7f700da96adbf",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxPNWVSeFBKYTNKY0ZxbndwekVsSWVWMkdlMHotWjZlOUJFcTdSMWlZTS0zLUUwNUZFdGFrSHlVbm4tVTVzOWxDLW9mR2MyZUxPX0ZFdjZFTzA5Q2tyX3F2bEt5bjdUb3Q0MmVIdHBZVjROYkliLW5HQVB1U1lZdmJPbkQ0VV9pVnNmU3pTZmxJX2dlZ01xMEhEVmhSMWdHR1B2NjNuVG85U0tIdjdVeHZacVlzelhDRlpTZWp2bkZyRllpUFhlLXQ5cTBZMUxTbDJYcmpIUVFKSnB1eVZwZXNiNFpNZ3o1S3ZLVjFoaHlfR2lkUmRYQWloS0ljSG8?oc=5",
+   "title": "General Fusion CEO on progress, financial discipline, and nuclear fusion commercialization",
+   "summary": "The CEO of General Fusion discussed recent technical milestones and fiscal strategies regarding the path toward commercial nuclear fusion energy. The discussion emphasizes the company's commitment to disciplined financial management while advancing fusion technologies.",
+   "original_title": "Le PDG de General Fusion sur les progrès, la discipline financière et la commercialisation de la fusion nucléaire",
+   "original_language": "fr",
+   "source": "Investing.com France",
+   "published": "2026-11-19T18:16:00+00:00",
+   "collected_at": "2026-11-19T18:26:44.201839+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a legitimate background development regarding scientific and commercial advancements in the nuclear fusion sector."
+  },
+  {
+   "id": "radnuc-background-8f56c7334cb93c08",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPc0ItTVh0Sk1RMU9zejM4VzJWdXhhd3c1WTVLbW04UENGdDhFenFKSmJYRGVnMEZtY2d4bWcxYTdHWndrcktHYVo5T2ZkV0R3YzNGQW5GRXNlaF9KT1ctWXBaX01memhSV2hNdWgxRkQ2emJPeklNdTV1Y1RaOUhEbmdn0gGCAUFVX3lxTE5kM1V3cGM5ZjVwbTFndTBjbGpzc2ZUZWZtSnFwWFVhUnoxSDl0dUNpRUxtQld5NGY0UHRzZjRYM3VsX1RLOHdYSzMzQXJUc1RVa0UxbTJHMnFfRU9HX0NmVEJBa3dEWmgwMFowRS01a0tDVTVkZzRKd3lSZnNadndEY1E?oc=5",
+   "title": "Diablo Canyon nuclear power plant uses AI. California lawmakers want to know if it’s safe",
+   "summary": "California state legislators are initiating an inquiry into the safety of AI applications currently deployed at the Diablo Canyon nuclear power plant. The review seeks to clarify how artificial intelligence is being integrated into plant operations.",
+   "original_title": "Diablo Canyon nuclear power plant uses AI. California lawmakers want to know if it’s safe",
+   "original_language": "en",
+   "source": "San Luis Obispo Tribune",
+   "published": "2026-11-19T18:00:00+00:00",
+   "collected_at": "2026-11-19T18:26:44.201839+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns the integration of AI within a civilian nuclear facility and subsequent regulatory interest in safety."
+  },
+  {
+   "id": "radnuc-background-69bcc64b59903daf",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPVnFRQ1B1c2J0Y2pRNTlLeU9BRzR2YUsycVotZ09ZTTQybV9faGJ2bWRWMExZWEtjUkQ0YmdQT3czenNxM251aUh5cm92R0QtdjdOT2ZvOV9xTjRwUzl3OHA3eXNqT2NSeDdZQTg5bjhIX3J4Z09jRUhhMnhvRDhMcGsxMWFqYkRHZWpOdkxhWVI0Uk1PNVp0aHBraGpSa3d2U2p4WFNXaHViRkE2TGFrSEEwSUVZUDVJT0lmTzV0LW9aNkFkOEJGVGlzS3l3RGI4azlRWDJxU3I?oc=5",
+   "title": "Fusion Innovation Bootcamp: Addressing workforce needs with unique educational opportunities",
+   "summary": "The American Nuclear Society is hosting a Fusion Innovation Bootcamp aimed at developing the specialized workforce required for the emerging fusion industry. This initiative provides educational programs to address the skills gap in advanced nuclear energy sectors.",
+   "original_title": "Fusion Innovation Bootcamp: Addressing workforce needs with unique educational opportunities",
+   "original_language": "en",
+   "source": "American Nuclear Society",
+   "published": "2026-11-19T17:48:05+00:00",
+   "collected_at": "2026-11-19T18:26:44.201839+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a legitimate industry capacity-building development related to the nuclear energy workforce."
+  },
+  {
+   "id": "radnuc-background-a709eaea10c253fe",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE0zTGoya2RPOHdLOFlGa0h6dklUeEdLNE1DUUYxMkFBa2NqYmVKYXlyLXFYb1owQ0gwNElKQjcwZERoaXlkbVdVVVdWcGNYeXlhSnlVOA?oc=5",
+   "title": "IAEA outlines five steps to strengthen Bangladesh’s nuclear emergency preparedness",
+   "summary": "The IAEA has provided a five-step framework to assist Bangladesh in enhancing its national nuclear emergency preparedness capabilities. This guidance aims to bolster institutional response mechanisms for civilian nuclear activities.",
+   "original_title": "IAEA outlines five steps to strengthen Bangladesh’s nuclear emergency preparedness",
+   "original_language": "en",
+   "source": "bdnews24.com",
+   "published": "2026-11-19T17:36:00+00:00",
+   "collected_at": "2026-11-19T18:26:44.201839+00:00",
+   "background_topics": [
+    "iaea_guidance"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This involves the implementation of IAEA guidance for national nuclear emergency preparedness."
+  },
+  {
+   "id": "radnuc-background-a243ca23ec0b0580",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipwJBVV95cUxQbG1lbXJ1eEFEakt3cW1NOWZYc1RtT3NOTzFac2trdmJIdzRnTGpJNWRIVmNGWm8tcjQzX3RwaEIxVEg3VG5MekJXZkJUZkgtVGp4SmxERWtCWXNGcVdHMXlta2F2WWFyWDR1YkhTVTdfUHRlRTlmUTVQNjNYWnNaTFZYVmpVa3BEcXlZeFdtbmVaNnFuMjVjclc2aFZhdENzT2dpdmZPVjVvaWlMUHhSU1JfUmYwT1dFSkV0RlotU0FIREFwZ2hTd1B1SWZDSm9JMmxCWVg0NHNoUzRtVFVta2ZtNmpDU2JLbl9ERUU5RHI4R1Q1YlZERld6UE82bV82RVpwb0dmQkVKUmMzTE5PTG5XYjlUYU05YnNJNzRNTEsxS2xJLVRJ?oc=5",
+   "title": "NANO Nuclear Energy and SJ Group Establish Collaboration to Advance Knowledge Exchange and Capability Building in Advanced Nuclear Energy across Southeast Asia",
+   "summary": "NANO Nuclear Energy and SJ Group have entered into a collaboration agreement to promote knowledge transfer and capacity building for advanced nuclear energy projects in Southeast Asia. The partnership aims to foster regional development in advanced nuclear technologies.",
+   "original_title": "NANO Nuclear Energy and SJ Group Establish Collaboration to Advance Knowledge Exchange and Capability Building in Advanced Nuclear Energy across Southeast Asia",
+   "original_language": "en",
+   "source": "The Eastern Herald",
+   "published": "2026-11-19T17:28:53+00:00",
+   "collected_at": "2026-11-19T18:26:44.201839+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a legitimate industry supply chain and capability-building development for the nuclear sector."
+  },
   {
    "id": "radnuc-background-86dba005dd7f0901",
    "kind": "radnuc_background",
