@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-18T19:11:33.376766+00:00",
+  "removed_at": "2026-11-19T19:19:16.689059+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -2511,6 +2511,49 @@
       "region": "Borno State",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Reports a concrete arrest operation against an actor linked to ISWAP.",
+      "related_articles": []
+    },
+    {
+      "id": "01a600f2c553456f",
+      "incident_id": "inc-7bd34444a9d5c8ff",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQMFNtWFZvdnY0UndHVkpYWG0yRjRnTVQtRzFlOEhqS3ZEVTBpbTFCbHVKa2prZ2swbDNlRVpmSkNJSWxMX1NnWjhiblhOd0xlbWtHeEs5azVHVmlCQ1VXX2t2YmN4SmEzeEVnZ2tacVdrNGJscDJkXzlPajNiR0tqWE5mTnBDUm9oWXM0cDdwM1VQVDE2TTNYd1ZjUTJ0dGxza1pGNndOMlhnTE9GYUZ6bVpQOXpvVF9WWWZsMHJfU0d6aGZvc1HSAcsBQVVfeXFMT0lQbENaY24tbThxSXBtV3YtRUFNMzhIS2VPUEhkeU1YcDVKLUhzVzRoOXIzSzBUUDBkeURDLXo3ZzREbWlKd1ZyaG9IQk5OWnhlLXd5U09lNnRMalowc1ZSeTFnS0tjYXlHWHpjd1ZMZGtYdkFaUFNkMXcyc19uMW5JekFoZ2gybXFhY1JiNUozWjNnR2VFeFk5QTMzYzZDMmdvSG5HcmNPWnZ4NFpuTEJCMDE4Z2t0MkZuRXhQUng5MDZVUnJ0d2ZOblE?oc=5",
+      "title": "MIT cross-border ISIS operation: 10 terrorists captured",
+      "summary": "Turkey's National Intelligence Organization (MIT) conducted a cross-border operation resulting in the capture of 10 ISIS terrorists.",
+      "original_title": "MİT'ten sınır ötesinde DEAŞ operasyonu: 10 terörist yakalandı",
+      "original_language": "tr",
+      "source": "Ekonomim",
+      "published": "2026-05-23T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Turkey",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a cross-border intelligence and security operation resulting in the capture of ISIS terrorists.",
+      "related_articles": []
+    },
+    {
+      "id": "2272d8704fb4f735",
+      "incident_id": "inc-44b1f946247272ab",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1WNGpxblE4UjROMHBKY3BXb01pZm90WkpWY2VucUUxbDBQNjViVHgxeS1xZUxfLWFtbWE1S2ZvOHl0OTVvLUdpbGE5eUc1cDBqVGNjaGYtT1NtZDJwdWI2ejQ2SkNRTVpubFJWeUZGSllKQUZIOUE?oc=5",
+      "title": "Russia reports foiled terrorist attack in Belgorod",
+      "summary": "Russian authorities claim to have disrupted a planned 'human bomb' terrorist attack aimed at the Belgorod region.",
+      "original_title": "«قنبلة بشرية».. روسيا تعلن إحباط «هجوم إرهابي» استهدف بيلغورود",
+      "original_language": "ar",
+      "source": "العين الإخبارية",
+      "published": "2026-05-23T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "DISRUPTED_PLOT",
+      "country": "Russia",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Report of a disrupted terrorist plot by security authorities.",
       "related_articles": []
     }
   ]
