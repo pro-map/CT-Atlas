@@ -1,39 +1,39 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-19T18:18:51.747205+00:00",
-  "last_attempt_at": "2026-11-19T18:18:51.747205+00:00",
-  "published_at": "2026-11-19T19:20:25.299307+00:00",
+  "run_started_at": "2026-11-19T23:34:34.890316+00:00",
+  "last_attempt_at": "2026-11-19T23:34:34.890316+00:00",
+  "published_at": "2026-11-20T00:15:38.275479+00:00",
   "recent": {
-    "candidates": 3856,
-    "reviewed": 3856,
-    "cached": 2046,
-    "new_reviews": 1810,
+    "candidates": 3757,
+    "reviewed": 3757,
+    "cached": 3011,
+    "new_reviews": 746,
     "official_auto_accepted": 0,
-    "retained": 352,
-    "rejected": 3504,
+    "retained": 142,
+    "rejected": 3615,
     "pending": 0,
     "status": "complete",
-    "calls": 70,
-    "primary_calls": 30,
-    "overflow_calls": 40,
+    "calls": 21,
+    "primary_calls": 20,
+    "overflow_calls": 1,
     "reasons": [],
-    "window_start": "2026-11-16T18:18:51.747205+00:00",
-    "window_end": "2026-11-19T18:18:51.747205+00:00"
+    "window_start": "2026-11-16T23:34:34.890316+00:00",
+    "window_end": "2026-11-19T23:34:34.890316+00:00"
   },
   "backlog": {
-    "candidates": 612,
-    "reviewed": 612,
-    "cached": 554,
-    "new_reviews": 58,
+    "candidates": 607,
+    "reviewed": 607,
+    "cached": 583,
+    "new_reviews": 24,
     "official_auto_accepted": 0,
-    "retained": 3,
-    "rejected": 609,
+    "retained": 0,
+    "rejected": 607,
     "pending": 0,
     "status": "complete",
-    "calls": 2,
-    "primary_calls": 0,
-    "overflow_calls": 2,
+    "calls": 1,
+    "primary_calls": 1,
+    "overflow_calls": 0,
     "reasons": []
   },
   "maintenance": {
@@ -54,26 +54,23 @@
   "source": {
     "google": {
       "retry_waves": 0,
-      "successful": 1219,
-      "empty_feeds": 472,
+      "successful": 1220,
+      "empty_feeds": 474,
       "throttled": 4,
-      "deduplicated_urls": 288,
-      "failed": 1
+      "deduplicated_urls": 288
     },
     "gdelt": {},
-    "errors": 1,
-    "status": "partial"
+    "errors": 0,
+    "status": "complete"
   },
   "reasons": [
-    "source_errors",
-    "geolocation_pending",
     "category_pending",
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 4056,
-    "retired": 421,
-    "cancelled_history": 199,
+    "expired": 4406,
+    "retired": 451,
+    "cancelled_history": 234,
     "duplicates": 0,
     "from_queue": {
       "expired": 0,
@@ -86,29 +83,29 @@
     "primary": {
       "per_run": 30,
       "per_day": 60,
-      "used_this_run": 30,
-      "used_today": 30
+      "used_this_run": 21,
+      "used_today": 51
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 55,
       "per_day": 110,
-      "used_this_run": 42,
-      "used_today": 42
+      "used_this_run": 1,
+      "used_today": 43
     },
     "historical_calls_per_run": 20,
-    "historical_calls_used": 2,
+    "historical_calls_used": 1,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
-    "status": "partial",
-    "pending": 53,
-    "located": 8081,
-    "unlocated": 368,
-    "completed_unlocated": 315,
+    "status": "complete",
+    "pending": 0,
+    "located": 8187,
+    "unlocated": 320,
+    "completed_unlocated": 320,
     "outcome": "success",
-    "processed_this_run": 60,
-    "review_required": 207
+    "processed_this_run": 111,
+    "review_required": 211
   },
   "categories": [
     {
@@ -133,21 +130,19 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-11-19T19:28:28.812468+00:00",
+  "finalized_at": "2026-11-20T00:17:50.818397+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success",
   "temporary_failures": {
-    "gemini-3.5-flash-lite:503": 22,
-    "gemini-3.1-flash-lite:503": 2
+    "gemini-3.5-flash-lite:503": 1,
+    "gemini-3.1-flash-lite:503": 1
   },
   "health": {
-    "state": "degraded",
-    "reasons": [
-      "geolocation_incomplete"
-    ],
-    "events_published_last_24h": 121,
+    "state": "healthy",
+    "reasons": [],
+    "events_published_last_24h": 131,
     "events_published_median_14d": 146.0,
-    "new_reviews": 1810,
+    "new_reviews": 746,
     "recent_pending": 0,
     "review_share": 1.0,
     "thresholds": {
