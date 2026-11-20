@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-19T19:19:16.689059+00:00",
+  "removed_at": "2026-11-20T18:45:25.843846+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -2555,6 +2555,251 @@
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Report of a disrupted terrorist plot by security authorities.",
       "related_articles": []
+    },
+    {
+      "id": "9d006046eb086fd0",
+      "incident_id": "inc-a4d2a0d4baedea0e",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNMFdDeFQ1aGhoTnZIWjI0MWROSWJpd1JFalhtb0dHMkMxZGViR2J5bVZHYzdENUIyTmEtUkNMczU5Q01aOWI1NWpWY1VhcVBPcm10N0dLRkU5N1BFYTZDbGRVdzBDQy1zSF92UHI1a2RZcjhCSnkxSUZpaERmb1dYZlFzQnFldVUzTWV6UmFyb0RUVGV3Wm02T015d1lSX1JMOGg2TVB5MzdBSmVnWkpleklR0gG3AUFVX3lxTE9HZ0dpM0ZTamlZS1VvaVRiSENDTFM3VUhLSmx0MncwaTR1Mkp3a2ZBcWpDaE90TXc4YXVrWkFGNWk2TU1jZEs4SGEwcjd3NFRJVGs2WWRaX1duMzBTbzBzSXFRaEN0WTI2d1pEcXNqZHdpYUprRE1PT2cyaHlCNlVOMl9jWFBYVzBPWlhNUklKbmxYbnFxNFBPWlNmTWNsckYtTHRjX3lMVlJBX1hhUFdzUXRlMm9mNA?oc=5",
+      "title": "Suicide car bomb attack on train in Pakistan",
+      "summary": "A suicide car bomb attack targeting a train in Pakistan resulted in at least 24 deaths.",
+      "original_title": "Suicide car bomb attack on train in Pakistan kills at least 24",
+      "original_language": "en",
+      "source": "Al Jazeera",
+      "published": "2026-05-24T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Pakistan",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a major terrorist attack on a passenger train resulting in numerous fatalities.",
+      "related_articles": [
+        {
+          "title": "Terrorist attack on railway in Pakistan: 23 people lost their lives",
+          "original_title": "Pakistan'da tren yoluna terör saldırısı: 23 kişi hayatını kaybetti",
+          "original_language": "tr",
+          "summary": "A terrorist bombing targeting a train line in Pakistan resulted in the deaths of 23 people.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Hürriyet",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQRlNtbExobkx6NUpFbmFlQnVMWDlQQWJ4Y0NDS0ctczlySEg3MUZJQ1BkQU1UNTRrR1d0ejJadURmdXhvZGd3LVozNlpCWnExR18zWXFjOTd4aTN5aGRjaHBjSlZnTm84anlkdURlWXltb3hoZDRiWW4xUnNEbXk4LVJYdmh6TnQyRHZLdW9ueHhDTHNIVTU3Z3h0WWhBa2pQUzI2cmVyQmxGdEU?oc=5"
+        },
+        {
+          "title": "Turkish Foreign Ministry strongly condemns terrorist attack in Pakistan",
+          "original_title": "Dışişleri Bakanlığı, Pakistan'daki terör saldırısını en güçlü biçimde kınadı",
+          "original_language": "tr",
+          "summary": "The Turkish Foreign Ministry issued a strong statement condemning the recent terrorist attack in Pakistan.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Anadolu Ajansı",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQVjlINUp0WUVKVzZnS0ItZ1FZWlNtTjFpdkhoNXJzUm5nd2hNckQ3a255bHVLZkRkTm96eWpBVVJGdUFnVUg4RXktVGN1SVNRT3FTSExZWWVDWXg1bjJINHE1Y1ZKUGxaNHdQLVZGYXNxZE5PelF5M05aZkRJN0FmNG5HYkpMVmQyWjBZRHhCdEdHRl9mYVZCWHBkcDZEaG9JLXg2OVYyc0dHbXI2cWllTDQzV3Q?oc=5"
+        },
+        {
+          "title": "Russian Embassy in Islamabad expresses condolences over victims of terrorist attack in Pakistan",
+          "original_title": "Посольство РФ в Исламабаде соболезнует в связи с жертвами теракта в Пакистане",
+          "original_language": "ru",
+          "summary": "The Russian Embassy in Islamabad expressed condolences regarding the casualties of the terrorist attack in Pakistan.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Интерфакс",
+          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFB6Q3lzZWc5OXRsTHdZalpTWnZ5a3FoR1FLOVFKOXA0QkhaWGxsVTl3eDdNM0tTVW82T3Q1M09wQ1RXUG9sXy1ldnA0dU82d9IBS0FVX3lxTE9kUHhDbzYyUW1iSFhnMzhJcWp6emYyOFZYTmNhQm9STkJrT0xlU0JNbUduaWRJb3lRcWl6Q3lXaVZVT3NWZjdrUm9DZw?oc=5"
+        },
+        {
+          "title": "Suicide bomber detonates car bomb near passenger train in Pakistan, at least 19 killed",
+          "original_title": "מחבל מתאבד פוצץ מכונית תופת ליד רכבת נוסעים בפקיסטאן, לפחות 19 נהרגו",
+          "original_language": "he",
+          "summary": "A suicide car bombing near a passenger train in Pakistan has left at least 19 people dead.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "הארץ",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOOUFxTjJDSHN1T1RIUnF1MVNWTWFRZklzTlFrN2pSZjhLN0tHOE95UzZQeGF4S1I4ay1iQUpXUHhHVVpZQ0E4c3YyWGtkc2F5TU4yOEpXZktQVl9DdWplSFNQVGlRaVNuN00yTWdjNHhwUGx6RXRoeWV0Rm5rV1hvVWdaRzlBLTA5SWxHdzRZb1hnMVQzQjhJOVpDZmdtd3o4TVdoT3JCX0xSMDN6OXc?oc=5"
+        },
+        {
+          "title": "Bahrain condemns terrorist bombing targeting Pakistan train",
+          "original_title": "Bahrain condemns terrorist bombing targeting Pakistan train",
+          "original_language": "en",
+          "summary": "The Kingdom of Bahrain issued an official condemnation of the terrorist bombing targeting a train in Pakistan.",
+          "published": "2026-05-25T07:00:00+00:00",
+          "source": "News of Bahrain",
+          "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBFODhudkd4SHZEeUhmVXZzR0wxaVNlVlRqbVFfQ2JsUWN1b1VXNWg3aDFqbTB4Mk83bFJ3aHdJSUotelRvZ0tORTltZGhyc0E5RkN3UUdLNDdGVWNaRnc?oc=5"
+        },
+        {
+          "title": "Car bomb attack kills at least 24 on a military train in Pakistan",
+          "original_title": "Pakistan: un attentat à la voiture piégée fait au moins 24 morts dans un train militaire",
+          "original_language": "fr",
+          "summary": "At least 24 people were killed in a car bomb attack targeting a military train in Pakistan.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Ici Beyrouth",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQWnFsSGgxT0RpMlZCTm1UUXg4eDZrT2dETUpxSGVSWWNTVEJhcHZVS0NHMXhsY1FoSmlzaER1WUJxbkVWOG1xMzJvZmVhbnlybkliXzQzYUdBMlYtQ1Jsd3Q3S1RvX2tyYm90ZnVxQlIyM2hVdEVHbTQzbGprbjlEV1htWDRjUGpNLVVvU19XUlZHTElyWVJUODNEYy02dlFNRWhqeEU4bnZsNklBWW9YNXNFNU9HNW54cUFsaGs4WHZXVHNaRkVn?oc=5"
+        },
+        {
+          "title": "BLA claims responsibility for suicide car bomb attack on train in Pakistan",
+          "original_title": "DW News. . A suicide car bomb attack on a train carrying soldiershas has killed at least 24 people and wounded around 70 others in Pakistan. The outlawed Balochistan Liberation Army insurgency group claimed responsibility. #dwnews",
+          "original_language": "en",
+          "summary": "The Balochistan Liberation Army (BLA) has claimed responsibility for a suicide car bomb attack on a train in Pakistan that killed at least 24 people.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Facebook",
+          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxObURTSWVmbGF2VFh6Y3BLcFlaWWxKNDI5V3U1OEROZkdFejVDYXlGZ2pPRW1NYmtfbFQxRVBrN0dlb3poLW9SdFJvc1kyc0s3VFM5N04tWDIzZHJDUS1VUlpLSEVJSm1vUFQ2X1BjeF9ZY2NGajVRS1hYdmJPM05JZTFHbVZmbWR1MnNrNnd4QktjejNpM0xzWEEyemh6aDNXclhVeE93NEJBSEdLdzVYYWRKYjZpcmgyNVI2YWZOX0tYamtTWXBNc2VRLVdTbk9KRm1rMWtFeUNuUHl0Q1JuYg?oc=5"
+        },
+        {
+          "title": "Suicide car bomb targeting train kills at least 24 in Pakistan",
+          "original_title": "Suicide car bomb targeting train kills at least 24 in Pakistan",
+          "original_language": "en",
+          "summary": "A suicide car bomb attack targeting a train in Pakistan caused at least 24 fatalities.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Kuwait Times",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPNTZIQ2F5ODd1c2NXeWY5ZC1uNGVoMjBjUXlXWF9pdU4tWEVXYXI3U3JNckFLcGpnN3N1NmVZTXhxRS1kaGhCeFNDNGVCYk1SUlFERXE5X3ZNQ0txN0l2blFUT1Q5S0wzZ0V2OEN1NVJXaEFWY0h1Rkt5T3JrRkJseEY1Q1hfazNtQ08ydUlwbEdFTUZIb0NBSG9xUTVwRlktYUxYZ3BQT1BTazdYMlRiNHpEONIBtwFBVV95cUxNMzNLZmF4emJMQU8zZUR0QlNJVmt0Rjh6QTNTMVQ4Sm1GekNyd2ZEaHBoaldqQURXeHNSaklCUVROZ2w0Ni1fclhvN0pmNXFwOHNjMWY3RFdJblk3eXdQUVFzVjNxMzlOMjBEUUVkT041XzBCNzNRaEJUaDQzNGFnZjhiOUJYODdSMGRUTHNJV2NFMDV4aEt1Q1hzZ1RDTWh2d2xjZ3ktbjZlWk9lVlJxLThITDB2NzA?oc=5"
+        },
+        {
+          "title": "Pakistan: Many dead in attack on passenger train",
+          "original_title": "Pakistan: Viele Tote bei Anschlag auf Personenzug",
+          "original_language": "de",
+          "summary": "Numerous people were killed in Pakistan following a terrorist attack targeting a passenger train.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "tagesschau.de",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOSWdNOWZaQldpT0hqZFhheEtvY29SQ19QaERiZUQzcktKWUFfcFNYVllsSkVZZnZWdWVxREJlbXQzLVI0Z3k5X0VrU1luYjk5M19mWl9ISUpqcEpVQXpIcHB2enRSYzh1SkZ5U3pSSDN4bzE2a3JHYkNsYWhBR2tiWHIyOTJPUUxM?oc=5"
+        },
+        {
+          "title": "Train in Pakistan targeted by car bomb, killing 24",
+          "original_title": "火車遭汽車炸彈攻擊釀24死 巴基斯坦定調為恐怖攻擊",
+          "original_language": "zh-hant",
+          "summary": "A car bomb attack on a train in Pakistan resulted in 24 deaths, with authorities investigating the incident as a terrorist attack.",
+          "published": "2026-05-25T07:00:00+00:00",
+          "source": "你的公共電視",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE50bVpQejhaMHlwVi0xd3kxNmxrOVl6RHgxd0V2bkNOMGk3aHZvOG9mV0x6YW10WTBOMC1aUDE5aXlFM0JaTnlwRS0wYlJPQWM?oc=5"
+        },
+        {
+          "title": "BLA claims suicide bombing of train in Pakistan",
+          "original_title": "自殺炸彈襲中巴經濟走廊火車至少30死70傷 俾路支解放軍認責",
+          "original_language": "zh-hant",
+          "summary": "The Baloch Liberation Army (BLA) claimed responsibility for a suicide bomb attack on a train in Pakistan, causing at least 30 deaths and 70 injuries.",
+          "published": "2026-05-25T07:00:00+00:00",
+          "source": "梅花新聞網",
+          "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9qbDc0VFlKS3BPNTBua0JNRjNVU3NIS2ttMGpUMGFqS2pHQWpoamVrWGlmWWVGNzRNWFRXczl3WF9pR2dEV0JOMHRPMjNoc0JMYll1aURGb3U?oc=5"
+        },
+        {
+          "title": "Train bombed in Pakistan",
+          "original_title": "巴基斯坦列車遭汽車炸彈攻擊 多人死傷",
+          "original_language": "zh-hant",
+          "summary": "A train in Pakistan was struck by a car bomb attack, resulting in multiple casualties.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "青年日報",
+          "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBhSnlOeENYcHJIclNzUTlMY05yMWJZVVFSZ3NPS1NIYnZmOElCQWNMRW9sMVhwMXIzSjhiLUdzdElieTNnUEplaC0xYlRtQi1Bd3FVQ1NGMmdkNUF2V2JxMTR3eTlxUTF6STI2LXJB?oc=5"
+        },
+        {
+          "title": "Military train bombed in Pakistan",
+          "original_title": "中巴經濟走廊要地遇襲 巴基斯坦軍用列車遭汽車炸彈攻擊24死",
+          "original_language": "zh-hant",
+          "summary": "A military train in Pakistan was hit by a car bomb attack, resulting in 24 deaths.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "自由時報",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBET3p2dDlTbUdrTnVTdF9ad1VNX3YyOUR4c2p2VTlwN1pEazdqTzR2d0pZbExQa2hsazN3ck5QMktfTVp1VTFDeXhNQVhyaGpnaVVYYm9XV0gwS2xxaWxVTFBSdmxuZw?oc=5"
+        },
+        {
+          "title": "Baloch Liberation Army claims responsibility for train bombing in Pakistan",
+          "original_title": "巴基斯坦有列車遭受爆炸襲擊 多人死傷 分離武裝組織俾路支解放軍承認施襲",
+          "original_language": "zh-hant",
+          "summary": "The Baloch Liberation Army (BLA) has claimed responsibility for the train bomb attack in Pakistan that resulted in multiple casualties.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "Now 新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBYc1h1MkFYdzI1TDB3SHRpQkx6T0p2RlBmZDJCT2RRRzVwa21VcjJhZ3NfQjNvcVVkLUJCNWFjRzZGYS0tVUZJMUlHdWxCcjU0WndsbWloOGptU01lbzV1NVNOay12TWpSMUlFSA?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "eb6c57703a9a9537",
+      "incident_id": "inc-de23e2e40986c91c",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQclF5ajZrenVUdVhBOHptemx5SUVOSFhEWC1VRzVjS29LLWl2OWlwUW01X0RUbzZDNVVOaEppMEhRcUdzQlNxUXROVHhkQTJrN2JyUDN6aTR5VXhUbjlZZVRFNjh6d0MtRjRaQ0pLX1hDYlBpRWRoMkk1M2l0S0VOY2luY1R4QUtVejlibTczTzdzY0FETVlGMHdNc1I4NVFjZFlRaw?oc=5",
+      "title": "Multiple vessels report suspicious approaches in Gulf of Aden",
+      "summary": "Multiple merchant vessels have reported suspicious approaches in the Gulf of Aden.",
+      "original_title": "Multiple vessels report suspicious approaches in Gulf of Aden",
+      "original_language": "en",
+      "source": "Seatrade Maritime News",
+      "published": "2026-05-24T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Yemen",
+      "region": "Gulf of Aden",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Reports suspicious approaches and potential pirate activity against merchant vessels.",
+      "related_articles": []
+    },
+    {
+      "id": "0a1fc48eb9d3a7d5",
+      "incident_id": "inc-f01f2c112d112dcf",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOeVVpNllVOTB5X1hhcktBODR4YndIUVhaS2pNSGt6OGFubEQzNWNZVkdyTXpPdUVJaXZyaXNIRWllbXF0dkhMdm5PZXUxV0E2TGZ0aTlfOUJFclZBenZudXFIMkRvZEltYjhtWW9lanNSelc3bUJOcnA1eE5Ydy1lbkpFM2Y1Z25tUWd5dldhTWh1N2xCY051OGcwNUc?oc=5",
+      "title": "Troops rescue 92 kidnapped victims and foil terrorists' ambush in Borno",
+      "summary": "Nigerian troops successfully rescued 92 kidnapped victims and foiled a terrorist ambush in Borno State.",
+      "original_title": "Troops: We rescued 92 kidnapped victims, foiled terrorists’ ambush in Borno",
+      "original_language": "en",
+      "source": "Daily Trust",
+      "published": "2026-05-24T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Borno State",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism military operation rescuing hostages and foiling an ambush.",
+      "related_articles": []
+    },
+    {
+      "id": "77c5504f655ca3df",
+      "incident_id": "inc-98e2631a799b2059",
+      "url": "https://news.google.com/rss/articles/CBMi8ANBVV95cUxOSE5pa0N1dnkxdHVCRm93aUNka3BFcmhFSVNyM3c1NjZPV3Q2SUo4eWNqeWxzU0pPZGR6LWZiODVYSFd1NENGdHlKcGlkcHpwbXMzWVp0WVM4TTR1amhGXy03NzBsd3ptTTdHemRLVDJwbjFuLU9wdDd6YUxvbDhaRzctdHNQNEJCcm5WQkVsWFVnVW5oNkcyUUhEbFd2LWNRZWc1dXY5VGV3M2hiRXFHZUplazc0TlEyMzd4R2N0eFZqdVEtN0tVMm9kU21LOXRmd2ZWVkVDak1xRkQ5eFR5LU01eWp1T1lYYTNtcHQtZXBudHREMXVQX0NVMXc5ZjZKc3ZCZmdCZmVFbEwyRGQtRGNxWGwxOWVYbmR3RUNhV3VlcUxmamEyS2tkMmZBNWJVXzQxV0lON0xJcFEwX296QWNPSTJ5dzFmYlhKeVp5NXhqbDd6MUZ3SXJPZjM1c0xfVlVHTUFjc0tnLUFnQXRtWms2eDh3Zmt3cmVVbzRYcDZ4dG9uTVJmQVJEZURKUW0xY1drOVU5Zk5xaHgya20tQ0hiZHJiamoyejFUcEF0Q1pLRHZDSFFVeHBsZGRlYlNJZkFNUXpBZm8xT2NUbEtjRGZnM1d3TEhxZ21MQUlfbXJkcEZrQkRKV0pCUzZuempF?oc=5",
+      "title": "IED attack kills soldiers in northern Iraq",
+      "summary": "Three soldiers were killed and four others injured in an IED explosion in northern Iraq.",
+      "original_title": "مقتل 3 جنود وإصابة 4 آخرين إثر انفجار عبوة ناسفة شمالي العراق",
+      "original_language": "ar",
+      "source": "qna.org.qa",
+      "published": "2026-05-24T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Iraq",
+      "region": "Nineveh",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "This is a concrete, dated terrorist/insurgent attack against military personnel involving an explosive device.",
+      "related_articles": [
+        {
+          "title": "IED attack in Nineveh, Iraq",
+          "original_title": "مكافحة الإرهاب: استشهاد 3 وإصابة 4 آخرين بانفجار عبوة من مخلفات داعش في نينوى",
+          "original_language": "ar",
+          "summary": "Three people died and four were wounded in an IED explosion in Nineveh attributed to ISIS leftovers.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "الواجهة - المربد",
+          "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE94X1RpemE1ak05ZHRwUE5zYm14TmZWNUdhS1IwMU1tZE5GdmNXZjMtOElBem1iQnFBUG56RWxxR1ozbXdjSnh1UmxQMmNlcENS?oc=5"
+        },
+        {
+          "title": "IED blast kills military personnel in Iraq",
+          "original_title": "العراق.. انفجار عبوة ناسفة يودي بحياة 3 عسكريين",
+          "original_language": "ar",
+          "summary": "An IED explosion in Iraq killed three military personnel.",
+          "published": "2026-05-24T17:55:43+00:00",
+          "source": "الشرق للأخبار",
+          "url": "https://news.google.com/rss/articles/CBMigwNBVV95cUxNY2pCZG1sWUNLbDczQ0d5cGlCSHhFNURRTE43UExUUTJPNm9wTmV2NHZaTXZIVHVNcUxBWlMtZ25IbC1jRGdyZ3hpMXZTR2RfS29KQXVLVXFEUzRFN1gyNmMtLUVtWXNBM25Za3BQS2tNZGRkQXRIUU5oY08wY3JyNUFrLS05VTFObkk4OVhVVFdZQ3lldXhlckE2N2pfbDlhNVpLNEc2TV9RM0M2SkVBODY2bVJnN0dNaDYzSUQ4bFNBN2xxczJSUktJbDg5S0JNOWVySzBwUE5mOV80Ujhvc2NqSE9yWXAtMzlkTmQ4RWhsaUl1ZEV2VG1NSVMxM1BNTGcwRkdEWkYtV0JmYXhmYTUwQTJCeWRlWlpRb0Vnem93eFBNSEVyN1RObDVkSVZTRHZCbkxDZHZjZEFDY1JTQ0p6ZFk0d0V5ZTh4SHdpa1daYkZoNHRQOWtpbzBDX0R2TFhEZ3ViSkFpdHctdVEwQzBRa1M0TnpvZTd5MHdiUEVoMG8?oc=5"
+        },
+        {
+          "title": "IED attack against Iraqi Counter-Terrorism Service",
+          "original_title": "جهاز مكافحة الإرهاب ينعى 3 من مقاتليه إثر انفجار عبوة ناسفة في صحراء الحضر",
+          "original_language": "ar",
+          "summary": "Three members of the Iraqi Counter-Terrorism Service were killed by an IED in the al-Hadhar desert.",
+          "published": "2026-05-24T07:00:00+00:00",
+          "source": "الترا العراق",
+          "url": "https://news.google.com/rss/articles/CBMivgVBVV95cUxNbFhPQVFDeWhkNGY5Y09iWTNJMkxPUWtyaDV1WGUxR0pOaWMyaG4wcDlYZ0xhLTJiaVZDMnZzSlV2OU9fWjVJRTBxaGFjTDRGWXhGblpTM0ZGRzd0V3F4V21rVnpXMXh1ZnhpdVN6UFNWTzZpVkJ3VXQ3ZUl1Ym9mRGRtVUp3ajI1M0g5aXVwcVU3QVpTWUFZeGVGUjN6dDVGbkFmSEc3X0s1MjRqcnIyX0VXM3JjeXVVNkJ0OWpKWHBzVEtheGRoTHc4SkxZWE9rYWUyb3otVTJqMEVsSURHV1dLTVhsd2dNZ05YMEczNVMtSXp5QTNYTU1KZzZWak5XNXpTR0FtMFlOVGJlaFZlUmFBVEJ4MW05VlZ4azNoM2FNWS1VdFRTZHRMMmVFZ3QzdkgxSHNpU0hZUkhlZEZRbVJTdy1XZjVUQjFGT0ZBa09ZaE94WlZxVU9qZ210Sk5FOWptVWtJT19zV0dXeDFDaTdwb2dWN2drYXFOLVlPdVhVTDd5WTFPVHRRS1UwWUNXUmd1ZDY1NDNMX0g0eVFqQVhqQ2VmOVBWazhnMGZEYUd4V3p4UldmLU00Tk5JQkV3MWtGQmRHQWlPYUdUamdxWmxhdE5YaUVfRkVxZmNBNS1ETkV4NjdLZGVYeUpUeDBmUjRUVzBUeWQtQm0ybDlnNGdYbWtPXy1OdjRiYWR3YTFOYUJ6S0VqVU5FemItRENYTDdOZDVWVklSV3JQcmtSbFVpZ0NYOTFkelN2ZE0zS0pHOUdmemhMWW5uWm5VMU5tMWJsd19mSU9wTEgycEFhTGtGRlZXRER5eFVMdEw0ZWRoYzhKckRxSDZfZDkzREpiUlAwN3VRTUVHMG42eVZuQ1Y2czgyYkZMSmtuS3dVN2N5RWJCSXFuSXB4ZzZ0cmc1NHpNSWh0ZDNqalE0OHc?oc=5"
+        }
+      ]
     }
   ]
 }
