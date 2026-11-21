@@ -3,8 +3,568 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-11-20T17:55:58.413365+00:00",
+ "updated_at": "2026-11-21T16:52:32.958079+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-19ab75cda26669e6",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPa1BWNjhDd3lBYnpiZmZZWnFqOHBuU25MLVZZQVkzT1lMc0dwUG9VeTJEdkdjc1dzeGhIV1BsN3k4YTYzdjgwRmxkVVp0SngzUF84cmpLUkFCSzA5ZC1yREM1QmQ5dms1ZnlZWElNSEFUa2MzTFZyMURiZDN5a1NpWDMzcDVaU3Q4WXllX2tsZkdMSW1YQk1wVTNoTEtrX2phS1RyZHJxM1VKeUc4M3ppejh6eUU3NXloS3U0?oc=5",
+   "title": "Nuclear, Dal Ben builds the base of the reactor that studies fusion",
+   "summary": "The Italian company Dal Ben has completed the construction of a base component for a nuclear fusion research reactor. This component is designed to support ongoing fusion energy studies.",
+   "original_title": "Nucleare, Dal Ben realizza la base del reattore che studia la fusione",
+   "original_language": "it",
+   "source": "il Nord Est",
+   "published": "2026-11-21T15:35:37+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report documents a technological development in nuclear fusion research infrastructure."
+  },
+  {
+   "id": "radnuc-background-d92ee9db76683bfd",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9zUnpFNF9IV3FWV2ZIMG9HUzh2T21Nb0tNc2EyaGpQNFVDMzNJa2tsMFB4enJNOVk4YUw5VjdZUng2ZGVQZS01Q3ppbTM0SURjSmdLNXF4eE5UMnFJV21SeTNYTmFZX0QtVk5iaGhVcExkWmo5Tnc0?oc=5",
+   "title": "Partnering with the US, Indonesia Develops Nuclear Reactors",
+   "summary": "Indonesia is collaborating with the United States to develop nuclear reactor technology. This partnership focuses on advancing civilian nuclear infrastructure capabilities.",
+   "original_title": "Gandeng AS, RI kembangkan reaktor nuklir",
+   "original_language": "id",
+   "source": "berita prioritas",
+   "published": "2026-11-21T15:24:37+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report highlights civilian nuclear cooperation and infrastructure development between Indonesia and the US."
+  },
+  {
+   "id": "radnuc-background-6a3d77c52eb7c237",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTFB2ZUJzdV9od09ZM3czcUxXZ1pST0dMYnZSTVVTVmtaeEI2SEdkZnhwempDWUZUZ0xuZVk5cWtSMGZYSmpi?oc=5",
+   "title": "Spotify founder supports a British startup to develop nuclear fusion reactors with artificial intelligence",
+   "summary": "The Spotify founder is backing a British startup focused on leveraging artificial intelligence for the development of nuclear fusion reactors. The initiative highlights ongoing private investment in AI-integrated nuclear energy technology.",
+   "original_title": "مؤسس «سبوتيفاي» يدعم شركة بريطانية ناشئة لتطوير مفاعلات الاندماج النووي بالذكاء الاصطناعي",
+   "original_language": "ar",
+   "source": "بوابة التكنولوجيا المالية",
+   "published": "2026-11-21T13:36:42+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report describes a new development in the use of AI for civilian nuclear fusion research and development."
+  },
+  {
+   "id": "radnuc-background-d28dd071f6820fdf",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOS1BVaWFHS3M2WEVCZHA1bGdHS1ZvT1d5SEZLaExIclBITE9nRUhMbE8zS0x3eThZeEc5MEdwbGJNak4yS3NvWU4xd2JscnNFYkJpTlg4Z0d3TDVWMFZVdHBqbm5TT0FQOHlfUDAyRC1HOEdVd2l1WG9Ha0VTRkZJS2VUWTNmdC1ySjcxV20zZWRucHl3WEhnSGgyZmFxdw?oc=5",
+   "title": "Indonesia and the US Agree to Strengthen Nuclear Technology, Prepare SMR Training Center",
+   "summary": "Indonesia and the United States have reached an agreement to enhance cooperation in nuclear technology. As part of this, they are establishing a training center for Small Modular Reactors (SMRs).",
+   "original_title": "Indonesia-AS Sepakat Perkuat Teknologi Nuklir, Siapkan Pusat Pelatihan SMR",
+   "original_language": "id",
+   "source": "kayonews.co.id",
+   "published": "2026-11-21T13:00:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain",
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report outlines a specific civilian nuclear infrastructure project and supply chain development."
+  },
+  {
+   "id": "radnuc-background-64bcfaacf5aaa53e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZWYxX2JaWUdFUVJZdTVYV2dFdHpGUzcyTW5taW53eXZYOHRmLVlGa1k1WWdiZzlreEcyUWxUSGRQYThiMGFvTHJ2ZUQ1R1FBbExTT0hEdmE0bFExS2VlNEpoV0ZKaUtETDRUM2NSeEVzYVRxTmpxTjIzeGFLa3JlMHhST1ppb0VpWFVJ?oc=5",
+   "title": "Tokamak, San Stino: Dal Ben challenges nuclear fusion",
+   "summary": "Dal Ben has participated in the development of equipment for a Tokamak fusion reactor. The project supports advancements in nuclear fusion research.",
+   "original_title": "Tokamak, San Stino: la Dal Ben sfida la fusione nucleare",
+   "original_language": "it",
+   "source": "Veneto Orientale Informazione",
+   "published": "2026-11-21T11:48:46+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report identifies industrial contributions to fusion technology research."
+  },
+  {
+   "id": "radnuc-background-919767ed534c2cb6",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9YVkZWUENKZG1HcjBhNFh5Q09aOUdGNTc2cFRtb0JTOWJPcDRmT0dpTnYxNFhraFBLb2FLLUlkUFE2VXJlaU1NMDNTZTczMGdvb0VqTWRFX2IxZVFYSGVETGRXeEJaSmJmbGhDNA?oc=5",
+   "title": "US Supplies SMR Reactor Simulator to Indonesia",
+   "summary": "The United States is providing a Small Modular Reactor (SMR) simulator to Indonesia. This equipment is intended for training and civilian nuclear capacity building.",
+   "original_title": "AS Pasok Simulator Reaktor SMR untuk Indonesia",
+   "original_language": "id",
+   "source": "www.suaralandak.co.id",
+   "published": "2026-11-21T10:21:32+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The acquisition of specialized nuclear training technology represents a significant civilian industry supply chain development."
+  },
+  {
+   "id": "radnuc-background-1683d8a107cbcdb6",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOVTQ0Y2Y1dTlhc2ZsVEQzSkNPUFlwLW9rVmFBbWlKTVJ2SVlZbHpwTlh6M3JGM25TUWtOdy1MeUIyQ2VZSS11SERUSE11NXZtM2dLbE5EcHI2VW93cnZoeVNRcXpIdTBCdkJfX25GM3dwdDlXWFNMVy12d0YySkl2YUpjanNkcmJ2OTVUeUxNM0F2N21SZ2U4OS1ZVGV3Zw?oc=5",
+   "title": "Fusion plasma retains more heat: a theory explains how",
+   "summary": "Researchers have proposed a new theoretical explanation for how plasma in fusion reactors can improve heat retention. This development is relevant to the advancement of controlled nuclear fusion technology.",
+   "original_title": "Il plasma della fusione trattiene più calore: una teoria spiega come",
+   "original_language": "it",
+   "source": "Tom's Hardware",
+   "published": "2026-11-21T10:00:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report covers scientific advances in nuclear fusion technology."
+  },
+  {
+   "id": "radnuc-background-3de41c3fea4d2413",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFA5UmNyd3lrcGw1U2EybHFIcGlxVzdKWHJCOU1Ca1I4a2d5VzR3MHBLOG10aV9SaWJiZExzeTJyTHBDcW1sVllJVGNwNHVWeG1YYzNUblNhRkxuNGU4M1hHeVlRNzdWOGtha1gtMA?oc=5",
+   "title": "US Expands Civil Nuclear Cooperation with Indonesia",
+   "summary": "The United States and Indonesia are expanding their partnership in the civilian nuclear sector. This collaboration underscores efforts to strengthen bilateral ties regarding peaceful nuclear technology.",
+   "original_title": "AS Perluas Kerja Sama Nuklir Sipil dengan Indonesia",
+   "original_language": "id",
+   "source": "MediaKompeten",
+   "published": "2026-11-21T09:39:58+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report confirms ongoing civilian nuclear cooperation and policy development."
+  },
+  {
+   "id": "radnuc-background-f4b89f3eb72d2ee8",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOdDRybEJZNjQ5dEtDYzBBWGFrQnVSOEdiVW9HNzRUc1pUNEVWVGp0TG1XLXgzY1hvLTBhc3R0dXBnYnN2VFFoYXNZMVdYOE5QRnJYZUZjRnNqOGhMcm92dnc3ZFlBdkZkbldSeFgwbEtCdW40V2Z1QnE4eUZwb0lVQ3ZfR05LNnJtQWhEU0RIUHZkTS0wN3FqUDJLazl3Z9IBnAFBVV95cUxOcE9xcEF2clFUeHhDNzhmeEpOQ0pONHBIdld5R2h1dnVkdk1DSm1MWmRycngyRzRwZElMSVpmNTFmSEVHZDB2LUczNTRCMjFzLU96dEUtZjJWbXBqYndPLUIxNkMwUXVBby1BUERDRGE1Z3VvTFVNdUVXNC16UjNoOUR3NWl1Z1JIUzNkXzhqLV9Kc25DZ2FYWmNRb04?oc=5",
+   "title": "Dal Ben, part of a reactor built: \"It will serve to study nuclear fusion\"",
+   "summary": "The company Dal Ben has manufactured a specific component for a nuclear fusion research reactor. This hardware is intended to support experimental fusion studies.",
+   "original_title": "Dal Ben, costruita parte di un reattore: «Servirà a studiare la fusione nucleare»",
+   "original_language": "it",
+   "source": "Il Gazzettino",
+   "published": "2026-11-21T08:39:42+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report documents industrial support for nuclear fusion research equipment."
+  },
+  {
+   "id": "radnuc-background-83d88084830814d0",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilgVBVV95cUxOLXNYVmhtbUtiU185NlM0NXBXdkkwbG5BMXdveTdhaTNJV2RHc0lZQV9ObTk1bjVOMXJqaTRqSkpHUDZDSFI2MXRsRklielJtS18yT2VRUkpEcnpXS29RTmVyTDM4X1ZuMXo5WjJfTXF4ekVwZnRhSDhuNTE4SlJMTm5fa2pnMFU2cGwwbDBOQTA3ckV3OWhRRHlhcHdSQmxEb05EemFpdDFIenhFTkFGQ1dwdmhxTEMzd1IzcGh4V3QzNUFlT1kzMGw1dGJ0bVZFUk5CVjBxb3Nabm95Y0ZOaDcybzM5N2hQeWE3WThKU0hYTlAwZFczTF9zVGhHcUdfMVA4aEw4NW94WlNsM3VpNXFUdC1xLV9rUTM4aEpOdDl6d0NFREhJZTI0eUFCaHdpSnBPdDdEcWhMalMzQ3pPTmxUSHVzMGtZVmNDSUNHZERZSDBSdnFlSnM0aVBFcnBKNVZKNWtWOHZRYmo4b0hzdVBMcW9iSDF6QjA4YzNpZWxfQ1FpZFlLVUF3eUVGMHlxR05QdnJpMGNvMkJselQ1cDc2Ymh0Rk5UeUJ0M1NNdEplWXF1TEF5cGFLcFhWWm41c2FIOGYtamxXVVN0QUt4TkUtdERSd0U2cEJqY1h5dUhKTG15SGllaHY0OUlvc0dpTHlQaFpIcFQtbGlvanpYemhPU0xpRmxWT2tZOFV0QlpGSnIzMzRrNlBUVlAzTGFhQ3d1RmdxZFNtdm4xQlpfdExXZG1jMWVJZFp6dUJBSDZDQnZ2Yl9sNmRESXo3UVhLT3ROZ2Z1RjRpN2pub1hDTldyVVd2ZlJFOTBPTFBGeEdOTGxkci1JSEtYZ1RPVFNKM09JaW83ZnpQeE9OS2VuclRUeVNRUQ?oc=5",
+   "title": "Rooppur Nuclear Power Plant receives international recognition, IAEA comments on emergency preparedness",
+   "summary": "The Rooppur Nuclear Power Plant has received international recognition. The IAEA provided specific feedback regarding the plant's emergency preparedness protocols.",
+   "original_title": "আন্তর্জাতিক স্বীকৃতি পেল রূপপুর পারমাণবিক বিদ্যুৎকেন্দ্র, জরুরি প্রস্তুতিতে যা বলল আইএইএ!",
+   "original_language": "bn",
+   "source": "দৈনিক দেশেরপত্র",
+   "published": "2026-11-21T08:24:45+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report discusses official IAEA feedback on emergency preparedness at a civilian nuclear power facility."
+  },
+  {
+   "id": "radnuc-background-e0b958314121c2c4",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNQUVEOENCSUVCZklFcWgyVng2QktMM1NFOFF4QkdWU2pFRDFXZDNKbXp3cS05U2t5a2hXUmJ5VV9iUVFwSTZWLVFMM09fSnczOGMwNV90UHU4UW13ZzRscml1OTM4TDduVHVHR0Q1dDQxRTZ2S1M0SzBBdDltWHpJbjdlQW9MVjYzek9UNkRvTmwwVzl5YVdPNTNocm5oWFlqS1pERWx3NHhDc1FUQXN2VU9XMWluMllGN0FiczhaVklPQdIBxwFBVV95cUxPNW5OY3JfLWJVTGNWbEVOcnBwQUMwR0w1WDU0M2hxUXNuRUxHYl9tRzU3WHIyWTY5clRHVlZ3a25yMG1RaV9wcmtaM21HM0R0WUx3LXFqZWxfN1VsV19TcmlpMml5X3g0TFVORVoybUNqbTI4Sk5FRk5IRmdEa2ItZzBKbEJkX0RZWWRnWWUya3JDb0gwbklGaGJQQ09URUFCajNHTjVNbXhodERqZEFab3JZaThMemJRdGtjOHFTV2R5dDVYQ0U4?oc=5",
+   "title": "Nuclear waste is no longer waste? Rosatom prepares to launch a new recycling cycle",
+   "summary": "Rosatom is preparing to implement a new nuclear waste recycling cycle. This initiative aims to advance the nuclear fuel supply chain through technological development.",
+   "original_title": "Ядерные отходы — больше не отходы? Росатом готовится запустить новый цикл переработки",
+   "original_language": "ru",
+   "source": "iXBT.com",
+   "published": "2026-11-21T08:23:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details a technological advancement and supply chain development within the civilian nuclear industry."
+  },
+  {
+   "id": "radnuc-background-06a93b5f235ae613",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9LeUlvN0g1R0FNZHdia2dFa2Z2T0x1RGk5RGlOd09lS0Z0T2FUdkZMSm91c1lnOHZiR19fSGJ6d3V3d2hXZXAzN2IzZmdwWDlBQU1XZTNnZ2NXRjZYbndIV2xqWmZYbXM?oc=5",
+   "title": "US Supplies Small Modular Reactor Simulator for Indonesia",
+   "summary": "The United States is supplying a Small Modular Reactor (SMR) simulator to Indonesia to support local technical capabilities. This simulator will be used for the training of personnel in advanced reactor technologies.",
+   "original_title": "AS Pasok Simulator Reaktor Modular Kecil untuk Indonesia",
+   "original_language": "id",
+   "source": "ChatNews.id",
+   "published": "2026-11-21T07:10:05+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The provision of SMR training hardware constitutes a relevant civilian industry development."
+  },
+  {
+   "id": "radnuc-background-37ff1fc5c3789650",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQQ2hMOTROdTVmdFlicE1lQ3E1MmZ6ck45WEx4Rmk5N2t5bWxodEoxNWprWmNybENJS2pOYnM3TU1rdE5KV3FfX1l3T3dReEtwX0FYQ0NFMGNXR3NLVjMtZHdxWC16VUZpREtvMEtXOU50RkpiZWlMMjB2VDNocHFrbnRn?oc=5",
+   "title": "Nvidia wants to turn decommissioned nuclear power plants into AI factories - in Germany",
+   "summary": "Nvidia is reportedly exploring the use of decommissioned nuclear power plant sites in Germany to host artificial intelligence data centers. This development concerns the repurposing of nuclear facility infrastructure.",
+   "original_title": "Nvidia will stillgelegte AKW zu KI-Fabriken machen – in Deutschland",
+   "original_language": "de",
+   "source": "BASIC thinking",
+   "published": "2026-11-21T04:56:47+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Concerns infrastructure repurposing related to the nuclear industry supply chain."
+  },
+  {
+   "id": "radnuc-background-bbd97da9da46e2e5",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBhV3BnZDFZV2lEZjNsOHdCdG9oT0xrTEdMX21XZVg5azh3RUpQQ3FRb1RMd0RXNE1KbG9Vc3pqV2xuNHJDcEtHcGd2TWpNZHFWNWVmVWVFM0JYOHlI?oc=5",
+   "title": "Vacancies at the Nuclear and Radiological Regulatory Authority 2026.. Applications open until December 18",
+   "summary": "The national nuclear regulator is seeking to fill staff vacancies through an open recruitment process. This recruitment cycle aims to support the operational requirements of the regulatory body.",
+   "original_title": "وظائف شاغرة بهيئة الرقابة النووية والإشعاعية 2026.. التقديم مستمر حتى 18 ديسمبر المقبل",
+   "original_language": "ar",
+   "source": "الوطن",
+   "published": "2026-11-20T22:37:21+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to the institutional capacity and operation of a national nuclear regulatory body."
+  },
+  {
+   "id": "radnuc-background-ed21b7bba12faa60",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQcEliekhGalhWblc4YzhzYTBpWjUzQnJ5QVhmNVpWMmwyUDdXaXR2MWI0WjhONGhWdF9RQUJ3S1FKUEZWVFd1RVQ4d2ZVdlhPb1p4aFFvbUdKVm50YWotdkxZR1dSVU1yMDNaSG04U3Q4Y0E0TnZIYXFyc0hQc2pUVnRISlN1M2xZZlR6b1FpWVZsUQ?oc=5",
+   "title": "Daniel Ek backs Europa Fusion, British nuclear fusion",
+   "summary": "Daniel Ek has provided backing to the British startup Europa Fusion. The startup focuses on the development of nuclear fusion technology.",
+   "original_title": "Daniel Ek respalda Europa Fusion, fusión nuclear británica",
+   "original_language": "es",
+   "source": "El Ecosistema Startup",
+   "published": "2026-11-20T22:24:54+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Industry development in nuclear fusion technology."
+  },
+  {
+   "id": "radnuc-background-d04c921a6158fdc0",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNWEItUUhhTndNNjlKRU55UjRXOFpEeXlJbUNwNjdqWTE3dzRlUnZCYUlxZE1LQ3hfMC1uV1BKVWhwLURucE5NTDhIYktPam56NVhpbEE1RlM1ck8zYjc0by1MU281WjZUYUpSRnVwOEZBYVhfQS1tOHpncXJPdEdJMXVCY0I5aVJjUnlXTklWdWpUNWFh?oc=5",
+   "title": "Daniel Ek supports Europa Fusion, British fusion startup",
+   "summary": "Daniel Ek is supporting the British fusion energy company, Europa Fusion. This investment marks a development in the fusion technology sector.",
+   "original_title": "Daniel Ek apoya a Europa Fusion, startup británica de fusión",
+   "original_language": "es",
+   "source": "El Ecosistema Startup",
+   "published": "2026-11-20T20:57:30+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Industry development in nuclear fusion technology."
+  },
+  {
+   "id": "radnuc-background-f5352e44e1037fe3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOa3BDMk1rQjEzb0tCdkk5MWlKSTlPTlRKc1pLV2U3N05mMi1kWTNBTVlYYmJlSEU0VUI3MGQ0ZkRCNGFnX0k5TV9jRlp6MmViRVhIX19wZ2c3OU1ZVktEeHpIYUVZOEpZWHhqYTEzTXhvdHo5WEFCWjl6UmFCNDMtbDR2R2ROcllNdzA1T2dvaS0wQmpOcVhDV0RxNlNYLVhMa2pj?oc=5",
+   "title": "Daniel Ek supports fusion startup dedicated by AI researcher",
+   "summary": "Daniel Ek has provided investment to a fusion energy startup founded by an AI researcher. The development highlights private sector advancement in fusion technology.",
+   "original_title": "Daniel Ek apoia startup de fusão dedicada por pesquisador de IA",
+   "original_language": "pt",
+   "source": "Boa Informação",
+   "published": "2026-11-20T20:25:07+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Supports science and technology background topic."
+  },
+  {
+   "id": "radnuc-background-033f062fa1d2e0de",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9GNmZTWHlZbHRKVGxmRm1vVng2M09ZczlDbk1EcHRQdXdsMHpSVzF5R3hVZy1KMFFMTlhHSHVDbW5qNUVfN2VBekVucDV3Z1VIM3M3VFdPU2VXcVRwN0NFeWE5NF9YNVZ6eVVfUG9LY3VkLWZCRFZpbzlHRTJ4Zw?oc=5",
+   "title": "The nuclear sector asks Congress to advance a solution for radioactive waste",
+   "summary": "The nuclear industry is urging Congress to establish a definitive policy or solution for the management of radioactive waste. This represents a request for regulatory action regarding nuclear lifecycle waste.",
+   "original_title": "El sector nuclear pide al Congreso avanzar con una solución para los residuos radiactivos",
+   "original_language": "es",
+   "source": "EcoPortal.net",
+   "published": "2026-11-20T19:31:35+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory and policy request regarding nuclear waste management."
+  },
   {
    "id": "radnuc-background-a30bfa53410fe966",
    "kind": "radnuc_background",
@@ -67,6 +627,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: The report covers developments in the nuclear industry supply chain and technological innovation for fuel recycling."
+  },
+  {
+   "id": "radnuc-background-0edc3dd9f732d53d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNdWluVXVSdDA0NGwxM0x3SE9ZLW5nOVByb1JoaHlqMjVvd21FUkJUaUVkemN4eUwxakZVQjNzblNYWFFNTGFKWTVuRWpENkM3REJnMC1MU29LZ0FKZk9NR1dlcHFZNDltRHJWeEZHTHF0QXNiMkNZUGhKUFczaUZZeW5nWjdRbWJKLTVfSEZlWFRLNFgzUGZGNWd6T3hOa1hMVXpuWlgySGFoUzFGWFBxOE9Gd3Frdw?oc=5",
+   "title": "Nuclear fusion: physicists solve a 40-year-old riddle, a major advance for ITER",
+   "summary": "Physicists have resolved a long-standing 40-year-old mystery in the field of nuclear fusion research. This development represents a significant advancement for the ITER project.",
+   "original_title": "Fusion nucléaire : des physiciens résolvent une énigme vieille de 40 ans, une avancée majeure pour ITER",
+   "original_language": "fr",
+   "source": "KultureGeek",
+   "published": "2026-11-20T17:44:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Scientific and technological progress relevant to nuclear energy research."
+  },
+  {
+   "id": "radnuc-background-66f51e9bb8e8e907",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNZnA0bkMyM1NFUGNvMTEyTlN4Nms1RXNxbTdpdVZLSEkwWWpqM3lTWThtWm1lY3NHTlJVMnhLUjVXU0cxZ0NscUpibUhJWXQ5OG9oX1dqT083T1JtbWplMDc0NDAwNHJXQ2x2SkVBZW92aWdrYUkycWhQNDFJWUpKdV9wZjF4TDZtS1NYcHZQOU5ZeUw5aDBfYQ?oc=5",
+   "title": "Fusion energy report from the National Intelligence Academy",
+   "summary": "The Turkish National Intelligence Academy has released a report regarding the development of fusion energy. The document outlines a strategic roadmap for the integration of fusion technology in Turkey.",
+   "original_title": "Milli İstihbarat Akademisi'nden füzyon enerjisi raporu",
+   "original_language": "tr",
+   "source": "Habererk.com",
+   "published": "2026-11-20T16:08:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report concerns technological development in the civilian nuclear sector (fusion)."
   },
   {
    "id": "radnuc-background-67614421135ca34f",
@@ -224,6 +846,37 @@
    "ai_relevance_reason": "RadNuc background only: This update pertains to the professional training and regulatory safety compliance of medical institutions regarding radiological materials."
   },
   {
+   "id": "radnuc-background-0d1675e356a986db",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPSUFwajdkWHZoNndlbkM0dnBGdlNXX18yN09wVGxQMDRpYkMzdURLTFFPcTNnLWwtREhtbVNydlE4dTMwSFB6OTkyeGhGcF94ZU9kUnRnUFJKbFA3RnZGQ0tXaGZQNkUzdFFLcE9vMDhOa0JXb1A3d0lSVnpZU3ZXZ1VCUkxDaXExVkd5N2N3bEZVWUVZRm5MSUpqb3I3WjRROVdwTlZB?oc=5",
+   "title": "Nuclea Energy finalizes the acquisition of Moltex and its SSR-W and WATSS technologies",
+   "summary": "Nuclea Energy has completed its acquisition of Moltex and its proprietary SSR-W reactor and WATSS fuel-processing technologies. This acquisition marks a strategic development in civilian nuclear industry capabilities.",
+   "original_title": "Nuclea Energy finalise l'acquisition de Moltex et ses technologies SSR-W et WATSS",
+   "original_language": "fr",
+   "source": "energynews.pro",
+   "published": "2026-11-20T14:48:38+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Corporate acquisition impacting the civilian nuclear technology and fuel supply chain."
+  },
+  {
    "id": "radnuc-background-471f319d4b5dfede",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -286,6 +939,99 @@
    "ai_relevance_reason": "RadNuc background only: This is a factual update regarding nuclear industry development and cooperation."
   },
   {
+   "id": "radnuc-background-c8b247e5a0986293",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQUGNySE85Q3ZxVHBlV3VTY20yekR3YmlRWkdncWZsb2ctampFdWszVjU4UXdKWkgtZWtjQlBGQVVHSTF3bXJzV1kzTVJTelkxaGNBTDRJNjR1bFo4dDBpSmEyaktsQzRCQWl3Y1A2M0wtMzRUaDA0R0dGamthOHVVQnpDblZwdGxPN1IxcmFOZVNRalnSAZgBQVVfeXFMUERUNjJBdWlSUjB4VUpDZFctTjl3ZG9wVV9PZEFldXZERjdsRjBORDJILUdmYkNSODFxM1lDWUF0OC1QNFAzSldNdXRrM25ocUJjUUFyZVFkUHk0SzkyNzhObUFQV3BZRmVFZkE1ai1WcHFCN1g1NklLelA3aFNGczdMeEQtVm1wM2w1bmI1NnhLa0k1ZTNINko?oc=5",
+   "title": "6 Decisions from the Nuclear Regulatory Board: Welding and Inspection Requirements Determined",
+   "summary": "The Nuclear Regulatory Board has issued six new decisions establishing requirements for welding and inspection processes at nuclear facilities. These updates standardize technical safety and maintenance procedures for the sector.",
+   "original_title": "Nükleer Düzenleme Kurulundan 6 Karar: Kaynak ve Muayene Gerekleri Belirlendi",
+   "original_language": "tr",
+   "source": "Adayorum",
+   "published": "2026-11-20T14:06:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a regulatory update regarding industry safety standards."
+  },
+  {
+   "id": "radnuc-background-e7422ccf48ac9cfc",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPRGluSlNPLXZNdjJaZU11YUIxZWktekczbzNtSXZKXzAtbzA3a0RFN2NWT1BpWWpVX3RvRUJRcXh3SzZHMWpSOE1hSW1CWjZJaEhEWWEwdVdHcHAyM0pZQnZjaTA1UzJ5QXBmMnpWWHVpdGZpT1hDVWZ4cGdvVHBQWndtbkNLSDI5dFlmVDE4eWN2dXJuLTBnczNQbWZRalhNQmd4bkhpbG5xT3Fz?oc=5",
+   "title": "New Rules for Welding and Inspection Works in Nuclear Facilities: 6 Months Time Granted",
+   "summary": "New regulatory requirements for welding and inspection tasks in nuclear facilities have been announced, with a six-month compliance period provided. These rules formalize technical inspection protocols for industrial safety.",
+   "original_title": "Nükleer Tesislerde Kaynak ve Muayene İşlerine Yeni Kurallar: 6 Ay Süre Verildi",
+   "original_language": "tr",
+   "source": "Adapazarı Akşam Haberleri Gazetesi",
+   "published": "2026-11-20T14:03:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a regulatory update regarding industry safety standards."
+  },
+  {
+   "id": "radnuc-background-0dc3257023734739",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxObk04dFlnUWVPTlhvZGxIc2xTQ1hfbFZzYmp4Rm12bFhReDdxRzhmaXZLSDd1VjlOTUtLU0FMQm1SWWpoSHFKUmpjRi1sMmJEd3JlWk9obFlmQlM4ZWZqQk1nd2IwT0dIS3VhcVZ2dWJ0N3NKbGFacVJVM1FIY1NwQVRlcWZSb2d5b2s1U2hERWRLV2IxaVBuTjhDdTU5UE9nWlZpNEZsQ1I4YWJlQ1NUWHdSVQ?oc=5",
+   "title": "Fusion Energy and Strategic Roadmap Report for Turkey from the National Intelligence Academy",
+   "summary": "The National Intelligence Academy released a comprehensive report detailing a strategic roadmap for fusion energy in Turkey. It analyzes the role of fusion technology within the national energy framework.",
+   "original_title": "Milli İstihbarat Akademisinden Füzyon Enerjisi Ve Türkiye İçin Stratejik Yol Haritası Raporu",
+   "original_language": "tr",
+   "source": "Tek Haber Ajansı",
+   "published": "2026-11-20T13:41:57+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report concerns technological development in the civilian nuclear sector (fusion)."
+  },
+  {
    "id": "radnuc-background-a2ecc0a7d6e0ade5",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -315,6 +1061,99 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This update describes a civil nuclear infrastructure development partnership."
+  },
+  {
+   "id": "radnuc-background-b6c793e8f07202ab",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOeDJuaFZGcG9fQ1VxM0JzcEI0b296NmpSQ0FteV9aY29ta1dQRnJncTg3SVR0dTIydHEzNVZtclVJQXE1eVo2eXdROFVQVWp2Ulduc0owUXV1RGFRbjk0Qm1JTWZJVk1FOFl1eU91RmtNYXI0UWpobE1pZ1N5LUNTSkRGdU80T3NKRi1JSUJrcEtKU3lWWm4wRTBPbXZQOFl6cFQ3OEVWNGFuc25MNll0Q2l3dUdlVEJkcVhua2IyQdIBV0FVX3lxTFBxSnBDbzJweDcxV3k5VWVqY1YyWmdnMlN3cTV4dmpuc1NqWkt3Ymdya2U4ZTJxekxxamRrQk1ub09lTHl5U0oyaDN3TzJySDFNWUtjMGdvcw?oc=5",
+   "title": "Fusion Energy Report published by MIA in Ankara offers strategic recommendations for Turkey.",
+   "summary": "The Fusion Energy Report issued by the National Intelligence Academy (MIA) provides strategic recommendations for future implementation in Turkey. The report focuses on long-term energy technology development.",
+   "original_title": "Ankara'da MİA tarafından yayımlanan Füzyon Enerjisi Raporu, Türkiye için stratejik öneriler sunuyor.",
+   "original_language": "tr",
+   "source": "Mersin Haber",
+   "published": "2026-11-20T12:43:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report concerns technological development in the civilian nuclear sector (fusion)."
+  },
+  {
+   "id": "radnuc-background-dd5fa63a9d7ea8ff",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNUkhDeEljUk5tZTBTckc5WktJUkYzUm9XbnlXXzZ5bFVNYllZcXNGdkRTYzZUcWJjTlBRelhZcGhVUlZGS004VFo4X1RJYWYtZFk3RlQ5amQyeVhlQWY1cmxrRzFBdFJtYk8xY3lobHkyWFJTb0RPS3h3Y0dBNEhTR2xaTXhFREgxcURwOEszTFcxb29MeXJkWGFn?oc=5",
+   "title": "Fusion energy has become a strategic area in global power competition",
+   "summary": "The report highlights the rising importance of fusion energy as a critical technology in the global landscape. It emphasizes the strategic value of advancements in this field.",
+   "original_title": "Füzyon enerjisi küresel güç rekabetinde stratejik alan oldu",
+   "original_language": "tr",
+   "source": "Canlı Gaste",
+   "published": "2026-11-20T12:37:43+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report concerns technological development in the civilian nuclear sector (fusion)."
+  },
+  {
+   "id": "radnuc-background-51626e6fd78089a7",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQWFRHd0lvXzlzSkVBX2Y5eTBZN1J5YW1qS28yUWNETzB6bVljb2dMcC1WejNQVzJhSFhXaWFGb3ZyZl9FT2hJZU5yRXZ2bDhrR0xLYS1JSHBkT0xPY1JFaENWTzVvTENIRWY0aFFobGhLamt2SEYtSTkwNGhfdUpjOEUwUTFSVERHMjhSQ0Z1YzdZMGcw0gGaAUFVX3lxTE1CLXNMa3BZMDVXb0JvcDdQWFVMdVM1bHYzZ1JfWEw0cC1MY2xsbVhxSkRvV2dwNnRla2s5SWlaMWRJWV9ZdlJCUXV1YTJBelhBcU9UZFlmQldQZGRwUEtTWUFwRjctN2ZvQ05pd3Z5cE5iY2pqajN6NFc2bU5vc1hjMUQ5RDNYRHpxbFZUU1F2VS11c2dVZHUySVE?oc=5",
+   "title": "Three-stage roadmap for fusion energy from MIA",
+   "summary": "The National Intelligence Academy has introduced a three-stage roadmap dedicated to fusion energy. This initiative aims to guide the development and potential adoption of fusion power technology.",
+   "original_title": "MİA'dan füzyon enerjisi için üç aşamalı yol haritası",
+   "original_language": "tr",
+   "source": "NTV Haber",
+   "published": "2026-11-20T12:17:27+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report concerns technological development in the civilian nuclear sector (fusion)."
   },
   {
    "id": "radnuc-background-f86582e9e09b1303",
@@ -441,6 +1280,37 @@
    "ai_relevance_reason": "RadNuc background only: Retained as a report on civilian nuclear technology advancement."
   },
   {
+   "id": "radnuc-background-7be07e367830e2c9",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5aSEUxSHRfQXQ2LWZNajFMOW5CQWlfLUtzMHFWNDJaTmtCM1htWGdhbzBOZHVGSGlkYmNYLXBCR1MtV1YwZllnY3ZKUjJnS2NlSTYtNjdyZ2c?oc=5",
+   "title": "Turkish Intelligence Academy develops a 3-stage national roadmap for nuclear fusion energy until 2035",
+   "summary": "The Turkish Intelligence Academy has released a three-stage national roadmap for the advancement of nuclear fusion energy through 2035. This strategic plan outlines long-term development goals for the country's involvement in fusion research.",
+   "original_title": "أكاديمية الاستخبارات التركية تضع خارطة طريق وطنية من 3 مراحل لطاقة الاندماج النووي حتى 2035",
+   "original_language": "ar",
+   "source": "TRT عربي",
+   "published": "2026-11-20T09:42:40+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update pertains to a national strategic roadmap for nuclear technology development."
+  },
+  {
    "id": "radnuc-background-38be20071567e6bd",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -564,6 +1434,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This describes a specific development in the uranium exploration and supply chain."
+  },
+  {
+   "id": "radnuc-background-aaf32163d60a7650",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxONHBqanYxYm82SFhlSGFpa1pWcDltWVZYMVBqem8zN2tTQWVsaVVrcFA5dmdEdmdzMkNla3lnMVRGNkhRcVlkNzVJdFNpd0FVN2N0azR4RFRxV1ZTS1NYY2dVSU5pa0UtZGhQOU9lU05Ranp2LXU3NVBBTVE2WFBDWDVB?oc=5",
+   "title": "A 40-year-old riddle solved in the field of fusion energy",
+   "summary": "Researchers have successfully resolved a 40-year-old mystery in fusion energy science. This scientific breakthrough enhances the theoretical foundation for fusion energy development.",
+   "original_title": "Une énigme de 40 ans résolue dans le domaine de l'énergie de fusion",
+   "original_language": "fr",
+   "source": "EPFL",
+   "published": "2026-11-20T06:03:02+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Significant advancement in fusion energy science."
   },
   {
    "id": "radnuc-background-e7bcb03a6f1f3858",
@@ -783,6 +1684,37 @@
    "ai_relevance_reason": "RadNuc background only: Discusses the strategic role of nuclear energy in industrial AI development."
   },
   {
+   "id": "radnuc-background-61536808402f2a2e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPS3h3eDF2RUFtaVdha1htUS1lMkc5MWNrZjRRVGdNVVhZdFBSNzMtM0ozVEZrSW1hZ1F4cWRwbE5lcDNiM2xObEI3SlY3dG5hZEtuX3A3d3hWcDRHbDlBOWtCd0hrV29xU203Mm92cDhhbjc3UE1lT053OTlQdk4yb0VEV0J0UGd2dTJwTG8wWGZRVGhVWnpRc3lfR0Q0TGFPdUhBaWlZcFFFcUhrdGVFUnpDSnhndWxPWHdEM3U2OEJIRmhoTUdlUjR6b0RaNk1sV2JmTWh1NnRiUQ?oc=5",
+   "title": "Embalse: Gendarmerie participated in a large nuclear emergency drill",
+   "summary": "The Gendarmerie conducted a large-scale nuclear emergency response exercise at the Embalse facility. The drill focused on improving inter-agency preparedness for radiological safety incidents.",
+   "original_title": "Embalse: Gendarmería participó de un gran simulacro de emergencia nuclear",
+   "original_language": "es",
+   "source": "El Diario de Carlos Paz",
+   "published": "2026-11-19T23:21:34+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This relates to civilian nuclear emergency preparedness exercises."
+  },
+  {
    "id": "radnuc-background-e7d6c0443bc1cf86",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -844,6 +1776,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This event concerns regulatory licensing and infrastructure construction in the civilian nuclear industry."
+  },
+  {
+   "id": "radnuc-background-c96a2084e8911e1c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNcGpDYW1wOU5nRXRXeFV1V3lWM0hnUjdaNEV5QjgyWW9hQk4zZWljb2VUQjhKZXBWZUNscm5CakhZd0Frb1R6cjlvelRsT2JIbmxQV05RSkFYT1g3anI0bTFkUlI4WFBkSzFOMV9UMUp4Y0hGaWhLNWdJb3YtSkVqMTd6WVBlamJRY3Z4dDVNWmZzOEpRSko3ZlFvNUU2RE4yZi1mUmZxSU92aVZWbFhnN0RoRVE5V0gxbUdxXzBNaDNHcGxt?oc=5",
+   "title": "The Prefecture participated in a nuclear emergency drill at the Embalse Power Plant.",
+   "summary": "The Argentine Naval Prefecture conducted a nuclear emergency simulation exercise at the Embalse nuclear power facility. The drill was organized to test readiness and inter-agency coordination for potential radiological emergencies.",
+   "original_title": "La Prefectura formó parte de un simulacro de emergencia nuclear en la Central de Embalse",
+   "original_language": "es",
+   "source": "Argentina.gob.ar",
+   "published": "2026-11-19T20:22:17+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a record of a documented nuclear emergency response exercise."
   },
   {
    "id": "radnuc-background-cb3261be96c646fb",
@@ -1030,6 +1993,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a legitimate industry supply chain and capability-building development for the nuclear sector."
+  },
+  {
+   "id": "radnuc-background-e6439bab51753cde",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5iNUNIdUJMNnBoel9XaEtxQ2VkMXIxTEZSRXNpZnBPbjBhamdHaE9XUlViTjFnWTFHYWZGTldrZjNRVkFGT0VCX1N1OGc?oc=5",
+   "title": "Heating plasma before densifying it would save energy, the PPPL theoretical track toward ignition",
+   "summary": "The Princeton Plasma Physics Laboratory (PPPL) has proposed a new theoretical method for energy savings in fusion by heating plasma prior to densification. This approach aims to improve the efficiency of achieving plasma ignition.",
+   "original_title": "Chauffer le plasma avant de le densifier économiserait de l'énergie, la piste théorique du PPPL vers l'allumage",
+   "original_language": "fr",
+   "source": "Daily Geek Show",
+   "published": "2026-11-19T17:01:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Technological advancement in fusion energy research."
   },
   {
    "id": "radnuc-background-7879b66d22edb378",
@@ -1402,6 +2396,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a state-level policy update concerning civilian nuclear energy development."
+  },
+  {
+   "id": "radnuc-background-3777e748bd4e8194",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBqVlBHbTRjZEJkS1ZHQUJHQVJjOHVXLUFZaUVjS1FHZjFURUp5R0I2emxaeEdEUHR5eDBrZEhoSUxwSjFqOU1tNXdmWkFubFp5ZnVGVVZzajE2UdIBX0FVX3lxTE42V3c0Q1dSZE1id3RleVVMR3BIOUY1dU9jUUpxNXd1Z3AwV1F4c21OWjJNZWJ5WFJmV1pCdnRMd1ZpY2NPUmR1Nkt4aU5OS1FFRjE0cUJhNEU5MWpOaHg4?oc=5",
+   "title": "Walsin Lihwa celebrates 60th anniversary; Chiao Yu-lun optimistic about 9 business opportunities including AI liquid cooling and SMR nuclear energy",
+   "summary": "Walsin Lihwa has identified Small Modular Reactor (SMR) nuclear energy as a key future business opportunity during its 60th-anniversary celebration. The company's strategic outlook reflects growing industry interest in SMR development.",
+   "original_title": "華新迎60週年 焦佑倫看好AI液冷、SMR核能等9大商機",
+   "original_language": "zh-Hant",
+   "source": "經濟日報",
+   "published": "2026-11-19T13:22:15+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Industry developments regarding civilian nuclear reactor technology."
+  },
+  {
+   "id": "radnuc-background-57014793710d497f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPZk1uX2VfUTV3OE05R2IwbmFPZ0JpMGE3ZkJSTEpoajhlcEpVVGxHcUxKN3BTMVl1cHhtNC1qaExYZF9aVjhpZmhqQ2VPWmRLckxiX25Md3FsRnJ5djZXb3EtOF90bnJtM3ZqMm5zeEZlbFltWm1WZGlTYjB6WXk1NnZKQnFBejQxb1hBSWpvVzB6YWZJaHZTbVZ0a0Q5Q1RlZnlnc19qRFpoaDZCSWlzck43amR5eVJYaGlObk5mNE1hYS1iNmRveXcza9IBywFBVV95cUxPZk1uX2VfUTV3OE05R2IwbmFPZ0JpMGE3ZkJSTEpoajhlcEpVVGxHcUxKN3BTMVl1cHhtNC1qaExYZF9aVjhpZmhqQ2VPWmRLckxiX25Md3FsRnJ5djZXb3EtOF90bnJtM3ZqMm5zeEZlbFltWm1WZGlTYjB6WXk1NnZKQnFBejQxb1hBSWpvVzB6YWZJaHZTbVZ0a0Q5Q1RlZnlnc19qRFpoaDZCSWlzck43amR5eVJYaGlObk5mNE1hYS1iNmRveXczaw?oc=5",
+   "title": "COP31 Climate Summit Antalya - The process of cleaning up radioactive waste in Izmir Gaziemir was discussed at COP31",
+   "summary": "Authorities and stakeholders discussed the status and progress of the radioactive waste remediation project in Izmir Gaziemir during the COP31 summit. The discussion focused on the ongoing environmental management and clean-up efforts at the site.",
+   "original_title": "İKLİM ZİRVESİ COP31 ANTALYA - İzmir Gaziemir'in radyoaktif atıktan arındırılma süreci COP31'de ele alındı",
+   "original_language": "tr",
+   "source": "Yeni Çağrı Gazetesi",
+   "published": "2026-11-19T13:19:00+00:00",
+   "collected_at": "2026-11-21T16:52:32.958079+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to the management, remediation, and environmental oversight of a radiological waste site."
   },
   {
    "id": "radnuc-background-86dba005dd7f0901",
