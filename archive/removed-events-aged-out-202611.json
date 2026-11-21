@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-20T18:45:25.843846+00:00",
+  "removed_at": "2026-11-21T17:34:51.172669+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -2800,6 +2800,48 @@
           "url": "https://news.google.com/rss/articles/CBMivgVBVV95cUxNbFhPQVFDeWhkNGY5Y09iWTNJMkxPUWtyaDV1WGUxR0pOaWMyaG4wcDlYZ0xhLTJiaVZDMnZzSlV2OU9fWjVJRTBxaGFjTDRGWXhGblpTM0ZGRzd0V3F4V21rVnpXMXh1ZnhpdVN6UFNWTzZpVkJ3VXQ3ZUl1Ym9mRGRtVUp3ajI1M0g5aXVwcVU3QVpTWUFZeGVGUjN6dDVGbkFmSEc3X0s1MjRqcnIyX0VXM3JjeXVVNkJ0OWpKWHBzVEtheGRoTHc4SkxZWE9rYWUyb3otVTJqMEVsSURHV1dLTVhsd2dNZ05YMEczNVMtSXp5QTNYTU1KZzZWak5XNXpTR0FtMFlOVGJlaFZlUmFBVEJ4MW05VlZ4azNoM2FNWS1VdFRTZHRMMmVFZ3QzdkgxSHNpU0hZUkhlZEZRbVJTdy1XZjVUQjFGT0ZBa09ZaE94WlZxVU9qZ210Sk5FOWptVWtJT19zV0dXeDFDaTdwb2dWN2drYXFOLVlPdVhVTDd5WTFPVHRRS1UwWUNXUmd1ZDY1NDNMX0g0eVFqQVhqQ2VmOVBWazhnMGZEYUd4V3p4UldmLU00Tk5JQkV3MWtGQmRHQWlPYUdUamdxWmxhdE5YaUVfRkVxZmNBNS1ETkV4NjdLZGVYeUpUeDBmUjRUVzBUeWQtQm0ybDlnNGdYbWtPXy1OdjRiYWR3YTFOYUJ6S0VqVU5FemItRENYTDdOZDVWVklSV3JQcmtSbFVpZ0NYOTFkelN2ZE0zS0pHOUdmemhMWW5uWm5VMU5tMWJsd19mSU9wTEgycEFhTGtGRlZXRER5eFVMdEw0ZWRoYzhKckRxSDZfZDkzREpiUlAwN3VRTUVHMG42eVZuQ1Y2czgyYkZMSmtuS3dVN2N5RWJCSXFuSXB4ZzZ0cmc1NHpNSWh0ZDNqalE0OHc?oc=5"
         }
       ]
+    },
+    {
+      "id": "df9bfc4d606f4291",
+      "incident_id": "inc-35b972556ad8b6d4",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQSHEzbjloUElISlptRHA0UzRQM21uNFkxLVh2SVRIX1dIYmxoSlhCUXJkNF90NUF2ODFEeDBiWnVoZ0l5ZDBYcWlrbWMxVWZFdDNza3Z0YU95Rkd1aWFFaUEyc0N3UlV0X3pSaXVtdTZqNHV2UmpRSV82ZFkzUTVxbGVTWVdUbEF5RVBwUnh4bFo3eEpr?oc=5",
+      "title": "22-year-old arrested for terrorism in Reggio Emilia",
+      "summary": "The Italian State Police arrested a 22-year-old individual in Reggio Emilia on terrorism-related charges.",
+      "original_title": "Reggio Emilia, ventiduenne arrestato per terrorismo",
+      "original_language": "it",
+      "source": "poliziadistato.it",
+      "published": "2026-05-25T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Italy",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete operational arrest for terrorism offences by law enforcement.",
+      "related_articles": []
+    },
+    {
+      "id": "5ecf75e91c73882c",
+      "incident_id": "inc-aa25068101f16720",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNM0xfY3E2VW5KQkhSMVBhdGwtc050YlRNcmpRdlp6dTF4bktwT1h3WnpYUGV1TkEtc3hoNjBKdHNEc3ZoS0tSajhUYzVnZDlsUkNHajB4QUVMeGg2OTFGNE14aTFVVmxldUNMazFaU1Z4NGRjeG9SM3MyOUNmWGF4TnBNV2pmQmtCSTdha2VCNzdUS2xtejRybnRBM1BZX2FpalJTZlhMcmRMNW5LdUQ2Ym9mOC1hdw?oc=5",
+      "title": "Terrorist threat advisory issued in Nigeria",
+      "summary": "A Joint Task Force (JTF) issued a security advisory warning of planned terrorist attacks on civilians during the upcoming Eid el-Kabir festival.",
+      "original_title": "Terrorists To Attack Civilians During Eid El Kabir, JTF Warns, Issues Advisory",
+      "original_language": "en",
+      "source": "Channels Television",
+      "published": "2026-05-25T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTEMPTED_ATTACK",
+      "country": "Nigeria",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Reports a concrete, credible threat/warning of imminent attacks, meeting operational threshold.",
+      "related_articles": []
     }
   ]
 }

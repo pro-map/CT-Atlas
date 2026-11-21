@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "db9adb70f6a366d8496b9b94af8d02950060fedc9ef2e6610acdbfa10930d9e4",
+  "events_sha256": "db14f4544d46757dfe63f02196caf65ed4ea3638fb8533bdecf007f6cbe6caa8",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 2753,
-      "bytes": 15785679,
-      "sha256": "b36791dd5912f80d2eb9cbf4fae8d090c6b7f8435c9fd5a169dabd5b4b1c3793"
+      "events": 2844,
+      "bytes": 16248946,
+      "sha256": "245a68de4d652aa6835e8d4c0f96ec15450901014188185b9a2f6f65765724a4"
     },
     "2026-10": {
       "events": 3616,
@@ -67,13 +67,13 @@
     },
     "2026-06": {
       "events": 162,
-      "bytes": 627894,
-      "sha256": "69d7bd675f7ec61f2c6464fd47d2c4d3fb7e17d849795736d1de81ab9e58bbc3"
+      "bytes": 628885,
+      "sha256": "3be51f6af6a7ebc5fffcf6b2c283975bd5b204842f1ae274ff8e94e6f06f7353"
     },
     "2026-05": {
-      "events": 33,
-      "bytes": 128306,
-      "sha256": "c7efa522840e7d15636b28215f7b03d5275574a5c304f2f4eafcc9d2236deb3e"
+      "events": 31,
+      "bytes": 122686,
+      "sha256": "0437e8b9b8eb8035a0b69a7c3261b992ec13cdf8db7d59f21b160f3aa47c34ea"
     }
   },
   "metadata": {
@@ -230,39 +230,39 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-20T23:05:17.473168+00:00",
-      "last_attempt_at": "2026-11-20T23:05:17.473168+00:00",
-      "published_at": "2026-11-20T23:43:00.487431+00:00",
+      "run_started_at": "2026-11-21T16:48:57.561100+00:00",
+      "last_attempt_at": "2026-11-21T16:48:57.561100+00:00",
+      "published_at": "2026-11-21T17:35:40.672595+00:00",
       "recent": {
-        "candidates": 3465,
-        "reviewed": 3465,
-        "cached": 2875,
-        "new_reviews": 590,
+        "candidates": 3581,
+        "reviewed": 3581,
+        "cached": 2191,
+        "new_reviews": 1390,
         "official_auto_accepted": 0,
-        "retained": 130,
-        "rejected": 3335,
+        "retained": 258,
+        "rejected": 3323,
         "pending": 0,
         "status": "complete",
-        "calls": 16,
-        "primary_calls": 15,
-        "overflow_calls": 1,
+        "calls": 45,
+        "primary_calls": 30,
+        "overflow_calls": 15,
         "reasons": [],
-        "window_start": "2026-11-17T23:05:17.473168+00:00",
-        "window_end": "2026-11-20T23:05:17.473168+00:00"
+        "window_start": "2026-11-18T16:48:57.561100+00:00",
+        "window_end": "2026-11-21T16:48:57.561100+00:00"
       },
       "backlog": {
-        "candidates": 596,
-        "reviewed": 596,
-        "cached": 573,
-        "new_reviews": 23,
+        "candidates": 663,
+        "reviewed": 663,
+        "cached": 621,
+        "new_reviews": 42,
         "official_auto_accepted": 0,
-        "retained": 1,
-        "rejected": 595,
+        "retained": 3,
+        "rejected": 660,
         "pending": 0,
         "status": "complete",
-        "calls": 1,
-        "primary_calls": 1,
-        "overflow_calls": 0,
+        "calls": 2,
+        "primary_calls": 0,
+        "overflow_calls": 2,
         "reasons": []
       },
       "maintenance": {
@@ -284,8 +284,8 @@
         "google": {
           "retry_waves": 0,
           "successful": 1220,
-          "empty_feeds": 495,
-          "throttled": 3,
+          "empty_feeds": 489,
+          "throttled": 6,
           "deduplicated_urls": 288
         },
         "gdelt": {},
@@ -297,9 +297,9 @@
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 4699,
-        "retired": 425,
-        "cancelled_history": 281,
+        "expired": 4583,
+        "retired": 371,
+        "cancelled_history": 247,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -312,29 +312,29 @@
         "primary": {
           "per_run": 30,
           "per_day": 60,
-          "used_this_run": 16,
-          "used_today": 46
+          "used_this_run": 30,
+          "used_today": 30
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
-          "used_this_run": 1,
-          "used_today": 33
+          "used_this_run": 17,
+          "used_today": 17
         },
         "historical_calls_per_run": 20,
-        "historical_calls_used": 1,
+        "historical_calls_used": 2,
         "maintenance_calls_per_run": 2
       },
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 8316,
-        "unlocated": 333,
-        "completed_unlocated": 333,
+        "located": 8395,
+        "unlocated": 343,
+        "completed_unlocated": 343,
         "outcome": "success",
-        "processed_this_run": 42,
-        "review_required": 219
+        "processed_this_run": 93,
+        "review_required": 224
       },
       "categories": [
         {
@@ -359,18 +359,18 @@
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-20T23:44:17.664690+00:00",
+      "finalized_at": "2026-11-21T17:37:34.534115+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 1
+        "gemini-3.5-flash-lite:503": 10
       },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 102,
-        "events_published_median_14d": 145.5,
-        "new_reviews": 590,
+        "events_published_last_24h": 95,
+        "events_published_median_14d": 140.5,
+        "new_reviews": 1390,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -386,63 +386,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 21 Nov, 00:42 Paris: Recent counter-terrorism developments highlight major security actions and attacks globally, including an ISIS-inspired car bomb plot disrupted in Sydney, Australia, multiple arrests following an explosives discovery in Frankfurt, Germany, and a lethal Houthi drone and missile attack targeting shipping in the Bab el-Mandeb Strait near Yemen.",
+      "overview": "As of 21 Nov, 18:35 Paris: Counter-terrorism operations over the past 24 hours highlighted significant arrests and foiled plots, including a car bomb plot investigation in Sydney, Australia, counter-terrorism raids and arrests in Frankfurt, Germany, and the high-profile armed arrest of a cartel figure in Sinaloa, Mexico.",
       "developments": [
         {
           "event_id": "c210bb53266660eb",
           "severity": "CRITICAL",
-          "category": "Arrests",
+          "category": "Counter Terrorism Action",
           "headline": "Sydney man charged with car bomb plot",
-          "detail": "A 35-year-old man was charged with plotting a car bomb attack and downloading ISIS materials following counter-terrorism raids.",
+          "detail": "A 35-year-old man was charged with plotting a car bomb attack and downloading ISIS materials following counter-terrorism raids in Sydney, Australia.",
           "location": "Australia, Sydney"
         },
         {
           "event_id": "2df9ba22c980a88e",
           "severity": "CRITICAL",
-          "category": "Arrests",
+          "category": "Counter Terrorism Action",
           "headline": "Police arrest two suspects in Frankfurt",
-          "detail": "German police arrested two individuals in Frankfurt in connection with a planned attack on Berger Straße.",
+          "detail": "German police arrested two individuals in Frankfurt am Main in connection with a planned attack targeting Berger Straße.",
           "location": "Germany, Frankfurt am Main"
         },
         {
-          "event_id": "61190f173c1f8ae9",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "3 killed in Houthi attack on merchant ship in Bab el-Mandeb",
-          "detail": "Three crew members were killed in a Houthi attack on a commercial vessel in the Bab el-Mandeb Strait.",
-          "location": "Yemen, Bab el-Mandeb"
+          "event_id": "5a4b3e36df4f208c",
+          "severity": "HIGH",
+          "category": "Arrests",
+          "headline": "El Chapo Isidro arrested in Sinaloa following armed operation",
+          "detail": "Fausto Isidro Meza, known as 'El Chapo Isidro', was arrested in an operation in Guasave, Sinaloa, that triggered significant armed violence.",
+          "location": "Mexico, Guasave"
         },
         {
-          "event_id": "c36a8dd532caaf9d",
+          "event_id": "7a2503d0478c65a8",
           "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "Coalition destroys 2 cruise missiles and 2 drones headed for Riyadh and southern Saudi Arabia",
-          "detail": "The coalition successfully destroyed two cruise missiles and two drones that were targeting Riyadh and areas in southern Saudi Arabia.",
+          "category": "Attacks",
+          "headline": "Saudi Arabia confirms tower belonging to Public Investment Fund in Riyadh hit in Houthi attack",
+          "detail": "Saudi authorities confirmed that a tower belonging to the Public Investment Fund in Riyadh sustained damage in a Houthi cross-border attack.",
           "location": "Saudi Arabia, Riyadh"
         },
         {
-          "event_id": "41f5cd37a890c9a2",
+          "event_id": "99eceb9a442ddfcb",
           "severity": "HIGH",
-          "category": "Arrests",
-          "headline": "Four arrested in Spain for using AI for radicalization",
-          "detail": "Four individuals were arrested across Barcelona, Guipúzcoa, Málaga, and Melilla for using artificial intelligence to facilitate radicalization.",
-          "location": "Spain"
+          "category": "Counter Terrorism Action",
+          "headline": "Pakistan announces 74 militants killed in operations across two provinces",
+          "detail": "Pakistani authorities announced that 74 militants were killed during recent security operations spanning two provinces.",
+          "location": "Pakistan"
         },
         {
-          "event_id": "abb731f268e8a5db",
-          "severity": "HIGH",
-          "category": "Attacks",
-          "headline": "Drone explosive attack in Tibú",
-          "detail": "A house in Tibú was targeted by three drones carrying explosives in an attack.",
-          "location": "Colombia, Tibú"
+          "event_id": "41f5cd37a890c9a2",
+          "severity": "SIGNIFICANT",
+          "category": "Arrests",
+          "headline": "Four arrested in Spain for using AI for radicalization",
+          "detail": "Four individuals were arrested across Spain in Barcelona, Guipúzcoa, Málaga, and Melilla for utilizing artificial intelligence to facilitate radicalization.",
+          "location": "Spain"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-20T23:42:57.940188+00:00",
+      "generated_at": "2026-11-21T17:35:38.117348+00:00",
       "candidate_events": 80,
-      "top_hash": "a7d69be670e1881d9cb610a68ce92818f4ee6020e2838a32c532c11d53787f97",
+      "top_hash": "023ef2e762b07a194b53820fb4b7ce1333ffdf6bbed0ea0ea980856882bed92d",
       "top_event_count": 10,
       "reused": false
     },
@@ -720,10 +720,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 45,
-      "corroboration_hold_listed_outlet": 30,
-      "already_reviewed_articles": 1834,
-      "duplicate_input_articles": 4870
+      "corroboration_hold_same_minute_burst": 61,
+      "corroboration_hold_listed_outlet": 34,
+      "already_reviewed_articles": 1608,
+      "duplicate_input_articles": 4760
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -805,8 +805,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-20T23:43:00.487431+00:00",
-    "number_of_events": 8649,
+    "last_updated": "2026-11-21T17:35:40.672595+00:00",
+    "number_of_events": 8738,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -819,23 +819,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 8607,
-      "ai_processed_this_run": 42,
-      "ai_pending_at_start": 42,
-      "city": 3150,
-      "region": 2779,
-      "country_capital": 2387,
-      "unlocated": 333,
-      "mapped_total": 8316,
-      "high_confidence": 7541,
-      "medium_confidence": 823,
-      "low_confidence": 285,
+      "cached_events": 8645,
+      "ai_processed_this_run": 93,
+      "ai_pending_at_start": 93,
+      "city": 3185,
+      "region": 2800,
+      "country_capital": 2410,
+      "unlocated": 343,
+      "mapped_total": 8395,
+      "high_confidence": 7612,
+      "medium_confidence": 835,
+      "low_confidence": 291,
       "methods": {
-        "ai_city_geonames": 2999,
-        "ai_country_capital": 2386,
-        "ai_unlocated": 108,
-        "ai_region_coordinates": 2776,
-        "unresolved_city_no_capital_fallback": 185,
+        "ai_unlocated": 113,
+        "ai_country_capital": 2409,
+        "ai_region_coordinates": 2797,
+        "ai_city_geonames": 3034,
+        "unresolved_city_no_capital_fallback": 190,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
