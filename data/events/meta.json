@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "a82c1d2370d3043e61a52a14f86ab1bcf79c1e05130de6aaa86db4c6424a2ac3",
+  "events_sha256": "977f760aa826e0db3ebb0a5c78a8a4174213c32f1ee0db538a6d906fb01dcee7",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 2995,
-      "bytes": 17122646,
-      "sha256": "fe2bcbbeefc9da02be08445328d362c1d718ed4efc8a615695d93282ef6005a7"
+      "events": 3033,
+      "bytes": 17341059,
+      "sha256": "ba9d4b303761fb359eeaa8b52b5011bc950a3eb8e00bf04cef9358a8af476bde"
     },
     "2026-10": {
       "events": 3616,
@@ -230,39 +230,39 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-22T18:12:59.715874+00:00",
-      "last_attempt_at": "2026-11-22T18:12:59.715874+00:00",
-      "published_at": "2026-11-22T19:06:25.660667+00:00",
+      "run_started_at": "2026-11-22T22:28:34.210387+00:00",
+      "last_attempt_at": "2026-11-22T22:28:34.210387+00:00",
+      "published_at": "2026-11-22T23:02:48.345044+00:00",
       "recent": {
-        "candidates": 3291,
-        "reviewed": 3291,
-        "cached": 1619,
-        "new_reviews": 1672,
+        "candidates": 3122,
+        "reviewed": 3122,
+        "cached": 2517,
+        "new_reviews": 605,
         "official_auto_accepted": 0,
-        "retained": 348,
-        "rejected": 2943,
+        "retained": 134,
+        "rejected": 2988,
         "pending": 0,
         "status": "complete",
-        "calls": 57,
-        "primary_calls": 30,
-        "overflow_calls": 27,
+        "calls": 17,
+        "primary_calls": 16,
+        "overflow_calls": 1,
         "reasons": [],
-        "window_start": "2026-11-19T18:12:59.715874+00:00",
-        "window_end": "2026-11-22T18:12:59.715874+00:00"
+        "window_start": "2026-11-19T22:28:34.210387+00:00",
+        "window_end": "2026-11-22T22:28:34.210387+00:00"
       },
       "backlog": {
-        "candidates": 668,
-        "reviewed": 668,
-        "cached": 606,
-        "new_reviews": 62,
+        "candidates": 681,
+        "reviewed": 681,
+        "cached": 641,
+        "new_reviews": 40,
         "official_auto_accepted": 0,
-        "retained": 7,
-        "rejected": 661,
+        "retained": 1,
+        "rejected": 680,
         "pending": 0,
         "status": "complete",
-        "calls": 2,
-        "primary_calls": 0,
-        "overflow_calls": 2,
+        "calls": 1,
+        "primary_calls": 1,
+        "overflow_calls": 0,
         "reasons": []
       },
       "maintenance": {
@@ -284,7 +284,7 @@
         "google": {
           "retry_waves": 0,
           "successful": 1220,
-          "empty_feeds": 485,
+          "empty_feeds": 483,
           "throttled": 2,
           "deduplicated_urls": 288
         },
@@ -297,9 +297,9 @@
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 4562,
-        "retired": 317,
-        "cancelled_history": 260,
+        "expired": 4590,
+        "retired": 352,
+        "cancelled_history": 294,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -312,29 +312,29 @@
         "primary": {
           "per_run": 30,
           "per_day": 60,
-          "used_this_run": 30,
-          "used_today": 30
+          "used_this_run": 17,
+          "used_today": 47
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
-          "used_this_run": 29,
-          "used_today": 29
+          "used_this_run": 1,
+          "used_today": 30
         },
         "historical_calls_per_run": 20,
-        "historical_calls_used": 2,
+        "historical_calls_used": 1,
         "maintenance_calls_per_run": 2
       },
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 8526,
-        "unlocated": 357,
-        "completed_unlocated": 357,
+        "located": 8560,
+        "unlocated": 361,
+        "completed_unlocated": 361,
         "outcome": "success",
-        "processed_this_run": 102,
-        "review_required": 233
+        "processed_this_run": 38,
+        "review_required": 236
       },
       "categories": [
         {
@@ -359,19 +359,18 @@
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-22T19:09:15.075891+00:00",
+      "finalized_at": "2026-11-22T23:04:05.513164+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 14,
-        "gemini-3.1-flash-lite:503": 1
+        "gemini-3.5-flash-lite:503": 1
       },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 95,
-        "events_published_median_14d": 151.5,
-        "new_reviews": 1672,
+        "events_published_last_24h": 91,
+        "events_published_median_14d": 152.0,
+        "new_reviews": 605,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -387,14 +386,14 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 22 Nov, 20:06 Paris: Recent counter-terrorism and security developments highlight major operations, including the arrest of three individuals with 264 kilograms of explosives in Lebanon, the charging of a man in Sydney, Australia, for an ISIS-inspired car bomb plot, and an explosive attack in Cesar, Colombia, that killed a soldier and wounded 12 others.",
+      "overview": "As of 23 Nov, 00:02 Paris: Recent counter-terrorism developments include significant security operations and high-impact incidents across multiple regions, highlighted by a major explosives seizure in Lebanon, a high-profile cartel leader arrest in Guasave, Mexico, and a deadly explosive attack against soldiers in Cesar, Colombia.",
       "developments": [
         {
           "event_id": "c210bb53266660eb",
           "severity": "CRITICAL",
           "category": "Arrests",
           "headline": "Sydney man charged with car bomb plot",
-          "detail": "A 35-year-old man was charged in Sydney, Australia, with plotting a car bomb attack and downloading ISIS materials following security raids.",
+          "detail": "A 35-year-old man was charged with plotting a car bomb attack and downloading ISIS-inspired materials following counter-terrorism raids in Sydney.",
           "location": "Australia, Sydney"
         },
         {
@@ -402,24 +401,8 @@
           "severity": "CRITICAL",
           "category": "Chemicals and Explosives",
           "headline": "Lebanon: Arrest of three individuals with 264 kilograms of explosives",
-          "detail": "Lebanese security forces arrested three individuals following the discovery of 264 kilograms of explosives.",
+          "detail": "Lebanese security forces arrested three individuals following the discovery of 264 kilograms of explosives near the border.",
           "location": "Lebanon"
-        },
-        {
-          "event_id": "397c2900c1d3421d",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "Explosive attack in Cesar leaves soldier dead and 12 wounded",
-          "detail": "An explosive attack in Cesar, Colombia, left one soldier dead and 12 wounded, prompting strong government vows for a robust response.",
-          "location": "Colombia, Cesar"
-        },
-        {
-          "event_id": "39ed649ce3f59b57",
-          "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "Iraqi security forces eliminate ISIS leader in precision operation in Diyala",
-          "detail": "Iraqi security forces neutralized a key ISIS leader during a targeted operation in Diyala.",
-          "location": "Iraq, Diyala"
         },
         {
           "event_id": "5a4b3e36df4f208c",
@@ -427,23 +410,39 @@
           "category": "Arrests",
           "headline": "El Chapo Isidro arrested in Sinaloa following armed operation",
           "detail": "Fausto Isidro 'El Chapo Isidro' Meza was arrested in an operation in Guasave, Sinaloa, that triggered significant armed violence.",
-          "location": "Mexico, Guasave, Sinaloa"
+          "location": "Mexico, Guasave"
         },
         {
-          "event_id": "c81c347e9c017864",
+          "event_id": "397c2900c1d3421d",
           "severity": "HIGH",
           "category": "Attacks",
-          "headline": "FARC dissidents car bomb plot thwarted in Huila",
-          "detail": "Police in Huila, Colombia, successfully identified and disarmed a car bomb planted by FARC dissidents.",
-          "location": "Colombia, Huila"
+          "headline": "Explosive attack in Cesar leaves soldier dead and 12 wounded",
+          "detail": "An explosive attack in the Cesar department left one soldier dead and 12 others wounded, prompting strong government vows of a response.",
+          "location": "Colombia, Cesar"
+        },
+        {
+          "event_id": "39ed649ce3f59b57",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
+          "headline": "Iraqi security forces eliminate ISIS leader in precision operation in Diyala",
+          "detail": "Iraqi security forces neutralized a key ISIS leader during a targeted counter-terrorism operation in Diyala province.",
+          "location": "Iraq, Diyala"
+        },
+        {
+          "event_id": "d13f42f9aa866965",
+          "severity": "HIGH",
+          "category": "Maritime Piracy",
+          "headline": "Egyptian captain thwarts 3 armed attack attempts in Gulf of Aden and saves 21 sailors",
+          "detail": "An Egyptian captain successfully thwarted three armed attack attempts in the Gulf of Aden, protecting a vessel and rescuing 21 crew members.",
+          "location": "Yemen, Gulf of Aden"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-22T19:06:23.113918+00:00",
+      "generated_at": "2026-11-22T23:02:45.842675+00:00",
       "candidate_events": 80,
-      "top_hash": "64c4897d26ba8b8ad548b68158d4134fa01cc21174576fd8286a2cf0b2ab29b5",
+      "top_hash": "940e9139013c2cae27e07b12907e1b810fb3973595687373c0862848a2ce85d5",
       "top_event_count": 10,
       "reused": false
     },
@@ -721,10 +720,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 52,
-      "corroboration_hold_listed_outlet": 31,
-      "already_reviewed_articles": 1336,
-      "duplicate_input_articles": 4375
+      "corroboration_hold_same_minute_burst": 55,
+      "corroboration_hold_listed_outlet": 33,
+      "already_reviewed_articles": 1738,
+      "duplicate_input_articles": 4468
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -806,8 +805,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-22T19:06:25.660667+00:00",
-    "number_of_events": 8883,
+    "last_updated": "2026-11-22T23:02:48.345044+00:00",
+    "number_of_events": 8921,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -820,23 +819,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 8781,
-      "ai_processed_this_run": 102,
-      "ai_pending_at_start": 102,
-      "city": 3236,
-      "region": 2844,
-      "country_capital": 2446,
-      "unlocated": 357,
-      "mapped_total": 8526,
-      "high_confidence": 7730,
-      "medium_confidence": 849,
-      "low_confidence": 304,
+      "cached_events": 8883,
+      "ai_processed_this_run": 38,
+      "ai_pending_at_start": 38,
+      "city": 3251,
+      "region": 2850,
+      "country_capital": 2459,
+      "unlocated": 361,
+      "mapped_total": 8560,
+      "high_confidence": 7760,
+      "medium_confidence": 853,
+      "low_confidence": 308,
       "methods": {
-        "ai_region_coordinates": 2841,
-        "ai_city_geonames": 3085,
-        "ai_country_capital": 2445,
-        "ai_unlocated": 118,
-        "unresolved_city_no_capital_fallback": 199,
+        "ai_country_capital": 2458,
+        "ai_city_geonames": 3100,
+        "ai_region_coordinates": 2847,
+        "unresolved_city_no_capital_fallback": 202,
+        "ai_unlocated": 119,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
