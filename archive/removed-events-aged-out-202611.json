@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-21T17:34:51.172669+00:00",
+  "removed_at": "2026-11-22T19:04:41.789119+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -2842,6 +2842,170 @@
       "ai_relevance_score": 60,
       "ai_relevance_reason": "Reports a concrete, credible threat/warning of imminent attacks, meeting operational threshold.",
       "related_articles": []
+    },
+    {
+      "id": "9189d4acc1e6da6c",
+      "incident_id": "inc-f75eb2ea6eba07d7",
+      "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPNmdWTklsTVYtOGJFN2JOTElzcllhWkk3cTFkYjlUdkgtTzlqZkVRRDNHY3Q1ZHZmT1E2MGFSNmI1T25FM0JETVlsdEhWeGVXdXFWNzJwQml5UGlfNEk0bkV5amZnN2I1WDV5OTVZczQyb3hKNmM3VHFrd0U3ak45Mm5ERjZCczJQQjlmSDM4RGs2SmNTaFE1dEI5aWdsUTRxZW55SW1ITU5zWmpoMG5zbldibUtzNmRya3BGQkdvdUljMFFTcjBhd1pucVhkMlRiX25OYlQtck56YTB1bUlUWGpsRzBGS0VBdm9PcWlVb2VCYU3SAYcCQVVfeXFMUHlQNi1GYXRfcUh1TU1EaDcyeHRvLUFqYTA1SldFbGx0NTNrNl80S0ZZVlNwNnVMZXJJb0pRVDJhaVQ5Z3Y4UlRGT280dElIc05Da0t4cEZZd01sM3FuOGhHbDJEdnBDaXAzbG53YVlnak1Wdm1ma3c2ei1xSEtXZzNpWkh6SmM0Q1JnUk0wLXMtWElSNVpDOUcyTnJhWUZHUVZQeG1EZDU3SnRqNVBuSU1rWWdWRng2Z0pGbm5VZ1hnR3BJRjFuOWJiYkl2ZTBkSGw3UWZPU3d6dXM4SnNYVjVlOEZpR01ySFc5ckRKU1E0S1k0YmtTOVdVSnVubW04QTZIVU9GTms?oc=5",
+      "title": "Moroccan Islamic State member arrested in Italy ahead of stabbing attack",
+      "summary": "Law enforcement arrested a Moroccan member of the Islamic State in Italy before he could carry out a planned stabbing attack.",
+      "original_title": "Detenido en Italia un miembro marroquí del Estado Islámico poco antes de acuchillar a varias personas",
+      "original_language": "es",
+      "source": "larazon.es",
+      "published": "2026-05-26T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ARREST",
+      "country": "Italy",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete counter-terrorism arrest of an ISIS operative plotting a stabbing attack.",
+      "related_articles": [
+        {
+          "title": "Moroccan-origin man arrested in Italy over alleged ISIS attack plot",
+          "original_title": "Moroccan-origin man arrested in Italy over alleged ISIS attack plot",
+          "original_language": "en",
+          "summary": "A man of Moroccan origin has been arrested in Italy on suspicion of plotting an ISIS-inspired attack.",
+          "published": "2026-05-27T07:00:00+00:00",
+          "source": "en.hespress.com",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNb3hHVTdjSmhBcUZPY2FrUV9rRzYycHpQWmNSOXlVb1A2RzhLYjNxQjJhcUFrRUYzVnVXUmMzTmw4eTRyMzBQTXJBd1BjRXNWbmp2dEUwZ1NLR0RKQVFZaFVzNDBGWkYzelhjVFByMjVTWjE1QW93TVFfV1hKaWUxWlBzcFBsQWtpZnRxNFpITzZZZkI2ZFZnZ1J2ZWs4ZTA2cjJBMGJn?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "4be371e5e2bc9fc4",
+      "incident_id": "inc-ddd69580ba0d1b74",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQRk13LVZjQTE4aU1mdDhJZGlmaW53QnBmMk1faU80dFMyamdNSlF0TEVBZ2pSNWNWeExhY09LZVRBZUtQSW5TU2dXMHRFR25xMUQzZDN0a3NBVE5sWF9sa2RDX09TcHRTTXB3VXdhc212cWJMTUprelUzdlZRUkZHY1JyMlF6TUtSNXhNS0JPZExQV3RPYl9GV1R2b3hTcU9HUnpESjlkTTR1c3YwUHc?oc=5",
+      "title": "Tyumen Oblast law enforcement detain suspect in terrorism financing",
+      "summary": "Security forces in Tyumen Oblast detained an individual suspected of financing terrorism.",
+      "original_title": "Силовики Тюменской области задержали подозреваемого в финансировании терроризма",
+      "original_language": "ru",
+      "source": "SiTV.RU",
+      "published": "2026-05-26T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Terrorist Financing"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Russia",
+      "region": "Tyumen Oblast",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete arrest for terrorist financing.",
+      "related_articles": []
+    },
+    {
+      "id": "6bf1ce920dac9635",
+      "incident_id": "inc-30ba2dffa8b24c16",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBtVmN3dFJCQ1RjazFBclc0T1pZZ1JvTU9PVGg0ZG1sY3lJRkxia1BRcUdHYk92WDNrZDZQVEZBZTVFQmpzWkdXR0NqNXgzX2o0M1BadGFKOW5BdGNrMHdrLW04OHpjLVRSSXd2YjJrbk40UkEzem9MTTJ2Nmt1ZFE?oc=5",
+      "title": "ReCAAP ISC reports one incident of armed robbery between May 19-25",
+      "summary": "The ReCAAP Information Sharing Centre published a report detailing an incident of armed robbery against ships.",
+      "original_title": "ReCAAP ISC: One incident of armed robbery 19-25 May",
+      "original_language": "en",
+      "source": "safety4sea.com",
+      "published": "2026-05-26T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Singapore",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Reports a concrete armed robbery incident at sea.",
+      "related_articles": []
+    },
+    {
+      "id": "4e3c1b58a97b87f6",
+      "incident_id": "inc-891181f8f5a89861",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQUWgyZld6a2otZVBZSjlPeHNPVmNZX0RQU3FDZmViTjN6ZDYxU2wwaUVZLVpPazRoSXBaVDZBUFgwWGhGcWc3UThBNFRtRWw0Q2hsY2RoNzUyanFURmZyRDFQQUdYRVBaQkxfb010SlZWd1RyMGQ3d1lKU3hPOFFKeFZvMFJzV3dNWE1iNU5Sc1l2Q1k?oc=5",
+      "title": "Troops Arrest Suspected ISWAP Fighters/Spy in Adamawa",
+      "summary": "Nigerian troops and local hunters arrested suspected ISWAP fighters and a spy during operations in Adamawa State.",
+      "original_title": "Troops Arrest Suspected ISWAP Spy in Adamawa",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-26T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "ARREST",
+      "country": "Nigeria",
+      "region": "Adamawa State",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports the operational arrest of suspected ISWAP militants and spies by security forces.",
+      "related_articles": [
+        {
+          "title": "Troops, Hunters Arrest Two Suspected ISWAP Fighters in Adamawa",
+          "original_title": "Troops, Hunters Arrest Two Suspected ISWAP Fighters in Adamawa",
+          "original_language": "en",
+          "summary": "Troops, Hunters Arrest Two Suspected ISWAP Fighters in Adamawa zagazola.org",
+          "published": "2026-06-02T07:00:00+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOeHhCTUhwOEhRMUJjQ0xrakFkRkE4dl9GY0dLb3lIY2I0Unc4Z05fc3NDcnQyX0NZbmlqX1c5QVA0ZHhFVEt4d0NHeDZkZFk2WVVONVBXTU0zU01uR3BaLVpXV3M4ZmY5aWpqSUxFNFZ1aXNEbGNEM0o5ZWdYQ2Z5ZGE1UFp3aWg2eFVnMGZRMXYtUjVoSEJhcWplUnA4OWtqS1RqVlRMUzlfdw?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "372586b7fef0d1d5",
+      "incident_id": "inc-4cc91eee1ce3ed43",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPRjAzc1Vjc0RSNFA3NHM3ZWFIT2NyTWk2NzNvdlBGeHg3cENKRS1QR0xMU3l6NjJJUFI2S1RvY3FEMnBKOENQUkd0eExtY3o1WXBzM2lzTHVJUjNwUFU1Vy0zczNZQlFHamo4VURfT0J0WU94aG1VTWZEM08zUXo4ZjJyd1A1V0QtaUFLTGtwLUtNTWw4azllcnlXXy0?oc=5",
+      "title": "Police in Larnaca, Cyprus, disrupt potential terror plot following explosives discovery",
+      "summary": "Authorities in Larnaca have recovered explosives, leading police to believe they have successfully disrupted a planned terrorist attack.",
+      "original_title": "Larnaca police believe they stopped terror attacks after explosives find",
+      "original_language": "en",
+      "source": "Philenews",
+      "published": "2026-05-26T07:00:00+00:00",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "DISRUPTED_PLOT",
+      "country": "Cyprus",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete, dated counter-terrorism operation involving the discovery of explosives and the disruption of a plot.",
+      "related_articles": []
+    },
+    {
+      "id": "bcf609988a85ae7a",
+      "incident_id": "inc-67a88ed4f5b22e9b",
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOSU03dkN6MVM5Y3RjOEF0dW15bTRqV2N5eVZQUllSQ2hjWURmMUZXb1F3ZWx3eHhieDdKdmQxWFdmQkU2aUozZVFZVkZiTF9leGpEazFyWFQ4VWRlaG9LRGpJZ3RRWnM5LXJZdTRObm5JZ3FjZnhaM1Q5TjBlSXY3dzhKSmpsSGFtdnJwUGlVZjU5MERaRDJBY0E4UjRMQTM1MDd2OENwbFk1WldzQVJOWEtoZWJXV2N1RnNETTVRSzQySzhzVUdwWHNEdTZjOGZz?oc=5",
+      "title": "Air strikes conducted against ISWAP in Nigeria",
+      "summary": "Nigerian forces conducted a sustained air interdiction campaign targeting ISWAP militants in the Sambisa Forest and Tumbun areas.",
+      "original_title": "Sustained Air Interdiction Campaign Deepens Fear Within ISWAP Ranks Across Sambisa, Tumbuns",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-26T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Sambisa / Tumbuns",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism military operation against a named non-state actor.",
+      "related_articles": [
+        {
+          "title": "Vigilante arrested for spying for ISWAP in Yobe",
+          "original_title": "Troops Arrest Vigilante Member Spying for ISWAP Terrorists in Yobe",
+          "original_language": "en",
+          "summary": "Nigerian troops have arrested a member of a local vigilante group accused of spying for ISWAP in Yobe State.",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOckRxOW1HQjZVZThNaDVCWVQ2cng2Unl6MnprVjIwaGhyemJkcTl4bllBb1RlWThKckxrcVB3bXZ3bk9QVDRxOWV6OVZlQkVYU0llR0VRcWoxTU9waGs1TE9BNk1aSzQ2OUMxb1RDWGF0ZXpNbUtXN0NfNURkRHlJVVd0cGZaVzl2OE5BMzduTGFyU051OWRlZHRBdXpsT1NOQWYwVGNqaTNqSmQ3REtwZg?oc=5"
+        }
+      ]
     }
   ]
 }

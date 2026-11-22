@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "e9cb04ed90d04c538129d91ba88f8c2acbb9be99b87cd888c7c5df75289a0323",
+  "events_sha256": "a82c1d2370d3043e61a52a14f86ab1bcf79c1e05130de6aaa86db4c6424a2ac3",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 2894,
-      "bytes": 16504530,
-      "sha256": "f076b90d0800e917848b6eed27a11c6e3526df965e6efa917661267f025718af"
+      "events": 2995,
+      "bytes": 17122646,
+      "sha256": "fe2bcbbeefc9da02be08445328d362c1d718ed4efc8a615695d93282ef6005a7"
     },
     "2026-10": {
       "events": 3616,
@@ -71,9 +71,9 @@
       "sha256": "3be51f6af6a7ebc5fffcf6b2c283975bd5b204842f1ae274ff8e94e6f06f7353"
     },
     "2026-05": {
-      "events": 31,
-      "bytes": 122686,
-      "sha256": "0437e8b9b8eb8035a0b69a7c3261b992ec13cdf8db7d59f21b160f3aa47c34ea"
+      "events": 25,
+      "bytes": 102578,
+      "sha256": "3515e16d41b56eb42e32696e003719463fe7bc0077b317092d2517ca8a8f3652"
     }
   },
   "metadata": {
@@ -230,39 +230,39 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-21T22:11:04.739749+00:00",
-      "last_attempt_at": "2026-11-21T22:11:04.739749+00:00",
-      "published_at": "2026-11-21T22:49:44.307571+00:00",
+      "run_started_at": "2026-11-22T18:12:59.715874+00:00",
+      "last_attempt_at": "2026-11-22T18:12:59.715874+00:00",
+      "published_at": "2026-11-22T19:06:25.660667+00:00",
       "recent": {
-        "candidates": 3343,
-        "reviewed": 3343,
-        "cached": 2704,
-        "new_reviews": 639,
+        "candidates": 3291,
+        "reviewed": 3291,
+        "cached": 1619,
+        "new_reviews": 1672,
         "official_auto_accepted": 0,
-        "retained": 142,
-        "rejected": 3201,
+        "retained": 348,
+        "rejected": 2943,
         "pending": 0,
         "status": "complete",
-        "calls": 16,
-        "primary_calls": 16,
-        "overflow_calls": 0,
+        "calls": 57,
+        "primary_calls": 30,
+        "overflow_calls": 27,
         "reasons": [],
-        "window_start": "2026-11-18T22:11:04.739749+00:00",
-        "window_end": "2026-11-21T22:11:04.739749+00:00"
+        "window_start": "2026-11-19T18:12:59.715874+00:00",
+        "window_end": "2026-11-22T18:12:59.715874+00:00"
       },
       "backlog": {
-        "candidates": 690,
-        "reviewed": 690,
-        "cached": 660,
-        "new_reviews": 30,
+        "candidates": 668,
+        "reviewed": 668,
+        "cached": 606,
+        "new_reviews": 62,
         "official_auto_accepted": 0,
-        "retained": 0,
-        "rejected": 690,
+        "retained": 7,
+        "rejected": 661,
         "pending": 0,
         "status": "complete",
-        "calls": 1,
-        "primary_calls": 1,
-        "overflow_calls": 0,
+        "calls": 2,
+        "primary_calls": 0,
+        "overflow_calls": 2,
         "reasons": []
       },
       "maintenance": {
@@ -283,25 +283,23 @@
       "source": {
         "google": {
           "retry_waves": 0,
-          "successful": 1219,
-          "empty_feeds": 488,
-          "throttled": 5,
-          "deduplicated_urls": 288,
-          "failed": 1
+          "successful": 1220,
+          "empty_feeds": 485,
+          "throttled": 2,
+          "deduplicated_urls": 288
         },
         "gdelt": {},
-        "errors": 1,
-        "status": "partial"
+        "errors": 0,
+        "status": "complete"
       },
       "reasons": [
-        "source_errors",
         "category_pending",
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 4536,
-        "retired": 386,
-        "cancelled_history": 333,
+        "expired": 4562,
+        "retired": 317,
+        "cancelled_history": 260,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -314,62 +312,66 @@
         "primary": {
           "per_run": 30,
           "per_day": 60,
-          "used_this_run": 17,
-          "used_today": 47
+          "used_this_run": 30,
+          "used_today": 30
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
-          "used_this_run": 0,
-          "used_today": 17
+          "used_this_run": 29,
+          "used_today": 29
         },
         "historical_calls_per_run": 20,
-        "historical_calls_used": 1,
+        "historical_calls_used": 2,
         "maintenance_calls_per_run": 2
       },
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 8441,
-        "unlocated": 347,
-        "completed_unlocated": 347,
+        "located": 8526,
+        "unlocated": 357,
+        "completed_unlocated": 357,
         "outcome": "success",
-        "processed_this_run": 51,
-        "review_required": 228
+        "processed_this_run": 102,
+        "review_required": 233
       },
       "categories": [
         {
           "category": "Radiological/Nuclear",
-          "last_attempt_at": "2026-11-21T22:15:28.136142+00:00",
+          "last_attempt_at": "2026-11-22T17:15:55.328091+00:00",
           "status": "partial",
-          "reviewed": 140,
-          "pending": 494,
+          "reviewed": 134,
+          "pending": 500,
           "candidates": 634,
-          "recent_pending": 81,
-          "backlog_pending": 413,
+          "recent_pending": 30,
+          "backlog_pending": 470,
           "undated_pending": 0,
           "source_discovery": {
             "planned_queries": 50,
-            "attempted_queries": 45,
-            "searched_queries": 45,
+            "attempted_queries": 50,
+            "searched_queries": 50,
             "failed_queries": 0,
-            "pending_queries": 5,
-            "complete": false,
-            "stop_code": "queue_capacity_reached"
+            "pending_queries": 0,
+            "complete": true,
+            "stop_code": ""
           },
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-21T22:53:46.255863+00:00",
+      "finalized_at": "2026-11-22T19:09:15.075891+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
+      "temporary_failures": {
+        "gemini-3.5-flash-lite:503": 14,
+        "gemini-3.1-flash-lite:503": 1
+      },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 110,
-        "events_published_median_14d": 139.5,
-        "new_reviews": 639,
+        "events_published_last_24h": 95,
+        "events_published_median_14d": 151.5,
+        "new_reviews": 1672,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -385,63 +387,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 21 Nov, 23:49 Paris: Recent counter-terrorism and security reporting highlights critical developments across multiple regions, featuring a major car bomb plot disruption in Sydney, Australia, an armed cartel arrest operation in Guasave, Mexico, and intensive counter-militancy actions resulting in significant casualties in Pakistan.",
+      "overview": "As of 22 Nov, 20:06 Paris: Recent counter-terrorism and security developments highlight major operations, including the arrest of three individuals with 264 kilograms of explosives in Lebanon, the charging of a man in Sydney, Australia, for an ISIS-inspired car bomb plot, and an explosive attack in Cesar, Colombia, that killed a soldier and wounded 12 others.",
       "developments": [
         {
           "event_id": "c210bb53266660eb",
           "severity": "CRITICAL",
-          "category": "Counter Terrorism Action",
+          "category": "Arrests",
           "headline": "Sydney man charged with car bomb plot",
-          "detail": "A 35-year-old man was charged with plotting a car bomb attack and downloading ISIS materials following raids in Sydney, Australia.",
+          "detail": "A 35-year-old man was charged in Sydney, Australia, with plotting a car bomb attack and downloading ISIS materials following security raids.",
           "location": "Australia, Sydney"
         },
         {
-          "event_id": "5a4b3e36df4f208c",
+          "event_id": "3fb3d2215d4bb5b4",
           "severity": "CRITICAL",
+          "category": "Chemicals and Explosives",
+          "headline": "Lebanon: Arrest of three individuals with 264 kilograms of explosives",
+          "detail": "Lebanese security forces arrested three individuals following the discovery of 264 kilograms of explosives.",
+          "location": "Lebanon"
+        },
+        {
+          "event_id": "397c2900c1d3421d",
+          "severity": "CRITICAL",
+          "category": "Attacks",
+          "headline": "Explosive attack in Cesar leaves soldier dead and 12 wounded",
+          "detail": "An explosive attack in Cesar, Colombia, left one soldier dead and 12 wounded, prompting strong government vows for a robust response.",
+          "location": "Colombia, Cesar"
+        },
+        {
+          "event_id": "39ed649ce3f59b57",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
+          "headline": "Iraqi security forces eliminate ISIS leader in precision operation in Diyala",
+          "detail": "Iraqi security forces neutralized a key ISIS leader during a targeted operation in Diyala.",
+          "location": "Iraq, Diyala"
+        },
+        {
+          "event_id": "5a4b3e36df4f208c",
+          "severity": "HIGH",
           "category": "Arrests",
           "headline": "El Chapo Isidro arrested in Sinaloa following armed operation",
           "detail": "Fausto Isidro 'El Chapo Isidro' Meza was arrested in an operation in Guasave, Sinaloa, that triggered significant armed violence.",
-          "location": "Mexico, Guasave"
+          "location": "Mexico, Guasave, Sinaloa"
         },
         {
-          "event_id": "99eceb9a442ddfcb",
+          "event_id": "c81c347e9c017864",
           "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "Pakistan announces 74 militants killed in operations across two provinces",
-          "detail": "Pakistani authorities announced that 74 militants were killed during recent security operations across two provinces.",
-          "location": "Pakistan"
-        },
-        {
-          "event_id": "92a9fc1dc56e1114",
-          "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "Three terrorists eliminated in Gaza",
-          "detail": "The IDF and ISA killed three terrorists in Gaza, including one involved in the October 7 infiltration.",
-          "location": "Palestinian Territory, Gaza Strip"
-        },
-        {
-          "event_id": "c09cc07d7c716e3e",
-          "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "Nigerian Army neutralizes 21 ISWAP fighters and frees kidnap victims",
-          "detail": "The Nigerian Army announced the neutralization of 21 ISWAP militants during counter-insurgency operations, successfully rescuing multiple abducted civilians.",
-          "location": "Nigeria"
-        },
-        {
-          "event_id": "e8badeeac36ebe4b",
-          "severity": "SIGNIFICANT",
           "category": "Attacks",
-          "headline": "US security agencies warn that terrorist groups distributed calls for 9/11-style attacks",
-          "detail": "US security agencies issued warnings indicating that terrorist organizations have distributed widespread calls for carrying out 9/11-style attacks.",
-          "location": "United States"
+          "headline": "FARC dissidents car bomb plot thwarted in Huila",
+          "detail": "Police in Huila, Colombia, successfully identified and disarmed a car bomb planted by FARC dissidents.",
+          "location": "Colombia, Huila"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-21T22:49:41.820349+00:00",
+      "generated_at": "2026-11-22T19:06:23.113918+00:00",
       "candidate_events": 80,
-      "top_hash": "d7b85bfa6df789ffe2767e5f725632d0b8e7a7196f76515da6014527fe7b531b",
+      "top_hash": "64c4897d26ba8b8ad548b68158d4134fa01cc21174576fd8286a2cf0b2ab29b5",
       "top_event_count": 10,
       "reused": false
     },
@@ -719,10 +721,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 46,
-      "corroboration_hold_listed_outlet": 43,
-      "already_reviewed_articles": 1746,
-      "duplicate_input_articles": 4865
+      "corroboration_hold_same_minute_burst": 52,
+      "corroboration_hold_listed_outlet": 31,
+      "already_reviewed_articles": 1336,
+      "duplicate_input_articles": 4375
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -804,8 +806,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-21T22:49:44.307571+00:00",
-    "number_of_events": 8788,
+    "last_updated": "2026-11-22T19:06:25.660667+00:00",
+    "number_of_events": 8883,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -818,23 +820,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 8737,
-      "ai_processed_this_run": 51,
-      "ai_pending_at_start": 51,
-      "city": 3203,
-      "region": 2815,
-      "country_capital": 2423,
-      "unlocated": 347,
-      "mapped_total": 8441,
-      "high_confidence": 7652,
-      "medium_confidence": 841,
-      "low_confidence": 295,
+      "cached_events": 8781,
+      "ai_processed_this_run": 102,
+      "ai_pending_at_start": 102,
+      "city": 3236,
+      "region": 2844,
+      "country_capital": 2446,
+      "unlocated": 357,
+      "mapped_total": 8526,
+      "high_confidence": 7730,
+      "medium_confidence": 849,
+      "low_confidence": 304,
       "methods": {
-        "ai_region_coordinates": 2812,
-        "ai_country_capital": 2422,
-        "unresolved_city_no_capital_fallback": 194,
-        "ai_city_geonames": 3052,
-        "ai_unlocated": 113,
+        "ai_region_coordinates": 2841,
+        "ai_city_geonames": 3085,
+        "ai_country_capital": 2445,
+        "ai_unlocated": 118,
+        "unresolved_city_no_capital_fallback": 199,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
