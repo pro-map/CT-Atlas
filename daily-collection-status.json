@@ -110,27 +110,27 @@
   "categories": [
     {
       "category": "Radiological/Nuclear",
-      "last_attempt_at": "2026-11-22T17:15:55.328091+00:00",
+      "last_attempt_at": "2026-11-22T22:38:30.903292+00:00",
       "status": "partial",
-      "reviewed": 134,
-      "pending": 500,
-      "candidates": 634,
-      "recent_pending": 30,
-      "backlog_pending": 470,
+      "reviewed": 121,
+      "pending": 453,
+      "candidates": 574,
+      "recent_pending": 0,
+      "backlog_pending": 453,
       "undated_pending": 0,
       "source_discovery": {
         "planned_queries": 50,
         "attempted_queries": 50,
-        "searched_queries": 50,
-        "failed_queries": 0,
-        "pending_queries": 0,
-        "complete": true,
-        "stop_code": ""
+        "searched_queries": 49,
+        "failed_queries": 1,
+        "pending_queries": 1,
+        "complete": false,
+        "stop_code": "source_errors"
       },
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-11-22T23:04:05.513164+00:00",
+  "finalized_at": "2026-11-22T23:06:33.556872+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success",
   "temporary_failures": {
