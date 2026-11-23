@@ -25,10 +25,9 @@ on:
       - "archive/related-overflow-*.json"
       - "archive/enriched-articles-*.json"
       - ".github/workflows/sync-background-corpus.yml"
-  schedule:
-    # After the map and archive-only RadNuc evening batches have had time to finish.
-    - cron: "47 20 * * *"
-      timezone: "Europe/Paris"
+  # Timed run at 20:47 Paris, after the map and archive-only RadNuc evening batches
+  # have had time to finish, started by the report Worker
+  # (cloudflare-worker/schedule-dispatcher.js, SCHEDULE_SLOTS) with a slot input.
   workflow_dispatch:
     inputs:
       cleanup:

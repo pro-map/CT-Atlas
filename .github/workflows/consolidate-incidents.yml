@@ -14,13 +14,10 @@ run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow 
 # ledger, quota/gemini-3.1-consolidation.json), so 3.1 Flash Lite keeps room for the archive
 # review, the enrichment and the Report Generator/Deep Search/Atlas AI fallback.
 on:
-  schedule:
-    # Once a day: the backlog was drained in October and the collector
-    # consolidates its own new incidents every run. GitHub starts scheduled
-    # runs hours late, so the old midday and afternoon slots landed inside the
-    # delayed map updates and held their shared lock.
-    - cron: "37 7 * * *"
-      timezone: "Europe/Paris"
+  # Once a day, at 07:37 Paris, started by the report Worker
+  # (cloudflare-worker/schedule-dispatcher.js, SCHEDULE_SLOTS) with a slot input:
+  # the backlog was drained in October and the collector consolidates its own new
+  # incidents every run.
   # A new consolidation rule re-opens refused incidents: review them at once.
   push:
     branches: [main]

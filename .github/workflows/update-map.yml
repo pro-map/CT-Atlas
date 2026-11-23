@@ -3,11 +3,9 @@ name: Daily CT Intelligence Map Update
 run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow }}
 
 on:
-  schedule:
-    - cron: "17 10 * * *"
-      timezone: "Europe/Paris"
-    - cron: "17 18 * * *"
-      timezone: "Europe/Paris"
+  # Timed runs at 10:17 and 18:17 Paris come from the report Worker
+  # (cloudflare-worker/schedule-dispatcher.js, SCHEDULE_SLOTS), with a slot input.
+  # GitHub's own schedule started them 4-10 hours late and skipped some.
   workflow_dispatch:
     inputs:
       mode:

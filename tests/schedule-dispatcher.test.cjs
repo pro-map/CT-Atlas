@@ -65,12 +65,34 @@ test("without the secret or without the switch nothing is contacted",async()=>{
   }
 });
 
-test("as shipped, a token added early starts nothing",async()=>{
+test("as shipped, the switch is on: the token alone starts the slots",async()=>{
   const shipped=read("cloudflare-worker/wrangler.toml").match(/^SCHEDULE_DISPATCH_ENABLED = "(.*)"$/m)[1];
-  assert.equal(shipped,"false");
+  assert.equal(shipped,"true");
   const {calls,fetcher}=github();
-  await runScheduleDispatcher({GITHUB_DISPATCH_TOKEN:"x",SCHEDULE_DISPATCH_ENABLED:shipped},at("2026-11-05T09:17:00Z"),fetcher);
-  assert.equal(calls.length,0);
+  const result=await runScheduleDispatcher({GITHUB_DISPATCH_TOKEN:"x",SCHEDULE_DISPATCH_ENABLED:shipped},at("2026-11-05T09:17:00Z"),fetcher);
+  assert.deepEqual(plain(result),[{slot:"update-map.yml 17 10 * * *",outcome:"dispatched"}]);
+  assert.equal(posts(calls).length,1);
+});
+
+test("no dispatched workflow keeps a GitHub schedule, or every slot would run twice",()=>{
+  for(const workflow of new Set(SCHEDULE_SLOTS.map(slot=>slot.workflow))){
+    const triggers=read(`.github/workflows/${workflow}`).split("\non:\n")[1].split("\npermissions:")[0];
+    assert.doesNotMatch(triggers,/^ {2}schedule:/m,workflow);
+    assert.doesNotMatch(triggers,/^\s*- cron:/m,workflow);
+    assert.match(triggers,/^ {2}workflow_dispatch:$/m,workflow);
+  }
+});
+
+test("the dispatcher keeps every Paris time GitHub's schedule had before it took over",()=>{
+  const times=SCHEDULE_SLOTS.map(slot=>`${slot.workflow} ${String(slot.hour).padStart(2,"0")}:${String(slot.minute).padStart(2,"0")}`);
+  assert.deepEqual(plain(times.sort()),[
+    "consolidate-incidents.yml 07:37",
+    "daily-radnuc-background.yml 10:27","daily-radnuc-background.yml 18:27",
+    "refresh-sanctions.yml 04:47","refresh-sanctions.yml 09:47","refresh-sanctions.yml 15:47",
+    "refresh-sanctions.yml 17:47","refresh-sanctions.yml 20:47","refresh-sanctions.yml 22:47",
+    "sync-background-corpus.yml 20:47",
+    "update-map.yml 10:17","update-map.yml 18:17"
+  ]);
 });
 
 test("a quiet tick makes no request",async()=>{

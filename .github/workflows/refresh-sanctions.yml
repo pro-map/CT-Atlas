@@ -9,14 +9,13 @@ run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow 
 # (tools/update_sanctions.py compares OFAC's Last-Modified) and not committed;
 # the same list under a new Last-Modified commits that date alone.
 #
-# The slots are Paris times, the same as the dispatcher's: 20:47 and 22:47 follow
-# OFAC's afternoon (14:47 and 16:47 in Washington), and 22:47 is still after
-# 20:00 UTC in summer. GitHub's own schedule starts these runs 3-10 hours late
-# and never creates some; only the dispatcher, once enabled, starts them on time.
+# The slots are Paris times: 20:47 and 22:47 follow OFAC's afternoon (14:47 and
+# 16:47 in Washington), and 22:47 is still after 20:00 UTC in summer. GitHub's own
+# schedule started these runs 3-10 hours late and never created some.
 on:
-  schedule:
-    - cron: "47 4,9,15,17,20,22 * * *"
-      timezone: "Europe/Paris"
+  # Timed runs at 04:47, 09:47, 15:47, 17:47, 20:47 and 22:47 Paris come from the
+  # report Worker (cloudflare-worker/schedule-dispatcher.js, SCHEDULE_SLOTS), with a
+  # slot input.
   workflow_dispatch:
     inputs:
       slot:

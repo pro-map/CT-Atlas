@@ -258,6 +258,41 @@ class RunnerImageTests(unittest.TestCase):
             self.assertLess(names.index(name), names.index("Deploy Worker"))
 
 
+class WorkerSecretGateTests(unittest.TestCase):
+    def check(self, secrets, switch):
+        step = next(step for step in steps(read("deploy-report-worker.yml"))
+                    if step_name(step) == "Verify required auth secret")
+        script = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        toml = (ROOT / "cloudflare-worker/wrangler.toml").read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as temp:
+            (Path(temp) / "cloudflare-worker").mkdir()
+            (Path(temp) / "cloudflare-worker/wrangler.toml").write_text(
+                re.sub(r'(?m)^SCHEDULE_DISPATCH_ENABLED = ".*"$', f'SCHEDULE_DISPATCH_ENABLED = "{switch}"', toml),
+                encoding="utf-8", newline="\n")
+            stub = "python3() { printf '%s' \"$SECRETS\"; }\n"
+            return subprocess.run(["bash", "-c", stub + script], cwd=temp, capture_output=True, text=True,
+                                  env={**os.environ, "SECRETS": json.dumps([{"name": name} for name in secrets])},
+                                  check=False)
+
+    def test_the_switched_on_dispatcher_cannot_ship_without_its_token(self):
+        # The workflows have no schedule of their own: a Worker without the token
+        # would start no map update at all, so its deploy goes red at once.
+        self.assertIn('SCHEDULE_DISPATCH_ENABLED = "true"',
+                      (ROOT / "cloudflare-worker/wrangler.toml").read_text(encoding="utf-8"))
+        cases = {
+            "both secrets": (["AUTH_USERS_JSON", "GITHUB_DISPATCH_TOKEN"], "true", True),
+            "no dispatch token": (["AUTH_USERS_JSON", "AUTH_USERS_EXTRA_JSON"], "true", False),
+            "no dispatch token, switch off": (["AUTH_USERS_JSON"], "false", True),
+            "no auth secret": (["GITHUB_DISPATCH_TOKEN"], "true", False),
+        }
+        for name, (secrets, switch, accepted) in cases.items():
+            with self.subTest(case=name):
+                result = self.check(secrets, switch)
+                self.assertEqual(result.returncode == 0, accepted, result.stdout + result.stderr)
+                if name == "no dispatch token":
+                    self.assertIn("::error::Cloudflare secret GITHUB_DISPATCH_TOKEN is missing", result.stdout)
+
+
 class DeployGateTriggerTests(unittest.TestCase):
     def test_a_test_only_fix_reruns_the_deploys_the_node_suite_blocked(self):
         # On 2026-11-07 the fix touched a test alone: the Worker redeployed and the
@@ -524,8 +559,12 @@ class CollectionDispatchTests(unittest.TestCase):
         self.assertNotIn("secrets.", validation)
         self.assertNotIn("actions/checkout", validation)
         self.assertNotIn("pip install", validation)
-        self.assertIn('cron: "17 10 * * *"', workflow)
-        self.assertIn('cron: "17 18 * * *"', workflow)
+        # The report Worker starts the 10:17 and 18:17 Paris slots; GitHub's own
+        # schedule would start each one a second time, hours late.
+        self.assertNotIn("  schedule:", workflow.split("\npermissions:", 1)[0])
+        dispatcher = (ROOT / "cloudflare-worker/schedule-dispatcher.js").read_text(encoding="utf-8")
+        self.assertIn('{ workflow: "update-map.yml", hour: 10, minute: 17, inputs: { mode: "daily" } }', dispatcher)
+        self.assertIn('{ workflow: "update-map.yml", hour: 18, minute: 17, inputs: { mode: "daily" } }', dispatcher)
         options = workflow.split("        options:\n", 1)[1].split("      force_ai:", 1)[0]
         self.assertEqual([line.strip()[2:] for line in options.splitlines() if line.strip()],
                          ["daily", "resume-pending"])

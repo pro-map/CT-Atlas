@@ -1,12 +1,14 @@
 // Starts CT Atlas's timed workflows on time through the GitHub API. GitHub's own
-// `schedule` trigger starts them 3-10 hours late; Cloudflare's cron does not.
+// `schedule` trigger started them 4-10 hours late in November 2026 and skipped the
+// 23 Nov morning map update; Cloudflare's cron does not.
 //
-// Inert unless BOTH are present: the secret GITHUB_DISPATCH_TOKEN (a fine-grained
-// token limited to Actions: read and write on this repository) and the variable
-// SCHEDULE_DISPATCH_ENABLED="true". The variable stays "false" for as long as the
-// workflows keep their own `schedule:` triggers, because with both every slot would
-// run twice; adding the token early therefore changes nothing. Stateless: GitHub's
-// run list is the record of what has started, read before each dispatch.
+// SCHEDULE_SLOTS is the only timetable: the workflows below have no `schedule:`
+// trigger of their own, or every slot would run twice. Inert unless BOTH are
+// present: the secret GITHUB_DISPATCH_TOKEN (a fine-grained token limited to
+// Actions: read and write on this repository) and the variable
+// SCHEDULE_DISPATCH_ENABLED="true". Without them no timed run starts at all; the
+// live smoke test then fails once the map is 26 hours old. Stateless: GitHub's run
+// list is the record of what has started, read before each dispatch.
 const GITHUB_REPOSITORY = "pro-map/CT-Atlas";
 const SCHEDULE_TIME_ZONE = "Europe/Paris";
 // Cloudflare cron is UTC only, so the Worker wakes every ten minutes on the slots'
