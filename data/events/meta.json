@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "c6be869f939f1d44ade7bca45bb755016b76cf909df75ee06fd58bac777b8a9e",
+  "events_sha256": "6901d9edf6990b6210968e62cd6ccc2246c67b8052d667ff02779c2155480820",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 3042,
-      "bytes": 17393275,
-      "sha256": "4a95ea0bd9c80b8ba37fdeded280494a4520441c1e7b80925c48ec903b439ec8"
+      "events": 3064,
+      "bytes": 17585284,
+      "sha256": "ef44500911262b5860c9b4164f14f93bfba9c9f4de28249ac379e90e464d2a9b"
     },
     "2026-10": {
       "events": 3616,
@@ -230,37 +230,38 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-23T20:20:05.576945+00:00",
-      "last_attempt_at": "2026-11-23T20:20:05.576945+00:00",
-      "published_at": "2026-11-23T21:40:19.221064+00:00",
+      "run_started_at": "2026-11-23T21:44:30.125487+00:00",
+      "last_attempt_at": "2026-11-23T21:44:30.125487+00:00",
+      "published_at": "2026-11-23T23:24:41.719347+00:00",
       "recent": {
-        "candidates": 3507,
-        "reviewed": 1394,
-        "cached": 1353,
-        "new_reviews": 40,
-        "official_auto_accepted": 1,
-        "retained": 23,
-        "rejected": 1371,
-        "pending": 2113,
+        "candidates": 3856,
+        "reviewed": 1884,
+        "cached": 1284,
+        "new_reviews": 600,
+        "official_auto_accepted": 0,
+        "retained": 130,
+        "rejected": 1754,
+        "pending": 1972,
         "status": "partial",
-        "calls": 63,
+        "calls": 85,
         "primary_calls": 30,
-        "overflow_calls": 33,
+        "overflow_calls": 55,
         "reasons": [
-          "transient_error"
+          "transient_error",
+          "run_budget"
         ],
-        "window_start": "2026-11-20T20:20:05.576945+00:00",
-        "window_end": "2026-11-23T20:20:05.576945+00:00"
+        "window_start": "2026-11-20T21:44:30.125487+00:00",
+        "window_end": "2026-11-23T21:44:30.125487+00:00"
       },
       "backlog": {
-        "candidates": 697,
-        "reviewed": 623,
-        "cached": 623,
+        "candidates": 689,
+        "reviewed": 553,
+        "cached": 553,
         "new_reviews": 0,
         "official_auto_accepted": 0,
         "retained": 0,
-        "rejected": 623,
-        "pending": 74,
+        "rejected": 553,
+        "pending": 136,
         "status": "partial",
         "calls": 0,
         "primary_calls": 0,
@@ -287,28 +288,27 @@
       "source": {
         "google": {
           "retry_waves": 0,
-          "successful": 1219,
-          "empty_feeds": 486,
-          "deduplicated_urls": 288,
+          "successful": 1220,
+          "empty_feeds": 489,
           "throttled": 5,
-          "failed": 1
+          "deduplicated_urls": 288
         },
         "gdelt": {},
-        "errors": 1,
-        "status": "partial"
+        "errors": 0,
+        "status": "complete"
       },
       "reasons": [
         "transient_error",
+        "run_budget",
         "recent_pending",
         "backlog_pending",
-        "source_errors",
         "category_pending",
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 4796,
-        "retired": 343,
-        "cancelled_history": 295,
+        "expired": 5734,
+        "retired": 404,
+        "cancelled_history": 384,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -322,14 +322,14 @@
           "per_run": 30,
           "per_day": 60,
           "used_this_run": 30,
-          "used_today": 30
+          "used_today": 60
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
-          "used_this_run": 33,
-          "used_today": 33
+          "used_this_run": 55,
+          "used_today": 88
         },
         "historical_calls_per_run": 20,
         "historical_calls_used": 0,
@@ -338,54 +338,54 @@
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 8563,
-        "unlocated": 361,
-        "completed_unlocated": 361,
+        "located": 8581,
+        "unlocated": 365,
+        "completed_unlocated": 365,
         "outcome": "success",
-        "processed_this_run": 9,
-        "review_required": 235
+        "processed_this_run": 22,
+        "review_required": 239
       },
       "categories": [
         {
           "category": "Radiological/Nuclear",
-          "last_attempt_at": "2026-11-22T22:38:30.903292+00:00",
+          "last_attempt_at": "2026-11-23T21:35:59.450788+00:00",
           "status": "partial",
-          "reviewed": 121,
-          "pending": 453,
-          "candidates": 574,
-          "recent_pending": 0,
-          "backlog_pending": 453,
+          "reviewed": 0,
+          "pending": 494,
+          "candidates": 494,
+          "recent_pending": 111,
+          "backlog_pending": 383,
           "undated_pending": 0,
           "source_discovery": {
             "planned_queries": 50,
-            "attempted_queries": 50,
-            "searched_queries": 49,
-            "failed_queries": 1,
-            "pending_queries": 1,
+            "attempted_queries": 27,
+            "searched_queries": 27,
+            "failed_queries": 0,
+            "pending_queries": 23,
             "complete": false,
-            "stop_code": "source_errors"
+            "stop_code": "http_503"
           },
-          "stop_code": "budget_reached"
+          "stop_code": "http_503"
         }
       ],
-      "finalized_at": "2026-11-23T21:41:12.906089+00:00",
+      "finalized_at": "2026-11-23T23:27:05.877576+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 29,
-        "gemini-3.1-flash-lite:503": 33
+        "gemini-3.5-flash-lite:503": 27,
+        "gemini-3.1-flash-lite:503": 43
       },
       "health": {
         "state": "starved",
         "reasons": [
           "few_events_published",
-          "reviews_far_below_arrivals"
+          "reviews_below_arrivals"
         ],
-        "events_published_last_24h": 9,
-        "events_published_median_14d": 152.0,
-        "new_reviews": 40,
-        "recent_pending": 2113,
-        "review_share": 0.019,
+        "events_published_last_24h": 24,
+        "events_published_median_14d": 151.0,
+        "new_reviews": 600,
+        "recent_pending": 1972,
+        "review_share": 0.233,
         "thresholds": {
           "starved_events_ratio": 0.25,
           "degraded_events_ratio": 0.5,
@@ -399,56 +399,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "status": "fallback",
-      "model": "gemini-3.5-flash-lite",
-      "window_hours": 24,
-      "generated_at": "2026-11-23T21:39:49.313043+00:00",
-      "candidate_events": 15,
-      "overview": "As of 23 Nov, 22:39 Paris, from only 15 reviewed events (normally 80), so developments may be missing: AI synthesis was unavailable for this update. Top-ranked reports of the last 24 hours, without analysis: Military bombardment kills five FARC dissidents in Meta; Military offensive leaves five guerrillas dead in southwestern Colombia; Three ELN members linked to extortion and terrorist attacks captured in Santander.",
+      "overview": "As of 24 Nov, 00:24 Paris: Counter-terrorism operations over the past 24 hours featured significant security actions and territorial shifts across multiple regions. Notably, al-Shabaab militants seized control of a town near Mogadishu, Somalia following government troop withdrawals. Meanwhile, Colombian military forces conducted a successful bombardment operation in Meta, Colombia killing five FARC dissidents, and Spanish authorities expelled a high-ranking Los Tiguerones leader accused of terrorist threats against Ecuador's president.",
       "developments": [
         {
+          "event_id": "39ad643b2658c039",
+          "severity": "CRITICAL",
+          "category": "Attacks",
+          "headline": "Al-Shabaab takes over town near Mogadishu",
+          "detail": "Al-Shabaab militants took control of a town near Mogadishu after government troops withdrew from the area.",
+          "location": "Somalia, Mogadishu"
+        },
+        {
           "event_id": "ed900a5110b60598",
-          "severity": "SIGNIFICANT",
+          "severity": "CRITICAL",
           "category": "Counter Terrorism Action",
           "headline": "Military bombardment kills five FARC dissidents in Meta",
           "detail": "A military bombardment in the department of Meta resulted in the death of five members of the 'Iván Mordisco' dissident group.",
-          "location": "Meta, Colombia"
+          "location": "Colombia, Meta"
         },
         {
-          "event_id": "62d603fa552fc6f8",
-          "severity": "SIGNIFICANT",
-          "category": "Counter Terrorism Action",
-          "headline": "Military offensive leaves five guerrillas dead in southwestern Colombia",
-          "detail": "An offensive military operation in southwestern Colombia resulted in the deaths of five guerrilla combatants.",
-          "location": ""
-        },
-        {
-          "event_id": "d0147190f20be287",
-          "severity": "SIGNIFICANT",
+          "event_id": "e3efcca737752593",
+          "severity": "HIGH",
           "category": "Arrests",
-          "headline": "Three ELN members linked to extortion and terrorist attacks captured in Santander",
-          "detail": "Three suspected ELN members linked to highway extortion and terrorist bomb attacks were captured in Santander.",
-          "location": "Santander, Colombia"
+          "headline": "Spain expels Los Tiguerones leader accused of threatening Ecuador's President",
+          "detail": "Spanish authorities expelled alias Negro Willy, a leader of the Los Tiguerones criminal organization accused of terrorism and threats against Ecuador's president.",
+          "location": "Spain"
+        },
+        {
+          "event_id": "6af0e4802c2b4eaa",
+          "severity": "HIGH",
+          "category": "Attacks",
+          "headline": "Student charged with Temple Mount suicide attack plot",
+          "detail": "An Arab student has been charged for plotting a suicide attack at the Temple Mount.",
+          "location": "Temple Mount"
         },
         {
           "event_id": "7367a5b9195a53e7",
-          "severity": "SIGNIFICANT",
+          "severity": "HIGH",
           "category": "Attacks",
-          "headline": "Police station attacked with explosive drones in Curumaní, Cesar",
+          "headline": "Police station attacked with explosive drones in Curumaní",
           "detail": "A police station in Curumaní, Cesar, was struck in a drone attack carrying explosives, resulting in heavy blasts.",
-          "location": ""
+          "location": "Colombia, Curumaní"
         },
         {
-          "event_id": "f42dda754d01b4ec",
+          "event_id": "b69cfeab08930bbf",
           "severity": "SIGNIFICANT",
           "category": "Counter Terrorism Action",
-          "headline": "Dagua becomes scene of military bombing operation against armed group",
-          "detail": "Dagua was the site of a military bombing operation targeting a narcoterrorist/armed group.",
-          "location": "Dagua, Colombia"
+          "headline": "Arrest of FARC dissident leader alias 'Choclo' in Jamundí",
+          "detail": "Security forces captured alias 'Choclo', a leader of the FARC dissident group Jaime Martínez, in Jamundí, who is under investigation for a terrorist attack in Cali and child recruitment.",
+          "location": "Colombia, Jamundí"
         }
       ],
-      "warning": "Gemini trend temporary error 503",
-      "top_hash": "49133e1830a4bcede2771f05df27d6414db6b1e149b2030623e65ac92b3203e9",
+      "status": "ok",
+      "model": "gemini-3.5-flash-lite",
+      "window_hours": 24,
+      "generated_at": "2026-11-23T23:24:32.917771+00:00",
+      "candidate_events": 41,
+      "top_hash": "8a40ecde81d17c87c576a112f1f9dae232a0700a32465ec0e074f66db0099e6f",
       "top_event_count": 10,
       "reused": false
     },
@@ -726,10 +733,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 55,
-      "corroboration_hold_listed_outlet": 23,
-      "duplicate_input_articles": 4232,
-      "already_reviewed_articles": 1386
+      "corroboration_hold_same_minute_burst": 57,
+      "corroboration_hold_listed_outlet": 24,
+      "duplicate_input_articles": 5022,
+      "already_reviewed_articles": 1529
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -811,8 +818,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-23T21:40:19.221064+00:00",
-    "number_of_events": 8924,
+    "last_updated": "2026-11-23T23:24:41.719347+00:00",
+    "number_of_events": 8946,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -825,23 +832,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 8915,
-      "ai_processed_this_run": 9,
-      "ai_pending_at_start": 9,
-      "city": 3255,
-      "region": 2848,
+      "cached_events": 8924,
+      "ai_processed_this_run": 22,
+      "ai_pending_at_start": 22,
+      "city": 3261,
+      "region": 2860,
       "country_capital": 2460,
-      "unlocated": 361,
-      "mapped_total": 8563,
-      "high_confidence": 7763,
-      "medium_confidence": 853,
-      "low_confidence": 308,
+      "unlocated": 365,
+      "mapped_total": 8581,
+      "high_confidence": 7780,
+      "medium_confidence": 854,
+      "low_confidence": 312,
       "methods": {
+        "ai_region_coordinates": 2857,
+        "ai_city_geonames": 3110,
+        "unresolved_city_no_capital_fallback": 205,
         "ai_unlocated": 120,
-        "ai_city_geonames": 3104,
         "ai_country_capital": 2459,
-        "ai_region_coordinates": 2845,
-        "unresolved_city_no_capital_fallback": 201,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
