@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-23T21:39:29.640815+00:00",
+  "removed_at": "2026-11-24T09:22:12.951963+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -3317,6 +3317,317 @@
       "region": "Benue State",
       "ai_relevance_score": 70,
       "ai_relevance_reason": "Reports a concrete arrest operation against a suspected terrorist.",
+      "related_articles": []
+    },
+    {
+      "id": "c6b58471f6f98fa7",
+      "incident_id": "inc-d3de9b774af46bbb",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNaG1mci1XU3VzRkFUSXdIMEpBTHRPTjM5Snlwd3BsQkNSSy1qOThJcnlzOE9KTkxESkQ4cWxIeF9HTklqUEloMWhVQTUzRzkyNGFUb1RUa1pmSW9rOFVaV20zb0hzZWtpMGZXcHoyQ0tXQjB0SlMyaS1UU2pZVllSam1aNWcyVHczNXFMVHNwMlBTbmM3d1d1N2FmMmVWbUc3czRnX01sRGtGMDhla0hVeXk0aVhqVDI2dDVsbw?oc=5",
+      "title": "Israel kills 2 Hamas military leaders in ongoing conflict",
+      "summary": "Israeli strikes have killed two Hamas military leaders in Gaza within the month, impacting leadership structures.",
+      "original_title": "Israel has killed 2 Hamas military leaders this month. But will it change the underlying conflict? | The Independent",
+      "original_language": "en",
+      "source": "ACLED",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Hamas",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Palestinian Territory",
+      "region": "Gaza Strip",
+      "ai_relevance_score": 82,
+      "ai_relevance_reason": "Reports the targeted killing of designated militant leaders by security forces.",
+      "related_articles": []
+    },
+    {
+      "id": "fe067de51358e67b",
+      "incident_id": "inc-79733a8cd6626502",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOUTdHR2dleS1TS3YxUUVucTBmUThiM2JaVUdUVV9ZMlZXa011WEU1WFNZSXJ6ODRHMDFEcTdEUl9sX2NCUzJKdTRYLUVGZFp6eGl5OXBDNzFGSUxyZTY2cngzei1KLTVCUGFEZWR1a2ZIdVNiSXk2cEhWSllLbGV6RmJSaUdUdlBVcUpjMWhIWnMtRlhMUWpWWHlLWmVRb2UxcHlHN2YyOV9KZ2ZkSTFr?oc=5",
+      "title": "Terrorist knife attack wounds three at Swiss train station",
+      "summary": "A knife attack classified by Swiss officials as a terrorist act wounded three people at a train station.",
+      "original_title": "'Terrorist' knife attack wounds 3 at Swiss train station: official",
+      "original_language": "en",
+      "source": "France 24",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Switzerland",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete terrorist knife attack injuring multiple people.",
+      "related_articles": [
+        {
+          "title": "'Terrorist' knife attack wounds 3 at Swiss train station: official",
+          "original_title": "'Terrorist' knife attack wounds 3 at Swiss train station: official",
+          "original_language": "en",
+          "summary": "'Terrorist' knife attack wounds 3 at Swiss train station: official RFI",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "RFI",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOMUVFb2EzS3lCMEhfN0hXVFJTTzlYb3hxQzZHSFlRRjJhRXdaTDg0RXVfS1dnVmE3OWRPMGpEQnk2N3B6VHAtR05RR2dIdTROTXlzRnNyZW9sOER1Q2NScndWamo1SjdGZHd6UjBSeXdnSnRfMmV6VUI5Mk5ILUxJbi1SYTI2aUJ2YW44eDNZTERwNWczUlUxQktfVk1DSGhKUVVOR1FSTFFjTWpWX2tBMVhIbw?oc=5"
+        },
+        {
+          "title": "Swiss train station knife attack 'a terrorist act,' regional security official says",
+          "original_title": "Swiss train station knife attack 'a terrorist act,' regional security official says",
+          "original_language": "en",
+          "summary": "Swiss train station knife attack 'a terrorist act,' regional security official says Euronews",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "Euronews",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxObmJQRm1IYXRHMlBhWDRxZWFRbmExaWFsa05IaEVaaFVxck81Z045TFVJZ0tvUFVjel9ya29LbnRPUGpfT1JWSmNNMDF6NnhvSGtwUHdra0tJczNvY1F3d3oyOGtoUGtXNzFmNklFSHZ2RWxEU1RYUGxrN0hFenc1QjhDdmJuRFhEMVloc2RvdzNMWl9qSlhFazhuWlVhTUt4U2U0?oc=5"
+        },
+        {
+          "title": "Three wounded in Swiss train station stabbing labelled ‘act of terror’",
+          "original_title": "Three wounded in Swiss train station stabbing labelled ‘act of terror’",
+          "original_language": "en",
+          "summary": "Three people were wounded in a stabbing attack at a Swiss train station that authorities have officially labelled an act of terror.",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "Al Jazeera",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQTEFfWlo2SUFQQVFtTW42NEoxVUtmTnFackhRNlI1dTNSNElwTjJ6VVNtMTZmSkJ0M19FbmptQ3A2eF9NYzNOZkE0a2lBTFVjaTljRi1GV2lQNE01dVd4YlhzbTdCQndNc3NWUmU3MEhzMk1hbk1RczhXdnRfRHpkVThlUjZIdXRQT2R1R1N3RXNEYTZPU0gwWGRIZktzRWYzd0htaEF5NlkxMmwzZFHSAbMBQVVfeXFMTjdzdkV2RXBhZ0lSSFhNYUFOWlJrbV83bXJVaWl2djF6SHFqRkM3cHBoUm9maFBDQ1kxclVUc1poSWNTQVFMV1ZLTGp4OXZEZWg1SHdIMHlPdGxFNGtYN1JHVEQ2VDNRTk9SaTlOSHRFNTI3N0FqaHI5alRKWEpPWVZHMTE1LU1WcDZvZ3hyc3pWaXJBeGJ3enhiSjdMMWxEM0lndFhJM1BrRE1JbGZuNk8wZkU?oc=5"
+        },
+        {
+          "title": "Terrorist attack in Switzerland: three injured with knife at railway station",
+          "original_title": "Теракт в Швейцарии: трое ранены ножом на вокзале",
+          "original_language": "ru",
+          "summary": "Three people were injured in a knife attack at a railway station in Switzerland, treated as a terrorist incident.",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "dw.com",
+          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPSW5QY3F5OGZzclZvMTI0SlhfQXc0bUNmdzhMWnI1NmJmcVlQa1N6RnpxSXpLR1lkc0NzWVZrdVB6WlJVLVc3Wm1NRDM1OWl3VmNQaUNNNF9wYzVsVFpVSUl3TlZxSlhJNks4TGhnSHlzcWRXNDRRRU5PSW9BMWhBckxkRUZsLVnSAYcBQVVfeXFMTWU4N1NtNGRVZmU2T1ZEZUREWEV5N19hOEtqV3FyVHNxZ2NtU1JsOEZwbVNzSTRiTkVIQ28xR3E3c0x2WnNqeFd3eFBuMWJKUWRuTFhkNDlDc3ZlLWQ4cU5CSWlyaEZpRnhIQnNJMHg4VGdSamdaUDJqWnFYWnNXcU91LW1RQjJN?oc=5"
+        },
+        {
+          "title": "Terror attack in Switzerland: Three injured in knife attack in Winterthur",
+          "original_title": "Terrorangriff in der Schweiz : Drei Verletzte bei Messerattacke in Winterthur",
+          "original_language": "de",
+          "summary": "Three people were injured in a knife attack in Winterthur, Switzerland, which authorities are investigating as a terrorist incident.",
+          "published": "2026-05-28T17:30:00+00:00",
+          "source": "salzburg24.at",
+          "url": "https://www.salzburg24.at/news/welt/terrorangriff-in-der-schweiz-drei-verletzte-bei-messerattacke-in-winterthur-art-327157"
+        }
+      ]
+    },
+    {
+      "id": "b00a272ceed35a4c",
+      "incident_id": "inc-79733a8cd6626502",
+      "url": "https://news.google.com/rss/articles/CBMiqgJBVV95cUxOdzl5UGNiN0NFdEc5THBwU3FEOWpESGE1SkNXd010YmRLNS1TY1N0U3Vfa3dlcXJHdkJyYUlhSVBmRE1EbHFUZl82b0FwWGZPc2tMSFB6dGFCc3dMU0RkekgwYmVMUGJ6ZlItODRtQ2hEdUVVWkFwOW84aHVPU2VCWHBvUGk1WGNaMWhOdmpGbFpQdWcwQ003UlNGelFwRjBVOGpkRHJsQS1VUU5MZlIyMWRmVjhHeWtBeDlFcV9WcWlnbm56OU1sU0NuTDBFX0YzWG42SnIwVWUzNWt0STRFdFhldzZUVE9tODdLSlZhdmFXUTlJZFhTN1pNb09JWXlfX1V5MFJjV1Q5Rk1uUFZFYUlUdmRmalF4bTE5YmtNcmprV1RkS2xXdXh30gGvAkFVX3lxTE1lb0I0aHo3Ni1vdUlhTHh4UnRBT1hOTnh5UWNJRkZ0eWhCcW8tc2c1OHA2aUdNeS1BZFBGdnh1b3phYWhWaS1XZnZiMERuZERfMGZNOVY0OG5nV1o3MEV0bkNJTzlXMnpRU2RLNW1KNVZZVC1zVDVQTUdpTzhNcUhoQlQtRFlJZThWVHQ5MmdVY2xzVUphQXplLWx2RVRXdXhSMmpXdmhpZUJ3N1BRckpRYXpPY3pHYktFaWxDa3VoRWRMQUhvblAxRE01WG1QVWpqNnI1aUFMRXZ3a25WazJMOWJWWWNFRG56Vm94MDlsMk9ZczBvLXQ0UHRMQUlaa0FYODVNQ1Q5YWVDcGJXam1pb0dycUdUS3plRGRhQktmMElQRllVQjlaQ2VOOExudw?oc=5",
+      "title": "Attack at train station near Zurich classified as terrorism by Switzerland",
+      "summary": "Swiss authorities have classified a train station attack near Zurich as a terrorist act following the stabbing of three individuals.",
+      "original_title": "هجوم بمحطة قطار قرب زيورخ وسويسرا تصنفه إرهابيا",
+      "original_language": "ar",
+      "source": "الجزيرة نت",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Switzerland",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports official classification and details of the terrorist train station attack in Switzerland.",
+      "related_articles": []
+    },
+    {
+      "id": "6ae01f95aa443b56",
+      "incident_id": "inc-5f3b09c6f4befae9",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQZlRtb0ZuM0xOLWdKZUZfR3lhTGNiS1Q5aDcwTFJSSFNkd0hKNFlscmctd1lxTzFMU1hTYnc0dWNCR0Zia0trMnM5c2xHLVZULV95OFlhUDg2ZHhFeGwteEZ3azQybWJzWEdMUk1ZSlRyc214UVlDWFJXUXJOMVZ3XzlNUXdGTWhHMmtGaUpxSXZOWldLamZOVVZxbmNIbnRaWWFzU9IBqgFBVV95cUxQdGs3dWlJTVVSQzFjS2FLOUNnSTZ5UC1JaVB4WElRM2lMUEtnTGt0Z0c5R3F5ZXpnTFJaOXRIdGdUaVJTVmpQdFdtWERhN0E4OVRNM2FJbzZxQ0ctYTdKNlAwX0NFOU5FQkQ0STdzVUN0Zm1hOWNBa3hyRUhxa0swMzZXeWxpOWVuZ2s5S1lfQWdTeWt4ZUZ1cGx0UHBKMGs2alJmeUR6b0J4QQ?oc=5",
+      "title": "At least 10 arrested in major counter-terrorism operation against jihadism in Spain",
+      "summary": "Spanish security forces have arrested at least 10 individuals in a widespread counter-terrorism sweep across multiple provinces.",
+      "original_title": "Al menos 10 detenidos en una macrooperación contra el yihadismo en varias provincias españolas",
+      "original_language": "es",
+      "source": "Castilla-La Mancha Media - CMM",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Spain",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Reports a major multi-province counter-terrorism operation and multiple arrests.",
+      "related_articles": [
+        {
+          "title": "Pre-trial detention ordered for one of 10 arrested in jihadist terrorism operation",
+          "original_title": "Prisión para uno de los 10 detenidos en la macrooperación contra el terrorismo yihadista",
+          "original_language": "es",
+          "summary": "A Spanish court ordered pre-trial detention for one of the ten suspects arrested in a recent counter-terrorism operation against jihadism.",
+          "published": "2026-05-29T07:00:00+00:00",
+          "source": "Onda Regional de Murcia | ORM",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNUjVNOGNhdzllR0cwMWZ5c0RyZDRsTGxpZ0VES2dKbDVZVWEtSWx2S0pIUjQ1aUxhaHVCRnF6TC1KZ3V5cENVc2w5dllXYllteHJQYm1jb1V3SnJwUkE3UkswLW42REJ6VXI2clVlb0FJM1JJRjZDWnNUXzdKY0tuY3lsS3FrNHhYaUo4NThMN0pkVGNTNlV0UjdNeGJObUZiS1RqVEZJaThNN0NoeUF1Wi1YZmMyNnplX0trb2RR?oc=5"
+        },
+        {
+          "title": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España",
+          "original_title": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España",
+          "original_language": "es",
+          "summary": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España 20Minutos",
+          "published": "2026-05-29T07:00:00+00:00",
+          "source": "20Minutos",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNVGc5MHlZNUhoRGVGUTdrbzZpaTBFeHhkc3p1THRLRTlvMENuTGtoMmpFUHFmSkZ1dW1NMnRxeU5jdGRxSkNYdjFTb3hLa2JyS3c1eVFob2w5YWhLd09ud3hHOFFNbDlnOTctU3hRdG84RkFWZGpYQWtfaUpOZURVc2JJSXVuZDVCZnlLWjlTWDlHbHFNWGNYQ0RIRWpIdkZaY0h3Y2VxLUZ3SF8wdlM3RHJmbThzdjMxNjEzUUowdzVjWHNZTzNWbVRGdS1yQdIB0wFBVV95cUxPSFdsb05aVXRtZndtVDFNa2Q2NDdsVHBXM04tb1dybW1BdlFsLXItVnc3RnpGRng0RjJpOWpYYVZWbTR6LVl6aUhoMXRsNzdOWGVjQVVtYU1aR1JmaGNEWG9TNGlDUDNlakdyMWF5S0ZHVmFrNExqbTNQQkJSc2lIclpzT2pFekExbURrOGd0bzhkTlZqNXdVQmZCbWJ4V2puYlZSdFZJQVR1NzBGVi1MSXREVjVQTldjOFhncHh4SG5HRVFxNGF6QXZGUlRDMEs0QkYw?oc=5"
+        },
+        {
+          "title": "Six members of Tren de Aragua arrested in Spain",
+          "original_title": "Detenidos seis miembros de Tren de Aragua, la “violentísima” banda detrás del asalto y secuestro del empresario que financió a Alvise",
+          "original_language": "es",
+          "summary": "Authorities in Spain have arrested six members of the Tren de Aragua gang linked to the kidnapping and assault of an businessman.",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "EL PAÍS",
+          "url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxNUE9DRFJhd0cyZm9ydVRWVF9Fc3g3Z09ram83MVBsODBPUU9lWDR0UllmMzhxc0pnUXZCZksyMG5QSms4cEVZZVhCWE5DUXdDc2pHN2xYanZrT1p3NWVWYW1fWGVHZ2Vpai1xVjdGT2FUTUtQQUY1aVVCV3diN2xkeWFIbWliVXJ4SGJEZ2FpY0RGUXR4dUc4Qk1QdmQxUzkxbG03WnRUZkJjcElVUExjQ3AxckZEOWVLbk1wYVdVNnp0RFRvWl94Z2g2RFVzWXhrZk83SGU2VnhQRlNZY0lXMDBSV0pJQU5lV1JLb3F0RVA3cktTdnRmRXdVdDczZzFtQnNRMUVIV0tPMGvSAZ8CQVVfeXFMT2dubUVuZDcwcnFmbWplajE0VzVkY0hUMTF5dkJRN2Ntam1qQUxMVzlpcW5oVDBGcWVYVFlSaUI1UmVPSE42bXJRRzFCVjBUOUhKcU9GVFVFeXVMZm1kWHB4NzNMOC00YURYamJSMG9KOG9IYTVqaVVjbnhuTFF6VzNOYi1ZNDBuVll0cjFSUENEZXFBdU5xYjJ0LUY0dG9tM1hZQUwzWkdkSTFxZVVqYTlsSDRVUHBHUUZjbkhWSlJFZUtuczhGLTJ2VVhyNDJjaFhfbl9QR1dBdjRzZlF1VWtXNks1dDc3cjNmTlNkYW5EZ0tKY0Q3ZjhYRVd3ZHhUenZDaWotWnVKSzg0ZnNOWFFiQ0U0XzZOcnhCWmt0NGs?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "d072a9a4e04cf2b1",
+      "incident_id": "inc-12de1a2966cb0986",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNVFFMd2pyLUR4RVlUM3dQRmZLZWV0YVo1NHdDQm9oTjhRb1N6bFc4b3QzRjRfUzdFRDVCaVIyZjVPd1A0T0syMS1ULXRoaUp1UFkzcTZBanNzVVFBcUhFUHRqUjgxNmdwNmFkd3RyMVFjdHRyM1hYRG41Z25La0RIVHVqQVNqZ2l6NkhJWFV1WnI1MmRraExOeG1MRVBtQ3ZkLXBMSU44SVdrc2ZZc0VkTmx5ZzlRTnZ0RFZHTWR1Z1g2aWk5enZndmhpY09tRzA?oc=5",
+      "title": "Suspect in public justification of terrorism detained in Yamal with National Guard SOBR assistance",
+      "summary": "Russian authorities detained an individual in Yamal accused of publicly justifying terrorism, backed by special forces.",
+      "original_title": "На Ямале при содействии СОБР Росгвардии задержан обвиняемый в публичном оправдании терроризма (видео)",
+      "original_language": "ru",
+      "source": "Федеральная служба войск национальной гвардии",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Russia",
+      "region": "Yamalo-Nenets Autonomous Okrug",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete special-forces-backed arrest for terrorism justification.",
+      "related_articles": []
+    },
+    {
+      "id": "7a6d873863db2225",
+      "incident_id": "inc-2fa017724cee0faf",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE0xbVluMTA2Vlg1cFFQbHRrVEd4MHJpOVNGX0FkUk1FZlZDV0Zka2d3TzZ4NEFEbWVvaGRmMEU2aGxBM250M1pQTjRJV2dRMlXSAUtBVV95cUxPN2x1U1p5YXhWSXZydzBFTVJTNXIyS3VFVjB4SmRaSG1VTjd1QW1FWXA5cy13WWZXQ3VxdVdfM0RlQUVLV1JpdG11NE0?oc=5",
+      "title": "15-year-old schoolboy detained after arson near railway station in St. Petersburg",
+      "summary": "A 15-year-old schoolboy was detained following an arson attack near a railway station in St. Petersburg.",
+      "original_title": "После поджога у ж/д станции в Петербурге задержан 15-летний школьник",
+      "original_language": "ru",
+      "source": "Интерфакс",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Russia",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete arrest following a sabotage/arson attack.",
+      "related_articles": []
+    },
+    {
+      "id": "a765cf16fc18a7cf",
+      "incident_id": "inc-1cb5a03a36d1cc30",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQay1qZGxueGY1ZnRBSUtpSUY4cTY5WG9DcVcxQkJlaUF1ZVVJdkVLOF9CZlpVSi1NNmNFMzVQdUtuR2N3emVsVVJONnJmRFZJcU9ESkM2UHZnbWE4MjJ2dWxkS0o4VzN3dGJRcE9uSV9BVEg0bmpTM3hwV2hlRXByb1VQam5BaVVCbm5xUDdrOA?oc=5",
+      "title": "Troops Repel ISWAP Attack in Chibok, Borno",
+      "summary": "Nigerian troops successfully repelled an attack launched by ISWAP militants in Chibok, Borno State.",
+      "original_title": "Troops repel ISWAP attack in Chibok, Borno",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism military operation repelling an ISWAP militant attack.",
+      "related_articles": [
+        {
+          "title": "Troops neutralize two ISWAP terrorists in Yobe",
+          "original_title": "Troops Neutralise 2 ISWAP Terrorists in Ambush Operation in Yobe",
+          "original_language": "en",
+          "summary": "Nigerian troops killed two ISWAP terrorists during an ambush operation in Yobe State.",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPQjFfVDNQcGxEdHRXWWIxZ0F6VzV6NGx6Y0h3Xy1jNGZydGhBTFZGUi0xSjJPTlVESGpCZ0FEWHI2aUFSNGFLOWF1bWVFcUwwOElheExkNWxGR3NBcjFyM2x3dW9kbVJOamlHc1Ixa2F3WFdSSXp5R2owdGl6a0ExanBDUzVxRG40RXU2bndoQzZuMjYtLVBBT01oVVU2Y2RDMHNaS0k0WWNBUUtzd1E?oc=5"
+        },
+        {
+          "title": "Troops repel Boko Haram attack, kill militants",
+          "original_title": "Troops Repel Boko Haram Attack, Kill Several Terrorists as One Soldier Wounded",
+          "original_language": "en",
+          "summary": "Nigerian troops repelled an attack by Boko Haram, killing several militants in the process; one soldier was wounded.",
+          "published": "2026-05-31T07:00:00+00:00",
+          "source": "ZAgazola",
+          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOMUNiTDEtM3dTZlEwNV84cGVtTEFrN25SQUhtbU1fWGVJaFNPbVotWmQ0WkdZVVRSYUY0aUVPVnd0VTNDTjZIUlF1RmF6NkhtY3ZiT0NETDJXeUQ5WjVhWDJaQmtzanVrMXM5UkVDd2VCUU9LSGlXNkVLMDN3NW5ndGh2WC1JOTA2ZDI1NHhzcjF5VF9YMGV2amJrbmtjbzNhMGNyTENOZjVtWW5Qd19ORHRha3RESGE3bXJ2QnQ5RQ?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "06f786a88a25e71d",
+      "incident_id": "inc-b4b080bfaf0a18e1",
+      "url": "https://news.google.com/rss/articles/CBMi9wNBVV95cUxPa2JpaC1OTnd0M0FmS0UtUlVvQ01VWFVsTHV2QzJjSDNNRXc3TGc2UzJxWGkyV3lSX0JIOFRONzR4YWxaWmg0ZHRkdkswM2VrZllEQ2ZJZzhIdnZXSXNoa0lhaXRSTDVpbUkwQmhpcmNYNU1RbDZjeFhKM2RXLTlJcDduSW42ZUI5b1FBMXhILXNSVmZQb3Y5RW5INjhmeUhHWnpTVzBwY3k1SDEwR3k2ZE9LMHdvMGxNdm1xY0ZQdHF0YWRranNMenVyMm5hRUt4bnhUcGZqekRxMERHd3B5Q3YybWE1T2RTXy1DbjhNQjdZVDh0MmJLakNPRHIxRlVmMEdTZE9QSTl5V05iWHl4SVQ2ZmgzamxKNVY3SEJES1Z5ZnAxUllGQ0xPUHZ3UjNJdjE3UWRESFFIeEtmbFY1NjBNSHNhaTZPa2xuTXNRTmp2NHNxZnM2MG54RHh3b0hYWk51MDBIUEg4cWZHLWtfOW8wcjRyMUM2OFhmUC1rMFhfRmJrbHcyRDRHeHdqTDA3VEJzcWNQOVFJOTN6RVNGcWc0ckdBVXRGOFdRR3ZCOVJOazFVc1VZalhGd0pQT1pQOTBVa3JZSG10M0tocjlaZEd3ZkRVNjVZLW9COV9uaHhCTDBZUHdUdGgxQTR3ZEpYQWQ4VjYwbw?oc=5",
+      "title": "Leader of armed faction killed by IED explosion in southern Iraq",
+      "summary": "A leader of an armed faction was killed in an IED explosion in southern Iraq.",
+      "original_title": "مقتل قيادي بفصيل مسلح بانفجار عبوة ناسفة جنوبي العراق.. فيديو",
+      "original_language": "ar",
+      "source": "شفق نيوز",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Iraq",
+      "region": "Southern Iraq",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete attack using an explosive device against a member of an armed group.",
+      "related_articles": []
+    },
+    {
+      "id": "df93e18cb7d4db90",
+      "incident_id": "inc-f0358faae45e79cf",
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1SeHBMdHBIR0I0bzNlYW9QVTJfYkE2cjFjRXBkejFKbVJqNGwtdV8zbFJaNjh0YWwzSmVWMm5YZXo0Y0txMElNTjFkN1lHbmhMc3kwQ0lyeFFQVDZR?oc=5",
+      "title": "Senior commander of militant organization killed in car bombing",
+      "summary": "A senior commander of an Iran-backed organization was killed in a car bomb attack.",
+      "original_title": "Senior commander of Iran-backed terrorist organization killed in car-bomb",
+      "original_language": "en",
+      "source": "The Jerusalem Post",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "Hezbollah",
+      "primary_event_type": "ATTACK",
+      "country": "Israel",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "The article reports a specific, concrete lethal attack using explosives against a high-ranking member of a non-state armed organization.",
+      "related_articles": []
+    },
+    {
+      "id": "3ba452f23e02a614",
+      "incident_id": "inc-dd0379fd01f7cb5d",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBYTFhTRVdENlBzQ1M2SEItSVN3VUo0aWNiUWdwNF81QWNBam5QZzBnVXM2WThVZTZXSjFidlJZdzJxLXpkb281UlFUWEk5Szlid0xuU0R2Skx5b0tiQkE?oc=5",
+      "title": "Explosion reported at Menlyn Park shopping center in Pretoria",
+      "summary": "An explosion occurred at a retail store within the Menlyn Park shopping center in Pretoria, reportedly caused by an unidentified device.",
+      "original_title": "比陀Menlyn Park购物中心突发爆炸Woolworths门店遭不明装置袭击_全球_新闻",
+      "original_language": "zh",
+      "source": "华人头条",
+      "published": "2026-05-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "South Africa",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete report of a bombing attack.",
       "related_articles": []
     }
   ]
