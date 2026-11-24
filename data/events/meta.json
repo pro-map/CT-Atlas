@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "034a7a523dc9fbbae20c6d64f04ae5ead6a7b578d6e2d13b76c3ded1f65079ac",
+  "events_sha256": "deadf72129d84ca7b0231130af2b74c7cdbc3459514c541c6051596f16ec3b4c",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 3204,
-      "bytes": 18497884,
-      "sha256": "1fdcbed2c9600885c98230f231d35edaff893fba6935f66865899e1af525c86b"
+      "events": 3275,
+      "bytes": 19111868,
+      "sha256": "926e84fe41ec511c0097ac44421d715b672ef207419cef1cc1e0cfdde36d2ee9"
     },
     "2026-10": {
       "events": 3616,
@@ -230,18 +230,18 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-24T08:13:54.606255+00:00",
-      "last_attempt_at": "2026-11-24T08:13:54.606255+00:00",
-      "published_at": "2026-11-24T09:22:59.654230+00:00",
+      "run_started_at": "2026-11-24T20:11:24.053229+00:00",
+      "last_attempt_at": "2026-11-24T20:11:24.053229+00:00",
+      "published_at": "2026-11-24T21:14:59.037375+00:00",
       "recent": {
-        "candidates": 4085,
-        "reviewed": 3689,
-        "cached": 1729,
-        "new_reviews": 1960,
+        "candidates": 4015,
+        "reviewed": 3929,
+        "cached": 1929,
+        "new_reviews": 2000,
         "official_auto_accepted": 0,
-        "retained": 394,
-        "rejected": 3295,
-        "pending": 396,
+        "retained": 453,
+        "rejected": 3476,
+        "pending": 86,
         "status": "partial",
         "calls": 85,
         "primary_calls": 30,
@@ -250,18 +250,18 @@
           "transient_error",
           "run_budget"
         ],
-        "window_start": "2026-11-21T08:13:54.606255+00:00",
-        "window_end": "2026-11-24T08:13:54.606255+00:00"
+        "window_start": "2026-11-21T20:11:24.053229+00:00",
+        "window_end": "2026-11-24T20:11:24.053229+00:00"
       },
       "backlog": {
-        "candidates": 937,
-        "reviewed": 608,
-        "cached": 608,
+        "candidates": 1010,
+        "reviewed": 533,
+        "cached": 533,
         "new_reviews": 0,
         "official_auto_accepted": 0,
         "retained": 0,
-        "rejected": 608,
-        "pending": 329,
+        "rejected": 533,
+        "pending": 477,
         "status": "partial",
         "calls": 0,
         "primary_calls": 0,
@@ -288,28 +288,30 @@
       "source": {
         "google": {
           "retry_waves": 0,
-          "successful": 1220,
-          "empty_feeds": 493,
-          "throttled": 11,
-          "deduplicated_urls": 288
+          "successful": 1219,
+          "empty_feeds": 478,
+          "throttled": 8,
+          "deduplicated_urls": 288,
+          "failed": 1
         },
         "gdelt": {},
-        "errors": 0,
-        "status": "complete"
+        "errors": 1,
+        "status": "partial"
       },
       "reasons": [
         "transient_error",
         "run_budget",
         "recent_pending",
         "backlog_pending",
+        "source_errors",
         "geolocation_pending",
         "category_pending",
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 6447,
-        "retired": 457,
-        "cancelled_history": 500,
+        "expired": 6029,
+        "retired": 424,
+        "cancelled_history": 530,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -323,14 +325,14 @@
           "per_run": 30,
           "per_day": 60,
           "used_this_run": 30,
-          "used_today": 30
+          "used_today": 60
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 55,
           "per_day": 110,
           "used_this_run": 55,
-          "used_today": 55
+          "used_today": 110
         },
         "historical_calls_per_run": 20,
         "historical_calls_used": 0,
@@ -338,13 +340,13 @@
       },
       "geolocation": {
         "status": "partial",
-        "pending": 39,
-        "located": 8664,
-        "unlocated": 412,
-        "completed_unlocated": 373,
+        "pending": 50,
+        "located": 8717,
+        "unlocated": 430,
+        "completed_unlocated": 380,
         "outcome": "success",
         "processed_this_run": 60,
-        "review_required": 244
+        "review_required": 248
       },
       "categories": [
         {
@@ -369,23 +371,23 @@
           "stop_code": "http_503"
         }
       ],
-      "finalized_at": "2026-11-24T09:29:24.634299+00:00",
+      "finalized_at": "2026-11-24T21:21:36.367386+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
         "gemini-3.5-flash-lite:503": 25,
-        "gemini-3.1-flash-lite:503": 5
+        "gemini-3.1-flash-lite:503": 8
       },
       "health": {
         "state": "degraded",
         "reasons": [
           "geolocation_incomplete"
         ],
-        "events_published_last_24h": 117,
-        "events_published_median_14d": 146.0,
-        "new_reviews": 1960,
-        "recent_pending": 396,
-        "review_share": 0.832,
+        "events_published_last_24h": 88,
+        "events_published_median_14d": 153.5,
+        "new_reviews": 2000,
+        "recent_pending": 86,
+        "review_share": 0.959,
         "thresholds": {
           "starved_events_ratio": 0.25,
           "degraded_events_ratio": 0.5,
@@ -399,8 +401,16 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 24 Nov, 10:22 Paris: Recent counter-terrorism developments include a severe car bomb explosion at the governor's office in Villavicencio, Colombia, injuring 23 people. In Nigeria, military airstrikes in Borno State killed 37 terrorists, while Israeli authorities charged a student in Jerusalem for plotting a suicide attack at the Temple Mount.",
+      "overview": "As of 24 Nov, 22:14 Paris: Recent high-consequence counter-terrorism and security developments include a disrupted bomb plot targeting a synagogue in Stavropol Krai and Kislovodsk, Russia, a destructive car bomb attack causing 23 injuries in Villavicencio, Colombia, and military airstrikes neutralizing 37 terrorists in Borno State, Nigeria.",
       "developments": [
+        {
+          "event_id": "fc691d45c8ee4c77",
+          "severity": "CRITICAL",
+          "category": "Counter Terrorism Action",
+          "headline": "FSB finds explosives in Kislovodsk terror plot",
+          "detail": "Russian authorities discovered an explosive device linked to a disrupted terror plot in Kislovodsk.",
+          "location": "Russia, Kislovodsk"
+        },
         {
           "event_id": "1b45d0259cdc753e",
           "severity": "CRITICAL",
@@ -411,51 +421,43 @@
         },
         {
           "event_id": "965121d626ef6e95",
-          "severity": "CRITICAL",
-          "category": "Attacks",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
           "headline": "Military air strikes in Borno",
           "detail": "Nigerian military airstrikes killed 37 terrorists and destroyed four vehicles in Borno State.",
           "location": "Nigeria, Borno State"
         },
         {
-          "event_id": "6af0e4802c2b4eaa",
+          "event_id": "7a2503d0478c65a8",
           "severity": "HIGH",
           "category": "Attacks",
-          "headline": "Student charged with Temple Mount suicide attack plot",
-          "detail": "An Arab student has been charged for plotting a suicide attack at the Temple Mount.",
-          "location": "Israel, Jerusalem"
+          "headline": "Saudi Arabia announces interception of Houthi ballistic missile targeting western region",
+          "detail": "BBC reports that Saudi Arabia intercepted a ballistic missile fired by Houthi forces toward the western region.",
+          "location": "Saudi Arabia, Riyadh"
         },
         {
-          "event_id": "d0147190f20be287",
-          "severity": "HIGH",
-          "category": "Arrests",
-          "headline": "Three ELN members linked to extortion and terrorist attacks captured in Santander",
-          "detail": "Three suspected ELN members linked to highway extortion and terrorist bomb attacks were captured in Santander.",
-          "location": "Colombia, Santander"
-        },
-        {
-          "event_id": "59f9904b3cd4b7d4",
+          "event_id": "06aad16dc6cf7b02",
           "severity": "HIGH",
           "category": "Counter Terrorism Action",
-          "headline": "Four cells dismantled in West Azerbaijan",
-          "detail": "Four militant cells were dismantled and 27 individuals were arrested in West Azerbaijan Province, Iran.",
-          "location": "Iran, West Azerbaijan Province"
+          "headline": "Pakistan Army, CTD kill three terrorists during joint operation in Peshawar",
+          "detail": "Pakistan Army and Counter Terrorism Department forces killed three terrorists during a joint operation near Peshawar.",
+          "location": "Pakistan, Peshawar"
         },
         {
-          "event_id": "46767ebb264d2c98",
+          "event_id": "f9db0fc503f752f9",
           "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "UAE dismantles terrorist cell",
-          "detail": "Authorities in the UAE announced the dismantling of a terrorist cell that was planning acts against the security of the country.",
-          "location": "United Arab Emirates"
+          "category": "Attacks",
+          "headline": "ISIS attacked a military bus in Deir ez-Zor",
+          "detail": "ISIS militants carried out an attack on a military bus in the Deir ez-Zor region.",
+          "location": "Syria, Deir ez-Zor"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-24T09:22:51.208824+00:00",
+      "generated_at": "2026-11-24T21:14:56.425190+00:00",
       "candidate_events": 80,
-      "top_hash": "5d60de87b60b247b14b03a96a7c9db221d1c0a858f2967967faa54a8cddc3385",
+      "top_hash": "da82ab152bd79cc53d9cff4f27502cfd83f3bb0d20bdb62649f530e23b6a3e26",
       "top_event_count": 10,
       "reused": false
     },
@@ -733,10 +735,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 52,
-      "corroboration_hold_listed_outlet": 14,
-      "already_reviewed_articles": 1820,
-      "duplicate_input_articles": 6188
+      "corroboration_hold_same_minute_burst": 88,
+      "corroboration_hold_listed_outlet": 17,
+      "duplicate_input_articles": 6818,
+      "already_reviewed_articles": 1899
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -818,8 +820,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-24T09:22:59.654230+00:00",
-    "number_of_events": 9076,
+    "last_updated": "2026-11-24T21:14:59.037375+00:00",
+    "number_of_events": 9147,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -832,24 +834,24 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 8977,
+      "cached_events": 9037,
       "ai_processed_this_run": 60,
-      "ai_pending_at_start": 99,
-      "city": 3288,
-      "region": 2888,
-      "country_capital": 2488,
-      "unlocated": 412,
-      "mapped_total": 8664,
-      "high_confidence": 7855,
-      "medium_confidence": 864,
-      "low_confidence": 357,
+      "ai_pending_at_start": 110,
+      "city": 3311,
+      "region": 2898,
+      "country_capital": 2508,
+      "unlocated": 430,
+      "mapped_total": 8717,
+      "high_confidence": 7901,
+      "medium_confidence": 874,
+      "low_confidence": 372,
       "methods": {
-        "unresolved_city_no_capital_fallback": 210,
-        "ai_region_coordinates": 2885,
-        "ai_city_geonames": 3137,
-        "ai_country_capital": 2487,
-        "ai_unlocated": 123,
-        "awaiting_ai_geolocation": 39,
+        "unresolved_city_no_capital_fallback": 214,
+        "ai_city_geonames": 3160,
+        "ai_country_capital": 2507,
+        "ai_region_coordinates": 2895,
+        "ai_unlocated": 126,
+        "awaiting_ai_geolocation": 50,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,

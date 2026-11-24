@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-24T08:13:54.606255+00:00",
-  "last_attempt_at": "2026-11-24T08:13:54.606255+00:00",
-  "published_at": "2026-11-24T09:22:59.654230+00:00",
+  "run_started_at": "2026-11-24T20:11:24.053229+00:00",
+  "last_attempt_at": "2026-11-24T20:11:24.053229+00:00",
+  "published_at": "2026-11-24T21:14:59.037375+00:00",
   "recent": {
-    "candidates": 4085,
-    "reviewed": 3689,
-    "cached": 1729,
-    "new_reviews": 1960,
+    "candidates": 4015,
+    "reviewed": 3929,
+    "cached": 1929,
+    "new_reviews": 2000,
     "official_auto_accepted": 0,
-    "retained": 394,
-    "rejected": 3295,
-    "pending": 396,
+    "retained": 453,
+    "rejected": 3476,
+    "pending": 86,
     "status": "partial",
     "calls": 85,
     "primary_calls": 30,
@@ -21,18 +21,18 @@
       "transient_error",
       "run_budget"
     ],
-    "window_start": "2026-11-21T08:13:54.606255+00:00",
-    "window_end": "2026-11-24T08:13:54.606255+00:00"
+    "window_start": "2026-11-21T20:11:24.053229+00:00",
+    "window_end": "2026-11-24T20:11:24.053229+00:00"
   },
   "backlog": {
-    "candidates": 937,
-    "reviewed": 608,
-    "cached": 608,
+    "candidates": 1010,
+    "reviewed": 533,
+    "cached": 533,
     "new_reviews": 0,
     "official_auto_accepted": 0,
     "retained": 0,
-    "rejected": 608,
-    "pending": 329,
+    "rejected": 533,
+    "pending": 477,
     "status": "partial",
     "calls": 0,
     "primary_calls": 0,
@@ -59,28 +59,30 @@
   "source": {
     "google": {
       "retry_waves": 0,
-      "successful": 1220,
-      "empty_feeds": 493,
-      "throttled": 11,
-      "deduplicated_urls": 288
+      "successful": 1219,
+      "empty_feeds": 478,
+      "throttled": 8,
+      "deduplicated_urls": 288,
+      "failed": 1
     },
     "gdelt": {},
-    "errors": 0,
-    "status": "complete"
+    "errors": 1,
+    "status": "partial"
   },
   "reasons": [
     "transient_error",
     "run_budget",
     "recent_pending",
     "backlog_pending",
+    "source_errors",
     "geolocation_pending",
     "category_pending",
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 6447,
-    "retired": 457,
-    "cancelled_history": 500,
+    "expired": 6029,
+    "retired": 424,
+    "cancelled_history": 530,
     "duplicates": 0,
     "from_queue": {
       "expired": 0,
@@ -94,14 +96,14 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 30
+      "used_today": 60
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 55,
       "per_day": 110,
       "used_this_run": 55,
-      "used_today": 55
+      "used_today": 110
     },
     "historical_calls_per_run": 20,
     "historical_calls_used": 0,
@@ -109,13 +111,13 @@
   },
   "geolocation": {
     "status": "partial",
-    "pending": 39,
-    "located": 8664,
-    "unlocated": 412,
-    "completed_unlocated": 373,
+    "pending": 50,
+    "located": 8717,
+    "unlocated": 430,
+    "completed_unlocated": 380,
     "outcome": "success",
     "processed_this_run": 60,
-    "review_required": 244
+    "review_required": 248
   },
   "categories": [
     {
@@ -140,23 +142,23 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-11-24T09:29:24.634299+00:00",
+  "finalized_at": "2026-11-24T21:21:36.367386+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success",
   "temporary_failures": {
     "gemini-3.5-flash-lite:503": 25,
-    "gemini-3.1-flash-lite:503": 5
+    "gemini-3.1-flash-lite:503": 8
   },
   "health": {
     "state": "degraded",
     "reasons": [
       "geolocation_incomplete"
     ],
-    "events_published_last_24h": 117,
-    "events_published_median_14d": 146.0,
-    "new_reviews": 1960,
-    "recent_pending": 396,
-    "review_share": 0.832,
+    "events_published_last_24h": 88,
+    "events_published_median_14d": 153.5,
+    "new_reviews": 2000,
+    "recent_pending": 86,
+    "review_share": 0.959,
     "thresholds": {
       "starved_events_ratio": 0.25,
       "degraded_events_ratio": 0.5,
