@@ -60,7 +60,7 @@ class ChineseDailyTests(unittest.TestCase):
         self.assertNotIn("qwen_backfill_adapter", text)
         workflow = (ROOT / ".github/workflows/update-map.yml").read_text(encoding="utf-8")
         self.assertIn("AI_SELECTION_MODEL: \"gemini-3.5-flash-lite\"", workflow)
-        self.assertIn("AI_SELECTION_DAILY_CALL_BUDGET: \"60\"", workflow)
+        self.assertIn("AI_SELECTION_DAILY_CALL_BUDGET: \"300\"", workflow)
         self.assertNotIn("QWEN_BACKFILL_URL", workflow)
 
 

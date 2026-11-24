@@ -3,7 +3,7 @@ name: Daily CT Intelligence Map Update
 run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow }}
 
 on:
-  # Timed runs at 10:17 and 18:17 Paris come from the report Worker
+  # Timed runs at 06:17, 12:17 and 18:17 Paris come from the report Worker
   # (cloudflare-worker/schedule-dispatcher.js, SCHEDULE_SLOTS), with a slot input.
   # GitHub's own schedule started them 4-10 hours late and skipped some.
   workflow_dispatch:
@@ -159,16 +159,23 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           AI_SELECTION_MODEL: "gemini-3.5-flash-lite"
           AI_SELECTION_BATCH_SIZE: "40"
-          AI_SELECTION_MAX_CALLS_PER_RUN: "30"
-          AI_SELECTION_DAILY_CALL_BUDGET: "60"
+          # The owner moved most of 3.5 Flash Lite's free 500 a day to the map on
+          # 24 Nov 2026, as reports and Deep Search are rarely used: 300 a Pacific
+          # day here (it was 60), up to about 90 for the collection's geolocation
+          # and incident consolidation (12 and 10 a run, three slots and a
+          # recovery run), and at least 110 left for the Worker's reports and
+          # Deep Search, which fall back to 3.6 Flash and 3.1 Flash Lite.
+          AI_SELECTION_MAX_CALLS_PER_RUN: "100"
+          AI_SELECTION_DAILY_CALL_BUDGET: "300"
           # Candidates left when 3.5 Flash Lite's budget is spent go to 3.1 Flash
-          # Lite (its own free quota) instead of falling off the feeds: 55 a run,
-          # 110 a Pacific day, part of the background jobs' share of that model,
-          # which must stay under 400 a day. The per-day figure is twice the
-          # per-run one, so each timed slot keeps its whole reservation.
+          # Lite (its own free quota) instead of falling off the feeds: 65 a run,
+          # 195 a Pacific day, part of the background jobs' share of that model,
+          # which must stay under 450 a day (500 less the Worker's fallback).
+          # Each per-day figure is three times the per-run one, so each of the
+          # three timed slots keeps its whole reservation.
           AI_SELECTION_OVERFLOW_MODEL: "gemini-3.1-flash-lite"
-          AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "55"
-          AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "110"
+          AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "65"
+          AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "195"
           AI_SELECTION_RECENT_PRIORITY_DAYS: "3"
           # These are sub-envelopes, sharing the unchanged request caps above.
           # Recent candidates always run before older recovery or maintenance, so

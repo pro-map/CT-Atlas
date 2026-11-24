@@ -17,10 +17,15 @@ const SCHEDULE_TIME_ZONE = "Europe/Paris";
 const DISPATCH_CRON = "7,17,27,37,47,57 * * * *";
 const DISPATCH_WINDOW_MINUTES = 29;
 const REQUEST_TIMEOUT_MS = 10000;
+// The map updates at 06:17, 12:17 and 18:17 Paris since 24 Nov 2026: analysts use it
+// from 08:00 to 20:00, so the night's news is on the map before 8:00 and no daytime
+// update is more than six hours old. All three fall in one Gemini quota day (it
+// resets at 09:00 Paris), which is why each run may spend a third of it.
 const SCHEDULE_SLOTS = Object.freeze([
   { workflow: "consolidate-incidents.yml", hour: 7, minute: 37 },
-  { workflow: "update-map.yml", hour: 10, minute: 17, inputs: { mode: "daily" } },
+  { workflow: "update-map.yml", hour: 6, minute: 17, inputs: { mode: "daily" } },
   { workflow: "daily-radnuc-background.yml", hour: 10, minute: 27 },
+  { workflow: "update-map.yml", hour: 12, minute: 17, inputs: { mode: "daily" } },
   { workflow: "update-map.yml", hour: 18, minute: 17, inputs: { mode: "daily" } },
   { workflow: "daily-radnuc-background.yml", hour: 18, minute: 27 },
   { workflow: "sync-background-corpus.yml", hour: 20, minute: 47 },
