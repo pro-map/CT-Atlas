@@ -1562,6 +1562,45 @@ body::before {
     background: #071019;
 }
 
+/* One-off notice over the map; updateMapNotice() hides it by itself. It sits between
+   the FILTERS button (left) and the zoom buttons (right). */
+#mapNotice {
+    position: absolute;
+    top: 10px;
+    left: 92px;
+    right: 56px;
+    z-index: 1100;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 9px 14px;
+    border: 1px solid #ff9a9a;
+    border-radius: 6px;
+    background: #b3121b;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: .02em;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(0,0,0,.45);
+    pointer-events: none;
+    animation: mapNoticeBlink 1.1s ease-in-out infinite;
+}
+
+#mapNotice[hidden] {
+    display: none;
+}
+
+@keyframes mapNoticeBlink {
+    50% { opacity: .35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #mapNotice {
+        animation: none;
+    }
+}
+
 #analyticsRail {
     width: auto;
     min-width: 0;
@@ -4536,6 +4575,8 @@ Visible rate
 
 <div id="mapStage">
 
+    <div id="mapNotice" role="status" hidden></div>
+
     <div id="map"></div>
 
     <div id="timelineDock">
@@ -6629,10 +6670,32 @@ function applyMapDatabase(data) {
 
         }
 
+        updateMapNotice(dataPublishedTime(mapDataFacts));
+
 
         refreshDashboard();
 
 }
+
+// One-off notice, 24 Nov 2026: Gemini failed the evening before and the collection's
+// quota came back only at 09:00 Paris, so the day's update is published late. The
+// notice hides itself once a collection published after 09:00 is on the map, and at
+// noon in any case, so nobody has to remember to take it down. Everything lives in
+// the function, so a call from anywhere in the page works whatever the load order.
+function updateMapNotice(published, now = Date.now()) {
+    const text = "Exceptionally, today's map update will be published between 9:00 and 10:00 (Paris time).";
+    const after = Date.parse("2026-11-24T09:00:00+01:00");
+    const until = Date.parse("2026-11-24T12:00:00+01:00");
+    if (published !== undefined) updateMapNotice.published = published;
+    const latest = updateMapNotice.published;
+    const notice = document.getElementById("mapNotice");
+    if (!notice) return;
+    const caughtUp = typeof latest === "number" && latest >= after;
+    notice.textContent = text;
+    notice.hidden = caughtUp || now >= until;
+}
+
+setInterval(() => updateMapNotice(), 60000);
 
 function mapPublicationMatches(data, target) {
     return !!target && typeof target.sha256_bytes === "string" && /^[a-f0-9]{64}$/.test(target.sha256_bytes)
