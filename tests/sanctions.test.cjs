@@ -318,7 +318,7 @@ test("CI refreshes the sanctions list several times a day, publishes it, and smo
   const refresh=fs.readFileSync(".github/workflows/refresh-sanctions.yml","utf8");
   assert.ok(refresh.includes("python -u tools/update_sanctions.py"));
   assert.ok(refresh.includes("git add -- sanctions-crypto.json"),"the refreshed file must be committed");
-  assert.ok(refresh.includes("uses: actions/deploy-pages@"),"and published where the Worker reads it");
+  assert.ok(refresh.includes("uses: ./.github/actions/deploy-pages\n"),"and published where the Worker reads it");
   assert.ok(!refresh.includes("continue-on-error"),"a failed refresh must turn the run red");
   assert.ok(!fs.readFileSync(".github/workflows/update-map.yml","utf8").includes("update_sanctions"),"one writer");
   const smoke=fs.readFileSync(".github/workflows/live-smoke.yml","utf8");

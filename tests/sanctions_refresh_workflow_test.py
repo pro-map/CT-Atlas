@@ -104,7 +104,7 @@ class LockTests(unittest.TestCase):
         self.assertIn("if: ${{ needs.refresh.outputs.pages == 'true' }}", deploy)
         self.assertIn("ref: ${{ needs.refresh.outputs.data_sha }}", deploy)
         self.assertIn("uses: ./.github/actions/build-events-lite", deploy)
-        self.assertIn("uses: actions/deploy-pages@", deploy)
+        self.assertIn("uses: ./.github/actions/deploy-pages\n", deploy)
         # The mirror does not stage the list, and the Worker reads it from ct-atlas.com.
         mirror = (WORKFLOWS / "deploy-cloudflare-mirror.yml").read_text(encoding="utf-8")
         self.assertNotIn('      - "Refresh OFAC sanctions list"\n', mirror)
