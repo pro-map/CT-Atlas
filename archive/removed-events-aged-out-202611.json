@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-24T09:22:12.951963+00:00",
+  "removed_at": "2026-11-25T20:47:25.799194+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -3628,6 +3628,51 @@
       "country": "South Africa",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Concrete report of a bombing attack.",
+      "related_articles": []
+    },
+    {
+      "id": "101709343f17e980",
+      "incident_id": "inc-bf78fa2d7f3df428",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNSUl0YUF2MFVLa1FsOExsZjhSZ0pXQnh4UDlvUkVCaDRRNHg3VDBVaFlmR2F3Y2p3UXExMzNZOHBDNFZISjBCOHNNWXcweFQwTEpSLTZzNERhN21XN3dtbllnNHY2NHYwaHZrTVBEMXp6LVZJc0staEZiNnpYUGh3cms2c0F2c25od2dqMlgwY0gzVFl0c0YzMVhzc19GdVBqWVU5U09sVXRlR1cxMUd5akVRMGc?oc=5",
+      "title": "Islamic State Claims First Attacks in North-west Nigeria",
+      "summary": "The Islamic State has formally claimed responsibility for its first-ever attacks carried out in north-west Nigeria.",
+      "original_title": "Islamic State claims first attacks in North-west Nigeria",
+      "original_language": "en",
+      "source": "Premium Times Nigeria",
+      "published": "2026-05-29T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "region": "North-west Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports concrete claims of terrorist attacks in a new region by ISIS.",
+      "related_articles": []
+    },
+    {
+      "id": "8c6c231ea3290c17",
+      "incident_id": "inc-58977f942a2a6ee0",
+      "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNTXFWQ3NxXzY0MHZPVU5OaFU5bUVkZ3pYck1TTTVPeGdWWS1oanU3TWthdjB5SVNuQm9KbV9HaUt0U25Yai0tUXdoSnZSRGZUSWkzMjNNaFJTSGxKaEE0TGJnRURUR01IZjVaT2JaSEFmQ2tWWXVXT2d1N3lZOVVSZURLbnRkN09pZWstUXUyX3FMdmlTU1YyaDNBdGhWS056STNkNnd3NWFvZ3doR0xaTFhxZ29URzk1eDZOV2ZSbThfLVpZR241cTVfOXVKdjlVMnF5Z2ExVW45QnJxcUHSAdwBQVVfeXFMTk9RUFVPSkZNb0VVemcxMmROdWhpQXV3aEE3YWRIQWZILTRpS0ZCN3hLOHpmcmd3WXJpczlYYzltQTNFa2JaS0lxRDNLU2tXYVhVQmtTOXd2VEpqb1ozaUJCOFBJSVN6YlltVHFpR2d0eEE5WU11ZlpraGEwUTFycmJKbzNpN0hmcUE0N2UyTTZua0kxUWU0RGwtOUI2ZnYyeE9sT3hxMWVlYkxtcTVJYl9OcFYyZTNpOGk5RVEtZW1USTlLZS1wbGYwSmtxUG83Q3gtYkM2ck80Y1laZQ?oc=5",
+      "title": "SBU claims to have thwarted a terrorist attack in Odesa",
+      "summary": "The Security Service of Ukraine (SBU) reported the interception of an explosive-laden drone being transported from Abkhazia to Odesa, characterizing the act as a thwarted terrorist attack.",
+      "original_title": "SBU claims to have thwarted a terrorist attack in Odesa – smugglers were transporting an explosive-laden drone from Abkhazia",
+      "original_language": "uk",
+      "source": "Українські Національні Новини (УНН)",
+      "published": "2026-05-29T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Ukraine",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "The report details a specific counter-terrorism operation involving the interception of an explosive-laden drone by national security services.",
       "related_articles": []
     }
   ]
