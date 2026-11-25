@@ -14,11 +14,15 @@ PUBLISHERS = (
 MANUAL_PUBLISHERS = ("refresh-logo-only.yml",)
 WORKFLOWS = {name: (ROOT / ".github/workflows" / name).read_text(encoding="utf-8")
              for name in PUBLISHERS + MANUAL_PUBLISHERS}
+ALL_WORKFLOWS = {path.name: path.read_text(encoding="utf-8")
+                 for path in sorted((ROOT / ".github/workflows").glob("*.yml"))}
+DEPLOY_ACTION = "./.github/actions/deploy-pages"
 
 
 def action_steps(source, action):
+    # A published action carries a version (@v5); a local one is a bare path.
     return [step for step in re.split(r"(?m)^      - ", source) if re.search(
-        rf"(?m)^[ \t]*uses: {re.escape(action)}@", step)]
+        rf"(?m)^[ \t]*(?:- )?uses: {re.escape(action)}(?:@|$)", step)]
 
 
 def step_input(step, key, default=None):
@@ -36,7 +40,7 @@ class MapPublicationRetryTests(unittest.TestCase):
         for name, source in WORKFLOWS.items():
             with self.subTest(workflow=name):
                 upload_steps = action_steps(source, "actions/upload-pages-artifact")
-                deploy_steps = action_steps(source, "actions/deploy-pages")
+                deploy_steps = action_steps(source, DEPLOY_ACTION)
                 self.assertEqual(len(upload_steps), 1)
                 self.assertEqual(len(deploy_steps), 1)
                 upload = step_input(upload_steps[0], "name", "github-pages")
@@ -98,6 +102,51 @@ class MapPublicationRetryTests(unittest.TestCase):
                 deploy = source.split("\n  deploy:", 1)[1]
                 self.assertIn("if: ${{ needs.repair.outputs.changed == 'true' || "
                               "github.event_name == 'workflow_dispatch' }}", deploy.split("steps:", 1)[0])
+
+
+class PagesDeployRetryTests(unittest.TestCase):
+    # On 24 and 25 Nov 2026 deploy-pages missed the artifact its own job had uploaded half a
+    # second earlier ("No artifacts named github-pages-<run>-<attempt>") six times, and the map
+    # and the mirror kept the previous data until someone reran the job by hand.
+    def test_every_site_publisher_deploys_through_the_retrying_action(self):
+        publishers = {name for name, source in ALL_WORKFLOWS.items()
+                      if "uses: actions/upload-pages-artifact@" in source}
+        self.assertGreaterEqual(publishers, set(WORKFLOWS))
+        for name in sorted(publishers):
+            source = ALL_WORKFLOWS[name]
+            with self.subTest(workflow=name):
+                self.assertNotIn("uses: actions/deploy-pages@", source)
+                steps = action_steps(source, DEPLOY_ACTION)
+                self.assertEqual(len(steps), 1)
+                # The job's environment URL and the verify step read steps.deployment.outputs.page_url.
+                self.assertRegex(steps[0], r"(?m)^\s*id: deployment$")
+                # A local action is read from the checkout, so the job must check out first.
+                at = source.index(f"uses: {DEPLOY_ACTION}\n")
+                job = source[max(match.start() for match in re.finditer(
+                    r"(?m)^  [A-Za-z_][\w-]*:[ \t]*$", source[:at])):at]
+                self.assertIn("uses: actions/checkout@", job)
+
+    def test_it_tries_once_more_after_a_pause_and_fails_when_both_attempts_fail(self):
+        action = (ROOT / DEPLOY_ACTION / "action.yml").read_text(encoding="utf-8")
+        steps = re.split(r"(?m)^    - ", action.split("\n  steps:\n", 1)[1])[1:]
+        deploys = [step for step in steps if re.search(r"(?m)^\s*uses: actions/deploy-pages@v\d+$", step)]
+        self.assertEqual(len(deploys), 2)
+        first, retry = deploys
+        wait = steps[steps.index(first) + 1]
+        self.assertIn("id: first\n", first)
+        # A literal true: composite actions do not evaluate an expression there reliably.
+        self.assertIn("continue-on-error: true\n", first)
+        self.assertIn("sleep 30", wait)
+        self.assertIn("id: retry\n", retry)
+        self.assertNotIn("continue-on-error", retry, "a second failure must still fail the job")
+        self.assertLess(steps.index(wait), steps.index(retry))
+        for step in (wait, retry):
+            self.assertIn("if: ${{ steps.first.outcome == 'failure' }}\n", step)
+        for step in deploys:
+            self.assertIn("artifact_name: ${{ inputs.artifact_name }}\n", step)
+        # Same default and same output as deploy-pages, so it replaces it step for step.
+        self.assertRegex(action, r"(?m)^    default: github-pages$")
+        self.assertIn("value: ${{ steps.first.outputs.page_url || steps.retry.outputs.page_url }}\n", action)
 
 
 if __name__ == "__main__":

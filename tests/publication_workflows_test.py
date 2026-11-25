@@ -59,7 +59,9 @@ def step_if(text):
 
 
 def deploys_pages(source):
-    return re.search(r"(?m)^[ \t]*(?:- )?uses: actions/deploy-pages@", source) is not None
+    # Directly, or through the local action that retries it once (.github/actions/deploy-pages).
+    return re.search(r"(?m)^[ \t]*(?:- )?uses: (?:actions/deploy-pages@|\./\.github/actions/deploy-pages$)",
+                     source) is not None
 
 
 class MirrorTriggerTests(unittest.TestCase):

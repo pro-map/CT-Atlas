@@ -1,0 +1,43 @@
+name: Deploy GitHub Pages, with one retry
+description: >
+  actions/deploy-pages, tried a second time after a pause when it fails. GitHub sometimes
+  lists the run's artifacts before the one upload-pages-artifact has just finalized:
+  half a second later deploy-pages finds the earlier ones only and stops with
+  "No artifacts named github-pages-<run>-<attempt> were found". On 24 and 25 Nov 2026
+  this stopped six publications (one rerun needed four attempts); the map and the
+  mirror then stayed on the previous data until someone reran the job by hand.
+  Use it with the step id the job already gives deploy-pages: page_url is the same output.
+inputs:
+  artifact_name:
+    description: The name upload-pages-artifact gave this attempt's site.
+    required: false
+    default: github-pages
+outputs:
+  page_url:
+    description: The URL GitHub Pages serves the site from, from whichever attempt deployed it.
+    value: ${{ steps.first.outputs.page_url || steps.retry.outputs.page_url }}
+runs:
+  using: composite
+  steps:
+    # A literal true: an expression here is not evaluated reliably in composite actions.
+    - name: Deploy GitHub Pages
+      id: first
+      continue-on-error: true
+      uses: actions/deploy-pages@v5
+      with:
+        artifact_name: ${{ inputs.artifact_name }}
+    - name: Wait before the second attempt
+      if: ${{ steps.first.outcome == 'failure' }}
+      shell: bash
+      env:
+        ARTIFACT: ${{ inputs.artifact_name }}
+      run: |
+        echo "::warning title=Pages deploy retried::The first deploy of $ARTIFACT failed; trying again in 30 seconds."
+        sleep 30
+    # When this one fails too, the job fails as before.
+    - name: Deploy GitHub Pages, second attempt
+      id: retry
+      if: ${{ steps.first.outcome == 'failure' }}
+      uses: actions/deploy-pages@v5
+      with:
+        artifact_name: ${{ inputs.artifact_name }}
