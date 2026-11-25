@@ -17,9 +17,8 @@ on:
       - "tools/enrich_radnuc_background.py"
       - "tools/news_search.py"
       - ".github/workflows/daily-radnuc-background.yml"
-  schedule:
-    - cron: "27 10,18 * * *"
-      timezone: "Europe/Paris"
+  # Timed runs at 10:27 and 18:27 Paris come from the report Worker
+  # (cloudflare-worker/schedule-dispatcher.js, SCHEDULE_SLOTS), with a slot input.
   workflow_dispatch:
     inputs:
       slot:

@@ -19,7 +19,7 @@ const ON={GITHUB_DISPATCH_TOKEN:"test-value-not-a-token",SCHEDULE_DISPATCH_ENABL
 const SIX_HOUR_CRON="17 */6 * * *";
 const at=iso=>Date.parse(iso);
 const posts=calls=>calls.filter(call=>call.init.method==="POST");
-const morningMap=()=>SCHEDULE_SLOTS.find(slot=>slot.workflow==="update-map.yml"&&slot.hour===10);
+const morningMap=()=>SCHEDULE_SLOTS.find(slot=>slot.workflow==="update-map.yml"&&slot.hour===6);
 
 function github(runs=[],{listStatus=200,postStatus=204}={}){
   const calls=[];
@@ -60,17 +60,39 @@ test("without the secret or without the switch nothing is contacted",async()=>{
   for(const env of [{},undefined,{GITHUB_DISPATCH_TOKEN:"   ",SCHEDULE_DISPATCH_ENABLED:"true"},
     {GITHUB_DISPATCH_TOKEN:"x"},{GITHUB_DISPATCH_TOKEN:"x",SCHEDULE_DISPATCH_ENABLED:"false"},{SCHEDULE_DISPATCH_ENABLED:"true"}]){
     const {calls,fetcher}=github();
-    assert.deepEqual(plain(await runScheduleDispatcher(env,at("2026-11-05T09:17:00Z"),fetcher)),[]);
+    assert.deepEqual(plain(await runScheduleDispatcher(env,at("2026-11-05T05:17:00Z"),fetcher)),[]);
     assert.equal(calls.length,0);
   }
 });
 
-test("as shipped, a token added early starts nothing",async()=>{
+test("as shipped, the switch is on: the token alone starts the slots",async()=>{
   const shipped=read("cloudflare-worker/wrangler.toml").match(/^SCHEDULE_DISPATCH_ENABLED = "(.*)"$/m)[1];
-  assert.equal(shipped,"false");
+  assert.equal(shipped,"true");
   const {calls,fetcher}=github();
-  await runScheduleDispatcher({GITHUB_DISPATCH_TOKEN:"x",SCHEDULE_DISPATCH_ENABLED:shipped},at("2026-11-05T09:17:00Z"),fetcher);
-  assert.equal(calls.length,0);
+  const result=await runScheduleDispatcher({GITHUB_DISPATCH_TOKEN:"x",SCHEDULE_DISPATCH_ENABLED:shipped},at("2026-11-05T05:17:00Z"),fetcher);
+  assert.deepEqual(plain(result),[{slot:"update-map.yml 17 6 * * *",outcome:"dispatched"}]);
+  assert.equal(posts(calls).length,1);
+});
+
+test("no dispatched workflow keeps a GitHub schedule, or every slot would run twice",()=>{
+  for(const workflow of new Set(SCHEDULE_SLOTS.map(slot=>slot.workflow))){
+    const triggers=read(`.github/workflows/${workflow}`).split("\non:\n")[1].split("\npermissions:")[0];
+    assert.doesNotMatch(triggers,/^ {2}schedule:/m,workflow);
+    assert.doesNotMatch(triggers,/^\s*- cron:/m,workflow);
+    assert.match(triggers,/^ {2}workflow_dispatch:$/m,workflow);
+  }
+});
+
+test("the dispatcher keeps every Paris time GitHub's schedule had before it took over",()=>{
+  const times=SCHEDULE_SLOTS.map(slot=>`${slot.workflow} ${String(slot.hour).padStart(2,"0")}:${String(slot.minute).padStart(2,"0")}`);
+  assert.deepEqual(plain(times.sort()),[
+    "consolidate-incidents.yml 07:37",
+    "daily-radnuc-background.yml 10:27","daily-radnuc-background.yml 18:27",
+    "refresh-sanctions.yml 04:47","refresh-sanctions.yml 09:47","refresh-sanctions.yml 15:47",
+    "refresh-sanctions.yml 17:47","refresh-sanctions.yml 20:47","refresh-sanctions.yml 22:47",
+    "sync-background-corpus.yml 20:47",
+    "update-map.yml 06:17","update-map.yml 12:17","update-map.yml 18:17"
+  ]);
 });
 
 test("a quiet tick makes no request",async()=>{
@@ -79,15 +101,15 @@ test("a quiet tick makes no request",async()=>{
   assert.equal(calls.length,0);
 });
 
-test("10:17 Paris dispatches update-map with daily mode, its slot and a User-Agent",async()=>{
+test("06:17 Paris dispatches update-map with daily mode, its slot and a User-Agent",async()=>{
   const {calls,fetcher}=github();
-  const result=await runScheduleDispatcher(ON,at("2026-11-05T09:17:00Z"),fetcher); // CET
-  assert.deepEqual(plain(result),[{slot:"update-map.yml 17 10 * * *",outcome:"dispatched"}]);
+  const result=await runScheduleDispatcher(ON,at("2026-11-05T05:17:00Z"),fetcher); // CET
+  assert.deepEqual(plain(result),[{slot:"update-map.yml 17 6 * * *",outcome:"dispatched"}]);
   assert.equal(calls.length,2);
-  assert.match(calls[0].url,/pro-map\/CT-Atlas\/actions\/workflows\/update-map\.yml\/runs\?event=workflow_dispatch&per_page=100&created=%3E%3D2026-11-05T09%3A17%3A00Z$/);
+  assert.match(calls[0].url,/pro-map\/CT-Atlas\/actions\/workflows\/update-map\.yml\/runs\?event=workflow_dispatch&per_page=100&created=%3E%3D2026-11-05T05%3A17%3A00Z$/);
   assert.equal(calls[1].init.method,"POST");
   assert.match(calls[1].url,/pro-map\/CT-Atlas\/actions\/workflows\/update-map\.yml\/dispatches$/);
-  assert.deepEqual(JSON.parse(calls[1].init.body),{ref:"main",inputs:{mode:"daily",slot:"17 10 * * *"}});
+  assert.deepEqual(JSON.parse(calls[1].init.body),{ref:"main",inputs:{mode:"daily",slot:"17 6 * * *"}});
   for(const call of calls){
     assert.equal(call.init.headers["User-Agent"],"CT-Atlas-Schedule-Dispatcher/1.0");
     assert.equal(call.init.headers.Authorization,"Bearer test-value-not-a-token");
@@ -96,22 +118,22 @@ test("10:17 Paris dispatches update-map with daily mode, its slot and a User-Age
 
 test("the same slot in summer falls one hour earlier in UTC",async()=>{
   const {calls,fetcher}=github();
-  const result=await runScheduleDispatcher(ON,at("2027-07-05T08:17:00Z"),fetcher); // CEST
+  const result=await runScheduleDispatcher(ON,at("2027-07-05T04:17:00Z"),fetcher); // CEST
   assert.equal(result[0].outcome,"dispatched");
-  assert.equal(JSON.parse(calls[1].init.body).inputs.slot,"17 10 * * *");
+  assert.equal(JSON.parse(calls[1].init.body).inputs.slot,"17 6 * * *");
 });
 
 test("a slot that already started is not dispatched again, on any later tick",async()=>{
   const {calls,fetcher}=github([{display_title:slotTitle(morningMap()),conclusion:null}]);
-  const result=await runScheduleDispatcher(ON,at("2026-11-05T09:17:00Z"),fetcher);
-  assert.deepEqual(plain(result),[{slot:"update-map.yml 17 10 * * *",outcome:"already_started"}]);
+  const result=await runScheduleDispatcher(ON,at("2026-11-05T05:17:00Z"),fetcher);
+  assert.deepEqual(plain(result),[{slot:"update-map.yml 17 6 * * *",outcome:"already_started"}]);
   assert.equal(posts(calls).length,0);
 });
 
 test("a manual run with another title does not count as the slot; a cancelled one neither",async()=>{
   const {calls,fetcher}=github([{display_title:"Daily CT Intelligence Map Update",conclusion:"success"},
     {display_title:slotTitle(morningMap()),conclusion:"cancelled"}]);
-  await runScheduleDispatcher(ON,at("2026-11-05T09:17:00Z"),fetcher);
+  await runScheduleDispatcher(ON,at("2026-11-05T05:17:00Z"),fetcher);
   assert.equal(posts(calls).length,1);
 });
 
@@ -119,12 +141,12 @@ test("GitHub failures neither throw nor POST blind, and never print the token",a
   logged.length=0;
   for(const options of [{listStatus:503},{listStatus:401},{postStatus:401},{postStatus:422},{postStatus:500}]){
     const {calls,fetcher}=github([],options);
-    const result=await runScheduleDispatcher(ON,at("2026-11-05T09:17:00Z"),fetcher);
+    const result=await runScheduleDispatcher(ON,at("2026-11-05T05:17:00Z"),fetcher);
     assert.equal(result[0].outcome,"failed");
     if(options.listStatus)assert.equal(posts(calls).length,0);
   }
   const unreachable=async()=>{throw new Error("network down");};
-  assert.equal((await runScheduleDispatcher(ON,at("2026-11-05T09:17:00Z"),unreachable))[0].outcome,"failed");
+  assert.equal((await runScheduleDispatcher(ON,at("2026-11-05T05:17:00Z"),unreachable))[0].outcome,"failed");
   assert.ok(logged.length>0);
   assert.ok(!logged.join("\n").includes("test-value-not-a-token"));
 });
@@ -200,7 +222,7 @@ test("a crypto monitor failure stays logged and contained",async()=>{
 
 test("the ten-minute cron runs the dispatcher, then the provider probe, and never the crypto monitor",async()=>{
   const env={marker:"env"};
-  const time=at("2026-11-05T09:17:00Z");
+  const time=at("2026-11-05T05:17:00Z");
   const handler=scheduledHandler();
   await handler.fire({cron:DISPATCH_CRON,scheduledTime:time},env);
   assert.deepEqual(handler.calls.map(call=>call.job),["dispatch","probe"]);
@@ -213,14 +235,14 @@ test("the ten-minute cron runs the dispatcher, then the provider probe, and neve
 
 test("a provider probe that fails stays contained and logs no error object that could quote a key",async()=>{
   const handler=scheduledHandler({probe:async()=>{throw new Error("https://api.example.test/?apikey=test-value-not-a-token");}});
-  await handler.fire({cron:DISPATCH_CRON,scheduledTime:at("2026-11-05T09:17:00Z")},{});
+  await handler.fire({cron:DISPATCH_CRON,scheduledTime:at("2026-11-05T05:17:00Z")},{});
   assert.deepEqual(handler.calls.map(call=>call.job),["dispatch","probe"]);
   assert.deepEqual(handler.errors,["Crypto provider probe failed"]);
 });
 
 test("a provider probe that hangs never holds up the dispatcher",async()=>{
   const handler=scheduledHandler({probe:()=>new Promise(()=>{})});
-  handler.fire({cron:DISPATCH_CRON,scheduledTime:at("2026-11-05T09:17:00Z")},{});
+  handler.fire({cron:DISPATCH_CRON,scheduledTime:at("2026-11-05T05:17:00Z")},{});
   await handler.waits[0];
   assert.equal(handler.calls[0].job,"dispatch");
 });
@@ -267,6 +289,28 @@ test("update-map treats a dispatched slot like the schedule and keeps the schedu
   // The OFAC step that keyed on the 10:17 slot moved to refresh-sanctions.yml;
   // the recovery run is now what a dispatched slot must start like a scheduled one.
   assert.ok(yaml.includes("(github.event_name == 'schedule' || (inputs.mode == 'daily' && inputs.slot != ''))"));
+});
+
+test("each Gemini quota day holds exactly the three map slots, across both clock changes",()=>{
+  // The quota resets at Pacific midnight (09:00 Paris most of the year, 08:00 for a
+  // few weeks): 12:17, 18:17 and the next 06:17 share a day, so a third each fits.
+  const pacificDay=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Los_Angeles"});
+  const starts=new Map();
+  for(let ms=at("2026-11-01T00:07:00Z");ms<at("2027-11-02T00:00:00Z");ms+=600000){
+    for(const slot of dueSlots(ms).filter(slot=>slot.workflow==="update-map.yml")){
+      starts.set(slot.startedAt,slotExpression(slot));
+    }
+  }
+  const days=new Map();
+  for(const [startedAt,expression] of starts){
+    const day=pacificDay.format(new Date(startedAt));
+    days.set(day,[...(days.get(day)||[]),expression]);
+  }
+  const whole=[...days.entries()].slice(1,-1);
+  assert.ok(whole.length>360);
+  for(const [day,expressions] of whole){
+    assert.deepEqual(expressions.sort(),["17 12 * * *","17 18 * * *","17 6 * * *"],day);
+  }
 });
 
 test("update-map's slots are the ones the daily ledger accepts",()=>{

@@ -4669,7 +4669,7 @@ Visible rate
 
       <div class="health-section">
         <div class="health-section-title">UPDATE SCHEDULE</div>
-        <div class="health-row"><span>Automated updates</span><strong id="healthSchedule">10:17 · 18:17</strong></div>
+        <div class="health-row"><span>Automated updates</span><strong id="healthSchedule">06:17 · 12:17 · 18:17</strong></div>
         <div class="health-row"><span>Timezone</span><strong>Europe/Paris</strong></div>
         <div class="health-row"><span>Next scheduled update</span><strong id="healthNextUpdate">—</strong></div>
       </div>
@@ -10523,7 +10523,7 @@ document.addEventListener(
 
 
 let ctAtlasRuntimeConfig = {
-  update_times: ["10:17", "18:17"],
+  update_times: ["06:17", "12:17", "18:17"],
   timezone: "Europe/Paris",
   ai_selection_threshold: 60,
   collection_languages: 20,
@@ -10572,7 +10572,7 @@ function calculateNextScheduledUpdate(){
     const [hour,minute]=String(value).split(":").map(Number);
     return hour*60+minute;
   }).filter(Number.isFinite).sort((a,b)=>a-b);
-  const usableSchedule=schedule.length ? schedule : [617,1097];
+  const usableSchedule=schedule.length ? schedule : [377,737,1097];
   let next=usableSchedule.find(v=>v>current),tomorrow=false;
   if(next==null){next=usableSchedule[0];tomorrow=true;}
   const h=Math.floor(next/60),m=next%60,label=String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");

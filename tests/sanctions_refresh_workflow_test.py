@@ -62,28 +62,11 @@ def add_tools(repo):
 NO_SLEEP = "sleep() { :; }; export -f sleep"
 
 
-def cron_hours(field):
-    hours = set()
-    for part in field.split(","):
-        if part == "*":
-            return set(range(24))
-        start, _, end = part.partition("-")
-        hours.update(range(int(start), int(end or start) + 1))
-    return hours
-
-
 class ScheduleTests(unittest.TestCase):
     def paris_slots(self):
-        triggers = SOURCE.split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
-        self.assertIn("  workflow_dispatch:", triggers)
-        crons = re.findall(r'(?m)^    - cron: "([^"]+)"\n      timezone: "Europe/Paris"$', triggers)
-        self.assertEqual(len(crons), triggers.count("- cron:"), "every slot is a Paris time, like the dispatcher's")
-        slots = set()
-        for cron in crons:
-            minute, hours, *days = cron.split()
-            self.assertEqual(days, ["*", "*", "*"], "every day")
-            slots.update((hour, int(minute)) for hour in cron_hours(hours))
-        return slots
+        # The report Worker's dispatcher is the only timetable: Paris times, every day.
+        return {(int(hour), int(minute)) for hour, minute in re.findall(
+            r'\{ workflow: "refresh-sanctions\.yml", hour: (\d+), minute: (\d+) \}', DISPATCHER)}
 
     def test_it_runs_several_times_a_day_and_after_the_us_afternoon_in_both_seasons(self):
         slots = self.paris_slots()
@@ -98,12 +81,14 @@ class ScheduleTests(unittest.TestCase):
                 gaps = [(later - earlier) % 1440 for earlier, later in zip(minutes, minutes[1:] + minutes[:1])]
                 self.assertLessEqual(max(gaps), 8 * 60, "a new list never waits most of a day")
 
-    def test_the_dispatcher_can_start_every_slot_on_time(self):
-        # GitHub's own schedule starts this repository's runs 3-10 hours late and
-        # never creates some; the dispatcher starts the same slots on time.
-        dispatched = {(int(hour), int(minute)) for hour, minute in re.findall(
-            r'\{ workflow: "refresh-sanctions\.yml", hour: (\d+), minute: (\d+) \}', DISPATCHER)}
-        self.assertEqual(dispatched, self.paris_slots())
+    def test_only_the_dispatcher_starts_its_timed_runs(self):
+        # GitHub's own schedule started this repository's runs 4-10 hours late and
+        # skipped some; with both, every slot would run twice.
+        triggers = SOURCE.split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
+        self.assertIn("  workflow_dispatch:", triggers)
+        self.assertIn("        description: \"Timed slot this run stands for", triggers)
+        self.assertNotIn("  schedule:", triggers)
+        self.assertNotIn("cron:", triggers)
 
 
 class LockTests(unittest.TestCase):

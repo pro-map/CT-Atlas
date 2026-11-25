@@ -16,7 +16,16 @@ test('runtime configuration is internally consistent',()=>{
   assert.equal(new Set(config.language_codes.map(code=>code.split('-')[0])).size,config.collection_languages);
   assert.ok(config.language_codes.includes('zh') && config.language_codes.includes('zh-Hant'));
   assert.equal(config.retention_days,180);
-  assert.deepEqual(config.update_times,['10:17','18:17']);
+  assert.deepEqual(config.update_times,['06:17','12:17','18:17']);
+});
+
+test('the times shown to users are the map slots the report Worker starts',()=>{
+  const dispatcher=fs.readFileSync('cloudflare-worker/schedule-dispatcher.js','utf8');
+  const slots=[...dispatcher.matchAll(/\{ workflow: "update-map\.yml", hour: (\d+), minute: (\d+),/g)]
+    .map(([,hour,minute])=>`${hour.padStart(2,'0')}:${minute.padStart(2,'0')}`).sort();
+  assert.deepEqual(slots,config.update_times);
+  assert.match(html,/<strong id="healthSchedule">06:17 · 12:17 · 18:17<\/strong>/);
+  assert.match(html,/update_times: \["06:17", "12:17", "18:17"\],/);
 });
 
 test('UI and collection workflow consume the runtime configuration',()=>{

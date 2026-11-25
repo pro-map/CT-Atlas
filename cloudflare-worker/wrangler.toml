@@ -15,10 +15,11 @@ ALLOWED_ORIGIN = "https://ct-atlas.com"
 # mirrors of the static site hosted elsewhere (e.g. for networks that block
 # the main domain). See corsHeaders() in shared.js.
 EXTRA_ALLOWED_ORIGINS = "https://ct-atlas-mirror.fairpeace.workers.dev,https://pro-map.github.io"
-# schedule-dispatcher.js starts the timed workflows only when this is "true" and the secret
-# GITHUB_DISPATCH_TOKEN is set in Cloudflare (never commit it). Keep "false" while the
-# workflows have their own schedule: triggers, or every slot runs twice.
-SCHEDULE_DISPATCH_ENABLED = "false"
+# schedule-dispatcher.js starts the timed workflows when this is "true" and the secret
+# GITHUB_DISPATCH_TOKEN is set in Cloudflare (never commit it). The workflows have no
+# schedule: trigger of their own any more, so this is the only thing that starts their
+# timed runs: without the secret, no collection runs.
+SCHEDULE_DISPATCH_ENABLED = "true"
 
 [[durable_objects.bindings]]
 name = "REPORT_GATE"

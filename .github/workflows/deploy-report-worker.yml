@@ -85,6 +85,13 @@ jobs:
             exit 1
           fi
           echo "AUTH_USERS_JSON is provisioned in Cloudflare."
+          # The workflows have no schedule of their own: without this token nothing
+          # starts the map update. A red deploy tells the owner at once.
+          if grep -q '^SCHEDULE_DISPATCH_ENABLED = "true"' cloudflare-worker/wrangler.toml \
+            && ! printf '%s' "$secret_list" | grep -q 'GITHUB_DISPATCH_TOKEN'; then
+            echo "::error::Cloudflare secret GITHUB_DISPATCH_TOKEN is missing, so nothing starts the timed workflows. Refusing to deploy the Worker."
+            exit 1
+          fi
 
       - name: Deploy Worker
         run: python3 tools/wrangler_retry.py deploy --keep-vars --config cloudflare-worker/wrangler.toml

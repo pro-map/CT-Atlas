@@ -258,6 +258,41 @@ class RunnerImageTests(unittest.TestCase):
             self.assertLess(names.index(name), names.index("Deploy Worker"))
 
 
+class WorkerSecretGateTests(unittest.TestCase):
+    def check(self, secrets, switch):
+        step = next(step for step in steps(read("deploy-report-worker.yml"))
+                    if step_name(step) == "Verify required auth secret")
+        script = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        toml = (ROOT / "cloudflare-worker/wrangler.toml").read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as temp:
+            (Path(temp) / "cloudflare-worker").mkdir()
+            (Path(temp) / "cloudflare-worker/wrangler.toml").write_text(
+                re.sub(r'(?m)^SCHEDULE_DISPATCH_ENABLED = ".*"$', f'SCHEDULE_DISPATCH_ENABLED = "{switch}"', toml),
+                encoding="utf-8", newline="\n")
+            stub = "python3() { printf '%s' \"$SECRETS\"; }\n"
+            return subprocess.run(["bash", "-c", stub + script], cwd=temp, capture_output=True, text=True,
+                                  env={**os.environ, "SECRETS": json.dumps([{"name": name} for name in secrets])},
+                                  check=False)
+
+    def test_the_switched_on_dispatcher_cannot_ship_without_its_token(self):
+        # The workflows have no schedule of their own: a Worker without the token
+        # would start no map update at all, so its deploy goes red at once.
+        self.assertIn('SCHEDULE_DISPATCH_ENABLED = "true"',
+                      (ROOT / "cloudflare-worker/wrangler.toml").read_text(encoding="utf-8"))
+        cases = {
+            "both secrets": (["AUTH_USERS_JSON", "GITHUB_DISPATCH_TOKEN"], "true", True),
+            "no dispatch token": (["AUTH_USERS_JSON", "AUTH_USERS_EXTRA_JSON"], "true", False),
+            "no dispatch token, switch off": (["AUTH_USERS_JSON"], "false", True),
+            "no auth secret": (["GITHUB_DISPATCH_TOKEN"], "true", False),
+        }
+        for name, (secrets, switch, accepted) in cases.items():
+            with self.subTest(case=name):
+                result = self.check(secrets, switch)
+                self.assertEqual(result.returncode == 0, accepted, result.stdout + result.stderr)
+                if name == "no dispatch token":
+                    self.assertIn("::error::Cloudflare secret GITHUB_DISPATCH_TOKEN is missing", result.stdout)
+
+
 class DeployGateTriggerTests(unittest.TestCase):
     def test_a_test_only_fix_reruns_the_deploys_the_node_suite_blocked(self):
         # On 2026-11-07 the fix touched a test alone: the Worker redeployed and the
@@ -485,29 +520,44 @@ class SelectionCapacityTests(unittest.TestCase):
 
     def test_one_run_can_clear_a_backlog_like_that_of_5_november(self):
         # About 2,500 reviews a day met about 2,600 arrivals, and 2,616 waiting
-        # articles took 4 to 6 runs to clear.
+        # articles took 4 to 6 runs to clear. On 24 Nov a Gemini outage left 1,749
+        # waiting with the day's quota spent: one run must clear both at once.
         per_run = self.value("AI_SELECTION_MAX_CALLS_PER_RUN") + self.value("AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN")
-        self.assertEqual((self.value("AI_SELECTION_BATCH_SIZE"), per_run), (40, 85))
-        self.assertGreater(per_run * self.value("AI_SELECTION_BATCH_SIZE"), 2616)
+        self.assertEqual((self.value("AI_SELECTION_BATCH_SIZE"), per_run), (40, 165))
+        self.assertGreater(per_run * self.value("AI_SELECTION_BATCH_SIZE"), 2616 + 1749)
+
+    def test_most_of_35_flash_lite_goes_to_the_map(self):
+        # Owner's decision of 24 Nov 2026: reports and Deep Search are rarely used.
+        # Of the model's free 500 a day, the collection's geolocation and incident
+        # consolidation take up to 12 and 10 a run (three slots and a recovery run);
+        # what is left stays for the Worker's reports and Deep Search.
+        selection = self.value("AI_SELECTION_DAILY_CALL_BUDGET")
+        other_collection = 4 * (12 + 10)
+        self.assertEqual(selection, 300)
+        self.assertGreaterEqual(500 - selection - other_collection, 100)
 
     def test_the_wrapper_accepts_the_batch_size_as_set(self):
         wrapper = (ROOT / "tools/run_collector_quota_safe.py").read_text(encoding="utf-8")
         self.assertIn('BATCH=max(1,min(40,int(os.getenv("AI_SELECTION_BATCH_SIZE","25"))))', wrapper)
 
     def test_each_timed_slot_keeps_its_whole_reservation(self):
+        sys.path.insert(0, str(ROOT))
+        from daily_reliability import SLOTS
+        self.assertEqual(len(SLOTS), 3)
         for run, day in (("AI_SELECTION_MAX_CALLS_PER_RUN", "AI_SELECTION_DAILY_CALL_BUDGET"),
                          ("AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN", "AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET")):
-            self.assertEqual(self.value(day), 2 * self.value(run))
+            self.assertEqual(self.value(day), len(SLOTS) * self.value(run))
 
     def test_background_use_of_31_flash_lite_stays_under_the_contract(self):
-        # The owner's contract keeps it under 400 a day; enrichment's 100 are gone.
+        # Under 450 a day since 24 Nov 2026 (400 before): the rest of the free 500
+        # is the Worker's second fallback, which reports and Deep Search rarely reach.
         self.assertFalse((WORKFLOWS / "enrich-archive.yml").exists())
         archive = int(re.search(r'ARCHIVE_REVIEW_DAILY_CALLS: "(\d+)"', read("review-archive-backlog.yml")).group(1))
         radnuc = int(re.search(r'ARCHIVE_REVIEW_DAILY_CALLS: "(\d+)"', read("daily-radnuc-background.yml")).group(1))
         consolidation = 120
-        geolocation_fallback = 3 * 12  # two slots and a recovery run, at most the whole cap each
+        geolocation_fallback = 4 * 12  # three slots and a recovery run, at most the whole cap each
         total = archive + radnuc + consolidation + self.value("AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET") + geolocation_fallback
-        self.assertLess(total, 400)
+        self.assertLess(total, 450)
 
     def test_older_work_stays_a_share_of_the_run_not_of_the_reservation(self):
         self.assertEqual(self.value("AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN"), 20)
@@ -524,8 +574,13 @@ class CollectionDispatchTests(unittest.TestCase):
         self.assertNotIn("secrets.", validation)
         self.assertNotIn("actions/checkout", validation)
         self.assertNotIn("pip install", validation)
-        self.assertIn('cron: "17 10 * * *"', workflow)
-        self.assertIn('cron: "17 18 * * *"', workflow)
+        # The report Worker starts the 06:17, 12:17 and 18:17 Paris slots; GitHub's
+        # own schedule would start each one a second time, hours late.
+        self.assertNotIn("  schedule:", workflow.split("\npermissions:", 1)[0])
+        dispatcher = (ROOT / "cloudflare-worker/schedule-dispatcher.js").read_text(encoding="utf-8")
+        for hour in (6, 12, 18):
+            self.assertIn(f'{{ workflow: "update-map.yml", hour: {hour}, minute: 17, inputs: {{ mode: "daily" }} }}',
+                          dispatcher)
         options = workflow.split("        options:\n", 1)[1].split("      force_ai:", 1)[0]
         self.assertEqual([line.strip()[2:] for line in options.splitlines() if line.strip()],
                          ["daily", "resume-pending"])

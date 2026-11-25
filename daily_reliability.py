@@ -12,7 +12,9 @@ from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 LABELS = ('Radiological/Nuclear', 'Chemicals and Explosives', 'Biological Terrorism')
-SLOTS = ('17 10 * * *', '17 18 * * *')
+# The map's timed slots in Paris time, in the order of the day (the report Worker's
+# SCHEDULE_SLOTS starts them). All three fall in one Pacific quota day.
+SLOTS = ('17 6 * * *', '17 12 * * *', '17 18 * * *')
 PACIFIC = ZoneInfo('America/Los_Angeles')
 PARIS = ZoneInfo('Europe/Paris')
 

@@ -202,7 +202,7 @@ class ReliabilityTests(unittest.TestCase):
             self.assertFalse(audit.read(output)['publication_confirmed'])
 
     def test_delay_attribution_is_an_estimate_not_a_cause(self):
-        result=safe.timing(safe.SLOTS[0],'2026-10-20T13:33:58Z','2026-10-20T13:34:28Z')
+        result=safe.timing(safe.SLOTS[0],'2026-10-20T09:33:58Z','2026-10-20T09:34:28Z')
         self.assertEqual(result['creation_delay_seconds'],19018)
         self.assertIn('not_proof',result['schedule_attribution'])
 

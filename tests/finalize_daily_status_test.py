@@ -336,7 +336,7 @@ class FinalizeDailyStatusTests(unittest.TestCase):
         today = datetime.now(MODULE.PACIFIC).date().isoformat()
         self.write(self.cache, {"items": {}, "selection_quota_usage": {
             "pacific_day": today, "calls": 30, "overflow_calls": 0,
-            "completed_daily_slots": ["17 10 * * *", "17 18 * * *"]}})
+            "completed_daily_slots": ["17 6 * * *", "17 12 * * *", "17 18 * * *"]}})
         self.assertEqual(self.main_outputs()["recovery_wanted"], "true")
         self.write(self.sidecar, progress(recent=lane(2616, 2500, 116), budgets=budgets))
         self.assertEqual(self.main_outputs()["recovery_wanted"], "false")

@@ -122,7 +122,7 @@ QUOTA_RESTORE=textwrap.dedent('''
 ''')
 
 
-# Slot 2 crashes, as a Google block used to make it do: its reservation must go.
+# Slot 3 crashes, as a Google block used to make it do: its reservation must go.
 SLOT_CRASH=textwrap.dedent('''
     import importlib.util, json, os, sys
     from datetime import datetime
@@ -132,7 +132,7 @@ SLOT_CRASH=textwrap.dedent('''
     day=datetime.now(ZoneInfo("America/Los_Angeles")).date().isoformat()
     path=Path("ai_article_selection_cache.json")
     path.write_text(json.dumps({"version":"any","items":{},"selection_quota_usage":{
-        "pacific_day":day,"calls":30,"overflow_calls":25,"completed_daily_slots":["17 10 * * *"]}}))
+        "pacific_day":day,"calls":60,"overflow_calls":50,"completed_daily_slots":["17 6 * * *","17 12 * * *"]}}))
     os.environ["CT_ATLAS_SCHEDULE"]=slot
     sys.path.insert(0,os.path.join(root,"tools"))
     spec=importlib.util.spec_from_file_location("quota_safe",os.path.join(root,"tools","run_collector_quota_safe.py"))
@@ -145,7 +145,7 @@ SLOT_CRASH=textwrap.dedent('''
     except RuntimeError as error: raised=str(error)
     usage=json.loads(path.read_text())["selection_quota_usage"]
     print(json.dumps({"raised":raised,"slots":usage["completed_daily_slots"],
-                      "caps":wrapper.recovery_caps(usage,day,30,60,25,50)}))
+                      "caps":wrapper.recovery_caps(usage,day,30,90,25,75)}))
 ''')
 
 
@@ -380,16 +380,16 @@ class QuotaSafeWrapperTests(unittest.TestCase):
             return run(SLOT_CRASH, os.getcwd(), slot, cwd=empty)
 
     def test_a_slot_that_crashed_still_releases_its_reservation(self):
-        # The ledger kept only slot 1, so recovery_caps answered (0, 0) instead of
+        # The ledger kept only slots 1 and 2, so recovery_caps answered (0, 0) instead of
         # (30, 25) for the rest of that day.
         data = self.slot_crash("17 18 * * *")
         self.assertEqual(data["raised"], "Too many Google News queries failed", "the failure still reaches the run")
-        self.assertEqual(data["slots"], ["17 10 * * *", "17 18 * * *"])
+        self.assertEqual(data["slots"], ["17 12 * * *", "17 18 * * *", "17 6 * * *"])
         self.assertEqual(data["caps"], [30, 25])
 
     def test_a_run_that_is_no_timed_slot_releases_nothing(self):
         data = self.slot_crash("")
-        self.assertEqual(data["slots"], ["17 10 * * *"])
+        self.assertEqual(data["slots"], ["17 6 * * *", "17 12 * * *"])
         self.assertEqual(data["caps"], [0, 0])
 
     def test_recent_and_backlog_use_separate_newest_first_batches(self):
