@@ -1,24 +1,6 @@
 {
  "version": 1,
  "seen": {
-  "3037f46b5ed775aa": "2026-10-26T21:44:07.752072+00:00",
-  "28369d3d09f51411": "2026-10-26T21:44:07.752072+00:00",
-  "81de47ea5ea44dc1": "2026-10-26T21:44:07.752072+00:00",
-  "5a3314f1f3bf3e80": "2026-10-26T21:44:07.752072+00:00",
-  "567e96455e7e882a": "2026-10-26T21:44:07.752072+00:00",
-  "37a057a2e71b942a": "2026-10-26T21:44:07.752072+00:00",
-  "077f121d4023f192": "2026-10-26T21:44:07.752072+00:00",
-  "79ca2356398b9e1c": "2026-10-26T21:44:07.752072+00:00",
-  "b17db11cd588c77c": "2026-10-26T21:44:07.752072+00:00",
-  "d87d2f9a491ede34": "2026-10-26T21:44:07.752072+00:00",
-  "28cce56502a68d8e": "2026-10-26T21:44:07.752072+00:00",
-  "635b56daaa5e349d": "2026-10-26T21:44:07.752072+00:00",
-  "a1d4e2bbfa1146a3": "2026-10-26T21:44:07.752072+00:00",
-  "7a3bd4fdf6ab226a": "2026-10-26T21:44:07.752072+00:00",
-  "600341e26f483f55": "2026-10-26T21:44:07.752072+00:00",
-  "13c604aeb8580152": "2026-10-26T21:44:07.752072+00:00",
-  "cbcc5fc8cfb7b183": "2026-10-26T21:44:07.752072+00:00",
-  "bda63908945ad1ac": "2026-10-26T21:44:07.752072+00:00",
   "d104cba1a4457e11": "2026-10-27T15:28:18.691877+00:00",
   "d0d380a65b35bdba": "2026-10-27T15:28:18.691877+00:00",
   "5373354e80744e51": "2026-10-27T15:28:18.691877+00:00",
@@ -4528,9 +4510,149 @@
   "8b5c94931d69df27": "2026-11-24T20:16:32.066695+00:00",
   "0ab71e93f4a39e54": "2026-11-24T20:16:32.066695+00:00",
   "1cf9cddfd078cf07": "2026-11-24T20:16:32.066695+00:00",
-  "d63201bfbea277e8": "2026-11-24T20:16:32.066695+00:00"
+  "d63201bfbea277e8": "2026-11-24T20:16:32.066695+00:00",
+  "5e89e7be288b37c9": "2026-11-26T09:28:23.547836+00:00",
+  "18d82002d52b98ab": "2026-11-26T09:28:23.547836+00:00",
+  "602844919dc402da": "2026-11-26T09:28:23.547836+00:00",
+  "c07a84909949622f": "2026-11-26T09:28:23.547836+00:00",
+  "7d1745f0c9ef5e6f": "2026-11-26T09:28:23.547836+00:00",
+  "5908ebbf4478e479": "2026-11-26T09:28:23.547836+00:00",
+  "4260997bafcba26b": "2026-11-26T09:28:23.547836+00:00",
+  "c1c971a09ab90661": "2026-11-26T09:28:23.547836+00:00"
  },
  "pending": [
+  {
+   "id": "26ac884782ca3534",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Europe Tonight: Russia reportedly prepares nuclear satellite launch",
+   "summary": "Europe Tonight: Russia reportedly prepares nuclear satellite launch Newswav",
+   "original_title": "Europe Tonight: Russia reportedly prepares nuclear satellite launch",
+   "original_summary": "Europe Tonight: Russia reportedly prepares nuclear satellite launch Newswav",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-25T19:20:03+00:00",
+   "source": "Newswav",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNekFFZkhlbXFkdDdYTG9LNTNldlFVTnJVNi1kOEJQcllpVGlLSnR5VVRlMFR5czdQVDRzbUREUXpwc0FTSk5VeGNEUEkzdmlYcVFYd2ktQWtBQWdUUk10MmdtWDV6YmpkRS1zSUdsbFhWV2M3aXhUbFhqZ1lLcjVSVDdPdXVSTTlSOFNSTTFsWHE3RmVYamVXZ1dLZFdBUzBJWk5sLXZEa25GLWs?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "ab06bfcaaf66b58bbc3e753913189231747c4030a36f975992319c2b16f58946"
+   ],
+   "background_query_language": "en"
+  },
+  {
+   "id": "31b079ee059e2c28",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Russian nuclear satellite threat tests NATO’s space defences",
+   "summary": "Russian nuclear satellite threat tests NATO’s space defences National Security News",
+   "original_title": "Russian nuclear satellite threat tests NATO’s space defences",
+   "original_summary": "Russian nuclear satellite threat tests NATO’s space defences National Security News",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-25T15:52:55+00:00",
+   "source": "National Security News",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNZEY5UEswSkgwa1ROdXhRZlM5RWR4ZmFOcmdKMlFuV0hWc0VFemMtMEJqbmQxdGtuVnhIWUU0S2dFOEJiWU9OZzRRaHZOMW40UFZsLWhFa0VsT2tYUXc0SXFTVkNhMmFZZEdxSng0UFoxZGFUaDZhNzVvSzQ4dDkySGNOUFZPQ0pTYk9KTUpNUkhWV05pclhCTjFWOV9HWjZkR1Nr?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "4d7fc4e38a7cc45a944f8f877a2c7c3f85bfd598b5c4dbc42c9a3a30e0893a1c"
+   ],
+   "background_query_language": "en"
+  },
+  {
+   "id": "a91abaddde770c45",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "The escalation trap tightens: A misstep can trigger a NATO-Russia face-off",
+   "summary": "The escalation trap tightens: A misstep can trigger a NATO-Russia face-off The Economic Times",
+   "original_title": "The escalation trap tightens: A misstep can trigger a NATO-Russia face-off",
+   "original_summary": "The escalation trap tightens: A misstep can trigger a NATO-Russia face-off The Economic Times",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-25T14:36:34+00:00",
+   "source": "The Economic Times",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxQdTkzeEVxb0hmZmlmWmN4TmZzekd4WDdYTDdKeG5iY21sTE1ncHJuY0hZamlaYWlLa05IUDFVWkVDLU1HbHc2Sk02ZEtNTkpNN1dabHFMaW5ld0Qyel9XMzJEa3VSM3NHZ1c5Uk1yYlFkZmtsY01fdzAwa1ZTSTdUWkZlV2tXSGlweXY5UFFBU1lkWWZKRlk5OU1qTEZHYmgtc09LOVhwRUZ6ZEV1cW56bnpkbktEOWZCamlQeXVsZG9HeFVYdU9OR2FTZVRSNWVrWlFRd3ZKUzM0T1gyR2s3eWo5QkY5YXZo0gHuAUFVX3lxTE80cHdrcE16MS13SHl6ODJjcDA5b1A1c3FkVFN4dW1oUEYxSXlSTVRDNWE5WDJhVXZjeWZhWG1Fbk5sTElVcGR3TUM5NVFFS2pKX3JkMFZ4UERrV2Vob0ptQ1VVc1lLLTV5cGNNX3Z5TXpLbndEdm11enRNMVZ5OXdYSG9wdXgxb3JMdktLOUhwWnBmZDVHRUN1ZTNxdFoyaHhiT3MzNExDZVljQWk2UTVEU0lYMnBHdGZJYURSeVhYZ1NTeTZXME8zaWxQLUZzenlvaGdUcVZod2tZTHBhT196NGNqXzdlajhPMEQtdXc?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "1b9c347d5402e2fb3ec7d5ad595e3f9c35f583e2daa9b969f1e8bd13aed6c194"
+   ],
+   "background_query_language": "en"
+  },
+  {
+   "id": "00fda7facea599bc",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "'...Will Finish Europe in Blink of an Eye': Putin's 'Planning' Nuclear Strikes NATO | Spotlight",
+   "summary": "'...Will Finish Europe in Blink of an Eye': Putin's 'Planning' Nuclear Strikes NATO | Spotlight Firstpost",
+   "original_title": "'...Will Finish Europe in Blink of an Eye': Putin's 'Planning' Nuclear Strikes NATO | Spotlight",
+   "original_summary": "'...Will Finish Europe in Blink of an Eye': Putin's 'Planning' Nuclear Strikes NATO | Spotlight Firstpost",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-11-25T14:21:50+00:00",
+   "source": "Firstpost",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQWEZPNkNCaWtXUzI0XzFjeTZlNTRuZ1NWTjJ3ZzZrLVV2Njd5Z1dha3hLWUlDOUYxZ2hUNno0SHlpc0tEU1U1N09aeG5aUXJHQUphQWpIWFduLWtEblNlWS1ZbEs5dDBsRjNNUDZsMWtGcXRIQ0IyQkw5Ynh1R2xjQkhzOFFWejhuSmRLbTd4SkxFTVdGbE5jZDI1SERLS1J0R3ViVlJ3M2RiclJyT1RjZ0NzbWZQMWhlVjlvaHp4dGVNZk9sU2NMNkduTEpVYzFPM1JsM2UyUGVBZXAxSzlrWi1B0gHnAUFVX3lxTE5wV0p5NzRKZDlvMlNXaUgzcWV1SlFzb2xIeFhhS1paQmg2ZDdPSmR2c1htWnhZWV9fWXpmSXpscFhNRHU4enk1UVZZb0FIdmN6T2MxNGdmNUZrVVRtbmczWW1aSlB4MGFFQ09NOHBfb3pWQlRPZm83bzRBV1lRMUhqYzRQODdoTE5WajR4Mk5BbktjVDdFOV9GU1dSZHY0RHh3WnlySlJzblplQnhQWjd6RzhScm1NaS1kNDROeV8yYWtLY3VYelFid2hFOXVXd2J4TGhlRVFBakhRRk9YX0ZrVlk1LUI2aw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "a05e6e23817a4d2555129d9add982633053cb438d84fadb497290ff7ad24f698"
+   ],
+   "background_query_language": "en"
+  },
   {
    "id": "84dd996dfa878ca5",
    "category": "Radiological/Nuclear",
@@ -4561,105 +4683,6 @@
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
     "ed9f4cc839892843406e586876a10393ebca422222ea9ece855b2c9b592394be"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "2f6cf513eef1632e",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Senate approves permitting bill with nuclear energy amendments—what’s next?",
-   "summary": "Senate approves permitting bill with nuclear energy amendments—what’s next? American Nuclear Society",
-   "original_title": "Senate approves permitting bill with nuclear energy amendments—what’s next?",
-   "original_summary": "Senate approves permitting bill with nuclear energy amendments—what’s next? American Nuclear Society",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-24T18:39:53+00:00",
-   "source": "American Nuclear Society",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQZ2ItREx5X2JZNl9zZ2F2T3JBYXZhSXdMeFp2cjRjOV9pZWtsUlZGTEx1VE53Zm81Q1k2ZHh4WXZuV3QwdThveE1kbElTNXlaNUFCV3gzUFgtdVc2MVNrWHlqbGNyV1l5OV9mQjVVMW9MUVl5dDFPNndFZ3g3V0lDYW8teWwwdU9yR2pjS09DUkVCbWpIQjJLcTRsOUJRa3F1VUh6RWIzZEVMN0hZS1BBeQ?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "e6b5899aab8f9fcf17b27c3aceafa991bb5cd740d0a540c3d12cbef1960fd69e"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "281d30cd0275e623",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Landmark NRC Construction Permit Ushers in Next Phase for Dow’s Xe-100 HTGR Nuclear Project",
-   "summary": "Landmark NRC Construction Permit Ushers in Next Phase for Dow’s Xe-100 HTGR Nuclear Project POWER Magazine",
-   "original_title": "Landmark NRC Construction Permit Ushers in Next Phase for Dow’s Xe-100 HTGR Nuclear Project",
-   "original_summary": "Landmark NRC Construction Permit Ushers in Next Phase for Dow’s Xe-100 HTGR Nuclear Project POWER Magazine",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-24T17:09:06+00:00",
-   "source": "POWER Magazine",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPSGJKQlFEOVcwZ3NTYVR6REFqVUJlQjVSWFZtNGJWU3J6S01EY2EtUUdjUC1xaXhQMWlRVzZMSGFnNTZLa2NPQXg3MGZUbExMRkZwd2d0QVh0U0RPY1NvZ0FYdnYyT3pscjV5RV9CNDNSRnhnOVZvdEJGa3RBb0NyVkNRMXBJTmtLVGcyZ1JmRDR0MUtldjk4SWdCOVVYaHRTUkR2LTB6YnRXTW1ycldQU19xR1ZtdXc?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "36015a309b16801780afd4363e754c70dab4abec3317bd06c9a23c7297ef2579"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "ee7de2ba0c3e2a40",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Nuclear power station to be built next to exclusive town known as ‘Little Venice’ in South Africa",
-   "summary": "Nuclear power station to be built next to exclusive town known as ‘Little Venice’ in South Africa BusinessTech",
-   "original_title": "Nuclear power station to be built next to exclusive town known as ‘Little Venice’ in South Africa",
-   "original_summary": "Nuclear power station to be built next to exclusive town known as ‘Little Venice’ in South Africa BusinessTech",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-24T15:30:14+00:00",
-   "source": "BusinessTech",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQLVdJd2xmRGpqMlItREY1QzZYTVBPNjB3U3dIa0dPVWtTR0hwbHlYMmszc2I3R3VTY0xzS3dTMTVQZmFIZzNZdW9GdUhCQmo2cTdobGg1V2V4N2xFa2xjbF9qTjBmbXFoczZRbEVnanRZb2hQTjhSdFJfZTE1RnhGLU1XWjhOdE9rbU9yenNkTDctZWF4SXRBRjVnb2tYU3ZnRi1CWUEzb0xwOXItVExOYnlqd3Y2YmEzZGFpVk9mX016OUxsRkRBczdIajFYVmZqWXlRY2EyVUZtdw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "7c3225e1e05910cbdc7c9dd9b266a220315487ac8f9b8a54f6f989b7667e79a5"
    ],
    "background_query_language": "en"
   },
@@ -4726,39 +4749,6 @@
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
     "c16070ce6f482493d077ee6b4947ee05c4793aa2f0cbe819c9cb0023ef05a0a7"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "57c6ed1c22593482",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Key step in licensing of US TRISO fuel facilities",
-   "summary": "Key step in licensing of US TRISO fuel facilities World Nuclear News",
-   "original_title": "Key step in licensing of US TRISO fuel facilities",
-   "original_summary": "Key step in licensing of US TRISO fuel facilities World Nuclear News",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-11-24T13:36:18+00:00",
-   "source": "World Nuclear News",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQMTd4dFdneXA5NkZkSmlaVkx2b0ZIRjQyVV8xLXo5SVFURHh6dEc3UUpVR0psbzd1b25wd1p6MzY1SVN3b2ZJWTdzV0E5MncyMWNyWnFjWjdXX2xHaXJadXFYUEJhSXl4ZHdJaE1tQUZFbk5na0JRZ01OZE1lMjV6ZlNxcG9QTS14NjZmanRkdDJRWFE3YkJ4Rw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "b09560a9698ea5982dbf3c0cf573599bd3afa93f9de25a941930ac9f81f4f8fd"
    ],
    "background_query_language": "en"
   },
@@ -20834,6 +20824,6 @@
    "background_query_language": "id"
   }
  ],
- "cursor": 5,
- "updated_at": "2026-11-25T19:30:14.119988+00:00"
+ "cursor": 6,
+ "updated_at": "2026-11-26T09:28:23.547836+00:00"
 }

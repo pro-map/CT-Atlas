@@ -3,8 +3,70 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-11-25T19:30:14.119988+00:00",
+ "updated_at": "2026-11-26T09:28:23.547836+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-711e4c772c9633af",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9zNGtoV3h2MHlRNDlDNHdJamhIdGtqaEZGUklmYWZ1YWVzWXJMeURkRUFsbmZsS2IxY3J2WkJBOFdBSTZ4V01YNHVVMlQwVGtpam1XUGE1d3RGZS02ZzduQ2VLdFFRWWJlX3lVRWxJckc?oc=5",
+   "title": "Radiation Leak Preparedness... Gijang County Reviews Process from Evacuation to Residents' Return",
+   "summary": "Gijang County officials are reviewing emergency response procedures, focusing on evacuation protocols and plans for the eventual return of residents in the event of a radiological leak. This assessment is part of local efforts to enhance public safety preparedness for potential nuclear facility incidents.",
+   "original_title": "Radiation Leak Preparedness... Gijang County Reviews Process from Evacuation to Residents' Return",
+   "original_language": "en",
+   "source": "아시아경제",
+   "published": "2026-11-26T07:00:31+00:00",
+   "collected_at": "2026-11-26T09:28:23.547836+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details local government emergency planning and preparedness, fitting the emergency_exercises topic."
+  },
+  {
+   "id": "radnuc-background-20be6b705df7b47f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1zWmRkVXZ6NE1nS3FwTU02YkNZcElOYlhHVWZWUnhvdVVsTnFwaDFBcS12M2dicmJFeUx4dENINVB2NUZ6cC1nMmlFNWxDYTlQb19iMjZheEtfbkhvYzBnUWtjZkU?oc=5",
+   "title": "Nuclear Plant Loses Power, Coolant Leaks... Radiological Emergency Drill at Shin-Kori Unit 2",
+   "summary": "A radiological emergency drill was conducted at the Shin-Kori Unit 2 nuclear power plant to simulate scenarios including loss of power and coolant leakage. The exercise aimed to test facility response capabilities and coordination during a simulated nuclear accident.",
+   "original_title": "Nuclear Plant Loses Power, Coolant Leaks... Radiological Emergency Drill at Shin-Kori Unit 2",
+   "original_language": "en",
+   "source": "아시아경제",
+   "published": "2026-11-26T06:45:29+00:00",
+   "collected_at": "2026-11-26T09:28:23.547836+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report describes a scheduled emergency response exercise at a civilian nuclear facility."
+  },
   {
    "id": "radnuc-background-d4ba6472ab5689e7",
    "kind": "radnuc_background",
@@ -35,6 +97,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Covers regulatory and policy developments related to the civilian nuclear industry."
+  },
+  {
+   "id": "radnuc-background-004c1f6d9bc3d5b2",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQZ2ItREx5X2JZNl9zZ2F2T3JBYXZhSXdMeFp2cjRjOV9pZWtsUlZGTEx1VE53Zm81Q1k2ZHh4WXZuV3QwdThveE1kbElTNXlaNUFCV3gzUFgtdVc2MVNrWHlqbGNyV1l5OV9mQjVVMW9MUVl5dDFPNndFZ3g3V0lDYW8teWwwdU9yR2pjS09DUkVCbWpIQjJLcTRsOUJRa3F1VUh6RWIzZEVMN0hZS1BBeQ?oc=5",
+   "title": "Senate approves permitting bill with nuclear energy amendments—what’s next?",
+   "summary": "The U.S. Senate has approved a permitting reform bill that includes specific legislative amendments related to nuclear energy development. The move marks a procedural step toward streamlining regulatory processes for the nuclear sector.",
+   "original_title": "Senate approves permitting bill with nuclear energy amendments—what’s next?",
+   "original_language": "en",
+   "source": "American Nuclear Society",
+   "published": "2026-11-24T18:39:53+00:00",
+   "collected_at": "2026-11-26T09:28:23.547836+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report describes legislative changes to nuclear regulatory and permitting policy."
   },
   {
    "id": "radnuc-background-12406bf75ba7abce",
@@ -68,6 +161,38 @@
    "ai_relevance_reason": "RadNuc background only: The report discusses the proposed development of a nuclear power plant, fitting the industry supply chain background topic."
   },
   {
+   "id": "radnuc-background-fe57c96baf10ee18",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPSGJKQlFEOVcwZ3NTYVR6REFqVUJlQjVSWFZtNGJWU3J6S01EY2EtUUdjUC1xaXhQMWlRVzZMSGFnNTZLa2NPQXg3MGZUbExMRkZwd2d0QVh0U0RPY1NvZ0FYdnYyT3pscjV5RV9CNDNSRnhnOVZvdEJGa3RBb0NyVkNRMXBJTmtLVGcyZ1JmRDR0MUtldjk4SWdCOVVYaHRTUkR2LTB6YnRXTW1ycldQU19xR1ZtdXc?oc=5",
+   "title": "Landmark NRC Construction Permit Ushers in Next Phase for Dow’s Xe-100 HTGR Nuclear Project",
+   "summary": "The U.S. Nuclear Regulatory Commission has issued a construction permit for the Dow Xe-100 high-temperature gas-cooled reactor project. This approval facilitates the advancement of the project into its next phase of facility development.",
+   "original_title": "Landmark NRC Construction Permit Ushers in Next Phase for Dow’s Xe-100 HTGR Nuclear Project",
+   "original_language": "en",
+   "source": "POWER Magazine",
+   "published": "2026-11-24T17:09:06+00:00",
+   "collected_at": "2026-11-26T09:28:23.547836+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details a regulatory approval and facility development step for a civilian nuclear project."
+  },
+  {
    "id": "radnuc-background-ebc0baefaad224dd",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -97,6 +222,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Addresses technological progress in the field of nuclear fusion."
+  },
+  {
+   "id": "radnuc-background-236bffc784f0fd26",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQLVdJd2xmRGpqMlItREY1QzZYTVBPNjB3U3dIa0dPVWtTR0hwbHlYMmszc2I3R3VTY0xzS3dTMTVQZmFIZzNZdW9GdUhCQmo2cTdobGg1V2V4N2xFa2xjbF9qTjBmbXFoczZRbEVnanRZb2hQTjhSdFJfZTE1RnhGLU1XWjhOdE9rbU9yenNkTDctZWF4SXRBRjVnb2tYU3ZnRi1CWUEzb0xwOXItVExOYnlqd3Y2YmEzZGFpVk9mX016OUxsRkRBczdIajFYVmZqWXlRY2EyVUZtdw?oc=5",
+   "title": "Nuclear power station to be built next to exclusive town known as ‘Little Venice’ in South Africa",
+   "summary": "Plans have been announced for the construction of a new nuclear power station in proximity to an exclusive residential area in South Africa. The development is part of the country's utility infrastructure expansion.",
+   "original_title": "Nuclear power station to be built next to exclusive town known as ‘Little Venice’ in South Africa",
+   "original_language": "en",
+   "source": "BusinessTech",
+   "published": "2026-11-24T15:30:14+00:00",
+   "collected_at": "2026-11-26T09:28:23.547836+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns the siting and construction plans for a civilian nuclear facility."
   },
   {
    "id": "radnuc-background-f967209ba314a1fa",
@@ -159,6 +315,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Represents a technological development and innovation in the nuclear industry."
+  },
+  {
+   "id": "radnuc-background-50fe1d48d81a6019",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQMTd4dFdneXA5NkZkSmlaVkx2b0ZIRjQyVV8xLXo5SVFURHh6dEc3UUpVR0psbzd1b25wd1p6MzY1SVN3b2ZJWTdzV0E5MncyMWNyWnFjWjdXX2xHaXJadXFYUEJhSXl4ZHdJaE1tQUZFbk5na0JRZ01OZE1lMjV6ZlNxcG9QTS14NjZmanRkdDJRWFE3YkJ4Rw?oc=5",
+   "title": "Key step in licensing of US TRISO fuel facilities",
+   "summary": "A significant milestone has been reached regarding the licensing process for facilities producing TRISO nuclear fuel in the United States. This progress supports the ongoing development and regulatory validation of the domestic fuel supply chain.",
+   "original_title": "Key step in licensing of US TRISO fuel facilities",
+   "original_language": "en",
+   "source": "World Nuclear News",
+   "published": "2026-11-24T13:36:18+00:00",
+   "collected_at": "2026-11-26T09:28:23.547836+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report highlights a regulatory and licensing development within the nuclear fuel supply chain."
   },
   {
    "id": "radnuc-background-b55526e106e544a4",
