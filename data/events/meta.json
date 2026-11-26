@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "1fa70f4088af85e41d494cf123cef5e69b8973606996386e5564badb773955f9",
+  "events_sha256": "925dca2e574148e185cdfdf7e971a34f9bd35b15426c1037885a555528285ac9",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 3519,
-      "bytes": 20759271,
-      "sha256": "10b7c5b73785413333cec39085b811f44aa6f421d39d71206f2069a2940f2e4a"
+      "events": 3551,
+      "bytes": 20999321,
+      "sha256": "5522a4465b81294bee15bbad4099b60c945beae6f5d860a5c316f85b5148793b"
     },
     "2026-10": {
       "events": 3616,
@@ -230,34 +230,34 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-26T11:18:44.902566+00:00",
-      "last_attempt_at": "2026-11-26T11:18:44.902566+00:00",
-      "published_at": "2026-11-26T12:21:20.259047+00:00",
+      "run_started_at": "2026-11-26T17:18:46.828500+00:00",
+      "last_attempt_at": "2026-11-26T17:18:46.828500+00:00",
+      "published_at": "2026-11-26T18:06:13.603707+00:00",
       "recent": {
-        "candidates": 3669,
-        "reviewed": 3669,
-        "cached": 2668,
-        "new_reviews": 1001,
+        "candidates": 3622,
+        "reviewed": 3622,
+        "cached": 2629,
+        "new_reviews": 993,
         "official_auto_accepted": 0,
-        "retained": 247,
-        "rejected": 3422,
+        "retained": 179,
+        "rejected": 3443,
         "pending": 0,
         "status": "complete",
-        "calls": 42,
-        "primary_calls": 30,
-        "overflow_calls": 12,
+        "calls": 29,
+        "primary_calls": 25,
+        "overflow_calls": 4,
         "reasons": [],
-        "window_start": "2026-11-23T11:18:44.902566+00:00",
-        "window_end": "2026-11-26T11:18:44.902566+00:00"
+        "window_start": "2026-11-23T17:18:46.828500+00:00",
+        "window_end": "2026-11-26T17:18:46.828500+00:00"
       },
       "backlog": {
-        "candidates": 587,
-        "reviewed": 587,
-        "cached": 559,
-        "new_reviews": 28,
+        "candidates": 613,
+        "reviewed": 613,
+        "cached": 594,
+        "new_reviews": 19,
         "official_auto_accepted": 0,
-        "retained": 1,
-        "rejected": 586,
+        "retained": 2,
+        "rejected": 611,
         "pending": 0,
         "status": "complete",
         "calls": 1,
@@ -283,23 +283,25 @@
       "source": {
         "google": {
           "retry_waves": 0,
-          "successful": 1220,
-          "empty_feeds": 494,
-          "throttled": 4,
-          "deduplicated_urls": 288
+          "successful": 1219,
+          "empty_feeds": 490,
+          "throttled": 10,
+          "deduplicated_urls": 288,
+          "failed": 1
         },
         "gdelt": {},
-        "errors": 0,
-        "status": "complete"
+        "errors": 1,
+        "status": "partial"
       },
       "reasons": [
+        "source_errors",
         "category_pending",
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 6194,
-        "retired": 404,
-        "cancelled_history": 454,
+        "expired": 6675,
+        "retired": 444,
+        "cancelled_history": 516,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -312,15 +314,15 @@
         "primary": {
           "per_run": 100,
           "per_day": 300,
-          "used_this_run": 31,
-          "used_today": 31
+          "used_this_run": 26,
+          "used_today": 57
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 65,
           "per_day": 195,
-          "used_this_run": 12,
-          "used_today": 12
+          "used_this_run": 4,
+          "used_today": 16
         },
         "historical_calls_per_run": 20,
         "historical_calls_used": 1,
@@ -329,12 +331,12 @@
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 8988,
-        "unlocated": 405,
-        "completed_unlocated": 405,
+        "located": 9018,
+        "unlocated": 407,
+        "completed_unlocated": 407,
         "outcome": "success",
-        "processed_this_run": 50,
-        "review_required": 266
+        "processed_this_run": 34,
+        "review_required": 267
       },
       "categories": [
         {
@@ -359,19 +361,18 @@
           "stop_code": "http_503"
         }
       ],
-      "finalized_at": "2026-11-26T12:22:53.682926+00:00",
+      "finalized_at": "2026-11-26T18:07:55.648739+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
       "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 12,
-        "gemini-3.1-flash-lite:503": 4
+        "gemini-3.5-flash-lite:503": 4
       },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 121,
-        "events_published_median_14d": 143.0,
-        "new_reviews": 1001,
+        "events_published_last_24h": 115,
+        "events_published_median_14d": 137.0,
+        "new_reviews": 993,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -387,63 +388,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 26 Nov, 13:21 Paris: Counter-terrorism operations over the past 24 hours featured significant foiled threats and violent clashes globally, including the FSB preventing a synagogue attack in Kislovodsk, Russia, and security forces neutralizing major threats. Additional notable events included an ISIS suicide bombing and security clash in Al Hasakah, Syria, and a high-stakes supermarket hostage rescue operation in Cartagena, Colombia.",
+      "overview": "As of 26 Nov, 19:05 Paris: Recent counter-terrorism developments highlight serious kinetic and thwarted threats internationally. Notable incidents include an ISIS suicide and armed attack targeting security headquarters in Al Hasakah, Syria, that left multiple personnel dead; a thwarted terrorist plot targeting a synagogue in Kislovodsk, Russia, successfully intercepted by the FSB; and a major hostage crisis at a supermarket in Cartagena, Colombia, successfully resolved by special forces.",
       "developments": [
+        {
+          "event_id": "2c2ddd4cdf41a805",
+          "severity": "CRITICAL",
+          "category": "Attacks",
+          "headline": "ISIS attack targeting security headquarters in Hasakah leaves two dead",
+          "detail": "An Islamic State attack targeting a security headquarters in Al Hasakah, Syria, resulted in two deaths and several wounded.",
+          "location": "Syria, Al Ḩasakah"
+        },
         {
           "event_id": "1b02cd2ea867e224",
           "severity": "CRITICAL",
           "category": "Counter Terrorism Action",
           "headline": "Synagogue terrorist attack in Stavropol krai prevented by FSB",
-          "detail": "The FSB successfully stopped a planned terrorist attack targeting a synagogue in Kislovodsk, Stavropol region.",
+          "detail": "The FSB successfully intercepted and stopped a planned terrorist attack on a synagogue located in Kislovodsk, Russia.",
           "location": "Russia, Kislovodsk"
         },
         {
           "event_id": "3cb1027271521250",
           "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "Special forces rescue hostages in supermarket and subdue attackers in Colombia",
-          "detail": "Colombian special forces successfully stormed a supermarket in Cartagena following a failed armored vehicle robbery, rescuing dozens of hostages and subduing the armed attackers.",
+          "category": "Counter Terrorism Action",
+          "headline": "Special forces rescue hostages and subdue attackers in Cartagena",
+          "detail": "Colombian special forces successfully stormed a supermarket in Cartagena, rescuing dozens of hostages and subduing the armed attackers.",
           "location": "Colombia, Cartagena"
         },
         {
-          "event_id": "c66cb51719cfa11f",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "Two security personnel killed in ISIS suicide attack in Hasaka",
-          "detail": "An ISIS suicide bombing and subsequent armed clash targeting a security headquarters and recruitment center in Al Hasakah left two members of the Syrian security forces dead and several wounded.",
-          "location": "Syria, Al Ḩasakah"
-        },
-        {
-          "event_id": "1f675466fabc611b",
+          "event_id": "4e3a29c51707cee2",
           "severity": "HIGH",
           "category": "Arrests",
-          "headline": "Federal Prosecutor arrests three members of extremist group",
-          "detail": "The Office of the Federal Prosecutor confirmed the arrest of three individuals suspected of being members of a right-wing extremist terrorist organization during German nationwide security operations.",
-          "location": "Germany"
+          "headline": "Suspected Islamists planned synagogue attack in Cologne",
+          "detail": "Suspected terrorists were arrested in Köln, Germany, over an alleged plot to attack the local synagogue.",
+          "location": "Germany, Köln"
         },
         {
           "event_id": "f33f829ee862225d",
           "severity": "HIGH",
           "category": "Attacks",
-          "headline": "Niger: 11 soldiers killed in Boko Haram attack in the northeast",
-          "detail": "Eleven soldiers were killed in a Boko Haram attack in southeastern Niger near the Nigerian border, during which numerous assailants were neutralized.",
+          "headline": "Eleven soldiers killed in Boko Haram attack in southeastern Niger",
+          "detail": "Eleven soldiers were killed in a Boko Haram attack in southeastern Niger near the Nigerian border, with numerous assailants neutralized.",
           "location": "Niger"
         },
         {
-          "event_id": "f735e2b3060bf635",
-          "severity": "SIGNIFICANT",
-          "category": "Chemicals and Explosives",
-          "headline": "Sriganganagar Railway Track Blast Case: 3 accused arrested",
-          "detail": "Law enforcement arrested three suspects in connection with the terrorist railway track blast case in Sriganganagar linked to cross-border handlers.",
-          "location": "India, Sri Ganganagar"
+          "event_id": "965121d626ef6e95",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
+          "headline": "Military air strikes in Borno kill 37 terrorists",
+          "detail": "Nigerian military airstrikes killed 37 terrorists and destroyed four vehicles in Borno State.",
+          "location": "Nigeria, Borno State"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-26T12:21:16.565141+00:00",
+      "generated_at": "2026-11-26T18:05:57.033564+00:00",
       "candidate_events": 80,
-      "top_hash": "ff8437fa17a81dc9247d40af175b0a847050204c7e4a147e86132ecb418a5fb1",
+      "top_hash": "b793da8961a53137cf0f109b95b47ba684ce186001dd2a15e21dd9cc9af2da40",
       "top_event_count": 10,
       "reused": false
     },
@@ -721,10 +722,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 81,
+      "corroboration_hold_same_minute_burst": 90,
       "corroboration_hold_listed_outlet": 10,
-      "already_reviewed_articles": 2454,
-      "duplicate_input_articles": 6056
+      "already_reviewed_articles": 2515,
+      "duplicate_input_articles": 6280
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -806,8 +807,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-26T12:21:20.259047+00:00",
-    "number_of_events": 9393,
+    "last_updated": "2026-11-26T18:06:13.603707+00:00",
+    "number_of_events": 9425,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -820,23 +821,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 9343,
-      "ai_processed_this_run": 50,
-      "ai_pending_at_start": 50,
-      "city": 3415,
-      "region": 2973,
-      "country_capital": 2600,
-      "unlocated": 405,
-      "mapped_total": 8988,
-      "high_confidence": 8145,
-      "medium_confidence": 905,
-      "low_confidence": 343,
+      "cached_events": 9391,
+      "ai_processed_this_run": 34,
+      "ai_pending_at_start": 34,
+      "city": 3427,
+      "region": 2981,
+      "country_capital": 2610,
+      "unlocated": 407,
+      "mapped_total": 9018,
+      "high_confidence": 8172,
+      "medium_confidence": 909,
+      "low_confidence": 344,
       "methods": {
-        "ai_city_geonames": 3264,
-        "ai_region_coordinates": 2970,
-        "ai_country_capital": 2599,
-        "unresolved_city_no_capital_fallback": 232,
-        "ai_unlocated": 133,
+        "ai_city_geonames": 3276,
+        "ai_country_capital": 2609,
+        "ai_region_coordinates": 2978,
+        "ai_unlocated": 134,
+        "unresolved_city_no_capital_fallback": 233,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
