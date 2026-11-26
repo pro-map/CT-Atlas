@@ -1033136,7 +1033136,8 @@
       "dedup_confidence": 0.533,
       "dedup_methods": [
         "entity_actor_event_signature"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "01c76ea433b7b779",
@@ -1033750,7 +1033751,8 @@
       "ai_geo_reason": "Piracy incidents off the northern coast of Somalia.",
       "ai_geo_fingerprint": "210439cae84451fcb90a2b7386ae6d82ddbe09d9fcab927f6a1844c317f2a0f9",
       "ai_geo_inferred": false,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "8be21b5f2ad86769",
@@ -1034080,7 +1034082,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "7b58da41bdf2eb6d",
@@ -1034262,7 +1034265,8 @@
       "is_attack": false,
       "incident_anchor": "Somali National Army operation Middle Shabelle 2026-07-28",
       "update_type": "INITIAL",
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "878185240127600f",
@@ -1043809,7 +1043813,8 @@
         "same_incident",
         "same_url"
       ],
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "032f47079d108676",
@@ -1045135,7 +1045140,8 @@
       "ai_geo_reason": "Airstrike occurred in the Lower Shabelle region of Somalia.",
       "ai_geo_fingerprint": "145637ba26913b253d5c2d5087933fa72d6e6f3b2264306a76ab30592d768573",
       "ai_geo_inferred": false,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "eb59078a3b6cfb46",
