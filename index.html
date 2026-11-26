@@ -4089,6 +4089,8 @@ html, body {
 
 .database-event-title { margin-right: 24px; font-size: 15px; font-weight: 700; line-height: 1.35; }
 .database-event-meta { margin-top: 6px; color: #9fb4c0; font-size: 11px; }
+/* An event whose article is older than the day it reached CT Atlas (inPeriod). */
+.popup-added-late, .chronology-added-late, .database-event-added-late { margin-top: 3px; color: #ffcc80; font-size: 11px; }
 .database-event-tags { margin-top: 4px; color: #8fd0ff; font-size: 11px; }
 .database-event-summary { margin: 12px 0; font-size: 12.5px; line-height: 1.55; }
 .database-event-source a { color: #8fd0ff; }
@@ -6831,6 +6833,25 @@ function withinDays(
 
 }
 
+// An event belongs to a period when its article falls in it OR when it reached
+// CT Atlas in it (added_at, set by the collector). From 12 to 26 Nov 2026 a
+// quarter of the attacks arrived with an article already more than a day old
+// (late sources, date-only timestamps, a late collection), so a "last 24 hours"
+// keyed on the article alone never showed them. Records collected before the
+// field existed have no added_at and follow their article only.
+function inPeriod(event, days) {
+    return withinDays(event?.published, days) || withinDays(event?.added_at, days);
+}
+
+// "Added to CT Atlas ..." for an event that arrived more than a day after its
+// article, so an analyst sees why an older report is in a recent period.
+function addedLateText(event) {
+    const added = Date.parse(String(event?.added_at || ""));
+    const published = Date.parse(String(event?.published || ""));
+    if (!Number.isFinite(added) || !Number.isFinite(published) || added - published <= 86400000) return "";
+    return "Added to CT Atlas " + EVENT_TIME_FORMAT.format(new Date(added)) + " Paris";
+}
+
 
 
 // The map no longer has category checkboxes (it shows attacks only; category
@@ -7143,7 +7164,7 @@ function mapScopeEvents() {
         : filteredAllEvents().filter(event => mapScopeMatches(event, scope));
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
         event.attack_update !== true
-        && withinDays(event.published, selectedDays)
+        && inPeriod(event, selectedDays)
         && mapScopeMatches(event, scope)
         && groupMatches(event)
         && searchMatches(event)
@@ -7186,10 +7207,7 @@ function filteredAllEvents() {
 
         event =>
 
-            withinDays(
-                event.published,
-                selectedDays
-            )
+            inPeriod(event, selectedDays)
 
             &&
 
@@ -7285,10 +7303,7 @@ function countMapped(
 
                 &&
 
-                withinDays(
-                    event.published,
-                    days
-                )
+                inPeriod(event, days)
 
                 &&
 
@@ -7685,6 +7700,7 @@ function createMarker(
             <div>
                 ${dateText}
             </div>
+            ${addedLateText(event) ? `<div class="popup-added-late">${escapeHtml(addedLateText(event))}</div>` : ""}
 
             <div class="popup-location">
 
@@ -9064,6 +9080,14 @@ function renderChronology() {
             dateCell.textContent =
                 dateText;
 
+            const addedLate = addedLateText(event);
+            if (addedLate) {
+                const addedCell = document.createElement("div");
+                addedCell.className = "chronology-added-late";
+                addedCell.textContent = addedLate;
+                dateCell.appendChild(addedCell);
+            }
+
 
             const mainCell =
                 document.createElement(
@@ -9876,10 +9900,7 @@ function visibleEventsForPeriod(
                 );
 
             return (
-                withinDays(
-                    event.published,
-                    days
-                )
+                inPeriod(event, days)
                 &&
                 categories.some(
                     category =>
@@ -10727,10 +10748,7 @@ function updateFacetCounts() {
                                 event
                             )
                             ||
-                            !withinDays(
-                                event.published,
-                                days
-                            )
+                            !inPeriod(event, days)
                             ||
                             !searchMatches(
                                 event
@@ -10802,10 +10820,7 @@ function updateFacetCounts() {
                             event
                         )
                         &&
-                        withinDays(
-                            event.published,
-                            selectedDays
-                        )
+                        inPeriod(event, selectedDays)
                         &&
                         searchMatches(
                             event
@@ -12316,7 +12331,7 @@ function refreshVisibleDatabaseBackground() {
 // after a few requests and the panel only said "Failed to fetch". The Worker now
 // sends only the RadNuc background articles, a small archive query.
 // Bump the version when database-query.js changes, so no cached copy is used.
-const DATABASE_QUERY_MODULE = "./cloudflare-worker/database-query.js?v=20261116";
+const DATABASE_QUERY_MODULE = "./cloudflare-worker/database-query.js?v=20261126";
 let databaseQueryModulePromise = null;
 let databaseEventsSource = null;
 let databaseEventsPromise = null;
@@ -12607,7 +12622,7 @@ function databaseEventCardNote(event) {
     if (!located) {
         return label + " not shown on the map: its location is not precise enough to place it.";
     }
-    if (!withinDays(event.published, selectedDays)) {
+    if (!inPeriod(event, selectedDays)) {
         return label + " not shown on the map right now: the map covers the last "
             + (selectedDays === 1 ? "24 hours" : selectedDays + " days")
             + ". This event is in the CT Atlas database.";
@@ -12639,6 +12654,7 @@ function showDatabaseEventCard(event) {
         <div class="database-event-meta">
             ${escapeHtml(dateText)} · ${escapeHtml(chronologyLocationText(event) || "Location unknown")}
         </div>
+        ${addedLateText(event) ? `<div class="database-event-added-late">${escapeHtml(addedLateText(event))}</div>` : ""}
         <div class="database-event-tags">
             ${escapeHtml(eventCategories(event).join(" / "))}
             ${event.actor_group ? " · " + escapeHtml(event.actor_group) : ""}

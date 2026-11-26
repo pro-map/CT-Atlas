@@ -8540,9 +8540,14 @@ def _quick_candidate_compatible(
 def deduplicate_incremental(
     existing_events,
     fresh_records,
+    added_at=None,
 ):
     """
     Fast indexed daily update.
+
+    Each new cluster records when it reached the database (added_at, UTC), so
+    the map and the Database panel can show an incident whose article is older
+    than the chosen period for a whole period after it appears.
 
     Previous implementation scanned every eligible existing event and ran the
     full multi-variant event_match() against it. With multilingual clusters,
@@ -8941,6 +8946,13 @@ def deduplicate_incremental(
             event_id
         )
 
+    # A quarter of the attacks reach the map with an article already more than a
+    # day old (late sources, date-only timestamps, a late collection): a "last 24
+    # hours" view keyed on the article alone never showed them (12-26 Nov 2026).
+    stamp = (added_at or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(microsecond=0).isoformat()
+    for event in events[len(existing_events):]:
+        event.setdefault("added_at", stamp)
+
     print(
         f"   New standalone clusters: "
         f"{len(events) - len(existing_events)}"
@@ -9096,7 +9108,7 @@ def _parse_iso_utc(value):
 
 
 def _trend_recency(event):
-    return (
+    reported = (
         _parse_iso_utc(
             event.get(
                 "last_reported"
@@ -9109,6 +9121,12 @@ def _trend_recency(event):
             )
         )
     )
+    # An event that reached CT Atlas a day or more after its article belongs to
+    # the 24-hour brief of the day it arrived, as on the map (inPeriod).
+    added = _parse_iso_utc(event.get("added_at"))
+    if reported is None or added is None:
+        return reported or added
+    return max(reported, added)
 
 
 def _trend_priority(event):

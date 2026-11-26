@@ -28,7 +28,7 @@ import {
   databaseFiltersLabel
 } from "./shared.js";
 
-const DATABASE_QUERY_VERSION = "database-query-v6-browser-list";
+const DATABASE_QUERY_VERSION = "database-query-v7-late-additions";
 // 8,000 was reached in November 2026 and cut the oldest rows from global lists and
 // their exports. The database grows 125 events a day and levels off near 22,000 at
 // 180 days' retention, so this holds all of it plus every background row below; the
@@ -176,6 +176,8 @@ function databaseEventRow(event, index) {
     original_summary: cleanText(event.original_summary, 900),
     original_language: cleanText(event.original_language || event.collection_language, 12),
     published: eventRowPublished(event),
+    // When it reached CT Atlas; the card says so when the article is older.
+    added_at: cleanText(event.added_at, 40),
     country: cleanText(event.country, 100),
     country_code: cleanText(event.country_code, 8),
     region: cleanText(event.region, 100),

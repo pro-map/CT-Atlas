@@ -690,10 +690,13 @@ function matchesDatabaseFilters(event, filters, now = new Date(), { ignorePeriod
   if (!matchesRegion(event, filters.region) || !matchesTopic(event, filters.topic) ||
       !matchesGroup(event, filters.actorGroup)) return false;
   if (ignorePeriod || !filters.periodDays) return true;
-  const date = parseEventDate(event);
-  if (!date) return false;
-  const time = date.getTime();
-  return time <= now.getTime() && time >= now.getTime() - filters.periodDays * 86400000;
+  // In the period by its article, or by when it reached CT Atlas (added_at): the
+  // map's period buttons use the same rule (inPeriod in index.html), so an
+  // incident whose article is older than the period still shows once it arrives.
+  const start = now.getTime() - filters.periodDays * 86400000;
+  const inWindow = date => Boolean(date) && !Number.isNaN(date.getTime())
+    && date.getTime() <= now.getTime() && date.getTime() >= start;
+  return inWindow(parseEventDate(event)) || inWindow(event?.added_at ? new Date(event.added_at) : null);
 }
 
 function databaseFiltersLabel(filters) {

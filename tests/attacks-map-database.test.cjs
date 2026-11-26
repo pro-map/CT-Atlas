@@ -423,7 +423,7 @@ test('a list that no longer matches the filters is never shown or exported',()=>
 test('list clicks only zoom to events the map shows; the rest open their card',()=>{
   assert.match(extract('openDatabaseEvent'),/if \(isOnMapNow\(event\._mapEventKey\)\)[\s\S]*showDatabaseEventCard\(event\)/);
   const c=vm.createContext({selectedDays:1,mapCategoryScope:'ATTACKS'});
-  vm.runInContext(retirementRuleSource+extract('isMapAttackEvent')+extract('withinDays')+extract('databaseEventCardNote'),c);
+  vm.runInContext(retirementRuleSource+extract('isMapAttackEvent')+extract('withinDays')+extract('inPeriod')+extract('databaseEventCardNote'),c);
   assert.match(c.databaseEventCardNote({primary_event_type:'ARREST'}),/attacks only/);
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:'2020-01-01T00:00:00Z'}),/last 24 hours/);
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:new Date().toISOString()}),/after the map was loaded/);
@@ -458,7 +458,7 @@ test('red markers and heat are for attacks: a record merely filed under Attacks 
     L:{divIcon:icon=>icon,marker:(position,options)=>({options,bindPopup(){return this;},on(){return this;}})},
     escapeHtml:String,POPUP_DATE_FORMAT:new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris'}),safeHttpUrl:()=>'',
   });
-  vm.runInContext(categoryRuleSource+extract('isMapAttackEvent')+extract('createMarker')+extract('isHeatEligibleEvent'),c);
+  vm.runInContext(categoryRuleSource+extract('isMapAttackEvent')+extract('addedLateText')+extract('createMarker')+extract('isHeatEligibleEvent'),c);
   const marker=event=>{
     const {options}=c.createMarker({latitude:1,longitude:2,title:'x',...event});
     return [/ct-marker (\w+)/.exec(options.icon.html)[1],options.ctAttack];
@@ -666,7 +666,7 @@ function mapScopeHarness(){
     function groupMatches(){ return true; }
     function searchMatches(){ return true; }
   `,c);
-  vm.runInContext(retirementRuleSource+extract('eventCategories'),c);
+  vm.runInContext(retirementRuleSource+extract('eventCategories')+extract('inPeriod'),c);
   const src=html.slice(html.indexOf('let _filteredAllEventsCache = null;'),html.indexOf('function filteredAllEvents()'));
   vm.runInContext(src,c);
   vm.runInContext(extract('filteredMappedEvents'),c);

@@ -53,7 +53,7 @@ test("a marker with a bad source URL still gets its popup, without the link",()=
   const c=vm.createContext({
     categoryStyle:{},L:{divIcon:icon=>icon,marker:(position,options)=>({options,bindPopup(text){popup=text;return this;}})},
     escapeHtml:String,eventCategories:()=>["Attacks"],isMapAttackEvent:()=>true,Number,Date,Intl});
-  vm.runInContext(formats+extract("safeHttpUrl")+extract("createMarker"),c);
+  vm.runInContext(formats+extract("safeHttpUrl")+extract("addedLateText")+extract("createMarker"),c);
   c.createMarker({latitude:1,longitude:2,title:"x",source:"Paper",url:"javascript:alert(1)",published:"2026-11-05T23:10:00Z"});
   assert.doesNotMatch(popup,/javascript:/);
   assert.match(popup,/06\/11\/2026 Paris/,"23:10 UTC on 5 Nov is the 6th in Paris");
