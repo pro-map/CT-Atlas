@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-25T20:47:25.799194+00:00",
+  "removed_at": "2026-11-26T12:20:44.493810+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -3673,6 +3673,71 @@
       "country": "Ukraine",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "The report details a specific counter-terrorism operation involving the interception of an explosive-laden drone by national security services.",
+      "related_articles": []
+    },
+    {
+      "id": "59f4444245cef281",
+      "incident_id": "inc-ab0fe72c3528cd14",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE4xTVd2UjJWUjVCUHdQbFFjVGZrZXhrWkI3NzBSb0ZxY01vWDVhRzZ5cXFFNXhsM3U1YkM0YVI1bVJYSmU3NWpENzFvSERGVFHSAUtBVV95cUxObWJ5VlNvaWtFRG53bFBqZUNWMEdTMkpjaFpYOEhiemV5eFFmLWl1ek5lNDRYSi1kalFMZEVmemFrakpNVG92eWRZdEk?oc=5",
+      "title": "Two Residents of Krasnodar Krai Suspected of Terrorist Attack Attempt in Tuapse",
+      "summary": "Two residents in Krasnodar Krai were detained and suspected of attempting a terrorist attack in Tuapse.",
+      "original_title": "Двух жителей Краснодарского края заподозрили в попытке теракта в Туапсе",
+      "original_language": "ru",
+      "source": "Интерфакс",
+      "published": "2026-05-30T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Russia",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Concrete arrest of suspects plotting a terrorist attack.",
+      "related_articles": []
+    },
+    {
+      "id": "6a80b5538a33c1f2",
+      "incident_id": "inc-f985f66682daae60",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPbnRjSl9tWjhLU21jMDl3eVpKN3RyVmFkRE5xS1J2QjVXU3M5cWFFbFhQSmMtd1RrSG5ZRjZSX0xEYXkzUkh4andTMUE3YkpUemRXaHlGSVRwQnlOemR1MGduZWxCallsNXNiVXlDMU1KclZSNlNqSEVidnBqWnNDZHg0NTVPVGdZRWJoeUZlWjFDS1h1YnpUbFJ1YlR0MzM1V0NTMlhLVmVPNHA5Z0l5ZEd1UEJkSGNTckRVbGYzMG10cndEc21OSmtNUFl3VWJVVFJVYVhn?oc=5",
+      "title": "Mali: How JNIM Extorts Chinese Gold Miners to Finance Attacks",
+      "summary": "Reports detail how the JNIM terrorist group extorts Chinese artisanal gold miners in Mali to fund its terrorist operations.",
+      "original_title": "Mali : comment le Jnim rançonne les orpailleurs chinois pour financer ses attaques",
+      "original_language": "fr",
+      "source": "Jeune Afrique",
+      "published": "2026-05-30T07:00:00+00:00",
+      "category": "Terrorist Financing",
+      "categories": [
+        "Terrorist Financing"
+      ],
+      "actor_group": "JNIM",
+      "primary_event_type": "FINANCING",
+      "country": "Mali",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports concrete terrorist financing methods (extortion) used by JNIM.",
+      "related_articles": []
+    },
+    {
+      "id": "865222a239dd1004",
+      "incident_id": "inc-1a07afa6fa4ca194",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPTktOLXA1UjYwWGNPaEJDSUVmUm94VEZfbDJOaGNtYWxQRS0ySWJwaTc1U2tNaEZETGlJNm1wanJIWUNZbDY5VXpwRG9CWk1mbVFlaVg2OGNyR09IVlF1WlhpODc4Ql8yTWhhbXo3cEQtWFMwWVdMVnNhVktrQlZxMndHS0VpOVFlU2xpRmhwMkVsUUtfVlZBR3BHYlNFUDgwY0N0d1lJOVM2WTgtMWk1QkhENFEzLUs0UnRiaC1mQW9YMGvSAcgBQVVfeXFMTlUyM1ZFaHFvbUlhM2NHMlU5dktnaXZPNTVlMFZmX2Qzbkc4bnNibUpKWHJyV2FfdWRROE5uYnpReVRKRkdkd09YNngzcHhFWlpfZkN4MkJDVkExY21sM3o0aUdEd25TMnUwUFY3b0JsUDV6b3dPNEFpVkJRRHl4RUFkTWlFWFVjSGxYVnQ4dGJZNU5oazgwbWVkOWRLUWJDS2tBdG9pUE9kdlV4cFlwekhicmZrN2FwTnBwWXBzeGFueG5CQTdjaG8?oc=5",
+      "title": "NIA conducts raids in Kerala following explosives seizure",
+      "summary": "The National Investigation Agency (NIA) has conducted a series of raids in Kerala as part of an investigation into a seizure of explosives.",
+      "original_title": "NIA conducts raids in Kerala over explosives seizure",
+      "original_language": "en",
+      "source": "The Times of India",
+      "published": "2026-05-30T07:00:00+00:00",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "India",
+      "region": "Kerala",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete, official counter-terrorism raid and investigation involving the seizure of explosives.",
       "related_articles": []
     }
   ]
