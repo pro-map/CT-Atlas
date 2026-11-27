@@ -3,8 +3,721 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-11-27T09:28:20.016007+00:00",
+ "updated_at": "2026-11-27T17:28:22.952608+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-31c2cda0cc65d9bf",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOTl9LOVplUUJVTFVPb2prSDNBS2NQV1B6RWV2WVRQaWRhLWdxNjRFcmJBbDJoWUkzSDh3bDRLMUE2YVZCWVdOb2xTenlPNk5DRDRyZ1RpcXE2UEgtV1VNNThQNnE0OXM0UlhxRHNnczBnVFA4ZUwtNXhFZkdpVUlVWlliRGRkVnZNR3hkUzZYNkhOZmZKdUM0dDdJX2hNQnZCY2RqZDdTVmFJdC0yQ09sNk9uYXdYLUFBY0pLMdIBqgFBVV95cUxQaXE2S3F5VllTczBtUWVVOHp0UEs2QlpVeUtmV1FCeFhWY0c0SnBtQ3JaRFNYcEpBbndnTnduNzRvakc3SGkwVU9UcGtaUnFZeFpiNzhFMUd4XzRIeTJIeTBMU3Rqby0zbDVQNExtRjZuZkFJZ1lNT294cUc4ZXhVdlU1emFUQ2wta1N4Nl9UejRpUS0tcGRoVHJtVkJNWmxGVVJObklXRmRZdw?oc=5",
+   "title": "Four Challenges of Nuclear Power Plant Development in Indonesia, from Nuclear Waste to Earthquake Risk",
+   "summary": "An analysis highlights key challenges for the development of nuclear power plants in Indonesia, specifically addressing waste management and seismic safety concerns. These factors are central to the current regulatory and planning discourse for the country's nuclear energy ambitions.",
+   "original_title": "Empat Tantangan Pembangunan PLTN di Indonesia, dari Limbah Nuklir hingga Risiko Gempa",
+   "original_language": "id",
+   "source": "Ketik",
+   "published": "2026-11-27T17:16:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Discusses regulatory and developmental challenges for civilian nuclear infrastructure."
+  },
+  {
+   "id": "radnuc-background-d63ce0ac4c64e4d0",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOcElKZnZuckxfMzUxd1NkeG9fSjRyMEgyeUFtdWptb0dRbVc2TnBhM1VwNEoyT2Y3ckpqaDgyalMzQzZKXzJSc2hjOWJVVkNJZHl3VzFFa25nQ1hKVE03UWctM3ltazl1bURhZGxoYlE4UGZkQkpUaEVVWnBURVNvZ1JYV1oyRWFfbEg5dXI1azlTYWgzcTFIeGlTVnhOUm9wdzE4bFd1bXdyYWNTZHotOA?oc=5",
+   "title": "Cuorgnè, the nuclear cycle and new reactors at the center of the meeting at Unitre",
+   "summary": "A meeting held at Unitre in Cuorgnè focused on the nuclear fuel cycle and the development of new reactor technologies. The discussion covered technical aspects of nuclear energy as part of a public awareness initiative.",
+   "original_title": "Cuorgnè, il ciclo del nucleare e i nuovi reattori al centro dell’incontro all’Unitre",
+   "original_language": "it",
+   "source": "CanaveseNews",
+   "published": "2026-11-27T16:47:11+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details a public meeting on nuclear industry topics, which falls under safety/security meetings regarding knowledge sharing and industry discussion."
+  },
+  {
+   "id": "radnuc-background-ce04345360662fbb",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOS1dnVS1iTGRuUlA3VTlvN2s0VjhwRVhfVk9OY252dkJPSUlFX3NCZWM2RlR3NkJDSmstdHdxWVNDdGtCZnd6VnAyUGE5VHR5aUFnS3lFcEExYVBRdkF6TUw0LXhyOTY2STRNdEZ3M0NQLXNKakdhY19SY1pyNmRGV3VMcG1nX3lMMHYtd3g3eF9hT2ZW?oc=5",
+   "title": "Bapeten Approves Site Evaluation for Bangka Nuclear Plant",
+   "summary": "Indonesia's nuclear regulatory agency, Bapeten, has officially approved the site evaluation process for the proposed Bangka nuclear power plant. This approval marks a procedural step in the regulatory oversight of the project's development.",
+   "original_title": "Bapeten Approves Site Evaluation for Bangka Nuclear Plant",
+   "original_language": "en",
+   "source": "Tempo.co English",
+   "published": "2026-11-27T16:46:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a formal regulatory approval for a civilian nuclear facility site evaluation."
+  },
+  {
+   "id": "radnuc-background-b7ac4096b908aca1",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQeF9pdlVOWHRONGxNMzg5b2pGeDA5X1U4d3drTTlCa3NldFhMM2otTExxa2xkaDQwam1vVGtFQjNkVEFVbjlrMm1KREQwQ3pobGQ3aGFxOXAzUlc3bFAzVzh5UjIyRkljRE82NnlzbC1uZDN2Umd6WkZrb0hMYlpjR2JFZ3dlcTRjR2dzWVY5LW5YcG8?oc=5",
+   "title": "Nuclear, do ENEA data offer a new clue about the DTT mystery?",
+   "summary": "Recent data published by ENEA provides new insights regarding the DTT (Divertor Tokamak Test) facility project in Italy. The report highlights technical developments or status updates concerning this research fusion infrastructure.",
+   "original_title": "Nucleare, i dati ENEA offrono un nuovo indizio sul giallo del DTT?",
+   "original_language": "it",
+   "source": "Energia Oltre",
+   "published": "2026-11-27T16:11:59+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This relates to developments in civilian nuclear research infrastructure, specifically fusion technology testing."
+  },
+  {
+   "id": "radnuc-background-0d43997fb0cb435c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBwbFFGOURlVktKMGFITEJ0RnF4b2psbjVHd3d3U1BmemRtcDZsQWsxTUNqYXJISWZJRDZ6QmRHOHFIaHo4dVVwd2I5UDlaTEx1SVlVUjBENVB3REh3QWw5d2NVQzl6OGR6SHdWWkpMRVFES1k?oc=5",
+   "title": "From 'Manual Inspection' to 'Digital Intelligence Brain': Unveiling How AI Safeguards Nuclear Power Safety",
+   "summary": "The article explores the integration of artificial intelligence in nuclear power plant operations to enhance safety monitoring. It highlights the transition from manual inspection processes to digital systems designed to improve facility oversight.",
+   "original_title": "从“人工排查”到“数智大脑”：揭秘AI如何守护大国重器核电安全",
+   "original_language": "zh",
+   "source": "潮新闻客户端",
+   "published": "2026-11-27T15:08:46+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details the application of AI technologies in the safety management of nuclear power facilities."
+  },
+  {
+   "id": "radnuc-background-c66b57b7325f2386",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPdzNhd0NvOXhVTFBXZGc0UVpVcWNlS2FldUFKTmV0UVRvUm5NUndOZVZCbGc2UmtuLWpDbWZ4V3NWd1NOX3U3czFpTmd5b09nNFAtVzR2QnYyNFpDOEdUOG5jZ2s0aVBMM2lwOTZLcGxLR00tUW5yN2UzcndCc1E4UG16MGhlcmlQRW5neG5tWWNFM1ZaT3FORg?oc=5",
+   "title": "UK-Korea Civil Nuclear Cooperation Protocol 2026",
+   "summary": "The United Kingdom and South Korea have established a new protocol concerning civil nuclear cooperation. The agreement outlines a framework for collaborative efforts in the civilian nuclear sector.",
+   "original_title": "UK-Korea Civil Nuclear Cooperation Protocol 2026",
+   "original_language": "en",
+   "source": "CASRAI",
+   "published": "2026-11-27T15:08:21+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This relates to international policy and regulatory cooperation in the civilian nuclear sector."
+  },
+  {
+   "id": "radnuc-background-e46f65dfb623c73e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQOGxQdWxiRUczUnpUMGtwd0JsVkRpUkluX0pFRFlQNnRCYzNPVFBXSnc1ZUQ4VG1PdkJPa2QzcTQ2TG5FM2J4YzVLNWxTSE0xWEdWS2dXYW55UHM5dDlNQ3V3U190dlc5V0gxNjlJZHA5VVNBQ3pNUUJLUENBVWZvU1pXSzJtbjN1N1gzdjRtS0dGUFN1WnNCZ2N3?oc=5",
+   "title": "Vietnam has international experience in nuclear power development.",
+   "summary": "Vietnam is leveraging its international experience to inform the development of its nuclear power industry. This reflects the country's strategic planning for civilian energy infrastructure.",
+   "original_title": "পারমাণবিক শক্তি উন্নয়নে ভিয়েতনামের আন্তর্জাতিক অভিজ্ঞতা রয়েছে।",
+   "original_language": "bn",
+   "source": "Vietnam.vn",
+   "published": "2026-11-27T14:23:48+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This relates to civilian nuclear power industry development and planning."
+  },
+  {
+   "id": "radnuc-background-575be439dcec610a",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQQ1RHODVxRG5RRU1OOElNTWxCbFBLcWdNdmZkU3Q0MWlzUjlWOVMxRWMwdmJkRU5YVEh1VFBjTlh2RmV5WGRwVUdiRkhlVlc1NU96dUxtbUJsd0hfTnIzMW5SUHlxR3VZbHBESnBUNmJjY0laZnlFRURidTVoREtvcg?oc=5",
+   "title": "Italy Taking Steps to Revive Use of Nuclear Power",
+   "summary": "The Italian government is initiating policy measures aimed at reintroducing nuclear energy as part of the country's power infrastructure. These steps involve preliminary legislative and regulatory groundwork for future projects.",
+   "original_title": "Italy Taking Steps to Revive Use of Nuclear Power",
+   "original_language": "en",
+   "source": "POWER Magazine",
+   "published": "2026-11-27T14:16:43+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update involves national policy and regulatory development regarding the civilian nuclear industry."
+  },
+  {
+   "id": "radnuc-background-aa289c7f39bf90d3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOdmR5ei1GekdiOVJxTndRN2tnZVF0ZzdGVU95enBlZjBDdGxqZWZHcTBDNEszVGd3TjdtZEhramphVG5zdXotRml0QzNjVkxRR1RUZ3Joc2hVUW9WY3Rxb3B6c0F3N1RGZ0w4RWMzVVFmSl80eWFidUFDN2h1TWxXU3cxT290RXIwQWc5MmlnSUpHX2EzYmF1SHJuYlZaRzlaNVRFNTNqc1Axb3NQU1ZDNzdJbFIxUW81VFV1TGU4WFMtdG52NEEzYW1hWTg4SmtIaGc?oc=5",
+   "title": "Civil Nuclear Diplomacy: Governance of Indonesia-Korea Modular Reactors",
+   "summary": "The article explores the governance framework and bilateral cooperation between Indonesia and South Korea regarding the potential deployment of small modular reactors. It reflects on the policy and regulatory structures required for such civilian nuclear partnerships.",
+   "original_title": "Diplomasi Nuklir Sipil: Tata Kelola Reaktor Modular Indonesia-Korea Halaman 1",
+   "original_language": "id",
+   "source": "Kompasiana.com",
+   "published": "2026-11-27T14:05:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers civilian industry supply chain development and international cooperation."
+  },
+  {
+   "id": "radnuc-background-0bc250008b3c4fd6",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9RcnJOZy1NME9ic0pWMk90M2haVHA0cFV0Wmcya2tIcUZZUThtRllkZnEzblVFU2FEQ0lSN2taaHYwcG8xZHFfX3FDMjduTzAtcUI0czc3aVk5ODlEYlZ5Y0xEQ3V2S1JQbG40MnFoUkNkR0g5cktMSQ?oc=5",
+   "title": "Indonesia welcomes U.S. support for the country's nuclear energy development",
+   "summary": "The Indonesian government has expressed support for international cooperation with the U.S. to advance its domestic nuclear energy capabilities. This reflects ongoing efforts toward national nuclear policy and development.",
+   "original_title": "印尼欢迎美国支持我国核能发展",
+   "original_language": "zh",
+   "source": "Shangbao Indonesia",
+   "published": "2026-11-27T12:54:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This represents a significant development in national nuclear policy and international cooperation."
+  },
+  {
+   "id": "radnuc-background-78133060ac7cfdad",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQcG1yTE5uZ0F2alp1RzQ3S0hHZjhkZ1pPUnlhOG5BWkxFLVJJQ0pQYXMwc2xPOVBXX3BrUWktQWFiSE5XNTdyS0xaUTUzVTB5ZEtlY0UxOHpwQ3EzTTlPTzZWNDZ1YU95UUR4MUpmdFlLRXBQZFAyYVowVVFTOUhveHJHRXNOMEJJ?oc=5",
+   "title": "Did 'crew members' bring suspected radioactive items? Did someone force entry at the port? Kaiping border inspection conducts emergency response drills.",
+   "summary": "Kaiping border inspection authorities conducted emergency response drills to practice handling scenarios involving the transit of suspected radioactive materials and unauthorized port entry. These exercises aim to improve the preparedness of border personnel.",
+   "original_title": "“船员”带疑似辐射物品入境？有人强行冲闯口岸？开平边检开展应急处突演练",
+   "original_language": "zh",
+   "source": "Sohu",
+   "published": "2026-11-27T12:48:25+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a documented radiological emergency response training exercise."
+  },
+  {
+   "id": "radnuc-background-0375a82dce9e4b35",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5WcDctYjNLNl8weF93dU03NC1tYmoxaUVhWmV3V0Z2SDNpd2c5Ukt0d21RUkZSckZwbDQ3Tk1Dd2c5TDlJcW01Nk1oOEc5cmxnNXdCV0dpWkhIcTc2OWw5VkxrYmZtLV9z?oc=5",
+   "title": "Malaysia Plans to Introduce Nuclear Energy in Phases Starting from 2040 to Meet Rising Electricity Demand and Net-Zero Goals",
+   "summary": "Malaysia has announced plans to implement nuclear power in phases beginning in 2040. The move aims to address increasing power demand while supporting the nation's commitment to net-zero emission targets.",
+   "original_title": "马国拟2040年起分阶段引入核能 应对电力需求高涨与净零排放目标",
+   "original_language": "zh",
+   "source": "联合早报",
+   "published": "2026-11-27T12:38:30+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a policy-level development regarding national nuclear energy planning and regulatory planning for future implementation."
+  },
+  {
+   "id": "radnuc-background-bbf48587316587e9",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPaHF4SXY5eWYtRkg1M1RfdmFDVEhPX04tc1UwVXYwbm5ndXEwbGdlTW5xYjAyeDROR1NUUUppWTRtU1BYemJNZU8yRE1kWTZZclhiSlBIQmgwRE1jSk9FNnlZZ091akpocWkwdHF0TUVENE5zWS1PRFJlNlltLWtvMGhubVdYOTJZd2VvclBwUkJRU0hObFBfb25XWUlmdVJBZWk5ZTZRUTJ0WE1JaGlLaS1aOVUyeG9jREc5TVliTy1HYWxxWlR1TWhKZkJsbnJzaTBnd1VWTnBzRl9yb3Zr?oc=5",
+   "title": "Trump Media offers 13 million to convince shareholders of the merger with Tae Technologies",
+   "summary": "Trump Media is providing a financial incentive to shareholders to finalize a merger with TAE Technologies, a company specialized in nuclear fusion energy research. The transaction is intended to consolidate the development of fusion power solutions.",
+   "original_title": "Trump Media mette sul piatto 13 milioni per convincere gli azionisti della fusione con Tae Technologies",
+   "original_language": "it",
+   "source": "Milano Finanza",
+   "published": "2026-11-27T12:19:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The story concerns a corporate development within the civilian fusion energy supply chain/industry."
+  },
+  {
+   "id": "radnuc-background-f751c1569c849c04",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxOeEo5WXhHSGExb28yY0J5bzlQdUNDZGY2OFp2NlppN01PYUduZF9jYmVJUG4zaGZ1VDREM0dwSXBCajc4M3pCd0psakFmeTVRckp3Y1lqVzVjZEVIdmVWbU1oSmw4ZGhYbzRfTmlMOF9Gd1hwY2RjdW9FMWJSN3RPZml3amFUcTdVZjFJX0JuNDNqWmQxZFQ1Yk85TjRaSnA0b08zYjR4QlcxVnBrLTRjdV9Ec2RDSER5ZHc3NHdOajhVWTNKc00xT0c5MDJydmNHOGNRNTlMQVZORVVqS3FianhKZ0E2TUtfN0pGbVVLMkdlV3JYOTlyUTB2cTJULXd3M0NKdDZTRXd1T3c?oc=5",
+   "title": "Türkiye and Russia extend natural gas agreement by 3 years; first unit at Akkuyu to be commissioned in December",
+   "summary": "Türkiye and Russia have extended their natural gas supply agreement for three years. Additionally, the first unit of the Akkuyu Nuclear Power Plant is scheduled to be commissioned this December.",
+   "original_title": "Türkiye ile Rusya doğal gaz anlaşmasını 3 yıl uzattı, Akkuyu'da ilk ünite aralıkta devreye alınacak",
+   "original_language": "tr",
+   "source": "Foreks.com",
+   "published": "2026-11-27T11:48:26+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report covers a significant development in the lifecycle/commissioning of a civilian nuclear power facility."
+  },
+  {
+   "id": "radnuc-background-8b665f7048657196",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNRzBDYVJfZGlpWDB1MURscnM4bHZzQm5mZzZyVXdzQ1loTHFERGtVZ1ZQZEEtZlVtbE5WWTdXaWtXUHowMXBVRUl5cFBQT19FaGVYeW1LTXlmMENZbWFMM05ycjk0V2NuakNJdS0wQkZqSE1yUElnemJEMEl0OXhCb0dwc1pwaFlYNTd5MURRN053VlhZZFcxN0MwSFhLMXFUdWszWkhtNkhPN2vSAbsBQVVfeXFMUGxmQ3hVUlVjQ24wMG55Q0xmOWFEa1I1dzZpTFR0NnBvUVJoNkRVckVHTnF4ZjI4M3VDZHh5Z1llSWJLVzVuYWtER0xzQXdmX0ViN2tUVzRUS0RoNlVPVDhtRDBuaGI0SDNFRER3Vl8zS1JWbDZ3ZGY4TmdrY1ZOSW1tWlFGUUt6R1ByMkx4aDBCclAwNXdYQS1MY1UwQm5Bc3dnc3ZJRjJPMENSUWhrTVJydXQ4RFJvMnBiSQ?oc=5",
+   "title": "Investment in nuclear fuel startup from Borusan Ventures",
+   "summary": "Borusan Ventures has announced an investment in a nuclear fuel startup. This development concerns the civilian nuclear energy supply chain.",
+   "original_title": "Borusan Ventures’tan nükleer yakıt girişimine yatırım",
+   "original_language": "tr",
+   "source": "Enerji Günlüğü",
+   "published": "2026-11-27T11:15:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report pertains to industry supply chain developments in the nuclear fuel sector."
+  },
+  {
+   "id": "radnuc-background-77217475271ff5e6",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1ZcEdsck5hZFFsWTBhLWdfQmVlRVlPZnp4SmVaZlJ5MW82Y0ZCRWZTcEVnTVFVSDVyQUFWOExvU1hzUzN6c3NJd0lPRE1Ld1QyUTFoSkwzRWRmYUFGcVBlSEtEd3hzNXlBMVpEOQ?oc=5",
+   "title": "Dou Yong: Public Opinion on Nuclear Energy: The 'Cognitive Temperature Difference' and 'NIMBY Mentality' Behind Support",
+   "summary": "This commentary explores public perceptions and the NIMBY (Not In My Backyard) phenomenon regarding civilian nuclear energy development. It examines the disparity between general public support and local opposition to nuclear facility siting.",
+   "original_title": "窦勇：核能民调：支持背后的“认知温差”与“邻避心理”",
+   "original_language": "zh",
+   "source": "联合早报",
+   "published": "2026-11-27T11:03:18+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "civilian_facility_protests"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report discusses public attitudes and local-resident opposition, which falls under civilian_facility_protests."
+  },
+  {
+   "id": "radnuc-background-ed69860248dac580",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNa3ZvWlF1WkM3dnNVS2Q4S3R5NUdfRFVwVTkwRmo2dDlFWExjeG1kbG9qUGFHbnZZQUxJUGdLTF9oa3Z3QjdkV0RKUFJCeHp1SzkzUXZrdDNHanl3OW5nTmdDcUwxN2hYSEhKekJnUjBWa2N3OF9UakEwN1ZPWGRQS3dRLVlLUkRiNmZJNUlHeHhvOHNtTXlrZTFEa2FSQ3ItZEI3anZLc3ZCTmN6NElXdExXMF9QQTJ0RGlTSHdZWQ?oc=5",
+   "title": "Developing nuclear energy and atomic energy in the national energy development strategy.",
+   "summary": "National policies are prioritizing the integration of nuclear energy into the broader national energy development strategy. This indicates a high-level regulatory and strategic planning development for the nuclear sector.",
+   "original_title": "राष्ट्रीय ऊर्जा विकास रणनीति में परमाणु ऊर्जा और नाभिकीय ऊर्जा का विकास करना।",
+   "original_language": "hi",
+   "source": "Vietnam.vn",
+   "published": "2026-11-27T10:14:41+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches regulation_and_licensing for national nuclear policy."
+  },
+  {
+   "id": "radnuc-background-054bb457da1db8b0",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxObUREbnFYb3NEdlE2eFhJVkZTTkRYNjJiLWREWXg3Ym5jcF9MWHRDazVCQlJtYXlWdFlLeDRVMTUyQVpqVERhaVlSalVMQ0RmaEN3Y0J0OWVMeTlrMDhDRm01ZkVxZzRSLWR3a3BuMnBXMFhNZlNYTjRFR2pMaVpDbW50VVF1QlpkRTN0blhOVWRJYk9NRkMwUGNYY3FmM3V1ODItRGVITDZySnZEbE1YMlF4cw?oc=5",
+   "title": "Prabowo Wants to Promote Nuclear Energy: Is It Right?",
+   "summary": "The article examines the Indonesian government's political interest in advancing nuclear energy as part of the country's broader energy transition strategy. It questions the feasibility and appropriate path for implementing these nuclear power plans.",
+   "original_title": "Prabowo Ingin Mendorong Energi Nuklir: Apakah Tepat?",
+   "original_language": "id",
+   "source": "Transisi energi berkeadilan",
+   "published": "2026-11-27T09:58:56+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Discusses national policy and regulatory planning for civilian nuclear power."
+  },
+  {
+   "id": "radnuc-background-91278013228271f0",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNSFdvMDNEdGFCbnlEcm1aeXFhUlJaSkpJRncxQVZiU01CTUtpMGItaC0zeGdhT2pqSnNqYUtpdVpFM0xtX25PN2NlcERxdGs5TGhLbWs1cFhPS1NqZG5HTGY4SzVGMVNlRnJIQ1VLazAtZUpoRHB4MUlGelFGT1RIV0tST1M3QlB5Qnhfal83YzZaS3A3R0o3cDA1UVljMFFlU3c?oc=5",
+   "title": "Full-scale exercise in Izmir covering threats from earthquakes to chemical hazards",
+   "summary": "A comprehensive emergency response exercise was conducted in Izmir, covering disaster scenarios including chemical threats. These drills test inter-agency preparedness for radiological or hazardous material incidents.",
+   "original_title": "Depremden kimyasal tehdide İzmir’de tam kapsamlı tatbikat",
+   "original_language": "tr",
+   "source": "www.simashaber.com",
+   "published": "2026-11-27T09:49:28+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The event concerns emergency preparedness exercises relevant to radiological/hazardous material threats."
+  },
+  {
+   "id": "radnuc-background-bc16410f92343bdd",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPMmkyZ2o4clY0VnY5VUg1dGhqbWNiZFBKdW9QLVhnQkpnWkFnT2c4V3NsNldUSl91M2xrMnk2MHlmUG82UkRVZEF4b0owS3hCaFBOTDUzcXI2QVVlb2VmcDFKeWxMUDBxM01IYktxeHI5dGwwUHpFN1ktVnJERllaaTZ1NDBkYjR2ejJiMQ?oc=5",
+   "title": "The World's Largest Nuclear Energy Event! Shenzhen Nuclear Expo Opens on December 8",
+   "summary": "The Shenzhen Nuclear Expo is scheduled to commence on December 8, billed as the world's largest gathering for the nuclear industry. The event is expected to cover various aspects of the nuclear power sector.",
+   "original_title": "全球最大核能盛会！深圳核博会12月8日启幕",
+   "original_language": "zh",
+   "source": "Sohu",
+   "published": "2026-11-27T09:01:24+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This announces a major industry conference which serves as a forum for safety, security, and technical discussions."
+  },
+  {
+   "id": "radnuc-background-616c1585dea46f9c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNY2VRZXhMNTdlX3o3eVpEOF9LQWRPb1RjVTJyRzZmT1dCdEg0UERSRHlKTXI4RDN1Tl95enlpOWVKeExMQVloTWFtSF9fbHQwc0ZYX3doMll4VWg0YWdHZ2lCVFVaSkwwMTd0a0k4c3VhZUQ1amphQkVEZkwzdTJwUWtXbmV1Q2JtRDZlbzJPNVY1bGdXX1VXelJfRVdEUlJZSjEtWElLenU?oc=5",
+   "title": "80 million dollar investment in nuclear fuel startup Project Omega",
+   "summary": "Project Omega, a nuclear fuel startup, has secured 80 million dollars in investment. The funding supports advancement in the civilian nuclear fuel lifecycle.",
+   "original_title": "Nükleer yakıt girişimi Project Omega'ya 80 milyon dolarlık yatırım",
+   "original_language": "tr",
+   "source": "Dosya Haber",
+   "published": "2026-11-27T08:42:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report relates to investment in the nuclear fuel industry supply chain."
+  },
+  {
+   "id": "radnuc-background-d4372b4f550b1002",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE1kXzA1NkNEdnFaY0ZUclZMSzlfZWVEMDU1ekxJSzRlelJDUkVBN0tTaEtWV0tuekdEQVJZRDJPSkFjc0xrZ0RPS05UNFE?oc=5",
+   "title": "Inner Dome of Zhangzhou Nuclear Power Unit 4 Put into Place, Shifting to Equipment Installation",
+   "summary": "The inner containment dome for Unit 4 of the Zhangzhou Nuclear Power Plant has been successfully installed. The project is now transitioning into the equipment installation phase.",
+   "original_title": "漳州核电4号机组内穹顶就位 转入设备安装",
+   "original_language": "zh",
+   "source": "www.itsdw.cn",
+   "published": "2026-11-27T08:12:41+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This records a significant construction milestone in the industry supply chain lifecycle of a nuclear facility."
+  },
+  {
+   "id": "radnuc-background-4da79fd2d5b6d275",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNWVFpNmswR3RQNk5ic2pFZE1CQUxhUE1oZ1FuNVVEeVBfUTQzemNYRFNkMnlPMlRrYk10UjRaaHprRWdQY095OHZ1c0ctLTFkSEtINWg5eVVMYUEzZXg5ZDRBaGJBTXlLdldtVElYdXZwQVBvVzBMWGEtemRWeHJYNVczZXNlMHgzUUdYaGc2YVE?oc=5",
+   "title": "Disseminating training and plans for dealing with radiation and nuclear accidents.",
+   "summary": "Authorities are promoting and distributing training protocols and emergency plans for nuclear and radiological incident response. These measures aim to enhance readiness for potential civilian radiological accidents.",
+   "original_title": "विकिरण और परमाणु दुर्घटनाओं से निपटने के लिए प्रशिक्षण और योजनाओं का प्रसार करना।",
+   "original_language": "hi",
+   "source": "Vietnam.vn",
+   "published": "2026-11-27T08:10:10+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches emergency_exercises topic."
+  },
   {
    "id": "radnuc-background-f283fd6138f79f0e",
    "kind": "radnuc_background",
@@ -99,6 +812,68 @@
    "ai_relevance_reason": "RadNuc background only: Reports on a technological advancement in nuclear fusion research."
   },
   {
+   "id": "radnuc-background-4b7b7b3d2419d0a8",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQeUUxbi1LWWY0R3FYa0JIMmJLaDh6TkY5bEhiUV83QjAtY09Kd3REWHZVb09UYnlyNUI5YUFxc3F2bVJsb1B1b1ZadHNGQjJQTm1xZlpBTzBVc3RfTTUyaXZQOHZxakdIUHlLek8tYk1GRVp0a3Y0YlBna2V1eXF3RzZHTXdpVnE4cUlTeGZZdFZYWWo1VW82Q1FlUF9oMmlaZng0N25BSEhGbFlkU21tdTAwemxqNDg?oc=5",
+   "title": "Rosatom successfully tested closed nuclear fuel cycle at Beloyarsk",
+   "summary": "Rosatom has successfully tested a closed nuclear fuel cycle at the Beloyarsk nuclear power plant. This achievement represents a technological advancement in nuclear fuel management.",
+   "original_title": "Rosatom Beloyarsk'ta Kapalı Nükleer Yakıt Çevrimini Başarıyla Denedi",
+   "original_language": "tr",
+   "source": "Haber Gündemim",
+   "published": "2026-11-27T07:03:36+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a dated scientific/technological advancement in the nuclear industry."
+  },
+  {
+   "id": "radnuc-background-d5036d1093232d67",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOdldGejVvZG5TeXRRVEtIbFd5ZGpBbGx5NTBnQ0FDVHctSFliNlRvcWU4cU9ZREpmM0s1bDdXUDNabHVLUGpnZTFSUy1qN0F2enotaVYteFBEenVWQVlEN2dlN0tfNVpPbWtjclBjUGYyUmc1bE55TjhXTDBIM0o4VnF1a2lVQU14TXFjOU5vWVU?oc=5",
+   "title": "Development and dissemination of radiation and nuclear incident response plans.",
+   "summary": "Authorities are developing and distributing formal response plans for nuclear and radiological incidents. This effort is aimed at improving preparedness for potential emergency situations.",
+   "original_title": "Разработка и распространение планов реагирования на радиационные и ядерные инциденты.",
+   "original_language": "ru",
+   "source": "Vietnam.vn",
+   "published": "2026-11-27T06:03:52+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches topic of emergency response preparedness."
+  },
+  {
    "id": "radnuc-background-812feceb135a3966",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -161,6 +936,37 @@
    "ai_relevance_reason": "RadNuc background only: Describes a technological advance in nuclear fuel recycling, satisfying the science and technology topic criteria."
   },
   {
+   "id": "radnuc-background-f0fb752969239ba8",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNTWk4aXR6UW1JUno5dHRiRlpSSVI1R2NTaFpQaDY0UFhvUmRhWmtiSWZScFhCTEpTb0Zrd19SQVNWYjVnUXpEM0NzRkVBeXpzcDFhTkt6TWNTb3JoUGg1RkpZcnJjOWY0UkJMOTRvUndiVFNVaGtneWtKWURwM3pqcHVoNjV6X01rSGZuRTNrVnpLN3ZjejhzY9IBngFBVV95cUxOdzJZRVpTQ3MzY2c1YnVfQ1JDRXkwMWhVMjZ6UmtCM0NPRFJ1dDk1RnNPZjlvem9tbXZSdDJaMEkteUQ5RUNYQTFpYUxmMU1NYk9peGlOSjlkVDJJbTdsUExYUXh4N0FRU29WWmhXS3U1Z3lqaDJjMnk5SWlic1o3VU9UWmJBTnBFdjlLMFBfekt6SFh0ZXQyRDhLV1NSUQ?oc=5",
+   "title": "US Prepares Indonesia to Become an ASEAN Nuclear Energy Development Center",
+   "summary": "The United States is reportedly supporting Indonesia's role as a regional hub for the development of civilian nuclear energy in ASEAN. The initiative focuses on enhancing regional industrial and technical capacity for nuclear power.",
+   "original_title": "AS Siapkan Indonesia Jadi Pusat Pengembangan Energi Nuklir ASEAN »",
+   "original_language": "id",
+   "source": "dialeksis.com",
+   "published": "2026-11-27T05:00:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Addresses civilian nuclear supply chain development and regional industry capacity."
+  },
+  {
    "id": "radnuc-background-6f8e9e49a5c1662c",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -190,6 +996,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Reports on national policy and industrial development for civilian nuclear infrastructure."
+  },
+  {
+   "id": "radnuc-background-f7c948975bfd028f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOY0dvZnM2aFctd0pnTmtnT2hUN3c3TFdSS0ZtVHQ1LVZvdkhGZVBSTEg5SllUNmloSHc4T1JuOENZejdIeWhDXzAwTHBZbmVyZTRfMzQyVXdNdWs4YkVWQ3VGblhNRHJsR2p4VW85R2hETl9EUU1xaE9PQTNRejhTckhtUF9OQzFhUXRBTHdmNDVxRDBTS1hJT2RTT25fMmlyNVpIT1ZGbkF6RFVDbXBFQkVnN04?oc=5",
+   "title": "Rosatom puts closed nuclear fuel cycle into pilot operation for the first time",
+   "summary": "Rosatom has commissioned a pilot project for a closed nuclear fuel cycle. The operation signifies a transition toward more efficient nuclear fuel technology.",
+   "original_title": "Rosatom ilk kez kapalı nükleer yakıt çevrimini pilot işletmeye aldı",
+   "original_language": "tr",
+   "source": "Haber Ege",
+   "published": "2026-11-27T04:03:29+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This reports on the implementation of new nuclear fuel cycle technology."
   },
   {
    "id": "radnuc-background-842ff3874dac4459",
@@ -223,7 +1060,7 @@
    "ai_relevance_reason": "RadNuc background only: This report documents the supply-chain completion of nuclear fuel for a civilian power plant, which falls under the industry_supply_chain topic."
   },
   {
-   "id": "radnuc-background-e09cf7fd01f4f0d5",
+   "id": "radnuc-background-1bd4c6933635eed9",
    "kind": "radnuc_background",
    "archive_only": true,
    "background_reviewed": true,
@@ -239,19 +1076,19 @@
    "parent_incident_id": null,
    "country": null,
    "region": null,
-   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPRU1RVjhiWlU4U2I5akZacUFmaXJBcFQxMEhjeUVjT0FTLW9DZmc3TEpYNE1JWGY5OVZUZHNoTHZWVEZiUHhIUkpHZURkWm1IcmNscnJMSjFQMktudDA1WmtJb1lrRl9sVHcxSTA3VXZTTE9ROTlINEIyVVA3X1piajRtS204LWJf?oc=5",
-   "title": "Disseminating new regulations on radiation and nuclear safety",
-   "summary": "New regulatory standards concerning radiation protection and nuclear safety have been published in Vietnam. These updates serve to strengthen the oversight of civilian nuclear activities.",
-   "original_title": "Menyebarluaskan peraturan baru tentang radiasi dan keselamatan nuklir.",
-   "original_language": "id",
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQczBqeVBPWkw3OE1YX1ZIOVNiYVd5aXhRZmZTNDhHT3FSOU5aTnFHbTlyUjFhQnIyYmMyRnBsZlRKV3dGaXJ5QkpnWTVBS2hxengxakVMVzJpdmo4RFN5ZFN3OFJPZnJLSXpVNzc5ZWswS3hHQ3JVVE13SHBFdVVCb0M3Wk4tOWE3?oc=5",
+   "title": "Dissemination of new regulations on radiation and nuclear safety.",
+   "summary": "New regulatory documents concerning radiation protection and nuclear safety standards have been published. These updates aim to enhance the safety framework for relevant civilian operations.",
+   "original_title": "הפצת תקנות חדשות בנושא קרינה ובטיחות גרעינית.",
+   "original_language": "he",
    "source": "Vietnam.vn",
-   "published": "2026-11-27T03:05:24+00:00",
-   "collected_at": "2026-11-27T09:28:20.016007+00:00",
+   "published": "2026-11-27T03:29:29+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
    "background_topics": [
     "regulation_and_licensing"
    ],
    "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: This is a valid update regarding national nuclear and radiation safety regulations."
+   "ai_relevance_reason": "RadNuc background only: Matches regulation and licensing topic."
   },
   {
    "id": "radnuc-background-62f37be6fca990ca",
@@ -531,6 +1368,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Matches topic: civilian_facility_protests."
+  },
+  {
+   "id": "radnuc-background-b108806118a18a14",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQVEw2MnZIQjRSbmllWktjNjNmZHBEYzZVU3BoX24tZXFGSGUwWElkU1ZudnVZcXk1ZXlsZEs5aXl0V205QS11cVpjZ3h6TVZ0eDd1NzZJTEdaR2p4ZXlrdFdvWDdoQWJrT2drVVAyNkh1aEN0eTlZOFVWUnB3dkl1aHppVDBpeWlJYkZNZg?oc=5",
+   "title": "Europe faces financing tests for promoting nuclear energy, officials bluntly state it cannot rely solely on private commercial operations",
+   "summary": "European officials have indicated that nuclear energy projects in the region face significant financing challenges. They emphasized that private commercial funding alone is insufficient for current nuclear expansion goals.",
+   "original_title": "歐洲推動核能面臨融資考驗官員直言無法單靠民間商業運作- 財經新聞",
+   "original_language": "zh-Hant",
+   "source": "PChome Online 新聞",
+   "published": "2026-11-26T21:51:56+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Addresses high-level policy and financing challenges for civilian nuclear energy infrastructure."
   },
   {
    "id": "radnuc-background-fde9fcc9202e5e18",
@@ -1619,6 +2487,100 @@
    "ai_relevance_reason": "RadNuc background only: The report tracks industrial supply chain progress for fusion energy infrastructure."
   },
   {
+   "id": "radnuc-background-01900e6b5147ebff",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1PUVBkc2dDOXBNMF9OTnBId2s2QmZyMVZ6WXRTWHJfQVZsN01GMUhGTlVJNGlDYVdkWGZtZkh1RERFYW1rT0F1akZzdlREQWJUdDdJaHVzQzRzQWJDbXBFT0FXclhvVDZr?oc=5",
+   "title": "PLN Pushes for Nuclear Power Plant Decision to Begin Operation by 2034",
+   "summary": "Indonesia's state electricity company, PLN, is advocating for a formal government decision on nuclear power plant development. The aim is to ensure the facility becomes operational by 2034.",
+   "original_title": "PLN Dorong Keputusan PLTN agar Beroperasi pada 2034",
+   "original_language": "id",
+   "source": "ChatNews.id",
+   "published": "2026-11-26T09:48:09+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns the regulatory and policy-making process for the potential introduction of civilian nuclear energy in Indonesia."
+  },
+  {
+   "id": "radnuc-background-9b62ff27b85f800c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQTWFHZ1FlQ3RTZWNXeWFDYXpPckZqSld0dGRrY01yX3NQaXpnZ0E1Ui0tVFpXWmlhVlpsTldGTGkzQnJtWFJFdFpBeTI0YUNoQjVsdkFseWdSWklqelJCOUdVdnhxRTJyeFduejlhdDZFQnRzdzdyR3R4SWoxZkw5a2g1MHZGRmVuRDRhcHNKN3VqSkpsSlZQeVZ4TUpsaXpjQ3pzbmp5dHd2NU9JRURmWFB1TEVNMzRVQmVZRkl1STFlN0xRZXJQN9IByAFBVV95cUxQTWFHZ1FlQ3RTZWNXeWFDYXpPckZqSld0dGRrY01yX3NQaXpnZ0E1Ui0tVFpXWmlhVlpsTldGTGkzQnJtWFJFdFpBeTI0YUNoQjVsdkFseWdSWklqelJCOUdVdnhxRTJyeFduejlhdDZFQnRzdzdyR3R4SWoxZkw5a2g1MHZGRmVuRDRhcHNKN3VqSkpsSlZQeVZ4TUpsaXpjQ3pzbmp5dHd2NU9JRURmWFB1TEVNMzRVQmVZRkl1STFlN0xRZXJQNw?oc=5",
+   "title": "PLN Head: Nuclear Power Plant Must Be Decided in the Coming Years",
+   "summary": "The leadership of PLN has stated that a definitive decision regarding the adoption of nuclear power must be finalized in the near future. This announcement reflects ongoing discussions regarding the diversification of the national energy mix.",
+   "original_title": "Bos PLN: Pembangkit Listrik Nuklir Harus Diputuskan Tahun-Tahun Ini",
+   "original_language": "id",
+   "source": "CNBC Indonesia",
+   "published": "2026-11-26T09:45:04+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report involves high-level policy discussions regarding the licensing and regulatory initiation of a civilian nuclear energy program."
+  },
+  {
+   "id": "radnuc-background-6149795fadf7776d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPU0hfcWdBMjVVTDJVNmpkSnRpVGlPWkY5c3UtR3ZHOFQzRXRKS2lHcXdtMVNyZ2RyLWRaV2djY0V1N0E2QXZYb3hta0E4R0ZJcWctVjIwQTZYVUV0UDNadWFOVkJRS2pBUmFjXzRkVEJqQUhfdGVqdGZXbEpOTm5lQkJxMHZzRFlkVzZ4WjJ0cVc3cGNOd0ZBdQ?oc=5",
+   "title": "Nearly 20 years after bidding farewell to nuclear power, Lithuania evaluates introduction of SMRs",
+   "summary": "Lithuania is currently evaluating the feasibility of adopting Small Modular Reactors (SMRs) nearly two decades after phasing out its previous nuclear capabilities. This assessment marks a potential shift in the nation's energy strategy.",
+   "original_title": "告別核電近 20 年，立陶宛評估導入 SMR",
+   "original_language": "zh-Hant",
+   "source": "TechNews 科技新報",
+   "published": "2026-11-26T08:50:16+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Describes national policy development and assessment regarding future civilian nuclear infrastructure."
+  },
+  {
    "id": "radnuc-background-5ffeaf9fafea3c6a",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1648,6 +2610,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This report concerns nuclear industry technological progress, which falls under science_and_technology."
+  },
+  {
+   "id": "radnuc-background-1b7d8d63c1ddbad9",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOaEhFZTRDbFNuRlRnS2ZXd2hWdnAycjlER2xqc2NXMzNNbldfSm1Ddk9jYnhjQi15UVJzWEVfeVZVYVBNbG9zNk1JYlhRMEZqMDBwVFVfSjB2cENnNkJCVkRYMERQV0Zpc01TR1VRS3NmcUhXaW15emxuRnNFdV9JaUVtQ0Z6MGo0M1l4ZjVfMmZnbl9YZ1JF?oc=5",
+   "title": "Vietnam gradually participates in the nuclear energy supply chain.",
+   "summary": "Vietnam is initiating steps to integrate into the global civilian nuclear energy supply chain. This development marks a transition toward formal industry engagement in the sector.",
+   "original_title": "וייטנאם משתתפת בהדרגה בשרשרת האספקה ​​של אנרגיה גרעינית",
+   "original_language": "he",
+   "source": "Vietnam.vn",
+   "published": "2026-11-26T08:20:57+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches industry supply chain topic."
   },
   {
    "id": "radnuc-background-b316915630c27bbf",
@@ -1868,6 +2861,68 @@
    "ai_relevance_reason": "RadNuc background only: The report discusses the planning and future implementation of civilian nuclear infrastructure."
   },
   {
+   "id": "radnuc-background-73ea486ab0e29f50",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5Bd25iaUxPcVE1TURDNm1RWmNRYndjdzBLTjFJTks1OFc4c3BCbUhaSXNxb005RHBaazk4SWlSRjNhNFJLb3owUUlTNFpHRVEwVVVZMVFOX3RRWFFmUEYzQQ?oc=5",
+   "title": "Hamaoka Nuclear Power Plant: Extent of Fabrication '10% to 20%' is Merely 'One Example' (Chairman Yamanaka)",
+   "summary": "Chairman Yamanaka of the Japanese nuclear regulator clarified the interpretation of fabrication figures for the Hamaoka Nuclear Power Plant. He emphasized that the cited percentages are context-dependent and represent only one instance in the ongoing assessment.",
+   "original_title": "#Hamaoka Nuclear Power Plant: Extent of Fabrication '10% to 20%' is Merely 'One Example' (Chairman Yamanaka)",
+   "original_language": "en",
+   "source": "note",
+   "published": "2026-11-26T03:52:08+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This covers regulatory assessment and oversight of a civilian nuclear plant."
+  },
+  {
+   "id": "radnuc-background-a7822f9607b514b1",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFA1RVVJSmh2dTFpVGtXYlJFT0ljM2VBM1J5dllwSmMxUW13ZUFXSFpIUTJMYkZmcktUeEFrWHo5N0d3UjRPdzBucldXSl9xei1YMl93R3RzQmJoUmlTRkRXeDNqSWk?oc=5",
+   "title": "Topsec wins a bid for a domestic industrial control network security framework project for a nuclear power enterprise, worth over 10 million yuan.",
+   "summary": "A cybersecurity firm, Topsec, has been awarded a contract to implement a network security framework for a nuclear energy enterprise. This development supports the enhancement of facility cybersecurity infrastructure.",
+   "original_title": "天融信中標某核電企業國產化工控網絡安全框架採購項目 規模超千萬元",
+   "original_language": "zh-Hant",
+   "source": "觀點網",
+   "published": "2026-11-26T01:31:03+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "facility_cybersecurity"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a report on defensive cybersecurity developments at a nuclear facility."
+  },
+  {
    "id": "radnuc-background-52b8da7c85f8d858",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2085,6 +3140,99 @@
    "ai_relevance_reason": "RadNuc background only: This is a record of civilian nuclear supply chain development and facility commissioning."
   },
   {
+   "id": "radnuc-background-90f7d67738ae0889",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOVTlMZUJ6WTRwZzFVUS1YRThJc1E1YVQ0UzJ1Z3MxeXNQTXdrUk9qX0NVanJpeGRBdGxmMFkwNjV2OFJFT2MyYXg2dUVkLVFSSkJHeHI2SF9feXlkWUxXUS12YmRuRHVoMnJ3NG9Mc2JIaDg4S0VzTXlkaWx0bFEwV25pbkJMR2w3ZVV2ZEpUUldCZGFJYkRHb0Z0MEFHU1li0gGsAUFVX3lxTE9YUUlPM2NLc2Y5NkxHVHpod2ZZUnBBbTdLeWtFLU5TeWF6UHRMQ0tRZmVHWHdHZmlYZzlVVFk0emc5a0w1aTJsMWVjd29RSzd0OGlsb0V0VFBtQkVsaGtqeXZSMi14aTNXMU1ZM0RWQVkzcXY2ZklxcThzVDFVOVRuZFpsbXB2bncyU1g1VlFzeEd6WXkxWGRLRnplVWNoX2tYXzBVdkk0M1dPcEg?oc=5",
+   "title": "Burnham leadership on nuclear regulation review ‘not clear’, Fingleton says",
+   "summary": "Criticism has been raised regarding the clarity of leadership regarding an upcoming review of nuclear regulations. The discussion centers on the administrative direction of the policy review process.",
+   "original_title": "Burnham leadership on nuclear regulation review ‘not clear’, Fingleton says",
+   "original_language": "en",
+   "source": "Utility Week",
+   "published": "2026-11-25T16:47:06+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This concerns the administration and leadership of a civilian nuclear regulatory review."
+  },
+  {
+   "id": "radnuc-background-efb7d3114fdf910b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPbnhWamxTaVZVRGNuckFVTkRZV3U2Zk1tZnFQZG5PYWs2MHlzZGhESGJhaGFRRmphWnEwVl9CdV9FWW96TUpWZzdGU3JXX05XWkdLbTlfOVYzSDkxZG0tYl9od2xTendtdUFuMzNZQjRJR2h5cWl5VnZIaWFqSWFFOEpKM1FOUS1xeTlUSkRzRGUwTjExTVBTTlBSOWxBZklqSnl6blVn?oc=5",
+   "title": "Vietnam and South Korea promote cooperation in training nuclear energy personnel",
+   "summary": "Vietnam and South Korea are strengthening cooperation in the training of personnel for the nuclear energy sector. The initiative aims to enhance professional standards within the civilian nuclear industry.",
+   "original_title": "Vietnam ve Güney Kore, nükleer enerji personeli yetiştirme konusunda işbirliğini teşvik ediyor.",
+   "original_language": "tr",
+   "source": "Vietnam.vn",
+   "published": "2026-11-25T16:42:27+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This reflects international cooperation and capacity building in the nuclear energy sector."
+  },
+  {
+   "id": "radnuc-background-9c9eeb69b41e880f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNa0JSLWdMWnBUWUppMjBaR1E1NTR0d2FjNjY4LVc2bFVQbWtFbWdIUEFsRUFYenRETEJ1RE0taXo4UHBiS011UnRkMUQ3TjE3dHNXWGNZbm1FUFdJb3hzNlhCekhQNWxyM2FKaHRyT2U0Vm5MNmYySDY4MW4xUE5LX1hSemdVX0pUemJlakFhTk5HUU0ySkpQRk1JeElKWW1ZSE05U1BhZU12RXdmektlWFB5TFFnUlVIZ0RvRElLRWRLZGRYaG5EQWFFQlVPZ0N5NmNz?oc=5",
+   "title": "Eskom in hot water after multiple warnings about nuclear compliance problems at Koeberg",
+   "summary": "Utility provider Eskom has faced repeated warnings regarding regulatory compliance issues at the Koeberg nuclear power plant. The situation highlights ongoing regulatory oversight and compliance monitoring of the facility.",
+   "original_title": "Eskom in hot water after multiple warnings about nuclear compliance problems at Koeberg",
+   "original_language": "en",
+   "source": "MyBroadband",
+   "published": "2026-11-25T16:37:54+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This involves regulatory compliance and oversight of a civilian nuclear plant."
+  },
+  {
    "id": "radnuc-background-2884dc390b11be95",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2114,6 +3262,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Dated industry safety/security and sector cooperation meeting."
+  },
+  {
+   "id": "radnuc-background-e2fa3c78b13a9555",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOTjl6bm9vWlZ5WW5FYy1NSERNbVRfR1BMOFpxMm1ibEVGVHpFay13Tl9seHZxYU5RUk1JTEJCN3djdW9iRm9GeEVHOGZ5M2s1WUtKalF1WVhKaUVnUHppSUYydnE4R0dRVWN5bXJ4S0NPWXQwUU5ZZWhESEFISVpSZGE2V3pDZllPbXJuUEJLU05sMnRDWF84SEhPRzNvOWZieEo2c09PdzFFN1BlaGZDOUhST2swdGs?oc=5",
+   "title": "NASA seeks partners to create the first nuclear reactor on the Moon",
+   "summary": "NASA has initiated a search for commercial and research partners to develop nuclear power infrastructure for lunar exploration. This initiative focuses on the supply chain and construction aspects of nuclear technology in space.",
+   "original_title": "NASA busca parceiros para criar primeiro reator nuclear na Lua",
+   "original_language": "pt",
+   "source": "UOL",
+   "published": "2026-11-25T15:50:54+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Inclusion: civilian nuclear industry supply chain/facility development."
   },
   {
    "id": "radnuc-background-2e1b227643e19453",
@@ -2209,37 +3388,6 @@
    "ai_relevance_reason": "RadNuc background only: This details a peer-review or evaluation visit regarding nuclear security training capabilities."
   },
   {
-   "id": "radnuc-background-a7d2a3c88a6c22ab",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQMS0yZ2tEWFJodWw2S1VoVHIxeWFBcFNLUFAyeHhQOWFuem1SMnRaZGdpZkdjRWZCb0hJZjJOdnRMQ3N2d21VOUF5TDFIYlhMM1J2cGFyZ0Zpc0VfVWVXaUZMRGhlNWdRV1p0bWZhZWcwNkxaZ1ZFcExYUHJhWnJtWF9idjR5cDRldTFOODdrZGlnNXpvTnNtOUVrSlJrTHFCR3JLY19R?oc=5",
-   "title": "Vietnam and South Korea promote cooperation in training nuclear energy personnel.",
-   "summary": "Vietnam and South Korea have agreed to enhance collaboration on the training of nuclear energy specialists. This initiative aims to support the development of human resources for civilian nuclear energy programs.",
-   "original_title": "וייטנאם ודרום קוריאה מקדמות שיתוף פעולה בהכשרת אנשי אנרגיה גרעינית.",
-   "original_language": "he",
-   "source": "Vietnam.vn",
-   "published": "2026-11-25T12:22:20+00:00",
-   "collected_at": "2026-11-26T17:28:23.858644+00:00",
-   "background_topics": [
-    "industry_supply_chain"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: Covers civilian nuclear energy human capital development."
-  },
-  {
    "id": "radnuc-background-7900ae7dbaee7cce",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2269,6 +3417,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Testing medical response teams in a CBRN context is a valid emergency exercise update."
+  },
+  {
+   "id": "radnuc-background-97a765f11f4907fb",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPay1uQmhjeG14Y1NWSEdaTVd0bUVZc2tCUDQ2VW4taGpSWVJpT0dKb3NJdHl0Y0VyLVNUdzdwSDFxS2szVHJhMHJmT1lCUG9XdE5UOENMVmswYXJ0WXp4LXJQNTlyUDg5elZmb0ZGenhYU1ZRSzVjT1NhazdTTC1UWk5qNnc?oc=5",
+   "title": "Vietnam aims for sustainable nuclear energy development.",
+   "summary": "Vietnam has announced its intention to pursue the development of sustainable nuclear energy. This reflects a shift in national energy policy.",
+   "original_title": "वियतनाम सतत परमाणु ऊर्जा विकास का लक्ष्य रखता है।",
+   "original_language": "hi",
+   "source": "Vietnam.vn",
+   "published": "2026-11-25T10:49:28+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to national nuclear energy policy development."
   },
   {
    "id": "radnuc-background-91c53208dd99b8c5",
@@ -2425,6 +3604,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Focuses on the dissemination of official IAEA nuclear knowledge and standards."
+  },
+  {
+   "id": "radnuc-background-850c757979f081e1",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxNM0J6ZlNiaGM1ZTdnMEptNVlRbTV5TGJvSGFaZVAtSjlyOHRCLXpKUFFkbkFvVnZXQTBiY1FBX3p3d0lsVXpFYjhpaWtwcm9pTUJ5MjlWX29JVUhaa2NTWUhOT3UtNVlDbG8wNFFhMHhaRElKaEhKdVpLaWcyZzJYamtQUTJEc1JoRWlEdXVwY3JIZ0pUZy1fOEMwZl9ZQlFEdUlyc0dqRU5wZjUteWtSM3g0cExqU1VwV1U1UjV6TjZjZ3U1Z0kzdzFkeVBHc1RCRzM1R2lqZDRnRElEdzktd09wVE5yLTRUQTVaOWFDY2RPRlZLZm5kYjhLc09rX0J1ZHc?oc=5",
+   "title": "In the US, nuclear agency finds no significant environmental impact at facility preparing fuel for 1 MW microreactors",
+   "summary": "The US nuclear regulatory authority has completed an environmental assessment for a fuel preparation facility dedicated to 1 MW microreactors. The findings indicate that the facility's operations will not cause significant environmental impacts.",
+   "original_title": "Nos EUA, agência nuclear não encontra impacto ambiental significativo em instalação que prepara combustível para microrreatores de 1 MW",
+   "original_language": "pt",
+   "source": "Catraca Livre",
+   "published": "2026-11-25T06:24:37+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Inclusion: regulatory and licensing process for a civilian nuclear facility."
+  },
+  {
+   "id": "radnuc-background-0e4958c00e0bc77c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNRmFFSkk1UW9QaDBpejlsYnhoZG51SHJOb1ZDSUI5aHNCLWRGS0pDRUZfSldtRlFrbmc4cWdZOWdCdmtQY2J4RGRZbjBSSVZUUXhvdVNOaU9od2ZBWkdwSVVwaFpxNFVpTHdERU5HSUJpOHJnOTRyTGZVRU1OWlBGZG5BZ3o3YUJCY0hpQW90NlV5dTJUUEo1NHVhMDdJRzdWckpWalY3NDFKSWg0b1B1cVZPZ2Y5UQ?oc=5",
+   "title": "UENF research applies artificial intelligence to nuclear physics studies in Rio",
+   "summary": "Researchers at the State University of the North Fluminense (UENF) are applying AI techniques to advance nuclear physics studies. This project explores the use of computational intelligence for scientific research within the nuclear sector.",
+   "original_title": "Pesquisa da UENF aplica inteligência artificial a estudos de física nuclear no Rio",
+   "original_language": "pt",
+   "source": "RCWTV",
+   "published": "2026-11-25T00:35:00+00:00",
+   "collected_at": "2026-11-27T17:28:22.952608+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Inclusion: research-based industry/science AI application."
   },
   {
    "id": "radnuc-background-d4ba6472ab5689e7",
