@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-26T12:20:44.493810+00:00",
+  "removed_at": "2026-11-27T11:59:13.822791+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -3738,6 +3738,103 @@
       "region": "Kerala",
       "ai_relevance_score": 80,
       "ai_relevance_reason": "Reports a concrete, official counter-terrorism raid and investigation involving the seizure of explosives.",
+      "related_articles": []
+    },
+    {
+      "id": "d5355cdcaf102b7c",
+      "incident_id": "inc-3dd80e45af2c8b4d",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOYUhHQWpqcTg2UVpNQTgwTVFkbTFuZmt6VjBCOW1hRWdkbTJTRWtkckRYZ1VFdldwNDRLcnRYWFZya19iaEdUY2NSRmpDaUt0aDdlWllnbzloRTdqeGVTbnU2ZDZ0cWRXaUlvN2JCZlk4ZTBWcVp1Uk1rOWk0VG9rQ3ZJdXpyNUFoU0lJcHc2NnVwVnhLY3VEZkJ3Si1weHVnSHJpWlpHQUJDQUE?oc=5",
+      "title": "Gush Etzion Junction Car-Ramming Attack: Two Teenage Girls Injured",
+      "summary": "Two teenage girls were seriously and moderately injured in a car-ramming terror attack at the Gush Etzion junction.",
+      "original_title": "פיגוע דריסה בצומת גוש עציון: שתי נערות נפצעו קשה ובינוני",
+      "original_language": "he",
+      "source": "הארץ",
+      "published": "2026-05-31T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Israel",
+      "region": "West Bank",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete terrorist car-ramming attack injuring civilians.",
+      "related_articles": []
+    },
+    {
+      "id": "253e0d3a46d7557a",
+      "incident_id": "inc-fabb0e5834cd6ba4",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNZF8wamoxcGRPNlMzMTVuMlVQM0dBZWIwMHRuTUNrTDVzZUpvd3o4bW1oRGJKa1A5dFMxY0IyNU5hM0dteEdvQzEyUUk2V3VZUllaMm1xMzJjcktDX2ZWMThRcFU5aDZ5M3dzaEp5cWpDbDlUUDlQZG1zaXpDQTRJQk1tbi0zdWNRa0VwMXdTa0JpYjNoSEJ3bmVmWk8ycXJJMzR1QUxfVk1WdXh3dHByRE1lVEltM0FVUlFTM0VXUExvRUcyc0JZ?oc=5",
+      "title": "Military Airstrikes Obliterate 13 ISWAP Fighters in Southern Tumbuns, Lake Chad",
+      "summary": "Nigerian military airstrikes killed 13 ISWAP fighters in the Southern Tumbuns area of Lake Chad.",
+      "original_title": "Military Air Strikes Obliterates 13 ISWAP fighters in Southern Tumbuns in Lake Chad",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-31T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Lake Chad / Southern Tumbuns",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a specific military strike eliminating ISWAP fighters.",
+      "related_articles": []
+    },
+    {
+      "id": "191816688a0cf3c5",
+      "incident_id": "inc-0dbdedec89250229",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOMUNiTDEtM3dTZlEwNV84cGVtTEFrN25SQUhtbU1fWGVJaFNPbVotWmQ0WkdZVVRSYUY0aUVPVnd0VTNDTjZIUlF1RmF6NkhtY3ZiT0NETDJXeUQ5WjVhWDJaQmtzanVrMXM5UkVDd2VCUU9LSGlXNkVLMDN3NW5ndGh2WC1JOTA2ZDI1NHhzcjF5VF9YMGV2amJrbmtjbzNhMGNyTENOZjVtWW5Qd19ORHRha3RESGE3bXJ2QnQ5RQ?oc=5",
+      "title": "Troops Repel Boko Haram Attack, Kill Several Terrorists",
+      "summary": "Military troops successfully repelled a Boko Haram attack, killing several terrorists in the engagement.",
+      "original_title": "Troops Repel Boko Haram Attack, Kill Several Terrorists as One Soldier Wounded",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-31T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism combat operation where troops repelled an attack and killed terrorists.",
+      "related_articles": [
+        {
+          "title": "Displaced farmer killed in Borno; former Boko Haram terrorists accused",
+          "original_title": "Former Boko Haram Terrorists Accused of Killing Displaced Farmer in Borno",
+          "original_language": "en",
+          "summary": "A displaced farmer was killed in Borno, Nigeria, with suspects identified as former Boko Haram militants.",
+          "published": "2026-06-01T07:00:00+00:00",
+          "source": "HumAngle",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPM0VpY3dQbjFiTXYxN1h4RTJxMk9yNkRERS0xU3NDVFhoUzk1OFZCTlcyWEtlcWdQRm12ek12ZDlZRUdjUzBSSDV5NURyckV5dWlRQXpyZTI5M1U3OVE4X0J2MndSb1ZQVWtKa1RyUlk3NG1UTEpJcFRFbURxZFA4VmtILWFoeWFSaUowVWVqV2NrWHB0QXpFR1dqbDJ4b1Bx?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "98893312dfa46487",
+      "incident_id": "inc-71bf8274e87ee702",
+      "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPYUo2VjBtWlQyS2JDTDl0NDYyT2szX1g5NGotZ20tRF82RVNjSG0td2R4YlNUNGRsVG9hRzk2TWxMSmpqNlVWQnllaklUb0hUVm9XZnU1U0VldFZwbUkwLWpKZXloSWRUUkh0VHgtRmZDUERMWHBWYzRxMDh3TXpwREdZeG4zWTV5RnpZUm9oeVBfNUFIS3N0NDgxVGhuNXBwUllra1FLMVd1SVpkYjZCNzBjZFU5Y2NNNERpU1lGd3VOTk5mUjdlcXNvRTU1WnM3X3dfb2pXbjlqZDFiWkM1Q0w2Z09QZw?oc=5",
+      "title": "Photo of ISWAP commander released following joint Nigeria-U.S. operation",
+      "summary": "A photo of ISWAP commander Abu-Bilal al-Minuki has been released following a joint Nigerian-U.S. operation.",
+      "original_title": "Zagazola Obtains First-Ever Photo of ISWAP Commander Abu-Bilal al-Minuki After Joint Nigeria-U.S. Operation",
+      "original_language": "en",
+      "source": "ZAgazola",
+      "published": "2026-05-31T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports an operational disclosure/outcome from a CT operation.",
       "related_articles": []
     }
   ]

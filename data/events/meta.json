@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "events.json",
-  "events_sha256": "d54077c26894650e550fa49f77a8a747d830319b97d302adf478e7ab181a2d99",
+  "events_sha256": "c74a3a753256ba9138db77c02ce79115358e204bc84a9c10e995cca1bb5f9caf",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 3608,
-      "bytes": 21402408,
-      "sha256": "80030df6dd4182d8d9b4b3b0bb088434788ea1c742de3860cd6b623473e46dda"
+      "events": 3653,
+      "bytes": 21684096,
+      "sha256": "fbe130e0f4d7edd02e07e5993930699738adc6a5bf0c2907b57b0e5047b615cd"
     },
     "2026-10": {
       "events": 3616,
@@ -69,11 +69,6 @@
       "events": 163,
       "bytes": 632784,
       "sha256": "bc6a779c645b5be02fde76e453395eb3732902f23a1a13a9a0d94c94df6c7ee6"
-    },
-    "2026-05": {
-      "events": 4,
-      "bytes": 12826,
-      "sha256": "2d464bb9d965f118ba181fb58a2ad42cceb357f89d8e490986b16c246c45a1a6"
     }
   },
   "metadata": {
@@ -230,34 +225,34 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-27T05:18:45.754298+00:00",
-      "last_attempt_at": "2026-11-27T05:18:45.754298+00:00",
-      "published_at": "2026-11-27T06:06:19.695312+00:00",
+      "run_started_at": "2026-11-27T11:18:37.653726+00:00",
+      "last_attempt_at": "2026-11-27T11:18:37.653726+00:00",
+      "published_at": "2026-11-27T11:59:43.933580+00:00",
       "recent": {
-        "candidates": 3718,
-        "reviewed": 3718,
-        "cached": 2528,
-        "new_reviews": 1190,
+        "candidates": 3679,
+        "reviewed": 3679,
+        "cached": 2753,
+        "new_reviews": 926,
         "official_auto_accepted": 0,
-        "retained": 238,
-        "rejected": 3480,
+        "retained": 187,
+        "rejected": 3492,
         "pending": 0,
         "status": "complete",
-        "calls": 30,
-        "primary_calls": 30,
-        "overflow_calls": 0,
+        "calls": 25,
+        "primary_calls": 24,
+        "overflow_calls": 1,
         "reasons": [],
-        "window_start": "2026-11-24T05:18:45.754298+00:00",
-        "window_end": "2026-11-27T05:18:45.754298+00:00"
+        "window_start": "2026-11-24T11:18:37.653726+00:00",
+        "window_end": "2026-11-27T11:18:37.653726+00:00"
       },
       "backlog": {
-        "candidates": 591,
-        "reviewed": 591,
-        "cached": 577,
-        "new_reviews": 14,
+        "candidates": 570,
+        "reviewed": 570,
+        "cached": 547,
+        "new_reviews": 23,
         "official_auto_accepted": 0,
         "retained": 0,
-        "rejected": 591,
+        "rejected": 570,
         "pending": 0,
         "status": "complete",
         "calls": 1,
@@ -284,8 +279,8 @@
         "google": {
           "retry_waves": 0,
           "successful": 1220,
-          "empty_feeds": 485,
-          "throttled": 9,
+          "empty_feeds": 486,
+          "throttled": 12,
           "deduplicated_urls": 288
         },
         "gdelt": {},
@@ -297,8 +292,8 @@
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 6170,
-        "retired": 439,
+        "expired": 6485,
+        "retired": 466,
         "cancelled_history": 502,
         "duplicates": 0,
         "from_queue": {
@@ -312,15 +307,15 @@
         "primary": {
           "per_run": 100,
           "per_day": 300,
-          "used_this_run": 31,
-          "used_today": 88
+          "used_this_run": 25,
+          "used_today": 25
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 65,
           "per_day": 195,
-          "used_this_run": 0,
-          "used_today": 16
+          "used_this_run": 1,
+          "used_today": 1
         },
         "historical_calls_per_run": 20,
         "historical_calls_used": 1,
@@ -329,45 +324,48 @@
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 9071,
+        "located": 9112,
         "unlocated": 411,
         "completed_unlocated": 411,
         "outcome": "success",
-        "processed_this_run": 58,
+        "processed_this_run": 47,
         "review_required": 270
       },
       "categories": [
         {
           "category": "Radiological/Nuclear",
-          "last_attempt_at": "2026-11-26T17:28:23.858644+00:00",
+          "last_attempt_at": "2026-11-27T09:28:20.016007+00:00",
           "status": "partial",
-          "reviewed": 117,
-          "pending": 497,
-          "candidates": 614,
-          "recent_pending": 11,
-          "backlog_pending": 486,
+          "reviewed": 152,
+          "pending": 500,
+          "candidates": 652,
+          "recent_pending": 13,
+          "backlog_pending": 487,
           "undated_pending": 0,
           "source_discovery": {
             "planned_queries": 50,
-            "attempted_queries": 33,
-            "searched_queries": 33,
+            "attempted_queries": 35,
+            "searched_queries": 35,
             "failed_queries": 0,
-            "pending_queries": 17,
+            "pending_queries": 15,
             "complete": false,
-            "stop_code": "queue_capacity_reached"
+            "stop_code": "budget_reached"
           },
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-27T06:08:06.120007+00:00",
+      "finalized_at": "2026-11-27T12:00:56.548366+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
+      "temporary_failures": {
+        "gemini-3.5-flash-lite:503": 1
+      },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 107,
-        "events_published_median_14d": 138.0,
-        "new_reviews": 1190,
+        "events_published_last_24h": 100,
+        "events_published_median_14d": 142.5,
+        "new_reviews": 926,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -383,63 +381,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 27 Nov, 07:06 Paris: Recent counter-terrorism developments include a suicide attack and security headquarters assault by ISIS leaving two dead in Al Hasakah, Syria, a thwarted plot by suspected Islamists targeting a synagogue in Cologne, Germany, and an explosive attack in Villavicencio, Colombia, injuring 23 people.",
+      "overview": "As of 27 Nov, 12:59 Paris: Recent high-priority counter-terrorism developments include a thwarted Islamist plot targeting a synagogue in Cologne, Germany, a deadly Islamic State attack on a security headquarters in Al Hasakah, Syria, and an armed militant assault that killed 13 soldiers in Sanam, Niger.",
       "developments": [
         {
           "event_id": "4e3a29c51707cee2",
           "severity": "CRITICAL",
-          "category": "Attacks",
+          "category": "Counter Terrorism Action",
           "headline": "Suspected Islamists planned synagogue attack in Cologne",
           "detail": "Suspected terrorists were arrested in Germany over an alleged plot to attack the synagogue in Cologne.",
           "location": "Germany, Köln"
         },
         {
-          "event_id": "c66cb51719cfa11f",
+          "event_id": "2c2ddd4cdf41a805",
           "severity": "CRITICAL",
           "category": "Attacks",
-          "headline": "Two security personnel killed in ISIS suicide attack in Hasaka",
-          "detail": "Two members of the Syrian security forces were killed in an ISIS suicide attack in Hasaka.",
+          "headline": "Syria: Two killed and others wounded in ISIS attack targeting security headquarters in Hasakah",
+          "detail": "An Islamic State attack targeting a security headquarters in Hasakah left two people dead and several others wounded.",
           "location": "Syria, Al Ḩasakah"
         },
         {
-          "event_id": "1b45d0259cdc753e",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "Explosive attack in Colombia leaves 23 injured",
-          "detail": "An explosive attack in Colombia has resulted in 23 injuries, with officials condemning the act as narcoterrorism.",
-          "location": "Colombia, Villavicencio"
-        },
-        {
           "event_id": "f33f829ee862225d",
-          "severity": "HIGH",
+          "severity": "CRITICAL",
           "category": "Attacks",
           "headline": "At least 13 Niger soldiers killed in Sanam armed attack",
           "detail": "At least 13 soldiers were killed in an armed attack by militants in Sanam, western Niger.",
           "location": "Niger"
         },
         {
-          "event_id": "3b85649e4060c831",
+          "event_id": "9baf30ba1179968f",
           "severity": "HIGH",
-          "category": "Arrests",
-          "headline": "Barcelona Hamas financing arrests",
-          "detail": "Two people were arrested in Barcelona for funneling funds to Hamas terrorists.",
-          "location": "Spain, Barcelona"
+          "category": "Attacks",
+          "headline": "Coalition announces Jazan refinery subjected to Houthi attack and warns of military response",
+          "detail": "The Arab coalition announced that the Jazan refinery was targeted by a Houthi attack, warning of a potential military response.",
+          "location": "Saudi Arabia, Jizan"
         },
         {
-          "event_id": "f735e2b3060bf635",
+          "event_id": "ad802ee6d69f4fb1",
           "severity": "HIGH",
-          "category": "Chemicals and Explosives",
-          "headline": "Sriganganagar Railway Track Blast Case: 3 accused arrested",
-          "detail": "Law enforcement arrested three suspects in connection with the railway track blast case in Sriganganagar.",
-          "location": "India, Sri Ganganagar"
+          "category": "Maritime Piracy",
+          "headline": "Houthi attack sinks Indian ship in the Red Sea",
+          "detail": "A Houthi attack sank an Indian ship in the Red Sea.",
+          "location": "Yemen, Red Sea"
+        },
+        {
+          "event_id": "3028a183ee4c224a",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
+          "headline": "Joint Uganda-DRC assault kills 1,000 ADF rebels",
+          "detail": "A joint military operation by Uganda and the DRC results in the killing of 1,000 ADF rebels.",
+          "location": "Democratic Republic of the Congo, Eastern DRC"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-27T06:06:17.062274+00:00",
+      "generated_at": "2026-11-27T11:59:41.341642+00:00",
       "candidate_events": 80,
-      "top_hash": "42210fccff1f1fa1b3da56be0cb84dbfcd19824dc4fbb67a2887d1ec296d38fd",
+      "top_hash": "6ca96ff52ef65b253dc984720601dadc306635461fbcd82e59d54d2c15ee4679",
       "top_event_count": 10,
       "reused": false
     },
@@ -717,10 +715,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 92,
+      "corroboration_hold_same_minute_burst": 117,
       "corroboration_hold_listed_outlet": 11,
-      "already_reviewed_articles": 2352,
-      "duplicate_input_articles": 6535
+      "already_reviewed_articles": 2566,
+      "duplicate_input_articles": 6165
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -802,8 +800,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-27T06:06:19.695312+00:00",
-    "number_of_events": 9482,
+    "last_updated": "2026-11-27T11:59:43.933580+00:00",
+    "number_of_events": 9523,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -816,23 +814,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 9424,
-      "ai_processed_this_run": 58,
-      "ai_pending_at_start": 58,
-      "city": 3448,
-      "region": 2998,
-      "country_capital": 2625,
+      "cached_events": 9476,
+      "ai_processed_this_run": 47,
+      "ai_pending_at_start": 47,
+      "city": 3460,
+      "region": 3016,
+      "country_capital": 2636,
       "unlocated": 411,
-      "mapped_total": 9071,
-      "high_confidence": 8222,
-      "medium_confidence": 913,
-      "low_confidence": 347,
+      "mapped_total": 9112,
+      "high_confidence": 8258,
+      "medium_confidence": 917,
+      "low_confidence": 348,
       "methods": {
-        "ai_country_capital": 2624,
-        "ai_city_geonames": 3297,
+        "ai_country_capital": 2635,
+        "ai_region_coordinates": 3013,
+        "ai_city_geonames": 3309,
         "unresolved_city_no_capital_fallback": 236,
         "ai_unlocated": 135,
-        "ai_region_coordinates": 2995,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
