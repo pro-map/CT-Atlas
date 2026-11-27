@@ -1,0 +1,97 @@
+{
+  "direction": "contract",
+  "dry_run": false,
+  "mode_before": "dual",
+  "s0": "c74a3a753256ba9138db77c02ce79115358e204bc84a9c10e995cca1bb5f9caf",
+  "events": 9523,
+  "bytes": 66749900,
+  "id_sequence_sha256": "47fa8db46a31739c6dade5d313872ddfb6b9de717f1b886857f4822bfbf78c32",
+  "source_revision": "4975f96130aec7b6d4852c4ddb43ed86ad0671c9",
+  "tool": "events_store.py/1",
+  "format": "ct-atlas-events-store/1",
+  "at": "2026-11-27T15:33:51.956234+00:00",
+  "verification": {
+    "tool": "events_store.py/1",
+    "format": "ct-atlas-events-store/1",
+    "verified_at": "2026-11-27T15:33:59.315926+00:00",
+    "against": {
+      "path": "events.json",
+      "bytes": 66749900,
+      "sha256": "c74a3a753256ba9138db77c02ce79115358e204bc84a9c10e995cca1bb5f9caf"
+    },
+    "store": {
+      "ref": "HEAD",
+      "events_sha256": "c74a3a753256ba9138db77c02ce79115358e204bc84a9c10e995cca1bb5f9caf",
+      "months": {
+        "2026-11": {
+          "events": 3653,
+          "bytes": 21684096,
+          "sha256": "fbe130e0f4d7edd02e07e5993930699738adc6a5bf0c2907b57b0e5047b615cd"
+        },
+        "2026-10": {
+          "events": 3616,
+          "bytes": 23663657,
+          "sha256": "79c63ad68fb25176fd9116868b3738479d1b5794851962662baaff0d133c7752"
+        },
+        "2026-09": {
+          "events": 1499,
+          "bytes": 8533494,
+          "sha256": "1a22921e2963981b94015db72741925c4da02d614300059d36ad0326a0c81ef2"
+        },
+        "2026-08": {
+          "events": 340,
+          "bytes": 1549204,
+          "sha256": "55eaccc7df9591f111548bc486aafa135798b51e5b503c5a4740e965ab32b802"
+        },
+        "2026-07": {
+          "events": 252,
+          "bytes": 1063129,
+          "sha256": "4f85895520b1b9f1e50e895c75239e8c928da74e8e8c33c5544423b3824b577a"
+        },
+        "2026-06": {
+          "events": 163,
+          "bytes": 632784,
+          "sha256": "bc6a779c645b5be02fde76e453395eb3732902f23a1a13a9a0d94c94df6c7ee6"
+        }
+      }
+    },
+    "events": 9523,
+    "id_sequence_sha256": "47fa8db46a31739c6dade5d313872ddfb6b9de717f1b886857f4822bfbf78c32",
+    "identical": true,
+    "differences": []
+  },
+  "months": {
+    "2026-11": {
+      "events": 3653,
+      "bytes": 21684096,
+      "sha256": "fbe130e0f4d7edd02e07e5993930699738adc6a5bf0c2907b57b0e5047b615cd"
+    },
+    "2026-10": {
+      "events": 3616,
+      "bytes": 23663657,
+      "sha256": "79c63ad68fb25176fd9116868b3738479d1b5794851962662baaff0d133c7752"
+    },
+    "2026-09": {
+      "events": 1499,
+      "bytes": 8533494,
+      "sha256": "1a22921e2963981b94015db72741925c4da02d614300059d36ad0326a0c81ef2"
+    },
+    "2026-08": {
+      "events": 340,
+      "bytes": 1549204,
+      "sha256": "55eaccc7df9591f111548bc486aafa135798b51e5b503c5a4740e965ab32b802"
+    },
+    "2026-07": {
+      "events": 252,
+      "bytes": 1063129,
+      "sha256": "4f85895520b1b9f1e50e895c75239e8c928da74e8e8c33c5544423b3824b577a"
+    },
+    "2026-06": {
+      "events": 163,
+      "bytes": 632784,
+      "sha256": "bc6a779c645b5be02fde76e453395eb3732902f23a1a13a9a0d94c94df6c7ee6"
+    }
+  },
+  "message": "Stop tracking events.json: database in data/events (sha256 c74a3a753256ba9138db77c02ce79115358e204bc84a9c10e995cca1bb5f9caf, 9523 events)",
+  "receipt_path": "archive/events-store-contract-20261127.json"
+}

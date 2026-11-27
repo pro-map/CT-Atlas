@@ -22,3 +22,6 @@ private-outlet-watch/
 
 # Which data/events/ build a local events.json came from (events_store.py).
 /events.json.store-base
+# The database is committed as data/events/ (docs/STORAGE_MIGRATION.md);
+# events.json is rebuilt from it by `events_store.py materialize`.
+/events.json

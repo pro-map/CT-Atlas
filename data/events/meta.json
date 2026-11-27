@@ -1,7 +1,7 @@
 {
   "format": "ct-atlas-events-store/1",
   "partition": "month",
-  "authority": "events.json",
+  "authority": "store",
   "events_sha256": "c74a3a753256ba9138db77c02ce79115358e204bc84a9c10e995cca1bb5f9caf",
   "top_level_keys": [
     "project",
