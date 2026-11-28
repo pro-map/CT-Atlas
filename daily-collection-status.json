@@ -1,39 +1,39 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-27T17:18:30.508630+00:00",
-  "last_attempt_at": "2026-11-27T17:18:30.508630+00:00",
-  "published_at": "2026-11-27T17:58:14.609864+00:00",
+  "run_started_at": "2026-11-28T05:18:48.990790+00:00",
+  "last_attempt_at": "2026-11-28T05:18:48.990790+00:00",
+  "published_at": "2026-11-28T06:04:51.779438+00:00",
   "recent": {
-    "candidates": 3732,
-    "reviewed": 3732,
-    "cached": 2782,
-    "new_reviews": 950,
+    "candidates": 3527,
+    "reviewed": 3527,
+    "cached": 2664,
+    "new_reviews": 863,
     "official_auto_accepted": 0,
-    "retained": 195,
-    "rejected": 3537,
+    "retained": 209,
+    "rejected": 3318,
     "pending": 0,
     "status": "complete",
-    "calls": 25,
-    "primary_calls": 24,
-    "overflow_calls": 1,
+    "calls": 45,
+    "primary_calls": 25,
+    "overflow_calls": 20,
     "reasons": [],
-    "window_start": "2026-11-24T17:18:30.508630+00:00",
-    "window_end": "2026-11-27T17:18:30.508630+00:00"
+    "window_start": "2026-11-25T05:18:48.990790+00:00",
+    "window_end": "2026-11-28T05:18:48.990790+00:00"
   },
   "backlog": {
-    "candidates": 546,
-    "reviewed": 546,
-    "cached": 511,
-    "new_reviews": 35,
+    "candidates": 593,
+    "reviewed": 593,
+    "cached": 556,
+    "new_reviews": 37,
     "official_auto_accepted": 0,
-    "retained": 2,
-    "rejected": 544,
+    "retained": 1,
+    "rejected": 592,
     "pending": 0,
     "status": "complete",
-    "calls": 1,
+    "calls": 2,
     "primary_calls": 1,
-    "overflow_calls": 0,
+    "overflow_calls": 1,
     "reasons": []
   },
   "maintenance": {
@@ -54,25 +54,23 @@
   "source": {
     "google": {
       "retry_waves": 0,
-      "successful": 1218,
-      "empty_feeds": 490,
-      "throttled": 8,
-      "deduplicated_urls": 288,
-      "failed": 2
+      "successful": 1220,
+      "empty_feeds": 493,
+      "throttled": 5,
+      "deduplicated_urls": 288
     },
     "gdelt": {},
-    "errors": 2,
-    "status": "partial"
+    "errors": 0,
+    "status": "complete"
   },
   "reasons": [
-    "source_errors",
     "category_pending",
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 5882,
-    "retired": 440,
-    "cancelled_history": 483,
+    "expired": 6482,
+    "retired": 437,
+    "cancelled_history": 490,
     "duplicates": 0,
     "from_queue": {
       "expired": 0,
@@ -85,29 +83,29 @@
     "primary": {
       "per_run": 100,
       "per_day": 300,
-      "used_this_run": 25,
-      "used_today": 50
+      "used_this_run": 26,
+      "used_today": 76
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 65,
       "per_day": 195,
-      "used_this_run": 1,
-      "used_today": 2
+      "used_this_run": 21,
+      "used_today": 23
     },
     "historical_calls_per_run": 20,
-    "historical_calls_used": 1,
+    "historical_calls_used": 2,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 9148,
-    "unlocated": 413,
-    "completed_unlocated": 413,
+    "located": 9193,
+    "unlocated": 417,
+    "completed_unlocated": 417,
     "outcome": "success",
-    "processed_this_run": 40,
-    "review_required": 271
+    "processed_this_run": 51,
+    "review_required": 275
   },
   "categories": [
     {
@@ -132,18 +130,19 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-11-27T18:01:57.211251+00:00",
+  "finalized_at": "2026-11-28T06:06:42.300218+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success",
   "temporary_failures": {
-    "gemini-3.5-flash-lite:503": 1
+    "gemini-3.5-flash-lite:503": 21,
+    "gemini-3.1-flash-lite:503": 1
   },
   "health": {
     "state": "healthy",
     "reasons": [],
-    "events_published_last_24h": 99,
-    "events_published_median_14d": 141.0,
-    "new_reviews": 950,
+    "events_published_last_24h": 87,
+    "events_published_median_14d": 142.5,
+    "new_reviews": 863,
     "recent_pending": 0,
     "review_share": 1.0,
     "thresholds": {
