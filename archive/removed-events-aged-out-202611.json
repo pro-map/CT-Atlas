@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-27T11:59:13.822791+00:00",
+  "removed_at": "2026-11-28T11:54:29.719399+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -3836,6 +3836,115 @@
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Reports an operational disclosure/outcome from a CT operation.",
       "related_articles": []
+    },
+    {
+      "id": "d686cdd836c462df",
+      "incident_id": "inc-951fb66976bfdd0b",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPdW12dDF4c0d0aWg3SEd0TkQyLS05MEVTc0NBUkZYU0lGZndhSC1pM1RNbTNZak5QLXlIcXk4bHhENWJsZFFYdVoxLW1KekNlWUlZYlF2T0NMWEtrenJPT0pwVWhXbzluSG5kRmM4aDdpVERKZ21FclJreExObjVlMmhHY2VkcHBxTnpuMGY3ajJ2YUw5T3Rlak1GUWFqUzZ6SkFiMmVR0gFWQVVfeXFMTVVvN1diQjBkamRITS1OTDZMM1lyeXQ2NTBrcnR1UDlZUTV2QUIwYTVQSG12blpmem0tZ1FWdkpwc0o5c1JIYllFX0xITXR6dVgydDBScmc?oc=5",
+      "title": "Somali pirates release video of kidnapped Pakistani crew member",
+      "summary": "Somali pirates have released a video featuring a kidnapped Pakistani crew member currently held hostage.",
+      "original_title": "Somali pirates release video of kidnapped Pakistani crew member",
+      "original_language": "en",
+      "source": "dunyanews.tv",
+      "published": "2026-06-01T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Provides a direct operational update and media release concerning an ongoing piracy hostage situation.",
+      "related_articles": [
+        {
+          "title": "Somali pirates begin direct contact with families of abducted Pakistani crew members",
+          "original_title": "Somali Pirates begin direct contact with families of abducted Pakistani crew members",
+          "original_language": "en",
+          "summary": "Somali pirates have initiated direct contact with the families of abducted Pakistani crew members held in captivity.",
+          "published": "2026-06-02T07:00:00+00:00",
+          "source": "The Express Tribune",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQcVQtdGNpNFZHZWFuS1VuRnRfQXdUbGtrcDZJZVBIM3RZZGlaZmhOb0FWTTBSYmdCMDVELWRsbFpTZ2pnaWJ2ZGcyWmhQXy12Vzljbm5idHhLSTRBR1NWMGZzdTFSNjZhUGZhV1BNRkMyWWdSZjFsQ2F2Q1NsRndtaDc1Um50R0NkU09jS3JQR0FPR29KQ3REYjlXRjNOcG00SlFPTlV5bXJNMkxlaE1jR1ZCaW9YQ1FWTFE4LU9B0gHGAUFVX3lxTE1wbm9YQU1GOGdKZXJ1S0dIQTl5S2xRY1dpeEhfSl8zcThuNDRLM2dkcnFHREhpSHRWQVphZDhnQ1pnQ0dMd1BjQnc2OU8yR2hVTnFWSlVvVTd5YXp0U1pQZDB6LUJDUzhoX1gzdElUbzdPc1V2YXgzcW5zTE8xME9aY2RxZWtIY2JMaUlGck85ckhRUEZmdWlkY1REWl8xVkhDVk45SWxqWkdZQ0oxQ3R4d0lQaXRiQ3NZdkVBenNQaFd6WEJ1dw?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "27a076f4af94c454",
+      "incident_id": "inc-b49f80125e22f94b",
+      "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxNd2ZwcXppTThhU0xMYWdtVkxfNXpXOUdKQU1RdGFsb2RjcVB6QlNwRWdKci1HYmpVVVlrNUFKTkNXbVcwdkV5Q29QbjlqajAwcTNsMkVCZVp3MERvb1U1aWxmNkc0d0gxV090bXVFdHp1ck1jZUFoS3dNT19GaFRtOXFZUlJ0Um9XckJmcG5VQjB5WDh0ZmpwUWhfc2s2a2t3Uk14NDNpRVdfUVdxZTFXYjVxaWR1WTl5dWJvOUxmQU5pTVpXZi1SV0dib1FzLUJIXzB4RjJ4TXJMN19SNDZvbGJ2RWt2UQ?oc=5",
+      "title": "IDF Announces Death of Captain Dr. Ori Yosef Silvester in Explosive Hezbollah Drone Attack",
+      "summary": "The IDF announced the death of an officer caused by an explosive drone attack launched by Hezbollah.",
+      "original_title": "IDF announces the death of Captain Dr. Ori Yosef Silvester due to an explosive Hezbollah drone attack",
+      "original_language": "en",
+      "source": "i24NEWS",
+      "published": "2026-06-01T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Weapons",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "Hezbollah",
+      "primary_event_type": "ATTACK",
+      "country": "Israel",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a fatal operational attack using an explosive drone by Hezbollah.",
+      "related_articles": []
+    },
+    {
+      "id": "b37ff3be9305b26d",
+      "incident_id": "inc-7c65ffd049a671bd",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxObklESFBBSHV0RkpMRHNnNUpyUVZDNE8zLUJabm1ERGJOdENrYmlBdnlsRktEa0d1bGxXdERmSGdPZW9uWHdibGF3a19hekF1NVgzSGZKYlBFd0R5YVV4Zzd2NHkyVXJpZ1pHMHJVU1BfQkdHN3JUUEpTMWJlemlDMy15QUlxTXNCa29lRDUxM2VlS3NuN3RxS21ZTzE1LVlxSTI1ZjJHSVdQSnFZTGpFbWlsSzhHTTNvWDZmZw?oc=5",
+      "title": "Kwala and Macina Localities: FAMa Destroy Terrorist Refuges",
+      "summary": "Malian Armed Forces (FAMa) destroyed terrorist hideouts in the Kwala and Macina areas.",
+      "original_title": "Localités de Kwala et Macina : Les FAMa détruisent des refuges terroristes",
+      "original_language": "fr",
+      "source": "Maliweb",
+      "published": "2026-06-01T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "region": "Kwala and Macina",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete military counter-terrorism operation destroying terrorist hideouts.",
+      "related_articles": []
+    },
+    {
+      "id": "872cdd37ede33454",
+      "incident_id": "inc-5ddeb53a96662bc5",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQRkJBNzU0bTFWQmxuSUZkX3dfb2tESlJUbkN6cmpPbTZENlNSemtfSXh0Z0VnZlJIZXRBSzVUVzFLVlhlN2w5OXdZV1FwUk5nUXlHVHJTS0E2clVPc24yQXJNR2pFZzdIdm5KOEJ6SjFrS2F6LUF0YVRaQlo0MnFSN1NPN3ZBSnBXWGs2RTlrUEZrQUFUV29iSFZCUEFTQ3FiT2N3UnZVUFNlMW4zNlFWRUNtZy0?oc=5",
+      "title": "Troops Repel Terrorist Movement in Borno, Force Insurgents to Retreat",
+      "summary": "Nigerian troops intercepted and repelled insurgent movements in Borno State, forcing them to retreat following a clash.",
+      "original_title": "Troops Repel Terrorists Movement in Borno, Force Insurgents to Retreat",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-06-01T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Borno State",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete military counter-terrorism operation repelling an insurgent attack.",
+      "related_articles": [
+        {
+          "title": "Troops Arrest Suspected Terrorists’ Logistics Supplier in Borno",
+          "original_title": "Troops Arrest Suspected Terrorists’ Logistics Supplier in Borno",
+          "original_language": "en",
+          "summary": "Nigerian troops arrested a suspected logistics supplier for terrorists in Borno State.",
+          "published": "2026-06-02T07:00:00+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOVjYxVEhIcjNzci1hQjhxdHJUSGxCV19XSTNQZEoxbG1RXzJzY1daOWxqaGkzWmdlVDJMZkRxLTBsQmk5Yno2VzRoMzVEd05YOWhOMnFiUFZnQldxNEJseDVFdVZYT2hFNW5vX2V4SEFRd1p2RWJXMWM1c2xPamZPVGxjdU1GZmF1Q3ozM3VIZGkwRW0zOUVSbHBDTUd0ZElFSlRIWlNhLTJFd3M?oc=5"
+        }
+      ]
     }
   ]
 }

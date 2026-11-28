@@ -2,7 +2,7 @@
   "format": "ct-atlas-events-store/1",
   "partition": "month",
   "authority": "store",
-  "events_sha256": "cb9d557239330378283191df57c82822e93b82aceda098eec4b4e01792ebc645",
+  "events_sha256": "32fc71ec8efe4f1e0dda684179248d4662fb85136e32b8adf976b741c28d8ed9",
   "top_level_keys": [
     "project",
     "database_type",
@@ -41,9 +41,9 @@
   ],
   "months": {
     "2026-11": {
-      "events": 3740,
-      "bytes": 22361149,
-      "sha256": "c04d3e460c6bdc67519c1075b91d88b57c64fbb480220acfd132b75553132d64"
+      "events": 3773,
+      "bytes": 22580226,
+      "sha256": "d6eeb80d2103ac88d3d963c765be99faa424af72e66b80e6119ecda23a0f108a"
     },
     "2026-10": {
       "events": 3616,
@@ -66,9 +66,9 @@
       "sha256": "4f85895520b1b9f1e50e895c75239e8c928da74e8e8c33c5544423b3824b577a"
     },
     "2026-06": {
-      "events": 163,
-      "bytes": 632784,
-      "sha256": "bc6a779c645b5be02fde76e453395eb3732902f23a1a13a9a0d94c94df6c7ee6"
+      "events": 159,
+      "bytes": 618788,
+      "sha256": "311309b6afc669d7544ece132dfe1b56e05f2f31d162e2ad95ae85de92df8a60"
     }
   },
   "metadata": {
@@ -225,39 +225,39 @@
     "collection_status": {
       "schema_version": 2,
       "status": "partial",
-      "run_started_at": "2026-11-28T05:18:48.990790+00:00",
-      "last_attempt_at": "2026-11-28T05:18:48.990790+00:00",
-      "published_at": "2026-11-28T06:04:51.779438+00:00",
+      "run_started_at": "2026-11-28T11:18:41.375891+00:00",
+      "last_attempt_at": "2026-11-28T11:18:41.375891+00:00",
+      "published_at": "2026-11-28T11:54:59.039534+00:00",
       "recent": {
-        "candidates": 3527,
-        "reviewed": 3527,
-        "cached": 2664,
-        "new_reviews": 863,
+        "candidates": 3497,
+        "reviewed": 3497,
+        "cached": 2780,
+        "new_reviews": 717,
         "official_auto_accepted": 0,
-        "retained": 209,
-        "rejected": 3318,
+        "retained": 145,
+        "rejected": 3352,
         "pending": 0,
         "status": "complete",
-        "calls": 45,
-        "primary_calls": 25,
-        "overflow_calls": 20,
+        "calls": 18,
+        "primary_calls": 18,
+        "overflow_calls": 0,
         "reasons": [],
-        "window_start": "2026-11-25T05:18:48.990790+00:00",
-        "window_end": "2026-11-28T05:18:48.990790+00:00"
+        "window_start": "2026-11-25T11:18:41.375891+00:00",
+        "window_end": "2026-11-28T11:18:41.375891+00:00"
       },
       "backlog": {
-        "candidates": 593,
-        "reviewed": 593,
-        "cached": 556,
-        "new_reviews": 37,
+        "candidates": 509,
+        "reviewed": 509,
+        "cached": 496,
+        "new_reviews": 13,
         "official_auto_accepted": 0,
-        "retained": 1,
-        "rejected": 592,
+        "retained": 0,
+        "rejected": 509,
         "pending": 0,
         "status": "complete",
-        "calls": 2,
+        "calls": 1,
         "primary_calls": 1,
-        "overflow_calls": 1,
+        "overflow_calls": 0,
         "reasons": []
       },
       "maintenance": {
@@ -279,8 +279,8 @@
         "google": {
           "retry_waves": 0,
           "successful": 1220,
-          "empty_feeds": 493,
-          "throttled": 5,
+          "empty_feeds": 514,
+          "throttled": 6,
           "deduplicated_urls": 288
         },
         "gdelt": {},
@@ -292,9 +292,9 @@
         "geolocation_review_required"
       ],
       "queue_filter": {
-        "expired": 6482,
-        "retired": 437,
-        "cancelled_history": 490,
+        "expired": 6218,
+        "retired": 395,
+        "cancelled_history": 531,
         "duplicates": 0,
         "from_queue": {
           "expired": 0,
@@ -307,66 +307,62 @@
         "primary": {
           "per_run": 100,
           "per_day": 300,
-          "used_this_run": 26,
-          "used_today": 76
+          "used_this_run": 19,
+          "used_today": 19
         },
         "overflow": {
           "model": "gemini-3.1-flash-lite",
           "per_run": 65,
           "per_day": 195,
-          "used_this_run": 21,
-          "used_today": 23
+          "used_this_run": 0,
+          "used_today": 0
         },
         "historical_calls_per_run": 20,
-        "historical_calls_used": 2,
+        "historical_calls_used": 1,
         "maintenance_calls_per_run": 2
       },
       "geolocation": {
         "status": "complete",
         "pending": 0,
-        "located": 9193,
-        "unlocated": 417,
-        "completed_unlocated": 417,
+        "located": 9217,
+        "unlocated": 422,
+        "completed_unlocated": 422,
         "outcome": "success",
-        "processed_this_run": 51,
-        "review_required": 275
+        "processed_this_run": 34,
+        "review_required": 279
       },
       "categories": [
         {
           "category": "Radiological/Nuclear",
-          "last_attempt_at": "2026-11-27T17:28:22.952608+00:00",
+          "last_attempt_at": "2026-11-28T09:28:29.317848+00:00",
           "status": "partial",
-          "reviewed": 128,
-          "pending": 498,
-          "candidates": 626,
-          "recent_pending": 10,
-          "backlog_pending": 488,
+          "reviewed": 145,
+          "pending": 493,
+          "candidates": 638,
+          "recent_pending": 8,
+          "backlog_pending": 485,
           "undated_pending": 0,
           "source_discovery": {
             "planned_queries": 50,
-            "attempted_queries": 32,
-            "searched_queries": 32,
+            "attempted_queries": 45,
+            "searched_queries": 45,
             "failed_queries": 0,
-            "pending_queries": 18,
+            "pending_queries": 5,
             "complete": false,
             "stop_code": "queue_capacity_reached"
           },
           "stop_code": "budget_reached"
         }
       ],
-      "finalized_at": "2026-11-28T06:06:42.300218+00:00",
+      "finalized_at": "2026-11-28T11:55:56.920009+00:00",
       "collect_outcome": "success",
       "geolocate_outcome": "success",
-      "temporary_failures": {
-        "gemini-3.5-flash-lite:503": 21,
-        "gemini-3.1-flash-lite:503": 1
-      },
       "health": {
         "state": "healthy",
         "reasons": [],
-        "events_published_last_24h": 87,
-        "events_published_median_14d": 142.5,
-        "new_reviews": 863,
+        "events_published_last_24h": 79,
+        "events_published_median_14d": 143.0,
+        "new_reviews": 717,
         "recent_pending": 0,
         "review_share": 1.0,
         "thresholds": {
@@ -382,63 +378,63 @@
     "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
     "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
     "trend_summary": {
-      "overview": "As of 28 Nov, 07:04 Paris: Recent counter-terrorism and security reporting highlights critical developments across multiple regions, including arrests over a suspected synagogue attack plot in Cologne, Germany, a deadly Islamic State assault on a security headquarters in Al Hasakah, Syria, and an intercepted truck bomb in Meta, Colombia.",
+      "overview": "As of 28 Nov, 12:54 Paris: Recent high-impact security developments include an Islamic State attack in Al Hasakah, Syria, that left two dead and multiple wounded, a major vehicle-borne explosive attack in Villavicencio, Colombia, injuring 23 people, and an armed assault by militants in Sanam, Niger, resulting in the deaths of 13 soldiers.",
       "developments": [
         {
-          "event_id": "4e3a29c51707cee2",
+          "event_id": "2c2ddd4cdf41a805",
           "severity": "CRITICAL",
-          "category": "Arrests",
+          "category": "Attacks",
+          "headline": "ISIS attack targeting security headquarters in Al Hasakah leaves two dead",
+          "detail": "An Islamic State attack targeting a security headquarters in Al Hasakah left two people dead and several others wounded.",
+          "location": "Syria, Al Ḩasakah"
+        },
+        {
+          "event_id": "1b45d0259cdc753e",
+          "severity": "CRITICAL",
+          "category": "Attacks",
+          "headline": "Explosive attack in Villavicencio leaves 23 injured",
+          "detail": "An explosive attack in Colombia has resulted in 23 injuries, with officials condemning the act as narcoterrorism.",
+          "location": "Colombia, Villavicencio"
+        },
+        {
+          "event_id": "f33f829ee862225d",
+          "severity": "CRITICAL",
+          "category": "Attacks",
+          "headline": "At least 13 Niger soldiers killed in Sanam armed attack",
+          "detail": "At least 13 soldiers were killed in an armed attack by militants in Sanam, western Niger.",
+          "location": "Niger"
+        },
+        {
+          "event_id": "4e3a29c51707cee2",
+          "severity": "HIGH",
+          "category": "Counter Terrorism Action",
           "headline": "Suspected Islamists planned synagogue attack in Cologne",
           "detail": "Suspected terrorists were arrested in Germany over an alleged plot to attack the synagogue in Cologne.",
           "location": "Germany, Köln"
         },
         {
-          "event_id": "2c2ddd4cdf41a805",
-          "severity": "CRITICAL",
-          "category": "Attacks",
-          "headline": "Syria: Two killed and others wounded in ISIS attack targeting security headquarters in Hasakah",
-          "detail": "An Islamic State attack targeting a security headquarters in Hasakah left two people dead and several others wounded.",
-          "location": "Syria, Al Ḩasakah"
+          "event_id": "a2c44ed821c24348",
+          "severity": "HIGH",
+          "category": "Arrests",
+          "headline": "22-Year-Old Jaish Terror Suspect Arrested in Vadodara",
+          "detail": "Gujarat anti-terror squad arrested a 22-year-old terror suspect targeting an Air Force station.",
+          "location": "India, Vadodara"
         },
         {
           "event_id": "097448072a974d79",
           "severity": "HIGH",
           "category": "Counter Terrorism Action",
-          "headline": "Military intelligence thwarts terrorist attack in Meta, intercepting vehicle with explosives and arresting two",
+          "headline": "Military intelligence thwarts terrorist attack in Meta, intercepting vehicle with explosives",
           "detail": "Military intelligence intercepted an explosives-laden vehicle on the road to Puerto Gaitan and arrested two suspects in flagrante delicto.",
           "location": "Colombia, Meta"
-        },
-        {
-          "event_id": "807cac8a975b9acb",
-          "severity": "HIGH",
-          "category": "Counter Terrorism Action",
-          "headline": "IDF kills four Hamas terrorists, including one who participated in Oct 7 massacre",
-          "detail": "The IDF eliminated four Hamas terrorists in Gaza, including one involved in the October 7 attacks.",
-          "location": "Palestinian Territory, Gaza Strip"
-        },
-        {
-          "event_id": "85c95cb03c2c6c81",
-          "severity": "HIGH",
-          "category": "Arrests",
-          "headline": "Gujarat ATS arrests suspected Jaish-linked terrorist in Vadodara with AK-47",
-          "detail": "The Gujarat Anti-Terrorist Squad arrests a suspected Jaish-linked operative in Vadodara and recovers an AK-47 rifle.",
-          "location": "India, Vadodara"
-        },
-        {
-          "event_id": "2a5fe13cd00b89bd",
-          "severity": "HIGH",
-          "category": "Arrests",
-          "headline": "Stuttgart: 27-year-old man running towards Christmas market with two axes arrested",
-          "detail": "A 27-year-old man armed with two axes heading toward the Stuttgart Christmas market was stopped and arrested by police.",
-          "location": "Germany, Stuttgart"
         }
       ],
       "status": "ok",
       "model": "gemini-3.5-flash-lite",
       "window_hours": 24,
-      "generated_at": "2026-11-28T06:04:29.320338+00:00",
+      "generated_at": "2026-11-28T11:54:56.717420+00:00",
       "candidate_events": 80,
-      "top_hash": "a0a5e87e04452a782ce5ff0c56fb7ef496152612417e697c7de08efdabc7df13",
+      "top_hash": "237a17fd00274b33847442e5af61caabc404810c27647185a921f917f2e551c0",
       "top_event_count": 10,
       "reused": false
     },
@@ -716,10 +712,10 @@
       "Swahili": []
     },
     "incremental_collection_stats": {
-      "corroboration_hold_same_minute_burst": 85,
-      "corroboration_hold_listed_outlet": 6,
-      "already_reviewed_articles": 2315,
-      "duplicate_input_articles": 6404
+      "corroboration_hold_same_minute_burst": 114,
+      "corroboration_hold_listed_outlet": 4,
+      "already_reviewed_articles": 2401,
+      "duplicate_input_articles": 6698
     },
     "last_planned_query_count": 1220,
     "specialist_coverage": {
@@ -801,8 +797,8 @@
       "Europol",
       "UK Government / Counter-Terrorism"
     ],
-    "last_updated": "2026-11-28T06:04:51.779438+00:00",
-    "number_of_events": 9610,
+    "last_updated": "2026-11-28T11:54:59.039534+00:00",
+    "number_of_events": 9639,
     "geolocation": {
       "method": "Gemini AI-first semantic geolocation",
       "version": "gemini-ai-first-v5.3-source-faithful",
@@ -815,23 +811,23 @@
       "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
       "rescue_unlocated_final": 21,
       "ai_for_every_event": true,
-      "cached_events": 9559,
-      "ai_processed_this_run": 51,
-      "ai_pending_at_start": 51,
-      "city": 3488,
-      "region": 3038,
-      "country_capital": 2667,
-      "unlocated": 417,
-      "mapped_total": 9193,
-      "high_confidence": 8323,
-      "medium_confidence": 934,
-      "low_confidence": 353,
+      "cached_events": 9605,
+      "ai_processed_this_run": 34,
+      "ai_pending_at_start": 34,
+      "city": 3493,
+      "region": 3048,
+      "country_capital": 2676,
+      "unlocated": 422,
+      "mapped_total": 9217,
+      "high_confidence": 8345,
+      "medium_confidence": 937,
+      "low_confidence": 357,
       "methods": {
-        "ai_country_capital": 2666,
-        "unresolved_city_no_capital_fallback": 241,
-        "ai_city_geonames": 3337,
-        "ai_region_coordinates": 3035,
-        "ai_unlocated": 136,
+        "ai_region_coordinates": 3045,
+        "ai_country_capital": 2675,
+        "ai_city_geonames": 3342,
+        "unresolved_city_no_capital_fallback": 245,
+        "ai_unlocated": 137,
         "source_name_geonames_correction": 26,
         "ai_city_coordinates": 119,
         "reviewed_unsupported_point_withdrawn": 18,
